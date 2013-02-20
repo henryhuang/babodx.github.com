@@ -4,7 +4,7 @@
   <title><![CDATA[鑫的方向]]></title>
   <link href="http://babodx.github.com/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-13T22:11:16+08:00</updated>
+  <updated>2013-02-20T14:18:08+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,23 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[我2013年学习列表]]></title>
+    <link href="http://babodx.github.com/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/"/>
+    <updated>2013-02-20T13:55:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao</id>
+    <content type="html"><![CDATA[<h1>2013学习计划</h1>
+
+<p>2012年开始了，这一年打算好好学习下ruby、python两种语言和rails框架。</p>
+
+<h2>学习内容列表</h2>
+
+<p><strong>ruby</strong>
+<strong>python</strong>
+<strong>rails</strong></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[开始使用octopress]]></title>
