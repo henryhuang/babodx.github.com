@@ -4,7 +4,7 @@
   <title><![CDATA[鑫的方向]]></title>
   <link href="http://babodx.github.com/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-20T14:35:13+08:00</updated>
+  <updated>2013-02-20T14:37:03+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -73,6 +73,9 @@
 <p>最近在看<a href="http://ruby-china.org">ruby-china.org</a>和<a href="http://happycasts.net">happycasts.net</a>的视频。开始尝试使用git来做版本控制。原来都是使用svn，所以最近一直在折腾和学习。看到很多编程人员都开始采用octopress来代替wordpress写blog了。我也开始尝试使用这个octopress的blog系统。</p>
 
 <p>octopress是一套基于ruby构建的blog管理系统，通过git来为我们的文章做版本控制，并且通过rake命令可以简单的完成博客的发布与远程站点的同步。配合github提供的pages功能，我们连自己的主机都可以省了。非常方便。</p>
+
+<!--more-->
+
 
 <h2>新建文章</h2>
 
