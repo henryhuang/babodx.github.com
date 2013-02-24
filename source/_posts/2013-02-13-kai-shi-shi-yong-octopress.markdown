@@ -4,13 +4,12 @@ title: "开始使用octopress"
 date: 2013-02-13 14:54
 comments: true
 categories: octopress
-author: babodx 
 ---
 #概述#
 最近在看[ruby-china.org](http://ruby-china.org)和[happycasts.net](http://happycasts.net)的视频。开始尝试使用git来做版本控制。原来都是使用svn，所以最近一直在折腾和学习。看到很多编程人员都开始采用octopress来代替wordpress写blog了。我也开始尝试使用这个octopress的blog系统。
 
 octopress是一套基于ruby构建的blog管理系统，通过git来为我们的文章做版本控制，并且通过rake命令可以简单的完成博客的发布与远程站点的同步。配合github提供的pages功能，我们连自己的主机都可以省了。非常方便。
-
+<!--more-->
 ##新建文章##
 写文章只要进入到我们的octopress目录下，输入下面命令就可以创建一个新的blog文章。
 	rake new_post\[title\]
