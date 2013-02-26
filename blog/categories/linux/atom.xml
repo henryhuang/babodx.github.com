@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-26T15:08:04+08:00</updated>
+  <updated>2013-02-26T15:14:47+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -63,6 +63,40 @@ rheltest.img2 208845 4080509 1935832+ 8e Linux LVM
 <p><code>
 mount -o loop,offset=32256 test.img /foldername
 </code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[CentOS里的Xen配置pygrub]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/centos-xen-pygrub/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/centos-xen-pygrub</id>
+    <content type="html"><![CDATA[<p>如果用virt-install生成一台虚拟服务器
+在查看配置的时候，会发现已经没有了kernel=这个配置来制定启动内核。而是用了</p>
+
+<p><code>bootloader = '/usr/bin/pygrub'</code></p>
+
+<p>关于这个，可以参考
+<a href="http://wiki.xensource.com/xenwiki/PyGrub">http://wiki.xensource.com/xenwiki/PyGrub</a></p>
+
+<p>CentOS 5.3的虚拟化，好像没有了XenU的内核，而是改用了这种新的方式。</p>
+
+<p>反正我用kernel启动失败了。后来用这个方式已经可以正常使用虚拟服务器了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[CentOS 5.3下成功安装了Xen虚拟化服务。]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/centos-install-xen/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/centos-install-xen</id>
+    <content type="html"><![CDATA[<p>今天参照下面文档成功安装了虚拟化服务。</p>
+
+<p><a href="http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2">http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2</a></p>
+
+<p>并且在虚拟化服务里，安装了一台vm01的虚拟Centos。</p>
+
+<p>不过时间比较长，通过网络安装，用了4个小时。</p>
 ]]></content>
   </entry>
   

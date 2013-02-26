@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Octopress - 鑫的方向</title>
+  <title>CentOS里的Xen配置pygrub - 鑫的方向</title>
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="Category: Octopress">
+  <meta name="description" content="如果用virt-install生成一台虚拟服务器
+在查看配置的时候，会发现已经没有了kernel=这个配置来制定启动内核。而是用了 bootloader = '/usr/bin/pygrub' 关于这个，可以参考
+http://wiki.xensource.com/xenwiki/PyGrub &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://babodx.github.comblog/categories/octopress/">
+  <link rel="canonical" href="http://babodx.github.com/blog/2009/12/21/centos-xen-pygrub/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -63,35 +65,96 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Octopress</h1>
+    
+      <h1 class="entry-title">CentOS里的Xen配置pygrub</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>如果用virt-install生成一台虚拟服务器
+在查看配置的时候，会发现已经没有了kernel=这个配置来制定启动内核。而是用了</p>
 
-  
-  <h2>2013</h2>
+<p><code>bootloader = '/usr/bin/pygrub'</code></p>
 
-<article>
-  
-<h1><a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a></h1>
-<time datetime="2013-02-13T14:54:00+08:00" pubdate><span class='month'>Feb</span> <span class='day'>13</span> <span class='year'>2013</span></time>
+<p>关于这个，可以参考
+<a href="http://wiki.xensource.com/xenwiki/PyGrub">http://wiki.xensource.com/xenwiki/PyGrub</a></p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/octopress/'>Octopress</a></span>
-</footer>
+<p>CentOS 5.3的虚拟化，好像没有了XenU的内核，而是改用了这种新的方式。</p>
 
-
-</article>
-
+<p>反正我用kernel启动失败了。后来用这个方式已经可以正常使用虚拟服务器了。</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/virtualization/'>Virtualization</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2009/12/21/centos-xen-pygrub/" data-via="" data-counturl="http://babodx.github.com/blog/2009/12/21/centos-xen-pygrub/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/12/21/centos-install-xen/" title="Previous Post: CentOS 5.3下成功安装了Xen虚拟化服务。">&laquo; CentOS 5.3下成功安装了Xen虚拟化服务。</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/12/21/howto-mount-xen-img/" title="Next Post: 怎么mount一个xen的img映像。转载">怎么mount一个xen的img映像。转载 &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
 
 </div>
