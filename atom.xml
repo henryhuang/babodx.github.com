@@ -4,7 +4,7 @@
   <title><![CDATA[鑫的方向]]></title>
   <link href="http://babodx.github.com/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-20T14:37:03+08:00</updated>
+  <updated>2013-02-26T11:08:09+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[git-first-on-ubuntu]]></title>
+    <link href="http://babodx.github.com/blog/2013/02/24/git-first-on-ubuntu/"/>
+    <updated>2013-02-24T08:29:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/02/24/git-first-on-ubuntu</id>
+    <content type="html"><![CDATA[<h1>ubuntu 12.10下初次使用git</h1>
+
+<p>前些时候在mac下面使用了git，感觉很棒。今天在单位安装了一台ubuntu 12.10的桌面系统，也开始尝试用git的方式来写blog。</p>
+
+<h2>安装</h2>
+
+<p>ubuntu下面安装git非常容易。</p>
+
+<pre><code>sudo apt-get install git-core
+</code></pre>
+
+<p>然后对git进行全局设置</p>
+
+<pre><code>git config user.name "yourname"
+git config user.email "youremail"
+</code></pre>
+
+<p>设置后用下面命令可以查看</p>
+
+<pre><code>git config -l
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[我2013年学习列表]]></title>
@@ -101,6 +130,43 @@
 <p>我们只需要用我们熟悉的编辑器打开这个.markdown文件来写我们的文章就可以了。而文章的写作采用markdown语言。这个语言也是我最近才接触的，感觉非常容易上手，可以说完全是为了写作而诞生的。可以让我们愉快的写作，而不是考虑用什么字体，用什么格式，怎么对齐等问题。</p>
 
 <p>有了这个很好的开始，后面就是慢慢学习octopress的技巧和markdown的各种语法了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[我的网站开通了，www.xinlogs.com.]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/19/startup-xinlogs/"/>
+    <updated>2009-12-19T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/19/startup-xinlogs</id>
+    <content type="html"><![CDATA[<p>以前一直在断断续续的写Blog，开始放在百度的空间。网址http://hi.baidu.com/babodx</p>
+
+<p>后来在09年7月，觉得<a href="http://hi.baidu.com/babodx">http://hi.baidu.com/babodx</a>空间的功能太少了，就搬家到了<a href="http://babodx.spaces.live.com">ttp://babodx.spaces.live.com</a>并且注册了xinlogs.com域名。后来就一直关注VPS空间，觉得这个很好，相当于自己有了一台虚拟的服务器，完全可以自己在上面配置各种服务。</p>
+
+<p>于是在2009年12月18日，我终于决定购买了rashost.com的1款128M内存的VPS，位置在美国的洛杉矶机房。</p>
+
+<p>价格还算便宜1个月68元。rashost的有点就是不限制流量，而且CPU采用intel至强的。速度也不错</p>
+
+<p>我选择了CentOS 5.3系统</p>
+
+<p><strong>CPU信息</strong></p>
+
+<p>model name      : Intel(R) Xeon(R) CPU           X3220  @ 2.40GHz</p>
+
+<p><strong>内存信息</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>             total       used       free     shared    buffers     cached
+</span><span class='line'>Mem:           128        119          8          0          9         67
+</span><span class='line'>-/+ buffers/cache:         42         86
+</span><span class='line'>Swap:          255          0        255</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我的网站采用Nginx+PHP+MySQL+Bo-Blog架设，参考了<a href="www.s135.com">http://www.s135.com/</a>上的优化方法。</p>
+
+<p>后面剩下的工作就是如何将以前blog的文章搬家够来了。。。估计够折腾一阵子的。</p>
 ]]></content>
   </entry>
   
