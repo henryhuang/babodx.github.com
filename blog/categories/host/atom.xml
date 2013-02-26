@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: host | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/host/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-02-26T14:42:14+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[我的网站开通了，www.xinlogs.com.]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/19/startup-xinlogs/"/>
+    <updated>2009-12-19T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/19/startup-xinlogs</id>
+    <content type="html"><![CDATA[<p>以前一直在断断续续的写Blog，开始放在百度的空间。网址http://hi.baidu.com/babodx</p>
+
+<p>后来在09年7月，觉得<a href="http://hi.baidu.com/babodx">http://hi.baidu.com/babodx</a>空间的功能太少了，就搬家到了<a href="http://babodx.spaces.live.com">ttp://babodx.spaces.live.com</a>并且注册了xinlogs.com域名。后来就一直关注VPS空间，觉得这个很好，相当于自己有了一台虚拟的服务器，完全可以自己在上面配置各种服务。</p>
+
+<p>于是在2009年12月18日，我终于决定购买了rashost.com的1款128M内存的VPS，位置在美国的洛杉矶机房。</p>
+
+<p>价格还算便宜1个月68元。rashost的有点就是不限制流量，而且CPU采用intel至强的。速度也不错</p>
+
+<p>我选择了CentOS 5.3系统</p>
+
+<p><strong>CPU信息</strong></p>
+
+<p>model name      : Intel(R) Xeon(R) CPU           X3220  @ 2.40GHz</p>
+
+<p><strong>内存信息</strong></p>
+
+<p><code>
+             total       used       free     shared    buffers     cached
+Mem:           128        119          8          0          9         67
+-/+ buffers/cache:         42         86
+Swap:          255          0        255
+</code>
+我的网站采用Nginx+PHP+MySQL+Bo-Blog架设，参考了<a href="www.s135.com">http://www.s135.com/</a>上的优化方法。</p>
+
+<p>后面剩下的工作就是如何将以前blog的文章搬家够来了。。。估计够折腾一阵子的。</p>
+]]></content>
+  </entry>
+  
+</feed>
