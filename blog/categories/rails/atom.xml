@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-27T00:26:05+08:00</updated>
+  <updated>2013-02-27T00:29:11+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -14,43 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Rails下request.raw_post的一些问题]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/rails-request/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/rails-request</id>
-    <content type="html"><![CDATA[<p>我在学习Agile Web Development with Rails在第18章 Observers的例子中</p>
-
-<p><code>
-&lt;%=text_field_tag :search%&gt;
-&lt;%=observe_field( :search,
-                  :frequency =&gt; 0.5,
-                  :update =&gt; :results,
-                  :url =&gt; {:action =&gt; :search})%&gt;
-</code></p>
-
-<p>将text_field_tag里面的内容，每间隔0.5就提交给search这个action,然后将结果显示在<div id="results"></div>层</p>
-
-<p>在search方法里面可以通过request.raw_post获取提交的数据</p>
-
-<p><code>
-def search
-     render:text=&gt;request.raw_post   
-end
-</code></p>
-
-<p>问题是上面这样返回的内容，总是在提交的内容后多一个=号</p>
-
-<p>比如在文本框输入div层显示的就是a=</p>
-
-<p>后来只能通过把最后2位抹去，来达到正常效果render:text=>request.raw_post.to(request.raw_post.length-2)</p>
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[rails下上传文件并且解决乱码问题]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/38/"/>
+    <link href="http://babodx.github.com/blog/2009/12/21/rails-upload-unread/"/>
     <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/38</id>
+    <id>http://babodx.github.com/blog/2009/12/21/rails-upload-unread</id>
     <content type="html"><![CDATA[<p>这个问题是我在<a href="http://www.javaeye.com/">www.javaeye.com</a>论坛上提出的，并且由mathsfan给出了解决办法</p>
 
 <p>首先创建一个项目，叫<strong>test</strong></p>
@@ -154,6 +121,39 @@ def set_charset
   @headers["Content-Type"]="text/html;charset=utf8"
 end
 </code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Rails下request.raw_post的一些问题]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/rails-request/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/rails-request</id>
+    <content type="html"><![CDATA[<p>我在学习Agile Web Development with Rails在第18章 Observers的例子中</p>
+
+<p><code>
+&lt;%=text_field_tag :search%&gt;
+&lt;%=observe_field( :search,
+                  :frequency =&gt; 0.5,
+                  :update =&gt; :results,
+                  :url =&gt; {:action =&gt; :search})%&gt;
+</code></p>
+
+<p>将text_field_tag里面的内容，每间隔0.5就提交给search这个action,然后将结果显示在<div id="results"></div>层</p>
+
+<p>在search方法里面可以通过request.raw_post获取提交的数据</p>
+
+<p><code>
+def search
+     render:text=&gt;request.raw_post   
+end
+</code></p>
+
+<p>问题是上面这样返回的内容，总是在提交的内容后多一个=号</p>
+
+<p>比如在文本框输入div层显示的就是a=</p>
+
+<p>后来只能通过把最后2位抹去，来达到正常效果render:text=>request.raw_post.to(request.raw_post.length-2)</p>
 ]]></content>
   </entry>
   

@@ -9,10 +9,8 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="这个问题是我在www.javaeye.com论坛上提出的，并且由mathsfan给出了解决办法 首先创建一个项目，叫test 在app目录下的controllers目录下，找到test_controller.rb文件 添加一个upload的action 1
-2
-3
-def upload end &hellip;">
+  <meta name="description" content="今天安装了一台CentOS 5.3 64bit服务器。 服务器硬件HP 380G5，4U高 CPU 4核处理器 2颗
+内存 4G 硬盘 147G*3 安装很顺利，采用server模式，去掉了不用的软件，加入虚拟化。 安装后启动，占用内存在230M左右，感觉比CentOS 4.7高了很多呀。。。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -73,7 +71,7 @@ def upload end &hellip;">
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/38/">Rails下上传文件并且解决乱码问题</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-5-3-64bit-install-on-hp-380-g5/">CentOS 5.3 64bit安装在HP 380G5服务器</a></h1>
     
     
       <p class="meta">
@@ -96,43 +94,33 @@ def upload end &hellip;">
   </header>
 
 
-  <div class="entry-content"><p>这个问题是我在<a href="http://www.javaeye.com/">www.javaeye.com</a>论坛上提出的，并且由mathsfan给出了解决办法</p>
+  <div class="entry-content"><p>今天安装了一台CentOS 5.3 64bit服务器。</p>
 
-<p>首先创建一个项目，叫<strong>test</strong></p>
+<p>服务器硬件HP 380G5，4U高</p>
 
-<p>在app目录下的controllers目录下，找到<strong>test_controller.rb</strong>文件</p>
-
-<p>添加一个upload的action</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def upload
-</span><span class='line'>
-</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+<ul>
+<li>CPU 4核处理器 2颗</li>
+<li>内存 4G 硬盘 147G*3</li>
+</ul>
 
 
-<p>然后在view目录下的test目录下，创建一个<strong>upload.rhtml</strong>文件</p>
+<p>安装很顺利，采用server模式，去掉了不用的软件，加入虚拟化。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;%=form_tag({:action=&gt;'save'},:multipart=&gt;true)%&gt;
-</span><span class='line'>&lt;br/&gt;upload your file:&lt;%=file_field("file","file")%&gt;
-</span><span class='line'>&lt;br/&gt;
-</span><span class='line'>&lt;%=submit_tag("upload")%&gt;
-</span><span class='line'>&lt;%=end_form_tag%&gt;</span></code></pre></td></tr></table></div></figure>
+<p>安装后启动，占用内存在230M左右，感觉比CentOS 4.7高了很多呀。。。我在一台HP 140的1U服务器安装的CentOS 4.7 启动后，只占用29M内存。</p>
 
+<p>内存占用问题，还需要看看具体是什么原因。</p>
 
-<p>现在访问<a href="http://localhost:3000/test/upload">http://localhost:3000/test/upload</a>，应该可以看到一个上传的界面了。</p>
+<p>测试下性能，我比较喜欢用unixbench测试。</p>
 
-<p>不过还没有处理上传后的方法呢，所以还不能实现上传。因为上面的表单是提交给save这个action 的，现在还没有写呢。</p>
+<p><a href="http://www.hermit.org/Linux/Benchmarking/">http://www.hermit.org/Linux/Benchmarking/</a></p>
 
-<p>在写save之前，先要完成一些相关的方法</p>
+<p>我这次下载的5.0版本，因为5.1以后支持2D,3D我没有装X11，运行不了。</p>
 
-<p>在<strong>application.rb</strong>文件里，加入</p>
+<p>结果5.0也是运行了一半就出问题了。奇怪呀。</p>
+
+<p>我的一台CentOS 4.4 装在一个双核 Intel(R) Xeon(TM) CPU 2.66GHz，1G内存的机器上。用4.1.0-wht测试，得分只有145.不过是跑着java、tomcat、apache、mysql和vmserver的时候测试的。内存使用400M左右的时候。</p>
+
+<p>我看到网上很多128M的VPS居然也可以得到160多分，真是奇怪呀。而我这台双4核处理器xeon e7320,4G内存，装CentOS的机器，也只有下面的数据</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -146,84 +134,116 @@ def upload end &hellip;">
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def uploadFile(file) #处理上传后的文件保存
-</span><span class='line'>       if !file.original_filename.empty? 
-</span><span class='line'>          #生成一个随机的文件名
-</span><span class='line'>          @filename=getFileName(file.original_filename) 
-</span><span class='line'>          #向dir目录写入文件 
-</span><span class='line'>          File.open("#{RAILS_ROOT}/public/images/#{@filename}", "wb") do |f|
-</span><span class='line'>           f.write(file.read) 
-</span><span class='line'>          end 
-</span><span class='line'>          #返回文件名称
-</span><span class='line'>          return @filename 
-</span><span class='line'>        end 
-</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def getFileName(filename) 
-</span><span class='line'>#获取文件名
-</span><span class='line'>  if !filename.nil? 
-</span><span class='line'>     return filename 
-</span><span class='line'>  end 
-</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
-
-
-<p>现在在<strong>test_controller.rb</strong>里写出save的action</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def save 
-</span><span class='line'>  unless request.get? 
-</span><span class='line'>    if filename=uploadFile(params[:file]['file']) #调用application.rb&lt;/strong&gt;里写的uploadFile对文件保存
-</span><span class='line'>       render :text=&gt;filename 
-</span><span class='line'>    end 
-</span><span class='line'>  end 
-</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
-
-
-<p>文件可以正确上传到public/images下
-但是中文文件名变为了乱码,但是render :text=>filename返回的名字,并不是乱码.</p>
-
-<p> ###解决办法###</p>
-
-<p>在ApplicationController加上：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>before_filter:set_charset 
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@moodle unixbench-4.1.0-wht-2]# ./Run
+</span><span class='line'>make all
+</span><span class='line'>make[1]: Entering directory `/root/unixbench-4.1.0-wht-2'
+</span><span class='line'>Checking distribution of files
+</span><span class='line'>./pgms exists
+</span><span class='line'>./src exists
+</span><span class='line'>./testdir exists
+</span><span class='line'>./tmp exists
+</span><span class='line'>./results exists
+</span><span class='line'>make[1]: Leaving directory `/root/unixbench-4.1.0-wht-2'
+</span><span class='line'>   #    # #    # # #    #          #####   ###### #    #   ####   #    #&lt;br&gt;
+</span><span class='line'>   #    # ##   # #   # #           #    # #       ##   # #    # #    #&lt;br&gt;
+</span><span class='line'>   #    # # # # #    ##            #####   #####   # # # #       ######&lt;br&gt;
+</span><span class='line'>   #    # # # # #    ##            #    # #       # # # #       #    #&lt;br&gt;
+</span><span class='line'>   #    # #   ## #   # #           #    # #       #   ## #    # #    #&lt;br&gt;
+</span><span class='line'>    ####   #    # # #    #          #####   ###### #    #   ####   #    #
+</span><span class='line'>                 4        1           Based on the Byte Magazine Unix Benchmark
+</span><span class='line'>                44       11
+</span><span class='line'>   v   v       4 4        1
+</span><span class='line'>    v v       44444       1           v4.1 revisions mostly by David C. Niemi,
+</span><span class='line'>     v           4   o   111 - WHT.2 Reston, VA, USA niemi@tux.org
+</span><span class='line'>WHT Variant by Andy A. Lee andylee@dslextreme.com
+</span><span class='line'>See: http://www.webhostingtalk.com/showthread.php?s=&threadid=308055
 </span><span class='line'>
-</span><span class='line'>def set_charset 
-</span><span class='line'>     @headers["Content-Type"]="text/html;charset=gb2312" 
-</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>Dhrystone 2 using register variables 1 2
+</span><span class='line'>Double-Precision Whetstone 1 2
+</span><span class='line'>Execl Throughput 1
+</span><span class='line'>Filesystem Throughput 1024 bufsize 2000 maxblocks 1
+</span><span class='line'>Filesystem Throughput 256 bufsize 500 maxblocks 1
+</span><span class='line'>Filesystem Throughput 4096 bufsize 8000 maxblocks 1
+</span><span class='line'>Pipe Throughput 1 2
+</span><span class='line'>Pipe-based Context Switching 1 2
+</span><span class='line'>Process Creation 1
+</span><span class='line'>System Call Overhead 1 2
+</span><span class='line'>Shell Scripts (8 concurrent) 1
+</span><span class='line'>==============================================================
+</span><span class='line'>BYTE UNIX Benchmarks (Version 4.1-wht.2)
+</span><span class='line'>System -- Linux moodle.ict 2.6.18-128.el5xen #1 SMP Wed Jan 21 11:12:42 EST 2009 x86_64 x86_64 x86_64 GNU/Linux
+</span><span class='line'>                     271677672   3293760 254360848   2% /
+</span><span class='line'>Start Benchmark Run: Tue Jun 30 06:43:06 CST 2009
+</span><span class='line'>06:43:06 up 7:53, 1 user, load average: 0.19, 0.76, 0.81
+</span><span class='line'>End Benchmark Run: Tue Jun 30 06:53:17 CST 2009
+</span><span class='line'>06:53:17 up 8:03, 1 user, load average: 15.43, 6.42, 3.16
+</span><span class='line'>
+</span><span class='line'>                     INDEX VALUES
+</span><span class='line'>TEST                                        BASELINE     RESULT      INDEX
+</span><span class='line'>Dhrystone 2 using register variables        376783.7 19031818.6      505.1
+</span><span class='line'>Double-Precision Whetstone                      83.1     1448.6      174.3
+</span><span class='line'>Execl Throughput                               188.3     1593.9       84.6
+</span><span class='line'>File Copy 1024 bufsize 2000 maxblocks         2672.0   118911.0      445.0
+</span><span class='line'>File Copy 256 bufsize 500 maxblocks           1077.0    42442.0      394.1
+</span><span class='line'>File Read 4096 bufsize 8000 maxblocks        15382.0   946428.0      615.3
+</span><span class='line'>Pipe-based Context Switching                 15448.6   253316.5      164.0
+</span><span class='line'>Pipe Throughput                             111814.6 1223105.0      109.4
+</span><span class='line'>Process Creation                               569.3     3279.0       57.6
+</span><span class='line'>Shell Scripts (8 concurrent)                    44.8      508.7      113.5
+</span><span class='line'>System Call Overhead                        114433.5   907496.2       79.3
+</span><span class='line'>                                                                 =========
+</span><span class='line'>     FINAL SCORE                                                     182.5</span></code></pre></td></tr></table></div></figure>
 
 
-<p>我试验了一下，用utf8也可以正常处理,比如按照如下写法</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def set_charset
-</span><span class='line'>  @headers["Content-Type"]="text/html;charset=utf8" 
-</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
-
-
-
+<p>总分 182.5 真不知都那些VPS测试出 400分的，是什么情况。
+难道是可以针对unixbench优化？</p>
 </div>
   
   
