@@ -5,11 +5,15 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>我2013年学习列表 - 鑫的方向</title>
+  <title>怎么mount一个xen的img映像。转载 - 鑫的方向</title>
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="2013学习计划 2012年开始了，这一年打算好好学习下ruby、python两种语言和rails框架。 学习内容列表 ruby 打算通过阅读图书和在线学习两种方式来学习ruby。 图书主要就是一本手边的Programming ruby 2nd 在线学习倒是有不少好的资源 rubymonk &hellip;">
+  <meta name="description" content="First you need to find out the partitions and the startsector of partitions: 1
+2
+3
+4
+[root@xen rruban]# file rheltest.img rheltest.img: x86 boot &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +22,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://babodx.github.com/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">
+  <link rel="canonical" href="http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -67,7 +71,7 @@
   
   <header>
     
-      <h1 class="entry-title">我2013年学习列表</h1>
+      <h1 class="entry-title">怎么mount一个xen的img映像。转载</h1>
     
     
       <p class="meta">
@@ -83,55 +87,66 @@
   
 
 
-<time datetime="2013-02-20T13:55:00+08:00" pubdate data-updated="true">Feb 20<span>th</span>, 2013</time>
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h1>2013学习计划</h1>
-
-<p>2012年开始了，这一年打算好好学习下ruby、python两种语言和rails框架。</p>
-
-<!--more-->
-
-
-<h2>学习内容列表</h2>
-
-<h3>ruby</h3>
-
-<p>打算通过阅读图书和在线学习两种方式来学习ruby。</p>
-
-<p>图书主要就是一本手边的<strong>Programming ruby 2nd</strong></p>
-
-<p>在线学习倒是有不少好的资源</p>
-
-<ul>
-<li><a href="http://rubymonk.com">rubymonk</a></li>
-<li><a href="http://www.codeschool.com">codeschool</a></li>
-<li><a href="http://teamtreehouse.com/">teamtreehouse</a></li>
+<div class="entry-content"><ul>
+<li>First you need to find out the partitions and the startsector of partitions:</li>
 </ul>
 
 
-<h3>python</h3>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@xen rruban]# file rheltest.img rheltest.img: x86 boot sector, GRand Unified Bootloader (0.94); 
+</span><span class='line'>partition 
+</span><span class='line'>1: ID=0x83, active, starthead 1, startsector 63, 208782 sectors; partition 
+</span><span class='line'>2: ID=0x8e, starthead 0, startsector 208845, 3871665 sectors, code offset 0x48</span></code></pre></td></tr></table></div></figure>
 
-<p>python主要是通过阅读<strong>Python基础教程 第2版</strong></p>
 
-<h3>rails</h3>
-
-<p>主要通过一下网站来学习了</p>
+<p>There are 3 partitions inside the image file. The startsector of each partition is also listed. Boot partition will have start sector 63.</p>
 
 <ul>
-<li><a href="http://ruby-china.org">ruby-china</a></li>
-<li><a href="http://happycasts.net">happycasts</a></li>
-<li><a href="http://railscasts-china.com/">railscasts-china</a></li>
-<li><a href="http://www.codeschool.com">codeschool</a></li>
-<li><a href="http://teamtreehouse.com/">teamtreehouse</a></li>
+<li>Now you need to get the sector size:</li>
 </ul>
 
 
-<h2>希望可以尽快入门rails开发</h2>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@xen]fdisk -lu rheltest.img
+</span><span class='line'>Disk rheltest.img: 0 MB, 0 bytes 255 heads, 63 sectors/track, 0 cylinders, total 0 sectors 
+</span><span class='line'>Units = sectors of 1 * 512 = 512 bytes 
+</span><span class='line'>Device Boot Start End Blocks Id System 
+</span><span class='line'>rheltest.img1 * 63 208844 104391 83 Linux 
+</span><span class='line'>rheltest.img2 208845 4080509 1935832+ 8e Linux LVM </span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above shows the sector byte size is 512 byte.</p>
+
+<ul>
+<li>To calculating the offset: offset = start_sector x sector_byte_size.</li>
+</ul>
+
+
+<p>The startsector is 63 for the first partition, therefore the first partition offset is: 63x512=32256</p>
+
+<ul>
+<li>Finally, to mount the xen image, use:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mount -o loop,offset=32256 test.img /foldername</span></code></pre></td></tr></table></div></figure>
+
 </div>
 
 
@@ -154,12 +169,12 @@
   
 
 
-<time datetime="2013-02-20T13:55:00+08:00" pubdate data-updated="true">Feb 20<span>th</span>, 2013</time>
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/plan/'>Plan</a>
+    <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/virtualization/'>Virtualization</a>
   
 </span>
 
@@ -168,7 +183,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/" data-via="" data-counturl="http://babodx.github.com/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img/" data-via="" data-counturl="http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img/" >Tweet</a>
   
   
   
@@ -177,10 +192,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/02/13/kai-shi-shi-yong-octopress/" title="Previous Post: 开始使用octopress">&laquo; 开始使用octopress</a>
+        <a class="basic-alignment left" href="/blog/2009/12/19/startup-xinlogs/" title="Previous Post: 我的网站开通了，www.xinlogs.com.">&laquo; 我的网站开通了，www.xinlogs.com.</a>
       
       
-        <a class="basic-alignment right" href="/blog/2013/02/24/git-first-on-ubuntu/" title="Next Post: git-first-on-ubuntu">git-first-on-ubuntu &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2013/02/13/kai-shi-shi-yong-octopress/" title="Next Post: 开始使用octopress">开始使用octopress &raquo;</a>
       
     </p>
   </footer>

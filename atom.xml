@@ -4,7 +4,7 @@
   <title><![CDATA[鑫的方向]]></title>
   <link href="http://babodx.github.com/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-26T14:42:14+08:00</updated>
+  <updated>2013-02-26T15:00:49+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -130,6 +130,67 @@ git config user.email "youremail"
 <p>我们只需要用我们熟悉的编辑器打开这个.markdown文件来写我们的文章就可以了。而文章的写作采用markdown语言。这个语言也是我最近才接触的，感觉非常容易上手，可以说完全是为了写作而诞生的。可以让我们愉快的写作，而不是考虑用什么字体，用什么格式，怎么对齐等问题。</p>
 
 <p>有了这个很好的开始，后面就是慢慢学习octopress的技巧和markdown的各种语法了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[怎么mount一个xen的img映像。转载]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img</id>
+    <content type="html"><![CDATA[<ul>
+<li>First you need to find out the partitions and the startsector of partitions:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@xen rruban]# file rheltest.img rheltest.img: x86 boot sector, GRand Unified Bootloader (0.94); 
+</span><span class='line'>partition 
+</span><span class='line'>1: ID=0x83, active, starthead 1, startsector 63, 208782 sectors; partition 
+</span><span class='line'>2: ID=0x8e, starthead 0, startsector 208845, 3871665 sectors, code offset 0x48</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are 3 partitions inside the image file. The startsector of each partition is also listed. Boot partition will have start sector 63.</p>
+
+<ul>
+<li>Now you need to get the sector size:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@xen]fdisk -lu rheltest.img
+</span><span class='line'>Disk rheltest.img: 0 MB, 0 bytes 255 heads, 63 sectors/track, 0 cylinders, total 0 sectors 
+</span><span class='line'>Units = sectors of 1 * 512 = 512 bytes 
+</span><span class='line'>Device Boot Start End Blocks Id System 
+</span><span class='line'>rheltest.img1 * 63 208844 104391 83 Linux 
+</span><span class='line'>rheltest.img2 208845 4080509 1935832+ 8e Linux LVM </span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above shows the sector byte size is 512 byte.</p>
+
+<ul>
+<li>To calculating the offset: offset = start_sector x sector_byte_size.</li>
+</ul>
+
+
+<p>The startsector is 63 for the first partition, therefore the first partition offset is: 63x512=32256</p>
+
+<ul>
+<li>Finally, to mount the xen image, use:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mount -o loop,offset=32256 test.img /foldername</span></code></pre></td></tr></table></div></figure>
+
 ]]></content>
   </entry>
   

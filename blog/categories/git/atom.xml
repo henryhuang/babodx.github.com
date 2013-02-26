@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: git | 鑫的方向]]></title>
+  <title><![CDATA[Category: Git | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-26T14:42:14+08:00</updated>
+  <updated>2013-02-26T15:00:49+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>

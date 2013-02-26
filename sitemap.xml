@@ -2,31 +2,35 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://babodx.github.com/blog/2009/12/19/Centos-Virtualization/</loc>
-        <lastmod>2013-02-26T14:41:00+08:00</lastmod>
+        <lastmod>2013-02-26T14:57:33+08:00</lastmod>
     </url>
     <url>
         <loc>http://babodx.github.com/blog/2009/12/19/startup-xinlogs/</loc>
-        <lastmod>2013-02-26T11:10:18+08:00</lastmod>
+        <lastmod>2013-02-26T14:58:04+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img/</loc>
+        <lastmod>2013-02-26T14:56:24+08:00</lastmod>
     </url>
     <url>
         <loc>http://babodx.github.com/blog/2013/02/13/kai-shi-shi-yong-octopress/</loc>
-        <lastmod>2013-02-26T09:06:14+08:00</lastmod>
+        <lastmod>2013-02-26T14:58:16+08:00</lastmod>
     </url>
     <url>
         <loc>http://babodx.github.com/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/</loc>
-        <lastmod>2013-02-26T09:06:14+08:00</lastmod>
+        <lastmod>2013-02-26T14:57:51+08:00</lastmod>
     </url>
     <url>
         <loc>http://babodx.github.com/blog/2013/02/24/git-first-on-ubuntu/</loc>
-        <lastmod>2013-02-26T09:06:14+08:00</lastmod>
+        <lastmod>2013-02-26T14:58:38+08:00</lastmod>
     </url>
     <url>
         <loc>http://babodx.github.com/blog/archives/</loc>
-        <lastmod>2013-02-26T14:41:00+08:00</lastmod>
+        <lastmod>2013-02-26T14:58:38+08:00</lastmod>
     </url>
     <url>
         <loc>http://babodx.github.com/</loc>
-        <lastmod>2013-02-26T14:41:00+08:00</lastmod>
+        <lastmod>2013-02-26T14:58:38+08:00</lastmod>
     </url>
     <url>
         <loc>http://babodx.github.com/robots.txt</loc>

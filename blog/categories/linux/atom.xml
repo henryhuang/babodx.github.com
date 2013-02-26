@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: virtualiztion | 鑫的方向]]></title>
-  <link href="http://babodx.github.com/blog/categories/virtualiztion/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Linux | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-26T14:42:14+08:00</updated>
+  <updated>2013-02-26T15:00:49+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,59 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[怎么mount一个xen的img映像。转载]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img</id>
+    <content type="html"><![CDATA[<ul>
+<li>First you need to find out the partitions and the startsector of partitions:</li>
+</ul>
+
+
+<p><code>
+[root@xen rruban]# file rheltest.img rheltest.img: x86 boot sector, GRand Unified Bootloader (0.94);
+partition
+1: ID=0x83, active, starthead 1, startsector 63, 208782 sectors; partition
+2: ID=0x8e, starthead 0, startsector 208845, 3871665 sectors, code offset 0x48
+</code></p>
+
+<p>There are 3 partitions inside the image file. The startsector of each partition is also listed. Boot partition will have start sector 63.</p>
+
+<ul>
+<li>Now you need to get the sector size:</li>
+</ul>
+
+
+<p><code>
+[root@xen]fdisk -lu rheltest.img
+Disk rheltest.img: 0 MB, 0 bytes 255 heads, 63 sectors/track, 0 cylinders, total 0 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Device Boot Start End Blocks Id System
+rheltest.img1 * 63 208844 104391 83 Linux
+rheltest.img2 208845 4080509 1935832+ 8e Linux LVM
+</code></p>
+
+<p>The above shows the sector byte size is 512 byte.</p>
+
+<ul>
+<li>To calculating the offset: offset = start_sector x sector_byte_size.</li>
+</ul>
+
+
+<p>The startsector is 63 for the first partition, therefore the first partition offset is: 63x512=32256</p>
+
+<ul>
+<li>Finally, to mount the xen image, use:</li>
+</ul>
+
+
+<p><code>
+mount -o loop,offset=32256 test.img /foldername
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[CentOS虚拟化服务的配置]]></title>
