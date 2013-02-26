@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Software | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/software/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-26T17:44:42+08:00</updated>
+  <updated>2013-02-26T17:57:44+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -23,6 +23,27 @@
 <p>这个项目可以在企业内部架设一台服务器，来完成内部IM功能。客户端可以想QQ或者MSN一样登陆。并且通过服务器上设置GATEWAY功能，还能与MSN等主流软件通讯。</p>
 
 <p>具体功能还没有测试，不过打算有时间的时候架设下进行试用。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[一个在windows下很好用的MySQL工具Navicat]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/navicat/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/navicat</id>
+    <content type="html"><![CDATA[<p>为了解决中文乱码，我的Mysql都设置了使用utf8编码</p>
+
+<p>这样一来，使用SQLyog Enterprise查看表里面内容，就都不能正常显示了。可能SQLyog需要设置？反正我没有搞出来。</p>
+
+<p>不过后来我换用了Navicat 7以后，感觉很好。所有中文内容都可以正确显示</p>
+
+<p>比mysql front也要强很多。以后我就用这个了
+<img src="http://www.navicat.com/images/stories/product/mysql/product/win/win_big.jpg" alt="navicat" /></p>
+
+<p>而且支持Linux,windows,mac三个平台。下面是介绍</p>
+
+<p><span>PremiumSoft Navicat™ is a powerful MySQL database administration and development tool that is not only sophisticated enough for professional developers, but also easy to learn for new users. With an user-friendly GUI, Navicat™ lets you quickly and easily create, organize, access and share information in a secure and convenient way. </span>
+<span>PremiumSoft Navicat supports multiple MySQL server connections which can be connected locally or remotely. Your remote MySQL server can be running on Linux, Unix, Mac OS X or Windows platform.<br></span></p>
 ]]></content>
   </entry>
   

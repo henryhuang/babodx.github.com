@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Database | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/database/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-02-26T17:57:44+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Mysql设置my.cnf来记录下全部sql请求]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/mysql-log-sql/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/mysql-log-sql</id>
+    <content type="html"><![CDATA[<p>要想记录下提交到mysql数据库的全部sql语句，可以通过修改my.cnf来实现</p>
+
+<p>修改/etc/my.cnf文件</p>
+
+<p>找到[mysqld]段
+加入</p>
+
+<p><code>
+log=queryLog
+log-slow-queries=showquerylog
+</code></p>
+
+<p>然后就可以到/var/lib/mysql/目录下找到queryLog和showquerylog日志文件了</p>
+
+<p>里面记录这每个提交到数据库执行的sql语句。</p>
+
+<p>我的系统CentOS 4.4 rpm方式安装的mysql 5.0.57,如果其它系统或者其它安装方式，可能文件路径会有些不同。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[如何建立两个表间的外键]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/howto-create-foreign-key-on-mysql/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/howto-create-foreign-key-on-mysql</id>
+    <content type="html"><![CDATA[<p>建立Mysql两个表间的外键,需要满足三个条件</p>
+
+<ol>
+<li>两个表必须是InnoDB表类型</li>
+<li>使用在外键关系的域必须为索引型(Index)</li>
+<li>使用在外键关系的域必须与数据类型相似</li>
+</ol>
+
+
+<p>下面举例说明</p>
+
+<p>我们创建一个班级表和一个学生表,并建立一个外键</p>
+
+<p>创建班级表</p>
+
+<p><code>
+CREATE TABLE class (id INT NOT NULL AUTO_INCREMENT, classname VARCHAR(50) NOT NULL, PRIMARY KEY(id)) ENGINE=INNODB;
+</code></p>
+
+<p>插入班级数据</p>
+
+<p><code>
+INSERT INTO class VALUES (1,"一班"),(2,"二班"),(3,"三班");
+</code></p>
+
+<p>创建学生表</p>
+
+<p><code>
+CREATE TABLE students (id INT(4) NOT NULL, name VARCHAR(50) NOT NULL, FK_class INT(4) NOT NULL, INDEX (FK_class), FOREIGN KEY (FK_class) REFERENCES class (id), PRIMARY KEY(id)) ENGINE=INNODB;
+</code></p>
+
+<p>验证外键约束性,我们向students表插入一个学生数据,并让FK_class的值为一个在class表里面不存在的值.</p>
+
+<p><code>
+mysql&gt; INSERT INTO students VALUES (1,"zhang",5);
+</code></p>
+
+<p>马上就会看到Mysql报错</p>
+
+<p><code>
+ERROR 1452 : Cannot add or update a child row: a foreign key constraint fails (`test/students`, CONSTRAINT `students_ibfk_1` FOREIGN KEY (`FK_class`) REFERENCES `class` (`id`))
+</code></p>
+
+<p>以上证明外键可以正常工作了</p>
+
+<p>在Mysql下测试了以下,不建立index,并且不指定innodb格式.
+版本</p>
+
+<p>+----------------------+
+| version()            |
++----------------------+
+| 5.0.24a-community-nt |
++----------------------+</p>
+
+<p>建立class表</p>
+
+<p><code>
+CREATE TABLE class (id INT NOT NULL AUTO_INCREMENT, classname VARCHAR(50) NOT NULL, PRIMARY KEY(id));
+</code></p>
+
+<p>建立students表</p>
+
+<p><code>
+CREATE TABLE students (id INT(4) NOT NULL, name VARCHAR(50) NOT NULL, FK_class INT(4) NOT NULL, FOREIGN KEY (FK_class) REFERENCES class (id), PRIMARY KEY(id));
+</code></p>
+
+<p>通过Navicat查看,上面语句建立的两个表,也会默认用INNODB存储,而且也在students表建立了index和外键.一切正常.</p>
+]]></content>
+  </entry>
+  
+</feed>
