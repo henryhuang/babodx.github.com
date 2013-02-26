@@ -3,7 +3,7 @@ layout: post
 title: "开始使用octopress"
 date: 2013-02-13 14:54
 comments: true
-categories: octopress
+categories: Octopress
 ---
 #概述#
 最近在看[ruby-china.org](http://ruby-china.org)和[happycasts.net](http://happycasts.net)的视频。开始尝试使用git来做版本控制。原来都是使用svn，所以最近一直在折腾和学习。看到很多编程人员都开始采用octopress来代替wordpress写blog了。我也开始尝试使用这个octopress的blog系统。

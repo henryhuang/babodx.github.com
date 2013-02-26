@@ -1,0 +1,15 @@
+--- 
+categories: []
+comments: true
+layout: post
+title: "ubuntu8.04 玩魔兽世界 2.4.3(8606)"
+---
+最近一直在用ubuntu 8.04当桌面系统。已经很少用windows了。随着采用ubuntu也就一直没有玩魔兽世界了。<br>今天将Windows下的WOW目录直接拷贝到了ubuntu下面。我的wine是用sudo apt-get install默认安装的，没有特殊设置。<br>将wow目录拷贝到了用户目录的 .wine/drive_c/Program Files目录下。然后直接双击wow.exe运行。<br>这个时候会提示如下画面的错误。<br><div>
+<a rel="WLPP" href="https://s9rh2g.blu.livefilestore.com/y1m8N_TzSZWRIZodiHLM3Sy1M7XUE75HVH4hSLgeEQU_0uQeiD5pbm2oizz1pk96NcCWKc9q8dC9f7XtZqyxbBcX7LxYv1RInSkwNYXBR20MNuLXTG1evOgTvHjImcAxjBZ5E0_8L1CWNgzxoNCxkQOYw/bc198d3efd5ca5e1838b1322%5B2%5D.jpg"><img style="display: inline; border-width: 0px" src="https://s9rh2g.blu.livefilestore.com/y1mymKT363o3S7JlRnK7jIkk0wMUF3FTSH6H_BAzz-nkfx_M1rtrVYokOSqP2LVpUom9MUQlNCnaqvOXfvvRAzOfnaSdOAVjAyEQr51ToAL-tqyYnYs3VZVGaPrYfIn80ja2JZp_0rST9pyeXXH1x2big/bc198d3efd5ca5e1838b1322_thumb.jpg" border="0" alt="bc198d3efd5ca5e1838b1322" title="bc198d3efd5ca5e1838b1322" width="244" height="154"></a> </div>
+<br>这个不要紧，我们在启动的时候加入-opengl 参数就可以解决。<br>下面这个是成功启动的命令和截图<br>wine .wine/drive_c/Program\ Files/World\ of\ Warcraft/Wow.exe -opengl -nosound<br><br><div>
+<a rel="WLPP" href="https://s9rh2g.blu.livefilestore.com/y1mAmPLwGTjOrjGM3yYNoqELPQu_VkHb3RlUV90UNx-QLxLA1vAKPL0Lz_XRlVykGRDs3zlhsMhO7CGcsjZT59QKSr6sZig_s7Flue4Rci8GLJMUutglJssMl5FlSUTtosiNSXDH4yFRQm9e264yBf3Hg/af87c31f5d64fd78f724e42f%5B2%5D.jpg"><img style="display: inline; border-width: 0px" src="https://s9rh2g.blu.livefilestore.com/y1mQo3Gi98CNHQ0JwnB8iiHHERW-NnzASmJh9RW4SLFEfP16Xs4Dj3aHRgJSxfU1nX7hG4uXMmO2nbIbNsa9QEUsIl015liWuf7s0oM9hnPa3wpf9B6TyHypyM-WFxgs8Ck1bJGWvdY667F9COY92cY4Q/af87c31f5d64fd78f724e42f_thumb.jpg" border="0" alt="af87c31f5d64fd78f724e42f" title="af87c31f5d64fd78f724e42f" width="244" height="154"></a> </div>
+<br>已经成功启动了，感觉还不错。这个是在我IBM R61的笔记本上运行结果。<br>下面进入游戏看看速度<br><div>
+<a rel="WLPP" href="https://s9rh2g.blu.livefilestore.com/y1m0tFuWr-5n8FWSjjtHQxlxOm7u8iJ-gd2eWEuNlCxkHs51D94QoTnEYmXarvTLf4eIOZ-a55BmAyevVg3vgf7yDahhtgDMR2IkBumUIachMaqcYA5evfxIp2lvTzp4b2PjnhbFn7gktszR0PZ4NpiLg/19f06d600edac8c48cb10d2b%5B2%5D.jpg"><img style="display: inline; border-width: 0px" src="https://s9rh2g.blu.livefilestore.com/y1moRpS9S5GrUbPWgENT9yv3ryDKqp8bQp9-oenJ0ZPmQVTvG3bOX59AKiSSDtD1jDWVFak6nVe5mfJurip9HyCApsBPef72YUdF4Abif7rhjsT4UNiFU0YPrGpwV_O_tAHe48_duf4b44vj6cph8Wchw/19f06d600edac8c48cb10d2b_thumb.jpg" border="0" alt="19f06d600edac8c48cb10d2b" title="19f06d600edac8c48cb10d2b" width="244" height="154"></a> </div>
+<br>开始的时候，我的运行速度不行。只有可怜的35帧每秒。<br>在我关闭了所有特效后，速度到了惊人的100帧每秒。。。这个速度完全可以正常游戏了。<br>在看看我桌面右侧的状态cpu 53%占用 内存709.88MB 感觉还可以吧。<br><br>虽然已经AFK了，但是ubuntu能玩魔兽世界，还是让我很开心的。 <div id="related_log" style="font-size:12px">
+<b>相关日志：</b><a href="http://xinlogs.com/centos-install-ruby-rubygems">centos 源码安装ruby和rubygems</a><a href="http://xinlogs.com/post/20">ubuntu下arp攻击防御和反击！</a><a href="http://xinlogs.com/install-ApacheBench-on-CentOS-without-Apache">centos 单独安装apachebench</a><a href="http://xinlogs.com/wow-1-70-Express-Upgrade">国服3.13 德鲁伊带小号快速升级（1-70全程带）</a><a href="http://xinlogs.com/post/10">怎么mount一个xen的img映像。转载</a>
+</div>

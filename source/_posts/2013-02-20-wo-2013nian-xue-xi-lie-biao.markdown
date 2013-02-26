@@ -3,7 +3,7 @@ layout: post
 title: "我2013年学习列表"
 date: 2013-02-20 13:55
 comments: true
-categories: plan 
+categories: Plan 
 ---
 
 #2013学习计划
