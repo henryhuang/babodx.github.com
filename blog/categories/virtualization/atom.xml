@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Virtualization | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/virtualization/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-26T15:14:47+08:00</updated>
+  <updated>2013-02-26T15:37:39+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -82,6 +82,38 @@ mount -o loop,offset=32256 test.img /foldername
 <p>CentOS 5.3的虚拟化，好像没有了XenU的内核，而是改用了这种新的方式。</p>
 
 <p>反正我用kernel启动失败了。后来用这个方式已经可以正常使用虚拟服务器了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[CentOS 5.3 安装虚拟化后的内存识别问题.]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/centos-xen-memory-problem/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/centos-xen-memory-problem</id>
+    <content type="html"><![CDATA[<p>昨天单位到了2台SUN x4450.</p>
+
+<p><strong>硬件配置相当强力.</strong></p>
+
+<p>CPU 4颗6核的 Intel(R) Xeon(R) CPU           X7460 @ 2.66GHz</p>
+
+<p>系统可以识别出24颗处理器</p>
+
+<p><code>
+[root@localhost ~]# cat /proc/cpuinfo |grep processor|wc -l
+24
+</code></p>
+
+<p>内存64G</p>
+
+<p>在内存问题上,我郁闷了一阵子.我用dmesg、free、top查看，都是32G</p>
+
+<p>开始以为CentOS 5.3的64位内核就能支持到32G呢。又尝试在启动参数里加mem=64G</p>
+
+<p>又上论坛询问、查看官方文档，都说CentOS 5.3 64bit应该没有内存限制的。</p>
+
+<p>后来我发现了，原来问题出在安装的虚拟化上面</p>
+
+<p>用xm top可以正确识别内存。而且安装的系统，只是当作xm 里面的一个dom0来运行的。</p>
 ]]></content>
   </entry>
   

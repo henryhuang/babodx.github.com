@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>git-first-on-ubuntu - 鑫的方向</title>
+  <title>CentOS 5.3 安装虚拟化后的内存识别问题. - 鑫的方向</title>
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="ubuntu 12.10下初次使用git 前些时候在mac下面使用了git，感觉很棒。今天在单位安装了一台ubuntu 12.10的桌面系统，也开始尝试用git的方式来写blog。 安装 ubuntu下面安装git非常容易。 sudo apt-get install git-core &hellip;">
+  <meta name="description" content="昨天单位到了2台SUN x4450. 硬件配置相当强力. CPU 4颗6核的 Intel(R) Xeon(R) CPU           X7460 @ 2.66GHz 系统可以识别出24颗处理器 1
+2
+[root@localhost ~]# cat /proc/cpuinfo |grep &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://babodx.github.com/blog/2013/02/24/git-first-on-ubuntu/">
+  <link rel="canonical" href="http://babodx.github.com/blog/2009/12/21/centos-xen-memory-problem/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -67,7 +69,7 @@
   
   <header>
     
-      <h1 class="entry-title">Git-first-on-ubuntu</h1>
+      <h1 class="entry-title">CentOS 5.3 安装虚拟化后的内存识别问题.</h1>
     
     
       <p class="meta">
@@ -83,34 +85,38 @@
   
 
 
-<time datetime="2013-02-24T08:29:00+08:00" pubdate data-updated="true">Feb 24<span>th</span>, 2013</time>
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h1>ubuntu 12.10下初次使用git</h1>
+<div class="entry-content"><p>昨天单位到了2台SUN x4450.</p>
 
-<p>前些时候在mac下面使用了git，感觉很棒。今天在单位安装了一台ubuntu 12.10的桌面系统，也开始尝试用git的方式来写blog。</p>
+<p><strong>硬件配置相当强力.</strong></p>
 
-<h2>安装</h2>
+<p>CPU 4颗6核的 Intel(R) Xeon(R) CPU           X7460 @ 2.66GHz</p>
 
-<p>ubuntu下面安装git非常容易。</p>
+<p>系统可以识别出24颗处理器</p>
 
-<pre><code>sudo apt-get install git-core
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# cat /proc/cpuinfo |grep processor|wc -l
+</span><span class='line'>24</span></code></pre></td></tr></table></div></figure>
 
-<p>然后对git进行全局设置</p>
 
-<pre><code>git config user.name "yourname"
-git config user.email "youremail"
-</code></pre>
+<p>内存64G</p>
 
-<p>设置后用下面命令可以查看</p>
+<p>在内存问题上,我郁闷了一阵子.我用dmesg、free、top查看，都是32G</p>
 
-<pre><code>git config -l
-</code></pre>
+<p>开始以为CentOS 5.3的64位内核就能支持到32G呢。又尝试在启动参数里加mem=64G</p>
+
+<p>又上论坛询问、查看官方文档，都说CentOS 5.3 64bit应该没有内存限制的。</p>
+
+<p>后来我发现了，原来问题出在安装的虚拟化上面</p>
+
+<p>用xm top可以正确识别内存。而且安装的系统，只是当作xm 里面的一个dom0来运行的。</p>
 </div>
 
 
@@ -133,12 +139,12 @@ git config user.email "youremail"
   
 
 
-<time datetime="2013-02-24T08:29:00+08:00" pubdate data-updated="true">Feb 24<span>th</span>, 2013</time>
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/git/'>git</a>
+    <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/virtualization/'>Virtualization</a>
   
 </span>
 
@@ -147,7 +153,7 @@ git config user.email "youremail"
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2013/02/24/git-first-on-ubuntu/" data-via="" data-counturl="http://babodx.github.com/blog/2013/02/24/git-first-on-ubuntu/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2009/12/21/centos-xen-memory-problem/" data-via="" data-counturl="http://babodx.github.com/blog/2009/12/21/centos-xen-memory-problem/" >Tweet</a>
   
   
   
@@ -156,8 +162,10 @@ git config user.email "youremail"
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/" title="Previous Post: 我2013年学习列表">&laquo; 我2013年学习列表</a>
+        <a class="basic-alignment left" href="/blog/2009/12/21/centos-install-xen/" title="Previous Post: CentOS 5.3下成功安装了Xen虚拟化服务。">&laquo; CentOS 5.3下成功安装了Xen虚拟化服务。</a>
       
+      
+        <a class="basic-alignment right" href="/blog/2009/12/21/centos-xen-pygrub/" title="Next Post: CentOS里的Xen配置pygrub">CentOS里的Xen配置pygrub &raquo;</a>
       
     </p>
   </footer>
