@@ -4,7 +4,7 @@
   <title><![CDATA[鑫的方向]]></title>
   <link href="http://babodx.github.com/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-26T16:28:15+08:00</updated>
+  <updated>2013-02-26T17:25:23+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -134,6 +134,183 @@ git config user.email "youremail"
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[ubuntu 8.10下同步wm6.1手机]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/winphone-SynceWithUbuntu/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/winphone-SynceWithUbuntu</id>
+    <content type="html"><![CDATA[<p>参考了</p>
+
+<ul>
+<li><a href="http://www.synce.org/moin/SynceWithUbuntu">http://www.synce.org/moin/SynceWithUbuntu</a></li>
+<li>http://hi.baidu.com/john_zhy/blog/item/50e39f317240141febc4af5a.html</li>
+</ul>
+
+
+<p>我的本本 IBM R61</p>
+
+<p>系统 ubuntu 8.10从 8.04升级上来的。</p>
+
+<p>手机 eten X800 wm6.1英文系统</p>
+
+<p>原来一直不能在ubuntu下面同步手机资料，昨天参考了上面两个帖子，最后成功了。</p>
+
+<p>1、首先添加源</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo gedit   /etc/apt/sources.list</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在末尾添加</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>deb &lt;a href="http://ppa.launchpad.net/synce/ubuntu" target="_blank"&gt;http://ppa.launchpad.net/synce/ubuntu&lt;/a&gt; hardy main
+</span><span class='line'>
+</span><span class='line'>deb-src &lt;a href="http://ppa.launchpad.net/synce/ubuntu" target="_blank"&gt;http://ppa.launchpad.net/synce/ubuntu&lt;/a&gt; hardy main</span></code></pre></td></tr></table></div></figure>
+
+
+<p>保存，关闭</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get update</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我没有更新源，但是也成功。可能是8.10的缘故</p>
+
+<p>2、更新usb驱动（仅内核在2.6.24-19之前的，如果比这个新请跳过本步骤）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo rmmod rndis_host cdc_ether usbnet
+</span><span class='line'>sudo rm /lib/modules/`uname -r`/kernel/drivers/net/usb/{rndis_host,cdc_ether,usbnet}.ko
+</span><span class='line'>sudo apt-get install usb-rndis-source cdbs
+</span><span class='line'>sudo module-assistant auto-install usb-rndis
+</span><span class='line'>sudo apt-get install synce-hal librra0-tools librapi2-tools</span></code></pre></td></tr></table></div></figure>
+
+
+<p>因为我的内核是2.6.27-7的，所以跳过了这步。但是我安装了后面的软件包</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install synce-hal librra0-tools librapi2-tools</span></code></pre></td></tr></table></div></figure>
+
+
+<p>3、安装<strong>SynCE-GNOME</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install python-setuptools</span></code></pre></td></tr></table></div></figure>
+
+
+<p> 下载<a href="http://downloads.sourceforge.net/synce/synce-gnome-0.11.tar.gz">synce-gnome-0.11.tar.gz</a></p>
+
+<p> 解压，在终端进入其目录，运行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>python setup.py build
+</span><span class='line'>sudo python setup.py install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装<strong>notification-daemon</strong>（如果没有安装过的话，用新得立软件包管理器搜索一下就可以了）</p>
+
+<p>这个步骤完全做了一次，notification-daemon系统已经安装过了</p>
+
+<p>4、连接好手机，运行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/sbin/ifconfig -a | grep 80:00:60:0f:e8:00   | cut -d " " -f 1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>记下他输出的东西</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo gedit   /etc/network/interfaces</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在末尾添加<code>iface &lt;rndis0&gt; inet dhcp</code></p>
+
+<p>ps:&#8221;&lt;>&#8221;里面的是我在上面那步里输出的，你应该更换成你自己的，不带“&lt;>“ 保存并关闭，然后运行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo /etc/init.d/networking restart</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这次也是按照作的，我的网卡是多出来一个eth1(这个根据自己系统决定)。所以我在interfaces文件后面加入了</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>iface eth1 inet dhcp</span></code></pre></td></tr></table></div></figure>
+
+
+<p>5、安装OpenSync</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install multisync-tools opensync-plugin-evolution opensync-plugin-synce</span></code></pre></td></tr></table></div></figure>
+
+
+<p>6、现在该安装的都安装好了，就可以开始同步了<code>synce-sync-engine</code>如果出现如下错误</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>File "/usr/bin/sync-engine", line 84, in &lt;module&gt;
+</span><span class='line'>
+</span><span class='line'> configObj = Config.Config(progopts)
+</span><span class='line'>
+</span><span class='line'>   File "/usr/lib/python2.5/site-packages/SyncEngine/config.py", line 292, in __init__
+</span><span class='line'>
+</span><span class='line'> oldconf = os.path.join(self.path,"config.xml")
+</span><span class='line'>
+</span><span class='line'>AttributeError: Config instance has no attribute 'path'
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>请下载<a href="http://synce.svn.sf.net/svnroot/synce/releases/0.11.1/sync-engine/config/config.xml">config.xml</a>，保存为~/.synce/config.xml（提示：&#8221;~&#8221;为自己的家目录)</p>
+
+<p>创建同步项目<strong>synce-create-partnership &#8220;Linux desktop&#8221; &#8220;Contacts,Calendar&#8221;</strong></p>
+
+<p>ps：还有别的，可自行选择Contacts， Calendar， Tasks， Files 等</p>
+
+<p>创建OpenSync group</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>msynctool --addgroup synce-sync
+</span><span class='line'>
+</span><span class='line'>msynctool --addmember synce-sync synce-opensync-plugin
+</span><span class='line'>
+</span><span class='line'>msynctool --addmember synce-sync evo2-sync</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后同步synce-sync-engine</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>msynctool --sync synce-sync</span></code></pre></td></tr></table></div></figure>
+
+
+<p>他会同步到evolution里面</p>
+
+<p>我上面的照着做，全部成功了。</p>
+
+<p><strong>我的一些问题</strong></p>
+
+<p>据说安装了synce-gnomevfs后，可以在Nautilus里面看手机里的内容，但是我没有成功
+目前只能通过synce-pls、synce-pcp等命令，来操作手机里面文件。</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[试用ubuntu 8.04和LVM动态增加分区]]></title>
     <link href="http://babodx.github.com/blog/2009/12/21/ubuntu-dynamic-resize-lvm/"/>
     <updated>2009-12-21T00:00:00+08:00</updated>
@@ -244,6 +421,81 @@ git config user.email "youremail"
 
 
 <p>启用新的swap系统。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[如何快速统计服务器访问量]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/quick-stats-server-visits/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/quick-stats-server-visits</id>
+    <content type="html"><![CDATA[<p>最近看了javaeye上面<strong>robbin</strong>的一篇文章，学习到了很多知识。</p>
+
+<p><a href="http://robbin.javaeye.com/blog/97287">http://robbin.javaeye.com/blog/97287</a> 如何快速统计RoR网站的访问量</p>
+
+<p>我的服务器是Apache+tomcat的配置，上面跑了几个网站。都是基于apache 虚拟主机配置的。</p>
+
+<p>apache配置如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Include conf/vhost_*.conf</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后每个虚拟主机对应一个配置文件</p>
+
+<p>例如下面的(一些信息用???代替了，都是域名和姓名等个人信息)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;VirtualHost *:80&gt;
+</span><span class='line'>    ServerAdmin ???&lt;a href="mailto:???@???.cn"&gt;@???.cn&lt;/a&gt;
+</span><span class='line'>    DocumentRoot /home/???/www
+</span><span class='line'>    ServerName &lt;a href="http://www./???.org"&gt;www.???.org&lt;/a&gt;
+</span><span class='line'>    DirectoryIndex index.jsp index.htm
+</span><span class='line'>    ErrorLog logs/abc-error_log
+</span><span class='line'>    CustomLog "| /usr/sbin/rotatelogs /var/log/httpd/abc-access_%Y%m%d.log 86400" common
+</span><span class='line'>    &lt;Location "/*.jsp"&gt;
+</span><span class='line'>         JkUriSet worker ajp13:localhost:8009
+</span><span class='line'>    &lt;/Location&gt;
+</span><span class='line'>&lt;/VirtualHost&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样配置后，就会在/var/log/httpd下面按照虚拟主机名字和日期，每天生成一个访问日志文件</p>
+
+<p><strong>统计每日动态请求处理总数</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|wc -l</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>统计URL的访问频度</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $7}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>统计时间访问频度</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $4}'|awk -F : '{print $2}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>以上这些是基于CentOS+apache+tomcat实现的</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@ict ~]# cat /var/log/httpd/esdinchina-access_20081117.log |grep "200 "|awk '{print $4}'|awk -F : '{print $2}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
+
+
+
 ]]></content>
   </entry>
   

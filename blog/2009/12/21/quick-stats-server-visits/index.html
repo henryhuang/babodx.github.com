@@ -5,15 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>怎么mount一个xen的img映像。转载 - 鑫的方向</title>
+  <title>如何快速统计服务器访问量 - 鑫的方向</title>
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="First you need to find out the partitions and the startsector of partitions: 1
-2
-3
-4
-[root@xen rruban]# file rheltest.img rheltest.img: x86 boot &hellip;">
+  <meta name="description" content="最近看了javaeye上面robbin的一篇文章，学习到了很多知识。 http://robbin.javaeye.com/blog/97287 如何快速统计RoR网站的访问量 我的服务器是Apache+tomcat的配置，上面跑了几个网站。都是基于apache 虚拟主机配置的。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -22,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img/">
+  <link rel="canonical" href="http://babodx.github.com/blog/2009/12/21/quick-stats-server-visits/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -71,7 +67,7 @@
   
   <header>
     
-      <h1 class="entry-title">怎么mount一个xen的img映像。转载</h1>
+      <h1 class="entry-title">如何快速统计服务器访问量</h1>
     
     
       <p class="meta">
@@ -94,27 +90,21 @@
   </header>
 
 
-<div class="entry-content"><ul>
-<li>First you need to find out the partitions and the startsector of partitions:</li>
-</ul>
+<div class="entry-content"><p>最近看了javaeye上面<strong>robbin</strong>的一篇文章，学习到了很多知识。</p>
 
+<p><a href="http://robbin.javaeye.com/blog/97287">http://robbin.javaeye.com/blog/97287</a> 如何快速统计RoR网站的访问量</p>
+
+<p>我的服务器是Apache+tomcat的配置，上面跑了几个网站。都是基于apache 虚拟主机配置的。</p>
+
+<p>apache配置如下</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@xen rruban]# file rheltest.img rheltest.img: x86 boot sector, GRand Unified Bootloader (0.94); 
-</span><span class='line'>partition 
-</span><span class='line'>1: ID=0x83, active, starthead 1, startsector 63, 208782 sectors; partition 
-</span><span class='line'>2: ID=0x8e, starthead 0, startsector 208845, 3871665 sectors, code offset 0x48</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Include conf/vhost_*.conf</span></code></pre></td></tr></table></div></figure>
 
 
-<p>There are 3 partitions inside the image file. The startsector of each partition is also listed. Boot partition will have start sector 63.</p>
+<p>然后每个虚拟主机对应一个配置文件</p>
 
-<ul>
-<li>Now you need to get the sector size:</li>
-</ul>
-
+<p>例如下面的(一些信息用???代替了，都是域名和姓名等个人信息)</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -122,30 +112,50 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@xen]fdisk -lu rheltest.img
-</span><span class='line'>Disk rheltest.img: 0 MB, 0 bytes 255 heads, 63 sectors/track, 0 cylinders, total 0 sectors 
-</span><span class='line'>Units = sectors of 1 * 512 = 512 bytes 
-</span><span class='line'>Device Boot Start End Blocks Id System 
-</span><span class='line'>rheltest.img1 * 63 208844 104391 83 Linux 
-</span><span class='line'>rheltest.img2 208845 4080509 1935832+ 8e Linux LVM </span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;VirtualHost *:80&gt;
+</span><span class='line'>    ServerAdmin ???&lt;a href="mailto:???@???.cn"&gt;@???.cn&lt;/a&gt;
+</span><span class='line'>    DocumentRoot /home/???/www
+</span><span class='line'>    ServerName &lt;a href="http://www./???.org"&gt;www.???.org&lt;/a&gt;
+</span><span class='line'>    DirectoryIndex index.jsp index.htm
+</span><span class='line'>    ErrorLog logs/abc-error_log
+</span><span class='line'>    CustomLog "| /usr/sbin/rotatelogs /var/log/httpd/abc-access_%Y%m%d.log 86400" common
+</span><span class='line'>    &lt;Location "/*.jsp"&gt;
+</span><span class='line'>         JkUriSet worker ajp13:localhost:8009
+</span><span class='line'>    &lt;/Location&gt;
+</span><span class='line'>&lt;/VirtualHost&gt;</span></code></pre></td></tr></table></div></figure>
 
 
-<p>The above shows the sector byte size is 512 byte.</p>
+<p>这样配置后，就会在/var/log/httpd下面按照虚拟主机名字和日期，每天生成一个访问日志文件</p>
 
-<ul>
-<li>To calculating the offset: offset = start_sector x sector_byte_size.</li>
-</ul>
-
-
-<p>The startsector is 63 for the first partition, therefore the first partition offset is: 63x512=32256</p>
-
-<ul>
-<li>Finally, to mount the xen image, use:</li>
-</ul>
-
+<p><strong>统计每日动态请求处理总数</strong></p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mount -o loop,offset=32256 test.img /foldername</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|wc -l</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>统计URL的访问频度</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $7}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>统计时间访问频度</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $4}'|awk -F : '{print $2}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>以上这些是基于CentOS+apache+tomcat实现的</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@ict ~]# cat /var/log/httpd/esdinchina-access_20081117.log |grep "200 "|awk '{print $4}'|awk -F : '{print $2}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
+
+
 
 </div>
 
@@ -174,7 +184,7 @@
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/virtualization/'>Virtualization</a>
+    <a class='category' href='/blog/categories/linux/'>Linux</a>
   
 </span>
 
@@ -183,7 +193,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img/" data-via="" data-counturl="http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2009/12/21/quick-stats-server-visits/" data-via="" data-counturl="http://babodx.github.com/blog/2009/12/21/quick-stats-server-visits/" >Tweet</a>
   
   
   
@@ -192,10 +202,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2009/12/21/centos-xen-pygrub/" title="Previous Post: CentOS里的Xen配置pygrub">&laquo; CentOS里的Xen配置pygrub</a>
+        <a class="basic-alignment left" href="/blog/2009/12/21/opensource-im/" title="Previous Post: 一个很好的开源企业内部IM解决方案">&laquo; 一个很好的开源企业内部IM解决方案</a>
       
       
-        <a class="basic-alignment right" href="/blog/2009/12/21/opensource-im/" title="Next Post: 一个很好的开源企业内部IM解决方案">一个很好的开源企业内部IM解决方案 &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2009/12/21/ubuntu-dynamic-resize-lvm/" title="Next Post: 试用ubuntu 8.04和LVM动态增加分区">试用ubuntu 8.04和LVM动态增加分区 &raquo;</a>
       
     </p>
   </footer>

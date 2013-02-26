@@ -214,6 +214,210 @@ git config user.email "youremail"
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2009/12/21/winphone-SynceWithUbuntu/">Ubuntu 8.10下同步wm6.1手机</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>参考了</p>
+
+<ul>
+<li><a href="http://www.synce.org/moin/SynceWithUbuntu">http://www.synce.org/moin/SynceWithUbuntu</a></li>
+<li>http://hi.baidu.com/john_zhy/blog/item/50e39f317240141febc4af5a.html</li>
+</ul>
+
+
+<p>我的本本 IBM R61</p>
+
+<p>系统 ubuntu 8.10从 8.04升级上来的。</p>
+
+<p>手机 eten X800 wm6.1英文系统</p>
+
+<p>原来一直不能在ubuntu下面同步手机资料，昨天参考了上面两个帖子，最后成功了。</p>
+
+<p>1、首先添加源</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo gedit   /etc/apt/sources.list</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在末尾添加</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>deb &lt;a href="http://ppa.launchpad.net/synce/ubuntu" target="_blank"&gt;http://ppa.launchpad.net/synce/ubuntu&lt;/a&gt; hardy main
+</span><span class='line'>
+</span><span class='line'>deb-src &lt;a href="http://ppa.launchpad.net/synce/ubuntu" target="_blank"&gt;http://ppa.launchpad.net/synce/ubuntu&lt;/a&gt; hardy main</span></code></pre></td></tr></table></div></figure>
+
+
+<p>保存，关闭</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get update</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我没有更新源，但是也成功。可能是8.10的缘故</p>
+
+<p>2、更新usb驱动（仅内核在2.6.24-19之前的，如果比这个新请跳过本步骤）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo rmmod rndis_host cdc_ether usbnet
+</span><span class='line'>sudo rm /lib/modules/`uname -r`/kernel/drivers/net/usb/{rndis_host,cdc_ether,usbnet}.ko
+</span><span class='line'>sudo apt-get install usb-rndis-source cdbs
+</span><span class='line'>sudo module-assistant auto-install usb-rndis
+</span><span class='line'>sudo apt-get install synce-hal librra0-tools librapi2-tools</span></code></pre></td></tr></table></div></figure>
+
+
+<p>因为我的内核是2.6.27-7的，所以跳过了这步。但是我安装了后面的软件包</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install synce-hal librra0-tools librapi2-tools</span></code></pre></td></tr></table></div></figure>
+
+
+<p>3、安装<strong>SynCE-GNOME</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install python-setuptools</span></code></pre></td></tr></table></div></figure>
+
+
+<p> 下载<a href="http://downloads.sourceforge.net/synce/synce-gnome-0.11.tar.gz">synce-gnome-0.11.tar.gz</a></p>
+
+<p> 解压，在终端进入其目录，运行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>python setup.py build
+</span><span class='line'>sudo python setup.py install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装<strong>notification-daemon</strong>（如果没有安装过的话，用新得立软件包管理器搜索一下就可以了）</p>
+
+<p>这个步骤完全做了一次，notification-daemon系统已经安装过了</p>
+
+<p>4、连接好手机，运行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/sbin/ifconfig -a | grep 80:00:60:0f:e8:00   | cut -d " " -f 1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>记下他输出的东西</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo gedit   /etc/network/interfaces</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在末尾添加<code>iface &lt;rndis0&gt; inet dhcp</code></p>
+
+<p>ps:&#8221;&lt;>&#8221;里面的是我在上面那步里输出的，你应该更换成你自己的，不带“&lt;>“ 保存并关闭，然后运行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo /etc/init.d/networking restart</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这次也是按照作的，我的网卡是多出来一个eth1(这个根据自己系统决定)。所以我在interfaces文件后面加入了</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>iface eth1 inet dhcp</span></code></pre></td></tr></table></div></figure>
+
+
+<p>5、安装OpenSync</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install multisync-tools opensync-plugin-evolution opensync-plugin-synce</span></code></pre></td></tr></table></div></figure>
+
+
+<p>6、现在该安装的都安装好了，就可以开始同步了<code>synce-sync-engine</code>如果出现如下错误</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>File "/usr/bin/sync-engine", line 84, in &lt;module&gt;
+</span><span class='line'>
+</span><span class='line'> configObj = Config.Config(progopts)
+</span><span class='line'>
+</span><span class='line'>   File "/usr/lib/python2.5/site-packages/SyncEngine/config.py", line 292, in __init__
+</span><span class='line'>
+</span><span class='line'> oldconf = os.path.join(self.path,"config.xml")
+</span><span class='line'>
+</span><span class='line'>AttributeError: Config instance has no attribute 'path'
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>请下载<a href="http://synce.svn.sf.net/svnroot/synce/releases/0.11.1/sync-engine/config/config.xml">config.xml</a>，保存为~/.synce/config.xml（提示：&#8221;~&#8221;为自己的家目录)</p>
+
+<p>创建同步项目<strong>synce-create-partnership &#8220;Linux desktop&#8221; &#8220;Contacts,Calendar&#8221;</strong></p>
+
+<p>ps：还有别的，可自行选择Contacts， Calendar， Tasks， Files 等</p>
+
+<p>创建OpenSync group</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>msynctool --addgroup synce-sync
+</span><span class='line'>
+</span><span class='line'>msynctool --addmember synce-sync synce-opensync-plugin
+</span><span class='line'>
+</span><span class='line'>msynctool --addmember synce-sync evo2-sync</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后同步synce-sync-engine</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>msynctool --sync synce-sync</span></code></pre></td></tr></table></div></figure>
+
+
+<p>他会同步到evolution里面</p>
+
+<p>我上面的照着做，全部成功了。</p>
+
+<p><strong>我的一些问题</strong></p>
+
+<p>据说安装了synce-gnomevfs后，可以在Nautilus里面看手机里的内容，但是我没有成功
+目前只能通过synce-pls、synce-pcp等命令，来操作手机里面文件。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-dynamic-resize-lvm/">试用ubuntu 8.04和LVM动态增加分区</a></h1>
     
     
@@ -343,6 +547,108 @@ git config user.email "youremail"
 
 
 <p>启用新的swap系统。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/quick-stats-server-visits/">如何快速统计服务器访问量</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近看了javaeye上面<strong>robbin</strong>的一篇文章，学习到了很多知识。</p>
+
+<p><a href="http://robbin.javaeye.com/blog/97287">http://robbin.javaeye.com/blog/97287</a> 如何快速统计RoR网站的访问量</p>
+
+<p>我的服务器是Apache+tomcat的配置，上面跑了几个网站。都是基于apache 虚拟主机配置的。</p>
+
+<p>apache配置如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Include conf/vhost_*.conf</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后每个虚拟主机对应一个配置文件</p>
+
+<p>例如下面的(一些信息用???代替了，都是域名和姓名等个人信息)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;VirtualHost *:80&gt;
+</span><span class='line'>    ServerAdmin ???&lt;a href="mailto:???@???.cn"&gt;@???.cn&lt;/a&gt;
+</span><span class='line'>    DocumentRoot /home/???/www
+</span><span class='line'>    ServerName &lt;a href="http://www./???.org"&gt;www.???.org&lt;/a&gt;
+</span><span class='line'>    DirectoryIndex index.jsp index.htm
+</span><span class='line'>    ErrorLog logs/abc-error_log
+</span><span class='line'>    CustomLog "| /usr/sbin/rotatelogs /var/log/httpd/abc-access_%Y%m%d.log 86400" common
+</span><span class='line'>    &lt;Location "/*.jsp"&gt;
+</span><span class='line'>         JkUriSet worker ajp13:localhost:8009
+</span><span class='line'>    &lt;/Location&gt;
+</span><span class='line'>&lt;/VirtualHost&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样配置后，就会在/var/log/httpd下面按照虚拟主机名字和日期，每天生成一个访问日志文件</p>
+
+<p><strong>统计每日动态请求处理总数</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|wc -l</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>统计URL的访问频度</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $7}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>统计时间访问频度</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $4}'|awk -F : '{print $2}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>以上这些是基于CentOS+apache+tomcat实现的</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@ict ~]# cat /var/log/httpd/esdinchina-access_20081117.log |grep "200 "|awk '{print $4}'|awk -F : '{print $2}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
+
+
+
 </div>
   
   
@@ -584,233 +890,6 @@ git config user.email "youremail"
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-install-xen/">CentOS 5.3下成功安装了Xen虚拟化服务。</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天参照下面文档成功安装了虚拟化服务。</p>
-
-<p><a href="http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2">http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2</a></p>
-
-<p>并且在虚拟化服务里，安装了一台vm01的虚拟Centos。</p>
-
-<p>不过时间比较长，通过网络安装，用了4个小时。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-5-3-64bit-install-on-hp-380-g5/">CentOS 5.3 64bit安装在HP 380G5服务器</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天安装了一台CentOS 5.3 64bit服务器。</p>
-
-<p>服务器硬件HP 380G5，4U高</p>
-
-<ul>
-<li>CPU 4核处理器 2颗</li>
-<li>内存 4G 硬盘 147G*3</li>
-</ul>
-
-
-<p>安装很顺利，采用server模式，去掉了不用的软件，加入虚拟化。</p>
-
-<p>安装后启动，占用内存在230M左右，感觉比CentOS 4.7高了很多呀。。。我在一台HP 140的1U服务器安装的CentOS 4.7 启动后，只占用29M内存。</p>
-
-<p>内存占用问题，还需要看看具体是什么原因。</p>
-
-<p>测试下性能，我比较喜欢用unixbench测试。</p>
-
-<p><a href="http://www.hermit.org/Linux/Benchmarking/">http://www.hermit.org/Linux/Benchmarking/</a></p>
-
-<p>我这次下载的5.0版本，因为5.1以后支持2D,3D我没有装X11，运行不了。</p>
-
-<p>结果5.0也是运行了一半就出问题了。奇怪呀。</p>
-
-<p>我的一台CentOS 4.4 装在一个双核 Intel(R) Xeon(TM) CPU 2.66GHz，1G内存的机器上。用4.1.0-wht测试，得分只有145.不过是跑着java、tomcat、apache、mysql和vmserver的时候测试的。内存使用400M左右的时候。</p>
-
-<p>我看到网上很多128M的VPS居然也可以得到160多分，真是奇怪呀。而我这台双4核处理器xeon e7320,4G内存，装CentOS的机器，也只有下面的数据</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@moodle unixbench-4.1.0-wht-2]# ./Run
-</span><span class='line'>make all
-</span><span class='line'>make[1]: Entering directory `/root/unixbench-4.1.0-wht-2'
-</span><span class='line'>Checking distribution of files
-</span><span class='line'>./pgms exists
-</span><span class='line'>./src exists
-</span><span class='line'>./testdir exists
-</span><span class='line'>./tmp exists
-</span><span class='line'>./results exists
-</span><span class='line'>make[1]: Leaving directory `/root/unixbench-4.1.0-wht-2'
-</span><span class='line'>   #    # #    # # #    #          #####   ###### #    #   ####   #    #&lt;br&gt;
-</span><span class='line'>   #    # ##   # #   # #           #    # #       ##   # #    # #    #&lt;br&gt;
-</span><span class='line'>   #    # # # # #    ##            #####   #####   # # # #       ######&lt;br&gt;
-</span><span class='line'>   #    # # # # #    ##            #    # #       # # # #       #    #&lt;br&gt;
-</span><span class='line'>   #    # #   ## #   # #           #    # #       #   ## #    # #    #&lt;br&gt;
-</span><span class='line'>    ####   #    # # #    #          #####   ###### #    #   ####   #    #
-</span><span class='line'>                 4        1           Based on the Byte Magazine Unix Benchmark
-</span><span class='line'>                44       11
-</span><span class='line'>   v   v       4 4        1
-</span><span class='line'>    v v       44444       1           v4.1 revisions mostly by David C. Niemi,
-</span><span class='line'>     v           4   o   111 - WHT.2 Reston, VA, USA niemi@tux.org
-</span><span class='line'>WHT Variant by Andy A. Lee andylee@dslextreme.com
-</span><span class='line'>See: http://www.webhostingtalk.com/showthread.php?s=&threadid=308055
-</span><span class='line'>
-</span><span class='line'>Dhrystone 2 using register variables 1 2
-</span><span class='line'>Double-Precision Whetstone 1 2
-</span><span class='line'>Execl Throughput 1
-</span><span class='line'>Filesystem Throughput 1024 bufsize 2000 maxblocks 1
-</span><span class='line'>Filesystem Throughput 256 bufsize 500 maxblocks 1
-</span><span class='line'>Filesystem Throughput 4096 bufsize 8000 maxblocks 1
-</span><span class='line'>Pipe Throughput 1 2
-</span><span class='line'>Pipe-based Context Switching 1 2
-</span><span class='line'>Process Creation 1
-</span><span class='line'>System Call Overhead 1 2
-</span><span class='line'>Shell Scripts (8 concurrent) 1
-</span><span class='line'>==============================================================
-</span><span class='line'>BYTE UNIX Benchmarks (Version 4.1-wht.2)
-</span><span class='line'>System -- Linux moodle.ict 2.6.18-128.el5xen #1 SMP Wed Jan 21 11:12:42 EST 2009 x86_64 x86_64 x86_64 GNU/Linux
-</span><span class='line'>                     271677672   3293760 254360848   2% /
-</span><span class='line'>Start Benchmark Run: Tue Jun 30 06:43:06 CST 2009
-</span><span class='line'>06:43:06 up 7:53, 1 user, load average: 0.19, 0.76, 0.81
-</span><span class='line'>End Benchmark Run: Tue Jun 30 06:53:17 CST 2009
-</span><span class='line'>06:53:17 up 8:03, 1 user, load average: 15.43, 6.42, 3.16
-</span><span class='line'>
-</span><span class='line'>                     INDEX VALUES
-</span><span class='line'>TEST                                        BASELINE     RESULT      INDEX
-</span><span class='line'>Dhrystone 2 using register variables        376783.7 19031818.6      505.1
-</span><span class='line'>Double-Precision Whetstone                      83.1     1448.6      174.3
-</span><span class='line'>Execl Throughput                               188.3     1593.9       84.6
-</span><span class='line'>File Copy 1024 bufsize 2000 maxblocks         2672.0   118911.0      445.0
-</span><span class='line'>File Copy 256 bufsize 500 maxblocks           1077.0    42442.0      394.1
-</span><span class='line'>File Read 4096 bufsize 8000 maxblocks        15382.0   946428.0      615.3
-</span><span class='line'>Pipe-based Context Switching                 15448.6   253316.5      164.0
-</span><span class='line'>Pipe Throughput                             111814.6 1223105.0      109.4
-</span><span class='line'>Process Creation                               569.3     3279.0       57.6
-</span><span class='line'>Shell Scripts (8 concurrent)                    44.8      508.7      113.5
-</span><span class='line'>System Call Overhead                        114433.5   907496.2       79.3
-</span><span class='line'>                                                                 =========
-</span><span class='line'>     FINAL SCORE                                                     182.5</span></code></pre></td></tr></table></div></figure>
-
-
-<p>总分 182.5 真不知都那些VPS测试出 400分的，是什么情况。
-难道是可以针对unixbench优化？</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -825,7 +904,7 @@ git config user.email "youremail"
 <h1>Categories</h1>
 <ul id="categories">
   <li class='category'><a href='/blog/categories/host/'>Host (1)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (7)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (9)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (1)</a></li>
@@ -851,11 +930,11 @@ git config user.email "youremail"
       </li>
     
       <li class="post">
-        <a href="/blog/2009/12/21/ubuntu-dynamic-resize-lvm/">试用ubuntu 8.04和LVM动态增加分区</a>
+        <a href="/blog/2009/12/21/winphone-SynceWithUbuntu/">ubuntu 8.10下同步wm6.1手机</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2009/12/21/opensource-im/">一个很好的开源企业内部IM解决方案</a>
+        <a href="/blog/2009/12/21/ubuntu-dynamic-resize-lvm/">试用ubuntu 8.04和LVM动态增加分区</a>
       </li>
     
   </ul>

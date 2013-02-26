@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-26T16:28:15+08:00</updated>
+  <updated>2013-02-26T17:25:23+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,164 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ubuntu 8.10下同步wm6.1手机]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/winphone-SynceWithUbuntu/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/winphone-SynceWithUbuntu</id>
+    <content type="html"><![CDATA[<p>参考了</p>
+
+<ul>
+<li><a href="http://www.synce.org/moin/SynceWithUbuntu">http://www.synce.org/moin/SynceWithUbuntu</a></li>
+<li>http://hi.baidu.com/john_zhy/blog/item/50e39f317240141febc4af5a.html</li>
+</ul>
+
+
+<p>我的本本 IBM R61</p>
+
+<p>系统 ubuntu 8.10从 8.04升级上来的。</p>
+
+<p>手机 eten X800 wm6.1英文系统</p>
+
+<p>原来一直不能在ubuntu下面同步手机资料，昨天参考了上面两个帖子，最后成功了。</p>
+
+<p>1、首先添加源</p>
+
+<p><code>
+sudo gedit   /etc/apt/sources.list
+</code></p>
+
+<p>在末尾添加</p>
+
+<p>```
+deb <a href="http://ppa.launchpad.net/synce/ubuntu" target="_blank">http://ppa.launchpad.net/synce/ubuntu</a> hardy main</p>
+
+<p>deb-src <a href="http://ppa.launchpad.net/synce/ubuntu" target="_blank">http://ppa.launchpad.net/synce/ubuntu</a> hardy main
+```</p>
+
+<p>保存，关闭</p>
+
+<p><code>
+sudo apt-get update
+</code></p>
+
+<p>我没有更新源，但是也成功。可能是8.10的缘故</p>
+
+<p>2、更新usb驱动（仅内核在2.6.24-19之前的，如果比这个新请跳过本步骤）</p>
+
+<p><code>
+sudo rmmod rndis_host cdc_ether usbnet
+sudo rm /lib/modules/`uname -r`/kernel/drivers/net/usb/{rndis_host,cdc_ether,usbnet}.ko
+sudo apt-get install usb-rndis-source cdbs
+sudo module-assistant auto-install usb-rndis
+sudo apt-get install synce-hal librra0-tools librapi2-tools
+</code></p>
+
+<p>因为我的内核是2.6.27-7的，所以跳过了这步。但是我安装了后面的软件包</p>
+
+<p><code>
+sudo apt-get install synce-hal librra0-tools librapi2-tools
+</code></p>
+
+<p>3、安装<strong>SynCE-GNOME</strong></p>
+
+<p><code>
+sudo apt-get install python-setuptools
+</code></p>
+
+<p> 下载<a href="http://downloads.sourceforge.net/synce/synce-gnome-0.11.tar.gz">synce-gnome-0.11.tar.gz</a></p>
+
+<p> 解压，在终端进入其目录，运行</p>
+
+<p><code>
+python setup.py build
+sudo python setup.py install
+</code></p>
+
+<p>安装<strong>notification-daemon</strong>（如果没有安装过的话，用新得立软件包管理器搜索一下就可以了）</p>
+
+<p>这个步骤完全做了一次，notification-daemon系统已经安装过了</p>
+
+<p>4、连接好手机，运行</p>
+
+<p><code>
+/sbin/ifconfig -a | grep 80:00:60:0f:e8:00   | cut -d " " -f 1
+</code></p>
+
+<p>记下他输出的东西</p>
+
+<p><code>
+sudo gedit   /etc/network/interfaces
+</code></p>
+
+<p>在末尾添加<code>iface &lt;rndis0&gt; inet dhcp</code></p>
+
+<p>ps:"&lt;>"里面的是我在上面那步里输出的，你应该更换成你自己的，不带“&lt;>“ 保存并关闭，然后运行</p>
+
+<p><code>
+sudo /etc/init.d/networking restart
+</code></p>
+
+<p>这次也是按照作的，我的网卡是多出来一个eth1(这个根据自己系统决定)。所以我在interfaces文件后面加入了</p>
+
+<p><code>
+iface eth1 inet dhcp
+</code></p>
+
+<p>5、安装OpenSync</p>
+
+<p><code>
+sudo apt-get install multisync-tools opensync-plugin-evolution opensync-plugin-synce
+</code></p>
+
+<p>6、现在该安装的都安装好了，就可以开始同步了<code>synce-sync-engine</code>如果出现如下错误</p>
+
+<p>```
+File "/usr/bin/sync-engine", line 84, in <module></p>
+
+<p> configObj = Config.Config(progopts)</p>
+
+<p>   File "/usr/lib/python2.5/site-packages/SyncEngine/config.py", line 292, in <strong>init</strong></p>
+
+<p> oldconf = os.path.join(self.path,"config.xml")</p>
+
+<p>AttributeError: Config instance has no attribute 'path'</p>
+
+<p>```</p>
+
+<p>请下载<a href="http://synce.svn.sf.net/svnroot/synce/releases/0.11.1/sync-engine/config/config.xml">config.xml</a>，保存为~/.synce/config.xml（提示："~"为自己的家目录)</p>
+
+<p>创建同步项目<strong>synce-create-partnership "Linux desktop" "Contacts,Calendar"</strong></p>
+
+<p>ps：还有别的，可自行选择Contacts， Calendar， Tasks， Files 等</p>
+
+<p>创建OpenSync group</p>
+
+<p>```
+msynctool --addgroup synce-sync</p>
+
+<p>msynctool --addmember synce-sync synce-opensync-plugin</p>
+
+<p>msynctool --addmember synce-sync evo2-sync
+```</p>
+
+<p>然后同步synce-sync-engine</p>
+
+<p><code>
+msynctool --sync synce-sync
+</code></p>
+
+<p>他会同步到evolution里面</p>
+
+<p>我上面的照着做，全部成功了。</p>
+
+<p><strong>我的一些问题</strong></p>
+
+<p>据说安装了synce-gnomevfs后，可以在Nautilus里面看手机里的内容，但是我没有成功
+目前只能通过synce-pls、synce-pcp等命令，来操作手机里面文件。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[试用ubuntu 8.04和LVM动态增加分区]]></title>
@@ -122,6 +280,69 @@ sudo swapon -a
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[如何快速统计服务器访问量]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/quick-stats-server-visits/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/quick-stats-server-visits</id>
+    <content type="html"><![CDATA[<p>最近看了javaeye上面<strong>robbin</strong>的一篇文章，学习到了很多知识。</p>
+
+<p><a href="http://robbin.javaeye.com/blog/97287">http://robbin.javaeye.com/blog/97287</a> 如何快速统计RoR网站的访问量</p>
+
+<p>我的服务器是Apache+tomcat的配置，上面跑了几个网站。都是基于apache 虚拟主机配置的。</p>
+
+<p>apache配置如下</p>
+
+<p><code>
+Include conf/vhost_*.conf
+</code></p>
+
+<p>然后每个虚拟主机对应一个配置文件</p>
+
+<p>例如下面的(一些信息用???代替了，都是域名和姓名等个人信息)</p>
+
+<p><code>
+&lt;VirtualHost *:80&gt;
+    ServerAdmin ???&lt;a href="mailto:???@???.cn"&gt;@???.cn&lt;/a&gt;
+    DocumentRoot /home/???/www
+    ServerName &lt;a href="http://www./???.org"&gt;www.???.org&lt;/a&gt;
+    DirectoryIndex index.jsp index.htm
+    ErrorLog logs/abc-error_log
+    CustomLog "| /usr/sbin/rotatelogs /var/log/httpd/abc-access_%Y%m%d.log 86400" common
+    &lt;Location "/*.jsp"&gt;
+         JkUriSet worker ajp13:localhost:8009
+    &lt;/Location&gt;
+&lt;/VirtualHost&gt;
+</code></p>
+
+<p>这样配置后，就会在/var/log/httpd下面按照虚拟主机名字和日期，每天生成一个访问日志文件</p>
+
+<p><strong>统计每日动态请求处理总数</strong></p>
+
+<p><code>
+cat /var/log/httpd/abc-access_20081116.log |grep "200 "|wc -l
+</code></p>
+
+<p><strong>统计URL的访问频度</strong></p>
+
+<p><code>
+cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $7}'|sort|uniq -c
+</code></p>
+
+<p><strong>统计时间访问频度</strong></p>
+
+<p><code>
+cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $4}'|awk -F : '{print $2}'|sort|uniq -c
+</code></p>
+
+<p><strong>以上这些是基于CentOS+apache+tomcat实现的</strong></p>
+
+<p><code>
+[root@ict ~]# cat /var/log/httpd/esdinchina-access_20081117.log |grep "200 "|awk '{print $4}'|awk -F : '{print $2}'|sort|uniq -c
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[怎么mount一个xen的img映像。转载]]></title>
     <link href="http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img/"/>
     <updated>2009-12-21T00:00:00+08:00</updated>
@@ -190,53 +411,6 @@ mount -o loop,offset=32256 test.img /foldername
 <p>CentOS 5.3的虚拟化，好像没有了XenU的内核，而是改用了这种新的方式。</p>
 
 <p>反正我用kernel启动失败了。后来用这个方式已经可以正常使用虚拟服务器了。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[CentOS 5.3 安装虚拟化后的内存识别问题.]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/centos-xen-memory-problem/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/centos-xen-memory-problem</id>
-    <content type="html"><![CDATA[<p>昨天单位到了2台SUN x4450.</p>
-
-<p><strong>硬件配置相当强力.</strong></p>
-
-<p>CPU 4颗6核的 Intel(R) Xeon(R) CPU           X7460 @ 2.66GHz</p>
-
-<p>系统可以识别出24颗处理器</p>
-
-<p><code>
-[root@localhost ~]# cat /proc/cpuinfo |grep processor|wc -l
-24
-</code></p>
-
-<p>内存64G</p>
-
-<p>在内存问题上,我郁闷了一阵子.我用dmesg、free、top查看，都是32G</p>
-
-<p>开始以为CentOS 5.3的64位内核就能支持到32G呢。又尝试在启动参数里加mem=64G</p>
-
-<p>又上论坛询问、查看官方文档，都说CentOS 5.3 64bit应该没有内存限制的。</p>
-
-<p>后来我发现了，原来问题出在安装的虚拟化上面</p>
-
-<p>用xm top可以正确识别内存。而且安装的系统，只是当作xm 里面的一个dom0来运行的。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[CentOS 5.3下成功安装了Xen虚拟化服务。]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/centos-install-xen/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/centos-install-xen</id>
-    <content type="html"><![CDATA[<p>今天参照下面文档成功安装了虚拟化服务。</p>
-
-<p><a href="http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2">http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2</a></p>
-
-<p>并且在虚拟化服务里，安装了一台vm01的虚拟Centos。</p>
-
-<p>不过时间比较长，通过网络安装，用了4个小时。</p>
 ]]></content>
   </entry>
   
