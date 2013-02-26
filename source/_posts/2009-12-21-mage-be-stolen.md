@@ -1,5 +1,5 @@
 --- 
-categories: []
+categories: ['Game']
 comments: true
 layout: post
 title: 我的高督被盗了......

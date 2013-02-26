@@ -1,5 +1,5 @@
 --- 
-categories: []
+categories: ['Game']
 comments: true
 layout: post
 title: "TBC 2.3如何挂战场"

@@ -1,19 +1,23 @@
 --- 
-categories: []
+categories: ['Virtualization','Linux']
 comments: true
 layout: post
 title: "获取XEN guestOS的images文件"
 ---
-<h4 class="beTitle"></h4>我们可以从<a href="http://stacklet.com/" title="http://stacklet.com/">http://stacklet.com/</a>其实就是原来<a href="http://jailtime.org/" title="http://jailtime.org/">http://jailtime.org/</a>站点找我们需要的xen image文件
 
-<div id="msgcns!4986F8F322CC617B!699" class="bvMsg">在2009年的时候，jailtime.org发布了一个新闻
-<h6>May 4th, 2009</h6>
+我们可以从[http://stacklet.com/](http://stacklet.com/)其实就是原来[http://jailtime.org/](http://jailtime.org/)站点找我们需要的xen image文件
+
+在2009年的时候，jailtime.org发布了一个新闻
+
+######May 4th, 2009######
 The jailtime project has been relaunched with a new name and site: <a href="http://stacklet.com/">Stacklet</a> 
 As part of the relaunch all of the distributions currently on jailtime have been upgraded to their latest versions. Also, all of the code for creating the images is now publically available – see <a href="http://stacklet.com/">http://stacklet.com/</a> for further details.... 
 Jailtime will remain online but downloads will probably be turned off eventually as the transition to stacklet proceeds. 
-所以现在就访问<a href="http://stacklet.com/" title="http://stacklet.com/">http://stacklet.com/</a>就可以了。 
+
+所以现在就访问[http://stacklet.com/](http://stacklet.com/)就可以了。 
+
 包括如下系统 
-<li><ul>
+
 <li>
 <a href="http://stacklet.com/downloads/images/list/CentOS">CentOS</a> <ul>
 <li>
@@ -63,6 +67,7 @@ Jailtime will remain online but downloads will probably be turned off eventually
 </li>
 </ul></li>
 <li>
+
 <strong>下面是一个站点提供的img文件的简单说明</strong>
 <strong>All files on this site are provided without guarantee or warranty. Use at your own risk.</strong> 
 Each download is a bzipped tarball containing an image and cfg files: 
@@ -134,20 +139,4 @@ Mount the img file using the above howto. Assuming the destination partition is 
 </li>
 </ul>You will then be able to boot the filesystem using the partition instead of the image file, which should provide better performance. You will need to update the *.xen.cfg file to reference the partition instead of the img file (the <strong>disk</strong> parameter will need to change, see the <a href="http://www.cl.cam.ac.uk/Research/SRG/netos/xen/readmes/user/user.html">Xen Manual</a>). Also, remember to unmount partitions or img files before booting a xen guest from them! 
 
-
-
-
-
-
-
-
-
-
-
-
-
 </li>
-</div>
-<div id="related_log" style="font-size:12px">
-<b>相关日志：</b><a href="http://xinlogs.com/post/8">ubuntu 9.04 server 安装VMware Tools解决share folders问题</a><a href="http://xinlogs.com/post/4">安装和使用xen-shell</a><a href="http://xinlogs.com/post/13">CentOS 5.3 安装虚拟化后的内存识别问题.</a><a href="http://xinlogs.com/post/12">CentOS 5.3下成功安装了Xen虚拟化服务。</a><a href="http://xinlogs.com/post/11">CentOS里的Xen配置pygrub</a>
-</div>
