@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Game | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/game/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-02-27T00:26:05+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[有想恶补三角函数的冲动！]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/wow-xyz/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/wow-xyz</id>
+    <content type="html"><![CDATA[<p>最近在咕哝魔兽世界的坐标系统，发现这个游戏的坐标系统如下图所示</p>
+
+<p><img src="http://farm9.staticflickr.com/8228/8510673160_84e4f8b348.jpg" alt="wow坐标系统" /></p>
+
+<p>游戏的平面坐标为X,Y,用2π代表360度的方向。Z为高度，我们可以不用考虑。现在如果我们知道A点坐标X=2,Y=2 ，B点坐标X=4,Y=3那要想从A点出发到B点，我们的方向应该是多少呢？(目前我就知道Y轴正方向的话，角度为0 。X轴正方向 为π/4=90度)该怎么写这个三角函数得到这个角的的数值呢？</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[TBC 2.3如何挂战场]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/wow-robot-battlegroud/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/wow-robot-battlegroud</id>
+    <content type="html"><![CDATA[<p>目前TBC 2.3了，荣誉又开始有用处了，可以购买S1装备。但是如何挂战场呢？毕竟不是每个人都能不上班，每天玩10个小时。。。我目前的办法是使用国外开发的一款练级外挂glider，再配合一个自己些的程序和修改过的一个插件来实现的。glider可以控制人物按照设定的线路跑动和打怪。我用c#些一个程序，来监控着角色，如果死亡了，就停止wowglider，等待复活。如果复活了，就开glider。战斗结束了，就点npc排队。然后用我写的插件回答GM问题。。。。总之还算可以吧。用了大约1-2个晚上也业余时间解决的。c#确实使用起来很简单，至少之前我没有用过c#。但写个简单的网络程序，负责控制其它程序，实现起来很容易。基本都是采用TcpClient类，就可以了<a href="http://www.pvpbot.com/">www.pvpbot.com</a>也是个选择，但是收费比较贵。其实可以考虑用c#写个简单的web服务器，通过dns欺骗，来对pvpbot的bgtool做本地验证。关于pvpbot的验证，确实不怎么好。至少我用了不到1个小时抓包，分析和测试。已经可以本地验证了，不过懒得写个简单web服务器实现验证了。（以前没有写过，还要查资料。。）关于网络验证，glider做的就比较好。我觉得至少要对时间和硬件编号和用户名同时加密发送到服务器。然后再服务器验证后，对那个时间和是否验证通过等信息再加密，大乱顺序后发送回来。这样就算抓包，因为每次发送的时间不同，每次抓到的信息也不同。如果不知道算法，很难实现本地验证。不过c#的代码保护太差，反编译后和看源代码差不多。。。。。。这个很难解决。。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[修改了一个大战场团排插件 TeamQueue 1.35]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/wow-plugin-teamqueue/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/wow-plugin-teamqueue</id>
+    <content type="html"><![CDATA[<p>为了让插件排队速度更快.只要和大战场军官对话,就自动进入到"首先可用"界面等待队长排队了.</p>
+
+<p><a href="http://bbs.game.mop.com/viewthread.php?tid=1544817&amp;extra=page%3D1">插件下载</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[魔兽世界内存分析，基于wow 2.4.2]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/wow-memory-tools/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/wow-memory-tools</id>
+    <content type="html"><![CDATA[<p>今天基于wow 2.4.2分析了下魔兽世界的内存，并做了如下软件。</p>
+
+<p><img src="http://farm9.staticflickr.com/8227/8509559819_61b2546573.jpg" alt="wow外挂" /></p>
+
+<p>全部采用C#编写，实现如下功能加速3.5%.--（这个服务器有限制，超过4%就掉线）。这个加速是修改人物速度出来的，和那些变速齿轮不一样。这样修改后，别人看你的速度也是正常的，就好像你穿了加速的鞋子一样。无阻力爬山--只要不是90度的山，多陡都能爬上去。超级跳--可以让跳跃的高度自己设置Z+--直接传送到任意高度目前就分析出来了这些，其实这些小功能只能自己在副本娱乐下。估计出了副本。。大街上没有人敢用。呵呵主要锻炼下自己对C#实现内存读写，还有就是分析内存的基地址和最终目的地址。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[5v5打到1600+了，庆祝一下！]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/wow-5v5/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/wow-5v5</id>
+    <content type="html"><![CDATA[<p>今天5v5我们上1600了。庆祝下。</p>
+
+<p><img src="http://farm9.staticflickr.com/8527/8509573735_f7c64d2b5c_z.jpg" alt="wow 5v5" /></p>
+]]></content>
+  </entry>
+  
+</feed>

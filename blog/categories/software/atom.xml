@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Software | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/software/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-26T17:57:44+08:00</updated>
+  <updated>2013-02-27T00:26:05+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -44,6 +44,19 @@
 
 <p><span>PremiumSoft Navicat™ is a powerful MySQL database administration and development tool that is not only sophisticated enough for professional developers, but also easy to learn for new users. With an user-friendly GUI, Navicat™ lets you quickly and easily create, organize, access and share information in a secure and convenient way. </span>
 <span>PremiumSoft Navicat supports multiple MySQL server connections which can be connected locally or remotely. Your remote MySQL server can be running on Linux, Unix, Mac OS X or Windows platform.<br></span></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[一个内存所搜的好用具--Cheat Engine]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/cheat-engine/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/cheat-engine</id>
+    <content type="html"><![CDATA[<p>这个工具可以用来查找内存里面的数据。是目前最好的修改游戏软件了，支持查找基地址。不过要想查找出基地址，还是需要一定的汇编能力的。反正我用这个，还没有查找出WOW 2.1.2的基地址。不过国外有个人，用这个工具找到了WOW <strong>1.12.1</strong>的了</p>
+
+<p>可以在google查到这篇文章<a href="http://www.edgeofnowhere.cc/viewtopic.php?t=332444&amp;start=0&amp;postdays=0&amp;postorder=asc&amp;highlight=">Defeating DMA: Offsets and Pointers for WoW</a></p>
+
+<p>本来打算用这个工具找出基地址，然后重新写挂战场的外挂呢。。。。革命尚未成功，仍需努力呀暴风前夕这个版本里，我开始玩小D了，目前已经60，正在冲荣誉。。。用的还是以前我写的挂机程序，稍微修改了下，比较稳定。</p>
 ]]></content>
   </entry>
   

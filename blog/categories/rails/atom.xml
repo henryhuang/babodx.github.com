@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Rails | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/rails/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-02-27T00:26:05+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Rails下request.raw_post的一些问题]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/rails-request/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/rails-request</id>
+    <content type="html"><![CDATA[<p>我在学习Agile Web Development with Rails在第18章 Observers的例子中</p>
+
+<p><code>
+&lt;%=text_field_tag :search%&gt;
+&lt;%=observe_field( :search,
+                  :frequency =&gt; 0.5,
+                  :update =&gt; :results,
+                  :url =&gt; {:action =&gt; :search})%&gt;
+</code></p>
+
+<p>将text_field_tag里面的内容，每间隔0.5就提交给search这个action,然后将结果显示在<div id="results"></div>层</p>
+
+<p>在search方法里面可以通过request.raw_post获取提交的数据</p>
+
+<p><code>
+def search
+     render:text=&gt;request.raw_post   
+end
+</code></p>
+
+<p>问题是上面这样返回的内容，总是在提交的内容后多一个=号</p>
+
+<p>比如在文本框输入div层显示的就是a=</p>
+
+<p>后来只能通过把最后2位抹去，来达到正常效果render:text=>request.raw_post.to(request.raw_post.length-2)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[rails下上传文件并且解决乱码问题]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/38/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/38</id>
+    <content type="html"><![CDATA[<p>这个问题是我在<a href="http://www.javaeye.com/">www.javaeye.com</a>论坛上提出的，并且由mathsfan给出了解决办法</p>
+
+<p>首先创建一个项目，叫<strong>test</strong></p>
+
+<p>在app目录下的controllers目录下，找到<strong>test_controller.rb</strong>文件</p>
+
+<p>添加一个upload的action</p>
+
+<p>```
+def upload</p>
+
+<p>end
+```</p>
+
+<p>然后在view目录下的test目录下，创建一个<strong>upload.rhtml</strong>文件</p>
+
+<p>```
+&lt;%=form_tag({:action=>'save'},:multipart=>true)%></p>
+
+<br/>upload your file:<%=file_field("file","file")%>
+
+
+<br/>
+
+
+<p>&lt;%=submit_tag("upload")%>
+&lt;%=end_form_tag%>
+```</p>
+
+<p>现在访问<a href="http://localhost:3000/test/upload">http://localhost:3000/test/upload</a>，应该可以看到一个上传的界面了。</p>
+
+<p>不过还没有处理上传后的方法呢，所以还不能实现上传。因为上面的表单是提交给save这个action 的，现在还没有写呢。</p>
+
+<p>在写save之前，先要完成一些相关的方法</p>
+
+<p>在<strong>application.rb</strong>文件里，加入</p>
+
+<p>```
+def uploadFile(file) #处理上传后的文件保存
+       if !file.original_filename.empty?
+          #生成一个随机的文件名
+          @filename=getFileName(file.original_filename)
+          #向dir目录写入文件
+          File.open("#{RAILS_ROOT}/public/images/#{@filename}", "wb") do |f|
+           f.write(file.read)
+          end</p>
+
+<pre><code>      #返回文件名称
+</code></pre>
+
+<p>          return @filename
+        end
+end
+```</p>
+
+<p>```
+def getFileName(filename)</p>
+
+<h1>获取文件名</h1>
+
+<p>  if !filename.nil?
+     return filename
+  end
+end
+```</p>
+
+<p>现在在<strong>test_controller.rb</strong>里写出save的action</p>
+
+<p><code>
+def save
+  unless request.get?
+    if filename=uploadFile(params[:file]['file']) #调用application.rb&lt;/strong&gt;里写的uploadFile对文件保存
+       render :text=&gt;filename
+    end
+  end
+end
+</code></p>
+
+<p>文件可以正确上传到public/images下
+但是中文文件名变为了乱码,但是render :text=>filename返回的名字,并不是乱码.</p>
+
+<p> ###解决办法###</p>
+
+<p>在ApplicationController加上：</p>
+
+<p>```
+before_filter:set_charset</p>
+
+<p>def set_charset</p>
+
+<pre><code> @headers["Content-Type"]="text/html;charset=gb2312" 
+</code></pre>
+
+<p>end
+```</p>
+
+<p>我试验了一下，用utf8也可以正常处理,比如按照如下写法</p>
+
+<p><code>
+def set_charset
+  @headers["Content-Type"]="text/html;charset=utf8"
+end
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

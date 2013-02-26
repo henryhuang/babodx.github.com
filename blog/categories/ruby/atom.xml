@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ruby | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-02-27T00:26:05+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[学习Ruby中......]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/study-ruby-1/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/study-ruby-1</id>
+    <content type="html"><![CDATA[<h4>学习Ruby中......</h4>
+
+<p>终于拿到了Programming Ruby 中文第2版.开始认真学习Ruby</p>
+
+<p>不过感觉翻译的不是很好</p>
+
+<p>而且有网友已经整理了勘误表
+<a href="http://blogs.sun.com/yongsun/entry/programming_ruby_%C3%A7%C2%AC%C2%AC%C3%A4%C2%BA%C2%8C%C3%A7%C2%89%C2%88_%C3%A4%C2%B8%C2%AD%C3%A6%C2%96%C2%87%C3%A7%C2%89%C2%88_%C3%A5%C2%8B%C2%98%C3%A8%C2%AF%C2%AF">http://farm9.staticflickr.com/8527/8509573735_f7c64d2b5c_z.jpg</a></p>
+
+<p>我在阅读的时候,也发现了一些翻译的不是很明白的地方</p>
+
+<ul>
+<li><p>16页 第2章 2.3</p></li>
+<li><p>Ruby的数组(arrays)和散列表(hashes)是被索引的收集.(indexed collections)</p></li>
+</ul>
+
+
+<p>原文:Ruby's arrays and hashes are indexed collections</p>
+
+<p>我感觉这句话的意思应该是说:Ruby的数组和哈希表是有(被)索引的集合</p>
+
+<p>在后面的哈希表里面,也有讲解</p>
+
+<p>Hashes (some times known as associative arrays, maps,or dictionaries) are similar to arrays in that they are indexed collections of object references.
+哈希表(有时也称关系数组,映射或者词典) 和数组的相似之处是他们都是有(被)索引的对象引用的集合</p>
+
+<ul>
+<li>45页 第4章 4.1 倒数第8行</li>
+</ul>
+
+
+<p>使用这些方法,你可以用数组来实现栈(stack),收集(set),队列(queue),双向队列(dequeue)和先进先出队列(fifo)</p>
+
+<p>原文:Using these,you can treat arrays as stacks,sets,queues,dequeues,and fifos</p>
+
+<p>我感觉这里的set应该是集合,就是说可以用数组实现集合</p>
+]]></content>
+  </entry>
+  
+</feed>

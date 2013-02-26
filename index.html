@@ -214,6 +214,198 @@ git config user.email "youremail"
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-xyz/">有想恶补三角函数的冲动！</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近在咕哝魔兽世界的坐标系统，发现这个游戏的坐标系统如下图所示</p>
+
+<p><img src="http://farm9.staticflickr.com/8228/8510673160_84e4f8b348.jpg" alt="wow坐标系统" /></p>
+
+<p>游戏的平面坐标为X,Y,用2π代表360度的方向。Z为高度，我们可以不用考虑。现在如果我们知道A点坐标X=2,Y=2 ，B点坐标X=4,Y=3那要想从A点出发到B点，我们的方向应该是多少呢？(目前我就知道Y轴正方向的话，角度为0 。X轴正方向 为π/4=90度)该怎么写这个三角函数得到这个角的的数值呢？</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-robot-battlegroud/">TBC 2.3如何挂战场</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>目前TBC 2.3了，荣誉又开始有用处了，可以购买S1装备。但是如何挂战场呢？毕竟不是每个人都能不上班，每天玩10个小时。。。我目前的办法是使用国外开发的一款练级外挂glider，再配合一个自己些的程序和修改过的一个插件来实现的。glider可以控制人物按照设定的线路跑动和打怪。我用c#些一个程序，来监控着角色，如果死亡了，就停止wowglider，等待复活。如果复活了，就开glider。战斗结束了，就点npc排队。然后用我写的插件回答GM问题。。。。总之还算可以吧。用了大约1-2个晚上也业余时间解决的。c#确实使用起来很简单，至少之前我没有用过c#。但写个简单的网络程序，负责控制其它程序，实现起来很容易。基本都是采用TcpClient类，就可以了<a href="http://www.pvpbot.com/">www.pvpbot.com</a>也是个选择，但是收费比较贵。其实可以考虑用c#写个简单的web服务器，通过dns欺骗，来对pvpbot的bgtool做本地验证。关于pvpbot的验证，确实不怎么好。至少我用了不到1个小时抓包，分析和测试。已经可以本地验证了，不过懒得写个简单web服务器实现验证了。（以前没有写过，还要查资料。。）关于网络验证，glider做的就比较好。我觉得至少要对时间和硬件编号和用户名同时加密发送到服务器。然后再服务器验证后，对那个时间和是否验证通过等信息再加密，大乱顺序后发送回来。这样就算抓包，因为每次发送的时间不同，每次抓到的信息也不同。如果不知道算法，很难实现本地验证。不过c#的代码保护太差，反编译后和看源代码差不多。。。。。。这个很难解决。。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-plugin-teamqueue/">修改了一个大战场团排插件 TeamQueue 1.35</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>为了让插件排队速度更快.只要和大战场军官对话,就自动进入到&#8221;首先可用&#8221;界面等待队长排队了.</p>
+
+<p><a href="http://bbs.game.mop.com/viewthread.php?tid=1544817&amp;extra=page%3D1">插件下载</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-memory-tools/">魔兽世界内存分析，基于wow 2.4.2</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天基于wow 2.4.2分析了下魔兽世界的内存，并做了如下软件。</p>
+
+<p><img src="http://farm9.staticflickr.com/8227/8509559819_61b2546573.jpg" alt="wow外挂" /></p>
+
+<p>全部采用C#编写，实现如下功能加速3.5%.&#8211;（这个服务器有限制，超过4%就掉线）。这个加速是修改人物速度出来的，和那些变速齿轮不一样。这样修改后，别人看你的速度也是正常的，就好像你穿了加速的鞋子一样。无阻力爬山&#8211;只要不是90度的山，多陡都能爬上去。超级跳&#8211;可以让跳跃的高度自己设置Z+&#8211;直接传送到任意高度目前就分析出来了这些，其实这些小功能只能自己在副本娱乐下。估计出了副本。。大街上没有人敢用。呵呵主要锻炼下自己对C#实现内存读写，还有就是分析内存的基地址和最终目的地址。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-5v5/">5v5打到1600+了，庆祝一下！</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天5v5我们上1600了。庆祝下。</p>
+
+<p><img src="http://farm9.staticflickr.com/8527/8509573735_f7c64d2b5c_z.jpg" alt="wow 5v5" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2009/12/21/winphone-SynceWithUbuntu/">Ubuntu 8.10下同步wm6.1手机</a></h1>
     
     
@@ -554,423 +746,6 @@ git config user.email "youremail"
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-804-update-to-810/">Ubuntu 8.04升级到8.10</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1>升级</h1>
-
-<p>昨天开始作的升级。</p>
-
-<p>早上到单位，就开始<code>Alt+F2</code></p>
-
-<p>在弹出的命令行窗口输入
-<code>update-manager -d</code></p>
-
-<p>然后就进入了漫长的等待，单位网络那个垃圾。。。。。告诉我42天。。。。。</p>
-
-<p>一直到下班，下载了900多个文件，一共要下载1300多</p>
-
-<p>晚上到家继续update-manager -d 发现居然可以接着下载，还以为要重新来呢。家里好点，告诉我3个小时,后来就睡觉了。</p>
-
-<p>今天早上起来，发现已经下载完成了，开始到安装更新这一步了，弹出个窗口等我确认。</p>
-
-<p>我点上开始，就洗漱去了。一直到要上班也没有安装完成。（TMD，居然忘记今天星期五，不能开车。还是老婆提醒我，才想起来。）这次我可不敢关机了，怕升级一半，下次进不来系统。直接把本本和上盖子放包里了，下楼打车上班。</p>
-
-<p>在出租车里，完成了全部更新。关机。</p>
-
-<p><strong>启动</strong></p>
-
-<p>到了单位，发现系统总卡在进度条进不去。</p>
-
-<p>按Alt+F1然后 Alt+F8查看下文字模式的启动信息，发现一直卡在*Configuring network interfaces&#8230;</p>
-
-<p>这个第一次启动，没有办法（希望有好办法的，告诉下。）我就一直死等呀。。。感觉过了20分钟？？？</p>
-
-<p>进入系统了，3D显卡驱动不行。运行uname -a查看，内核还在用8.04的2.6.24-21.</p>
-
-<p>先修改网络吧
-<code>sudo gedit /etc/network/interfaces</code></p>
-
-<p>将里面的</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>auto eth0
-</span><span class='line'>iface eth0 inet dhcp
-</span><span class='line'>auto lo
-</span><span class='line'>auto wlan0</span></code></pre></td></tr></table></div></figure>
-
-
-<p>都注释掉，变成下面样子</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#auto lo
-</span><span class='line'>iface lo inet loopback
-</span><span class='line'>#iface eth0 inet dhcp
-</span><span class='line'>address 10.11.10.164
-</span><span class='line'>netmask 255.255.255.0
-</span><span class='line'>gateway 10.11.10.254
-</span><span class='line'>#nameserver 202.106.0.20
-</span><span class='line'>#auto eth0
-</span><span class='line'>iface wlan0 inet dhcp
-</span><span class='line'>wpa-psk 7640768b3d6b31f834b63abc8d2d667ae10f8bc3c41a8e4e87ec2c104d963a1e
-</span><span class='line'>wpa-driver wext
-</span><span class='line'>wpa-key-mgmt WPA-PSK
-</span><span class='line'>wpa-proto WPA
-</span><span class='line'>wpa-ssid babohome
-</span><span class='line'>#auto wlan0</span></code></pre></td></tr></table></div></figure>
-
-
-<p>接着修改/etc/NetworkManager/nm-system-settings.conf文件
-<code>sudo gedit /etc/NetworkManager/nm-system-settings.conf</code></p>
-
-<p>将文件里的<code>[ifupdown] manager=false</code>改成<code>[ifupdown] manager=true</code></p>
-
-<p>这样基本启动速度的问题就正常</p>
-
-<p><strong>内核</strong></p>
-
-<p>再来说内核</p>
-
-<p>内核需要手动编辑下grub的启动配置文件了。其实2.6.27-7内核已经安装了，就是没有给我们加入的menu.lst文件里面。修改menu.lst</p>
-
-<p><code>sudo gedit /boot/grub/menu.lst</code></p>
-
-<p>我的修改如下，这个应该每个人的不太一样。大家可以拷贝以前自己的文件进行修改</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>title        Ubuntu 8.04.1, kernel 2.6.27-7-generic
-</span><span class='line'>root        (hd0,1)
-</span><span class='line'>kernel        /boot/vmlinuz-2.6.27-7-generic root=UUID=614a1c10-6ed3-45c9-b24d-f7b3e39725b2 ro quiet splash locale=zh_CN
-</span><span class='line'>initrd        /boot/initrd.img-2.6.27-7-generic
-</span><span class='line'>quiet
-</span><span class='line'>title        Ubuntu 8.04.1, kernel 2.6.27-7-generic (recovery mode)
-</span><span class='line'>root        (hd0,1)
-</span><span class='line'>kernel        /boot/vmlinuz-2.6.27-7-generic root=UUID=614a1c10-6ed3-45c9-b24d-f7b3e39725b2 ro single
-</span><span class='line'>initrd        /boot/initrd.img-2.6.27-7-generic</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这个修改后，先不要重新启动。因为我们还没有卸载显卡驱动，要不重启后，卸载驱动还要继续重启。</p>
-
-<p><strong>卸载现有的显卡驱动</strong></p>
-
-<p>我原来显卡驱动是用envyng -t来安装的，现在还用这个工具卸载</p>
-
-<p>在终端<code>envyng -t</code></p>
-
-<p>然后选卸载驱动，安后等卸载完成后，重启就ok了</p>
-
-<p><strong>安装显卡驱动</strong></p>
-
-<p>注意，如果内核还是2.6.24-21，新的驱动安装不上。</strong>这次我没有用envyng -t来安装，而是用系统->系统管理->硬件驱动来安装的</p>
-
-<p>推荐我的是nvidia 177.80的驱动</p>
-
-<p>等待安装完成后。 Ctrl+Alt+Backspace 重新启动X server</p>
-
-<p>一切ok</p>
-
-<p><strong>一些问题</strong>
-在启动过程中，发现samba deamon启动fail还没有看是什么原因。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/quick-stats-server-visits/">如何快速统计服务器访问量</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近看了javaeye上面<strong>robbin</strong>的一篇文章，学习到了很多知识。</p>
-
-<p><a href="http://robbin.javaeye.com/blog/97287">http://robbin.javaeye.com/blog/97287</a> 如何快速统计RoR网站的访问量</p>
-
-<p>我的服务器是Apache+tomcat的配置，上面跑了几个网站。都是基于apache 虚拟主机配置的。</p>
-
-<p>apache配置如下</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Include conf/vhost_*.conf</span></code></pre></td></tr></table></div></figure>
-
-
-<p>然后每个虚拟主机对应一个配置文件</p>
-
-<p>例如下面的(一些信息用???代替了，都是域名和姓名等个人信息)</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;VirtualHost *:80&gt;
-</span><span class='line'>    ServerAdmin ???&lt;a href="mailto:???@???.cn"&gt;@???.cn&lt;/a&gt;
-</span><span class='line'>    DocumentRoot /home/???/www
-</span><span class='line'>    ServerName &lt;a href="http://www./???.org"&gt;www.???.org&lt;/a&gt;
-</span><span class='line'>    DirectoryIndex index.jsp index.htm
-</span><span class='line'>    ErrorLog logs/abc-error_log
-</span><span class='line'>    CustomLog "| /usr/sbin/rotatelogs /var/log/httpd/abc-access_%Y%m%d.log 86400" common
-</span><span class='line'>    &lt;Location "/*.jsp"&gt;
-</span><span class='line'>         JkUriSet worker ajp13:localhost:8009
-</span><span class='line'>    &lt;/Location&gt;
-</span><span class='line'>&lt;/VirtualHost&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样配置后，就会在/var/log/httpd下面按照虚拟主机名字和日期，每天生成一个访问日志文件</p>
-
-<p><strong>统计每日动态请求处理总数</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|wc -l</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>统计URL的访问频度</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $7}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>统计时间访问频度</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $4}'|awk -F : '{print $2}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>以上这些是基于CentOS+apache+tomcat实现的</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@ict ~]# cat /var/log/httpd/esdinchina-access_20081117.log |grep "200 "|awk '{print $4}'|awk -F : '{print $2}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/opensource-im/">一个很好的开源企业内部IM解决方案</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天发现了<a href="http://www.igniterealtime.org/">http://www.igniterealtime.org</a>这个项目首页</p>
-
-<p>这个项目可以在企业内部架设一台服务器，来完成内部IM功能。客户端可以想QQ或者MSN一样登陆。并且通过服务器上设置GATEWAY功能，还能与MSN等主流软件通讯。</p>
-
-<p>具体功能还没有测试，不过打算有时间的时候架设下进行试用。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/navicat/">一个在windows下很好用的MySQL工具Navicat</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>为了解决中文乱码，我的Mysql都设置了使用utf8编码</p>
-
-<p>这样一来，使用SQLyog Enterprise查看表里面内容，就都不能正常显示了。可能SQLyog需要设置？反正我没有搞出来。</p>
-
-<p>不过后来我换用了Navicat 7以后，感觉很好。所有中文内容都可以正确显示</p>
-
-<p>比mysql front也要强很多。以后我就用这个了
-<img src="http://www.navicat.com/images/stories/product/mysql/product/win/win_big.jpg" alt="navicat" /></p>
-
-<p>而且支持Linux,windows,mac三个平台。下面是介绍</p>
-
-<p><span>PremiumSoft Navicat™ is a powerful MySQL database administration and development tool that is not only sophisticated enough for professional developers, but also easy to learn for new users. With an user-friendly GUI, Navicat™ lets you quickly and easily create, organize, access and share information in a secure and convenient way. </span>
-<span>PremiumSoft Navicat supports multiple MySQL server connections which can be connected locally or remotely. Your remote MySQL server can be running on Linux, Unix, Mac OS X or Windows platform.<br></span></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/mysql-log-sql/">Mysql设置my.cnf来记录下全部sql请求</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>要想记录下提交到mysql数据库的全部sql语句，可以通过修改my.cnf来实现</p>
-
-<p>修改/etc/my.cnf文件</p>
-
-<p>找到[mysqld]段
-加入</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>log=queryLog
-</span><span class='line'>log-slow-queries=showquerylog</span></code></pre></td></tr></table></div></figure>
-
-
-<p>然后就可以到/var/lib/mysql/目录下找到queryLog和showquerylog日志文件了</p>
-
-<p>里面记录这每个提交到数据库执行的sql语句。</p>
-
-<p>我的系统CentOS 4.4 rpm方式安装的mysql 5.0.57,如果其它系统或者其它安装方式，可能文件路径会有些不同。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -984,13 +759,16 @@ git config user.email "youremail"
     <section>
 <h1>Categories</h1>
 <ul id="categories">
-  <li class='category'><a href='/blog/categories/database/'>Database (2)</a></li>
+  <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (10)</a></li>
 <li class='category'><a href='/blog/categories/host/'>Host (1)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (11)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (12)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
-<li class='category'><a href='/blog/categories/software/'>Software (2)</a></li>
-<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (5)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (2)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (1)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (3)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (6)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
 
 </ul>
@@ -1012,11 +790,11 @@ git config user.email "youremail"
       </li>
     
       <li class="post">
-        <a href="/blog/2009/12/21/winphone-SynceWithUbuntu/">ubuntu 8.10下同步wm6.1手机</a>
+        <a href="/blog/2009/12/21/wow-xyz/">有想恶补三角函数的冲动！</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2009/12/21/ubuntu-dynamic-resize-lvm/">试用ubuntu 8.04和LVM动态增加分区</a>
+        <a href="/blog/2009/12/21/wow-robot-battlegroud/">TBC 2.3如何挂战场</a>
       </li>
     
   </ul>

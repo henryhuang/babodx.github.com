@@ -1,0 +1,1165 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="First you need to find out the partitions and the startsector of partitions: 1
+2
+3
+4
+[root@xen rruban]# file rheltest.img rheltest.img: x86 boot &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/page/3/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/howto-mount-xen-img/">怎么mount一个xen的img映像。转载</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><ul>
+<li>First you need to find out the partitions and the startsector of partitions:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@xen rruban]# file rheltest.img rheltest.img: x86 boot sector, GRand Unified Bootloader (0.94); 
+</span><span class='line'>partition 
+</span><span class='line'>1: ID=0x83, active, starthead 1, startsector 63, 208782 sectors; partition 
+</span><span class='line'>2: ID=0x8e, starthead 0, startsector 208845, 3871665 sectors, code offset 0x48</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are 3 partitions inside the image file. The startsector of each partition is also listed. Boot partition will have start sector 63.</p>
+
+<ul>
+<li>Now you need to get the sector size:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@xen]fdisk -lu rheltest.img
+</span><span class='line'>Disk rheltest.img: 0 MB, 0 bytes 255 heads, 63 sectors/track, 0 cylinders, total 0 sectors 
+</span><span class='line'>Units = sectors of 1 * 512 = 512 bytes 
+</span><span class='line'>Device Boot Start End Blocks Id System 
+</span><span class='line'>rheltest.img1 * 63 208844 104391 83 Linux 
+</span><span class='line'>rheltest.img2 208845 4080509 1935832+ 8e Linux LVM </span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above shows the sector byte size is 512 byte.</p>
+
+<ul>
+<li>To calculating the offset: offset = start_sector x sector_byte_size.</li>
+</ul>
+
+
+<p>The startsector is 63 for the first partition, therefore the first partition offset is: 63x512=32256</p>
+
+<ul>
+<li>Finally, to mount the xen image, use:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mount -o loop,offset=32256 test.img /foldername</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/howto-create-foreign-key-on-mysql/">如何建立两个表间的外键</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>建立Mysql两个表间的外键,需要满足三个条件</p>
+
+<ol>
+<li>两个表必须是InnoDB表类型</li>
+<li>使用在外键关系的域必须为索引型(Index)</li>
+<li>使用在外键关系的域必须与数据类型相似</li>
+</ol>
+
+
+<p>下面举例说明</p>
+
+<p>我们创建一个班级表和一个学生表,并建立一个外键</p>
+
+<p>创建班级表</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE class (id INT NOT NULL AUTO_INCREMENT, classname VARCHAR(50) NOT NULL, PRIMARY KEY(id)) ENGINE=INNODB;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>插入班级数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO class VALUES (1,"一班"),(2,"二班"),(3,"三班");</span></code></pre></td></tr></table></div></figure>
+
+
+<p>创建学生表</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE students (id INT(4) NOT NULL, name VARCHAR(50) NOT NULL, FK_class INT(4) NOT NULL, INDEX (FK_class), FOREIGN KEY (FK_class) REFERENCES class (id), PRIMARY KEY(id)) ENGINE=INNODB;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>验证外键约束性,我们向students表插入一个学生数据,并让FK_class的值为一个在class表里面不存在的值.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; INSERT INTO students VALUES (1,"zhang",5);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>马上就会看到Mysql报错</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR 1452 : Cannot add or update a child row: a foreign key constraint fails (`test/students`, CONSTRAINT `students_ibfk_1` FOREIGN KEY (`FK_class`) REFERENCES `class` (`id`))</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上证明外键可以正常工作了</p>
+
+<p>在Mysql下测试了以下,不建立index,并且不指定innodb格式.
+版本</p>
+
+<p>+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-+
+| version()            |
++&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-+
+| 5.0.24a-community-nt |
++&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-+</p>
+
+<p>建立class表</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE class (id INT NOT NULL AUTO_INCREMENT, classname VARCHAR(50) NOT NULL, PRIMARY KEY(id));</span></code></pre></td></tr></table></div></figure>
+
+
+<p>建立students表</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE students (id INT(4) NOT NULL, name VARCHAR(50) NOT NULL, FK_class INT(4) NOT NULL, FOREIGN KEY (FK_class) REFERENCES class (id), PRIMARY KEY(id));</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过Navicat查看,上面语句建立的两个表,也会默认用INNODB存储,而且也在students表建立了index和外键.一切正常.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/get-xen-guestos-image/">获取XEN guestOS的images文件</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>我们可以从<a href="http://stacklet.com/">http://stacklet.com/</a>其实就是原来<a href="http://jailtime.org/">http://jailtime.org/</a>站点找我们需要的xen image文件</p>
+
+<p>在2009年的时候，jailtime.org发布了一个新闻</p>
+
+<h6>May 4th, 2009</h6>
+
+<p>The jailtime project has been relaunched with a new name and site: <a href="http://stacklet.com/">Stacklet</a>
+As part of the relaunch all of the distributions currently on jailtime have been upgraded to their latest versions. Also, all of the code for creating the images is now publically available – see <a href="http://stacklet.com/">http://stacklet.com/</a> for further details&#8230;.
+Jailtime will remain online but downloads will probably be turned off eventually as the transition to stacklet proceeds.</p>
+
+<p>所以现在就访问<a href="http://stacklet.com/">http://stacklet.com/</a>就可以了。</p>
+
+<p>包括如下系统</p>
+
+<p><li>
+<a href="http://stacklet.com/downloads/images/list/CentOS">CentOS</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/centos/5.3">5.3</a> </li>
+<li><a href="http://stacklet.com/downloads/images/centos/5.3.64bit">5.3 (64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Debian">Debian</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/debian/5.0">5.0 (Lenny)</a> </li>
+<li><a href="http://stacklet.com/downloads/images/debian/5.0.64bit">5.0 (Lenny, 64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Fedora">Fedora</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/fedora/10">10</a> </li>
+<li><a href="http://stacklet.com/downloads/images/fedora/10.64bit">10 (64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Gentoo">Gentoo</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/gentoo/2008-0">2008.0</a> </li>
+<li><a href="http://stacklet.com/downloads/images/gentoo/2008-0.64bit">2008.0 (64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Mandriva">Mandriva</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/mandriva/2009.0">2009.0</a> </li>
+<li><a href="http://stacklet.com/downloads/images/mandriva/2009.0.64bit">2009.0 (64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Slackware">Slackware</a> <ul>
+<li><a href="http://stacklet.com/node/13">12.2</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Ubuntu">Ubuntu</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/ubuntu/9.04">9.04 (Jaunty)</a> </li>
+<li><a href="http://stacklet.com/downloads/images/ubuntu/9.04.64bit">9.04 (Jaunty, 64-bit)</a></li>
+</ul>
+</li>
+</ul></li>
+<li></p>
+
+<p><strong>下面是一个站点提供的img文件的简单说明</strong>
+<strong>All files on this site are provided without guarantee or warranty. Use at your own risk.</strong>
+Each download is a bzipped tarball containing an image and cfg files:</p>
+
+<ul>
+<li>a xen guest filesystem
+</li>
+<li>sample xen configuration files to be used with <strong>xm create</strong>
+</li>
+</ul>
+
+
+<p>The naming convention of the download tarball is:
+<strong><distribution>.<distro-version>.<created-date>.img.tar.bz2</strong>.
+For example centos.5-3.x86.20090423.img.tar.bz2 contains</p>
+
+<ul>
+<li>centos.5-3.x86.img
+</li>
+<li>centos.5-3.x86.xen3.cfg
+</li>
+<li>centos.5-3.x86.xen3.pygrub.cfg（这个文件比较重要，如果用的是CentOS 5.3的虚拟化，就需要这个文件才可以启动guestOS。因为CentOS 5.3没有提供Xen-U的内核。）
+</li>
+</ul>
+
+
+<p>All of the packages installed in the image will be the latest versions available as of the created date, which is in yyyy-mm-dd format.</p>
+
+<h3>Prerequisites</h3>
+
+
+<ol>
+<li>Working installation of Xen version 3
+</li>
+<li>The xen daemon (xend) must be running
+</li>
+<li>Enough filesystem space to accomodate the uncompressed tarball (generally 1GB)
+</li>
+<li>Enough unallocated RAM to run the xen guest (generally 128MB)
+</li>
+</ol>
+
+
+<h3>Default Configuration and Networking</h3>
+
+
+<p>Each filesystem is configured to use dhcp. The *.xen.cfg also is also configured for dhcp. It is recommended that you first test the filesystem using dhcp if possible before attempting other networking parameters. Each download page has additional notes on networking that is appropriate for a particular distribution.
+The root login is root/password. It is highly recommened that you change the root password immediately.</p>
+
+<h3>Installation</h3>
+
+
+<p>You will need to uncompress the tarball to a local directory and edit the *.xen.cfg file to point to the uncompressed image and swap file.
+If all is well you will see the guest’s boot messages scrolling by.
+<strong>一些HOWTO文档</strong></p>
+
+<h3><strong>HOWTO: Filesystems</strong></h3>
+
+
+<p>In the following howto’s, <image file> should be replaced with a reference to a specific .img file.</p>
+
+<h4><strong>How do I mount an image without booting it?</strong></h4>
+
+
+<ul>
+<li>mkdir -p /mnt/loop
+</li>
+<li>mount -o loop <image file> /mnt/loop/
+</li>
+</ul>
+
+
+<h4><strong>How do I resize an image file?</strong></h4>
+
+
+<p>First, make sure that the image file is not already mounted and is not already running as a xen guest. The following commands increase an image file to 2.5GB. Backup the image before attempting this.</p>
+
+<ul>
+<li>dd if=/dev/zero of=<image file> bs=1M conv=notrunc count=1 seek=2500 
+</li>
+<li>losetup /dev/loop0 <image file>
+</li>
+<li>e2fsck -f /dev/loop0
+</li>
+<li>resize2fs /dev/loop0
+</li>
+<li>e2fsck -f /dev/loop0
+</li>
+<li>losetup -d /dev/loop0
+</li>
+</ul>
+
+
+<p>You may then boot or mount the image to confirm the increased size. The e2fsck checks in this howto are not strictly necessary.</p>
+
+<h4><strong>How do I move the contents of an img file to a regular partition?</strong></h4>
+
+
+<p>Mount the img file using the above howto. Assuming the destination partition is mounted at /mnt/dest, execute the following:</p>
+
+<ul>
+<li>cp -a /mnt/loop/* /mnt/dest/
+</li>
+</ul>
+
+
+<p>You will then be able to boot the filesystem using the partition instead of the image file, which should provide better performance. You will need to update the *.xen.cfg file to reference the partition instead of the img file (the <strong>disk</strong> parameter will need to change, see the <a href="http://www.cl.cam.ac.uk/Research/SRG/netos/xen/readmes/user/user.html">Xen Manual</a>). Also, remember to unmount partitions or img files before booting a xen guest from them!</p>
+
+<p></li></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/defense-arp-attack-on-ubuntu/">Ubuntu下arp攻击防御和反击！</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天在单位，发现有人在用聚生网管和p2p终结者</p>
+
+<p>在windows下面，可以安装arp防火墙，还可以通过安装同类软件，进行检测。可是我已经转到ubuntu上了，总不能一旦被攻击，就回windows吧。于是上网找了一些关于linux下防止arp攻击的方法。</p>
+
+<p><strong>第一种方法</strong></p>
+
+<p>用静态arp.</p>
+
+<p>这种方法就是通过在 /etc/ethers 建立ip和mac地址对应记录。然后用arp -f来读取记录。这样将网关的mac地址和ip都建立在静态arp文件里。就不容易被arp欺骗了。</p>
+
+<p>还可以配合关闭arp解析，用<code>ifconfig eth0 -arp</code></p>
+
+<p><strong>第二中方法</strong></p>
+
+<p>采用arping</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>babo@babo-laptop:~$ arping 
+</span><span class='line'>Usage: arping [-fqbDUAV] [-c count] [-w timeout] [-I device] [-s source] destination
+</span><span class='line'>-f : quit on first reply
+</span><span class='line'>-q : be quiet
+</span><span class='line'>-b : keep broadcasting, don't go unicast
+</span><span class='line'>-D : duplicate address detection mode
+</span><span class='line'>-U : Unsolicited ARP mode, update your neighbours
+</span><span class='line'>-A : ARP answer mode, update your neighbours
+</span><span class='line'>-V : print version and exit
+</span><span class='line'>-c count : how many packets to send
+</span><span class='line'>-w timeout : how long to wait for a reply
+</span><span class='line'>-I device : which ethernet device to use (eth0)
+</span><span class='line'>-s source : source ip address
+</span><span class='line'>destination : ask for what ip address
+</span><span class='line'>用法举例：比如我的ip 192.168.1.101 网关:192.168.1.1
+</span><span class='line'>就用arping -U -I eth0 -s 192.168.1.101 192.168.1.1
+</span><span class='line'>显示结果如下
+</span><span class='line'>Unicast reply from 192.168.1.1 [00:21:29:94:62:47] 1.999ms
+</span><span class='line'>Unicast reply from 192.168.1.1 [00:21:29:94:62:47] 9.571ms
+</span><span class='line'>Unicast reply from 192.168.1.1 [00:21:29:94:62:47] 1.245ms
+</span><span class='line'>Unicast reply from 192.168.1.1 [00:21:29:94:62:47] 1.227ms
+</span><span class='line'>Unicast reply from 192.168.1.1 [00:21:29:94:62:47] 1.390ms
+</span><span class='line'>Unicast reply from 192.168.1.1 [00:21:29:94:62:47] 4.526ms
+</span><span class='line'>Unicast reply from 192.168.1.1 [00:21:29:94:62:47] 1.294ms
+</span><span class='line'>Unicast reply from 192.168.1.1 [00:21:29:94:62:47] 1.245ms
+</span><span class='line'>Unicast reply from 192.168.1.1 [00:21:29:94:62:47] 1.239ms
+</span><span class='line'>Unicast reply from 192.168.1.1 [00:21:29:94:62:47] 1.266ms
+</span><span class='line'>Unicast reply from 192.168.1.1 [00:21:29:94:62:47] 1.259ms
+</span><span class='line'>Unicast reply from 192.168.1.1 [00:21:29:94:62:47] 1.267ms
+</span><span class='line'>Sent 12 probes (1 broadcast(s))
+</span><span class='line'>Received 12 response(s)</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>终极解决办法</strong></p>
+
+<p>采用arpoison来解决是最好的办法了，这个办法还是参考了《linux下arp攻击的解决方案［原］》的办法。</p>
+
+<p>arpoison需要libnet的库才能正确编译，所以要下载libnet和arpoison两个软件。</p>
+
+<p><a href="http://www.packetfactory.net/libnet">arpoison主页</a></p>
+
+<p><a href="http://www.packetfactory.net/libnet">libnet主页</a></p>
+
+<p><strong>安装</strong></p>
+
+<p>现安装libnet,因为是源代码编译，需要gcc等我就不说了。去查看具体ubuntu源代码安装需要的软件包吧</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar zxvf libnet.tar.gz
+</span><span class='line'>cd libnet/
+</span><span class='line'>sudo ./configure
+</span><span class='line'>sudo make
+</span><span class='line'>sudo make install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>编译过程中，会提示也些警告，没有关系。反正安装后，有/usr/lib/libnet.a就可以了
+然后安装arpoison</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar zxvf arpoison-0.6.tar.gz 
+</span><span class='line'>cd arpoison/
+</span><span class='line'>sudo gcc arpoison.c /usr/lib/libnet.a -o arpoison
+</span><span class='line'>sudo mv arpoison /usr/sbin/</span></code></pre></td></tr></table></div></figure>
+
+
+<p>用法举例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>babo@babo-laptop:~$ sudo arpoison
+</span><span class='line'>Usage: -i &lt;device&gt; -d &lt;dest IP&gt; -s &lt;src IP&gt; -t &lt;target MAC&gt; -r &lt;src MAC&gt; [-a] [-w time between packets] [-n number to send]
+</span><span class='line'>说明
+</span><span class='line'>-i 指定发送arp包的网卡接口eth0
+</span><span class='line'>-d 192.168.1.1 指定目的ip为192.168.1.1
+</span><span class='line'>-s 192.168.1.101 指定源ip为192.168.1.101
+</span><span class='line'>-t ff:ff:ff:ff:ff:ff 指定目的mac地址为ff:ff:ff:ff:ff:ff(arp广播地址)
+</span><span class='line'>-r 00:1c:bf:03:9f:c7 指定源mac地址为00:1c:bf:03:9f:c7</span></code></pre></td></tr></table></div></figure>
+
+
+<p>比如我想防止arp攻击</p>
+
+<p><code>sudo arpoison -i eth0 -d 192.168.1.1 -s 192.168.1.101 -t ff:ff:ff:ff:ff:ff -r 00:1c:bf:03:9f:c7</code></p>
+
+<p>比如我想攻击192.168.1.50的机器不让他上网</p>
+
+<p><code>sudo arpoison -i eth0 -d 192.168.1.50 -s 192.168.1.1 -t ff:ff:ff:ff:ff:ff -r 00:1c:bf:03:9f:c7</code></p>
+
+<p><strong>一些猜想</strong></p>
+
+<p>如果在本机开始NAT服务</p>
+
+<p>然后通过arp欺骗把对方的网关地址欺骗到自己这里，因为自己这里开了NAT，对方应该也可以上网吧。然后在本地开wireshark抓包，对方就不知不觉的被监视了。这些想法没有测试，不知道这样欺骗的办法，NAT是否可以。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/dagger/">刷MLD公主,得到了无尽黑暗之忍</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>虽然号被盗了,但是老天却把幸运给了我.让我刷出了</p>
+
+<p>[无尽黑暗之刃]</p>
+
+<p>有了这个匕首,可以一次刷ZG 9堆鳄鱼了,简直是FS AOE的极品武器</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/cheat-engine/">一个内存所搜的好用具&#8211;Cheat Engine</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这个工具可以用来查找内存里面的数据。是目前最好的修改游戏软件了，支持查找基地址。不过要想查找出基地址，还是需要一定的汇编能力的。反正我用这个，还没有查找出WOW 2.1.2的基地址。不过国外有个人，用这个工具找到了WOW <strong>1.12.1</strong>的了</p>
+
+<p>可以在google查到这篇文章<a href="http://www.edgeofnowhere.cc/viewtopic.php?t=332444&amp;start=0&amp;postdays=0&amp;postorder=asc&amp;highlight=">Defeating DMA: Offsets and Pointers for WoW</a></p>
+
+<p>本来打算用这个工具找出基地址，然后重新写挂战场的外挂呢。。。。革命尚未成功，仍需努力呀暴风前夕这个版本里，我开始玩小D了，目前已经60，正在冲荣誉。。。用的还是以前我写的挂机程序，稍微修改了下，比较稳定。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-xen-pygrub/">CentOS里的Xen配置pygrub</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>如果用virt-install生成一台虚拟服务器
+在查看配置的时候，会发现已经没有了kernel=这个配置来制定启动内核。而是用了</p>
+
+<p><code>bootloader = '/usr/bin/pygrub'</code></p>
+
+<p>关于这个，可以参考
+<a href="http://wiki.xensource.com/xenwiki/PyGrub">http://wiki.xensource.com/xenwiki/PyGrub</a></p>
+
+<p>CentOS 5.3的虚拟化，好像没有了XenU的内核，而是改用了这种新的方式。</p>
+
+<p>反正我用kernel启动失败了。后来用这个方式已经可以正常使用虚拟服务器了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-xen-memory-problem/">CentOS 5.3 安装虚拟化后的内存识别问题.</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>昨天单位到了2台SUN x4450.</p>
+
+<p><strong>硬件配置相当强力.</strong></p>
+
+<p>CPU 4颗6核的 Intel(R) Xeon(R) CPU           X7460 @ 2.66GHz</p>
+
+<p>系统可以识别出24颗处理器</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# cat /proc/cpuinfo |grep processor|wc -l
+</span><span class='line'>24</span></code></pre></td></tr></table></div></figure>
+
+
+<p>内存64G</p>
+
+<p>在内存问题上,我郁闷了一阵子.我用dmesg、free、top查看，都是32G</p>
+
+<p>开始以为CentOS 5.3的64位内核就能支持到32G呢。又尝试在启动参数里加mem=64G</p>
+
+<p>又上论坛询问、查看官方文档，都说CentOS 5.3 64bit应该没有内存限制的。</p>
+
+<p>后来我发现了，原来问题出在安装的虚拟化上面</p>
+
+<p>用xm top可以正确识别内存。而且安装的系统，只是当作xm 里面的一个dom0来运行的。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-install-xen/">CentOS 5.3下成功安装了Xen虚拟化服务。</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天参照下面文档成功安装了虚拟化服务。</p>
+
+<p><a href="http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2">http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2</a></p>
+
+<p>并且在虚拟化服务里，安装了一台vm01的虚拟Centos。</p>
+
+<p>不过时间比较长，通过网络安装，用了4个小时。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-5-3-64bit-install-on-hp-380-g5/">CentOS 5.3 64bit安装在HP 380G5服务器</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天安装了一台CentOS 5.3 64bit服务器。</p>
+
+<p>服务器硬件HP 380G5，4U高</p>
+
+<ul>
+<li>CPU 4核处理器 2颗</li>
+<li>内存 4G 硬盘 147G*3</li>
+</ul>
+
+
+<p>安装很顺利，采用server模式，去掉了不用的软件，加入虚拟化。</p>
+
+<p>安装后启动，占用内存在230M左右，感觉比CentOS 4.7高了很多呀。。。我在一台HP 140的1U服务器安装的CentOS 4.7 启动后，只占用29M内存。</p>
+
+<p>内存占用问题，还需要看看具体是什么原因。</p>
+
+<p>测试下性能，我比较喜欢用unixbench测试。</p>
+
+<p><a href="http://www.hermit.org/Linux/Benchmarking/">http://www.hermit.org/Linux/Benchmarking/</a></p>
+
+<p>我这次下载的5.0版本，因为5.1以后支持2D,3D我没有装X11，运行不了。</p>
+
+<p>结果5.0也是运行了一半就出问题了。奇怪呀。</p>
+
+<p>我的一台CentOS 4.4 装在一个双核 Intel(R) Xeon(TM) CPU 2.66GHz，1G内存的机器上。用4.1.0-wht测试，得分只有145.不过是跑着java、tomcat、apache、mysql和vmserver的时候测试的。内存使用400M左右的时候。</p>
+
+<p>我看到网上很多128M的VPS居然也可以得到160多分，真是奇怪呀。而我这台双4核处理器xeon e7320,4G内存，装CentOS的机器，也只有下面的数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@moodle unixbench-4.1.0-wht-2]# ./Run
+</span><span class='line'>make all
+</span><span class='line'>make[1]: Entering directory `/root/unixbench-4.1.0-wht-2'
+</span><span class='line'>Checking distribution of files
+</span><span class='line'>./pgms exists
+</span><span class='line'>./src exists
+</span><span class='line'>./testdir exists
+</span><span class='line'>./tmp exists
+</span><span class='line'>./results exists
+</span><span class='line'>make[1]: Leaving directory `/root/unixbench-4.1.0-wht-2'
+</span><span class='line'>   #    # #    # # #    #          #####   ###### #    #   ####   #    #&lt;br&gt;
+</span><span class='line'>   #    # ##   # #   # #           #    # #       ##   # #    # #    #&lt;br&gt;
+</span><span class='line'>   #    # # # # #    ##            #####   #####   # # # #       ######&lt;br&gt;
+</span><span class='line'>   #    # # # # #    ##            #    # #       # # # #       #    #&lt;br&gt;
+</span><span class='line'>   #    # #   ## #   # #           #    # #       #   ## #    # #    #&lt;br&gt;
+</span><span class='line'>    ####   #    # # #    #          #####   ###### #    #   ####   #    #
+</span><span class='line'>                 4        1           Based on the Byte Magazine Unix Benchmark
+</span><span class='line'>                44       11
+</span><span class='line'>   v   v       4 4        1
+</span><span class='line'>    v v       44444       1           v4.1 revisions mostly by David C. Niemi,
+</span><span class='line'>     v           4   o   111 - WHT.2 Reston, VA, USA niemi@tux.org
+</span><span class='line'>WHT Variant by Andy A. Lee andylee@dslextreme.com
+</span><span class='line'>See: http://www.webhostingtalk.com/showthread.php?s=&threadid=308055
+</span><span class='line'>
+</span><span class='line'>Dhrystone 2 using register variables 1 2
+</span><span class='line'>Double-Precision Whetstone 1 2
+</span><span class='line'>Execl Throughput 1
+</span><span class='line'>Filesystem Throughput 1024 bufsize 2000 maxblocks 1
+</span><span class='line'>Filesystem Throughput 256 bufsize 500 maxblocks 1
+</span><span class='line'>Filesystem Throughput 4096 bufsize 8000 maxblocks 1
+</span><span class='line'>Pipe Throughput 1 2
+</span><span class='line'>Pipe-based Context Switching 1 2
+</span><span class='line'>Process Creation 1
+</span><span class='line'>System Call Overhead 1 2
+</span><span class='line'>Shell Scripts (8 concurrent) 1
+</span><span class='line'>==============================================================
+</span><span class='line'>BYTE UNIX Benchmarks (Version 4.1-wht.2)
+</span><span class='line'>System -- Linux moodle.ict 2.6.18-128.el5xen #1 SMP Wed Jan 21 11:12:42 EST 2009 x86_64 x86_64 x86_64 GNU/Linux
+</span><span class='line'>                     271677672   3293760 254360848   2% /
+</span><span class='line'>Start Benchmark Run: Tue Jun 30 06:43:06 CST 2009
+</span><span class='line'>06:43:06 up 7:53, 1 user, load average: 0.19, 0.76, 0.81
+</span><span class='line'>End Benchmark Run: Tue Jun 30 06:53:17 CST 2009
+</span><span class='line'>06:53:17 up 8:03, 1 user, load average: 15.43, 6.42, 3.16
+</span><span class='line'>
+</span><span class='line'>                     INDEX VALUES
+</span><span class='line'>TEST                                        BASELINE     RESULT      INDEX
+</span><span class='line'>Dhrystone 2 using register variables        376783.7 19031818.6      505.1
+</span><span class='line'>Double-Precision Whetstone                      83.1     1448.6      174.3
+</span><span class='line'>Execl Throughput                               188.3     1593.9       84.6
+</span><span class='line'>File Copy 1024 bufsize 2000 maxblocks         2672.0   118911.0      445.0
+</span><span class='line'>File Copy 256 bufsize 500 maxblocks           1077.0    42442.0      394.1
+</span><span class='line'>File Read 4096 bufsize 8000 maxblocks        15382.0   946428.0      615.3
+</span><span class='line'>Pipe-based Context Switching                 15448.6   253316.5      164.0
+</span><span class='line'>Pipe Throughput                             111814.6 1223105.0      109.4
+</span><span class='line'>Process Creation                               569.3     3279.0       57.6
+</span><span class='line'>Shell Scripts (8 concurrent)                    44.8      508.7      113.5
+</span><span class='line'>System Call Overhead                        114433.5   907496.2       79.3
+</span><span class='line'>                                                                 =========
+</span><span class='line'>     FINAL SCORE                                                     182.5</span></code></pre></td></tr></table></div></figure>
+
+
+<p>总分 182.5 真不知都那些VPS测试出 400分的，是什么情况。
+难道是可以针对unixbench优化？</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/4/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/2/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (10)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (1)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (12)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (2)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (1)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (3)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (6)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2009/12/21/wow-xyz/">有想恶补三角函数的冲动！</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2009/12/21/wow-robot-battlegroud/">TBC 2.3如何挂战场</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
