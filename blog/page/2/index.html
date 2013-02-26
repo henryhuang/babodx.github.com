@@ -9,7 +9,9 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="今天参照下面文档成功安装了虚拟化服务。 http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2 并且在虚拟化服务里，安装了一台vm01的虚拟Centos。 不过时间比较长，通过网络安装，用了4个小时 &hellip;">
+  <meta name="description" content="如果用virt-install生成一台虚拟服务器
+在查看配置的时候，会发现已经没有了kernel=这个配置来制定启动内核。而是用了 bootloader = '/usr/bin/pygrub' 关于这个，可以参考
+http://wiki.xensource.com/xenwiki/PyGrub &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +66,112 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-xen-pygrub/">CentOS里的Xen配置pygrub</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>如果用virt-install生成一台虚拟服务器
+在查看配置的时候，会发现已经没有了kernel=这个配置来制定启动内核。而是用了</p>
+
+<p><code>bootloader = '/usr/bin/pygrub'</code></p>
+
+<p>关于这个，可以参考
+<a href="http://wiki.xensource.com/xenwiki/PyGrub">http://wiki.xensource.com/xenwiki/PyGrub</a></p>
+
+<p>CentOS 5.3的虚拟化，好像没有了XenU的内核，而是改用了这种新的方式。</p>
+
+<p>反正我用kernel启动失败了。后来用这个方式已经可以正常使用虚拟服务器了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-xen-memory-problem/">CentOS 5.3 安装虚拟化后的内存识别问题.</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>昨天单位到了2台SUN x4450.</p>
+
+<p><strong>硬件配置相当强力.</strong></p>
+
+<p>CPU 4颗6核的 Intel(R) Xeon(R) CPU           X7460 @ 2.66GHz</p>
+
+<p>系统可以识别出24颗处理器</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# cat /proc/cpuinfo |grep processor|wc -l
+</span><span class='line'>24</span></code></pre></td></tr></table></div></figure>
+
+
+<p>内存64G</p>
+
+<p>在内存问题上,我郁闷了一阵子.我用dmesg、free、top查看，都是32G</p>
+
+<p>开始以为CentOS 5.3的64位内核就能支持到32G呢。又尝试在启动参数里加mem=64G</p>
+
+<p>又上论坛询问、查看官方文档，都说CentOS 5.3 64bit应该没有内存限制的。</p>
+
+<p>后来我发现了，原来问题出在安装的虚拟化上面</p>
+
+<p>用xm top可以正确识别内存。而且安装的系统，只是当作xm 里面的一个dom0来运行的。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -630,7 +738,7 @@
 <h1>Categories</h1>
 <ul id="categories">
   <li class='category'><a href='/blog/categories/host/'>Host (1)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (9)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (11)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (1)</a></li>

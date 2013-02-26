@@ -25,6 +25,10 @@
         <lastmod>2013-02-26T15:10:58+08:00</lastmod>
     </url>
     <url>
+        <loc>http://babodx.github.com/blog/2009/12/21/defense-arp-attack-on-ubuntu/</loc>
+        <lastmod>2013-02-26T17:43:05+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img/</loc>
         <lastmod>2013-02-26T14:56:24+08:00</lastmod>
     </url>
@@ -35,6 +39,10 @@
     <url>
         <loc>http://babodx.github.com/blog/2009/12/21/quick-stats-server-visits/</loc>
         <lastmod>2013-02-26T17:24:21+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://babodx.github.com/blog/2009/12/21/ubuntu-804-update-to-810/</loc>
+        <lastmod>2013-02-26T17:34:02+08:00</lastmod>
     </url>
     <url>
         <loc>http://babodx.github.com/blog/2009/12/21/ubuntu-dynamic-resize-lvm/</loc>
@@ -58,11 +66,11 @@
     </url>
     <url>
         <loc>http://babodx.github.com/blog/archives/</loc>
-        <lastmod>2013-02-26T17:24:21+08:00</lastmod>
+        <lastmod>2013-02-26T17:43:05+08:00</lastmod>
     </url>
     <url>
         <loc>http://babodx.github.com/</loc>
-        <lastmod>2013-02-26T17:24:21+08:00</lastmod>
+        <lastmod>2013-02-26T17:43:05+08:00</lastmod>
     </url>
     <url>
         <loc>http://babodx.github.com/robots.txt</loc>
