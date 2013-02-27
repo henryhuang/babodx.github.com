@@ -9,8 +9,9 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="今天安装了一台CentOS 5.3 64bit服务器。 服务器硬件HP 380G5，4U高 CPU 4核处理器 2颗
-内存 4G 硬盘 147G*3 安装很顺利，采用server模式，去掉了不用的软件，加入虚拟化。 安装后启动，占用内存在230M左右，感觉比CentOS 4.7高了很多呀。。。 &hellip;">
+  <meta name="description" content="昨天单位到了2台SUN x4450. 硬件配置相当强力. CPU 4颗6核的 Intel(R) Xeon(R) CPU           X7460 @ 2.66GHz 系统可以识别出24颗处理器 1
+2
+[root@localhost ~]# cat /proc/cpuinfo |grep &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,232 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-xen-memory-problem/">CentOS 5.3 安装虚拟化后的内存识别问题.</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>昨天单位到了2台SUN x4450.</p>
+
+<p><strong>硬件配置相当强力.</strong></p>
+
+<p>CPU 4颗6核的 Intel(R) Xeon(R) CPU           X7460 @ 2.66GHz</p>
+
+<p>系统可以识别出24颗处理器</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# cat /proc/cpuinfo |grep processor|wc -l
+</span><span class='line'>24</span></code></pre></td></tr></table></div></figure>
+
+
+<p>内存64G</p>
+
+<p>在内存问题上,我郁闷了一阵子.我用dmesg、free、top查看，都是32G</p>
+
+<p>开始以为CentOS 5.3的64位内核就能支持到32G呢。又尝试在启动参数里加mem=64G</p>
+
+<p>又上论坛询问、查看官方文档，都说CentOS 5.3 64bit应该没有内存限制的。</p>
+
+<p>后来我发现了，原来问题出在安装的虚拟化上面</p>
+
+<p>用xm top可以正确识别内存。而且安装的系统，只是当作xm 里面的一个dom0来运行的。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-vpn-howto/">CentOS 5.3架设VPN和619错误排除</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>我买这个VPS的主机，一个目的是用来做Blog空间，另外一个就是用来跑vpn。</p>
+
+<p>先按照<a href="http://rashost.com/blog/centos5-pptpd-vpn">http://rashost.com/blog/centos5-pptpd-vpn</a>这里的文章安装vpn服务。</p>
+
+<p><strong>内核支持</strong></p>
+
+<p>pptpd VPN需要内核支持mppe，我们的VPS自带的内核已经把mppe编译进去了，没有把mppe另外当作内核的模块。</p>
+
+<p><strong>软件安装</strong></p>
+
+<p>要安装pptpd VPN，ppp和iptables这两个软件是必须安装的，安装命令：<code>yum install -y ppp iptables</code></p>
+
+<p>然后到<a href="http://www.poptop.org/">http://www.poptop.org/</a>下载pptpd的rpm包并安装，下载的时候要注意下面几点：</p>
+
+<ul>
+<li>好像只有1.3.3版本有rpm包，其他版本只有源代码</li>
+<li>没有el5或者centos5的rpm包，用rh4的rpm包可以安装在centos 5上</li>
+<li>64位的系统要下载64位的rpm包，32位的系统要下载32位的rpm包，别搞错了</li>
+</ul>
+
+
+<p>64位系统安装命令：<code>rpm -ivh pptpd-1.3.3-1.rhel4.x86_64.rpm</code>
+32位系统安装命令：<code>&lt;pre&gt;rpm -ivh pptpd-1.3.3-1.rhel4.i386.rpm</code></p>
+
+<p>编辑配置文件 /etc/ppp/options.pptpd</p>
+
+<p>内容如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>name pptpd refuse-pap refuse-chap refuse-mschap require-mschap-v2 require-mppe-128 proxyarp lock nobsdcomp novj novjccomp nologfd ms-dns 208.67.222.222 ms-dns 208.67.220.220 </span></code></pre></td></tr></table></div></figure>
+
+
+<p>编辑配置文件 /etc/pptpd.conf 内容如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>option /etc/ppp/options.pptpd logwtmp localip 192.168.92.1 remoteip 192.168.92.11-15</span></code></pre></td></tr></table></div></figure>
+
+
+<p>编辑配置文件 /etc/ppp/chap-secrets,配置用户名为johndoe，密码为password，内容如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>johndoe pptpd password *</span></code></pre></td></tr></table></div></figure>
+
+
+<p>修改配置文件/etc/sysctl.conf中的相应内容如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>net.ipv4.ip_forward = 1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>配置iptables:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>iptables -t nat -A POSTROUTING -o eth0 -s 192.168.92.0/24 -j MASQUERADE /etc/init.d/iptables save /etc/init.d/iptables restart</span></code></pre></td></tr></table></div></figure>
+
+
+<p>设置iptables和pptpd开机自动启动：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chkconfig pptpd on chkconfig iptables on</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后运行reboot重新启动即可</p>
+
+<h2>错误排除</h2>
+
+<p>完成以上配置，通过Windows拨号到VPN，一定提示619错误。</p>
+
+<p>引发619错误的原因有很多，比如密码不正确等，都报这个错误。</p>
+
+<p>我们可以通过/var/log/messages查看下日志，找到问题原因</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Dec 20 06:45:12 204-74-212-217 pptpd[18317]: CTRL: Client 221.223.48.186 control connection started
+</span><span class='line'>Dec 20 06:45:12 204-74-212-217 pptpd[18317]: CTRL: Starting call (launching pppd, opening GRE)
+</span><span class='line'>Dec 20 06:45:12 204-74-212-217 pppd[18318]: Plugin /usr/lib/pptpd/pptpd-logwtmp.so is for pppd version 2.4.3, this is 2.4.4
+</span><span class='line'>Dec 20 06:45:12 204-74-212-217 pptpd[18317]: GRE: read(fd=6,buffer=804e5a0,len=8196) from PTY failed: status = -1 error = Input/output error, usually caused by unexpected termination of pppd, check option syntax and pppd logs
+</span><span class='line'>Dec 20 06:45:12 204-74-212-217 pptpd[18317]: CTRL: PTY read or GRE write failed (pty,gre)=(6,7)
+</span><span class='line'>Dec 20 06:45:12 204-74-212-217 pptpd[18317]: CTRL: Client 221.223.48.186 control connection finished</span></code></pre></td></tr></table></div></figure>
+
+
+<p>后来有找了一些文档查看，和一条一条屏蔽配置语法
+发现是logwtmp这个配置选项出现问题。最后编辑/etc/pptpd.conf文件
+注释掉logwtmp选项，重启pptpd服务，就可以正常登陆了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-install-xen/">CentOS 5.3下成功安装了Xen虚拟化服务。</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天参照下面文档成功安装了虚拟化服务。</p>
+
+<p><a href="http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2">http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2</a></p>
+
+<p>并且在虚拟化服务里，安装了一台vm01的虚拟Centos。</p>
+
+<p>不过时间比较长，通过网络安装，用了4个小时。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -899,108 +1126,9 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/04/19/resolve-explorer-cpu-occupancy-reate/">解决explorer Cpu占用率高的一些办法</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-04-19T00:00:00+08:00" pubdate data-updated="true">Apr 19<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>1 将zipfldr.dll注销掉</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>regsvr32 c:\windows\system32\zipfldr.dll /u
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>2 关闭avi预览</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>regsvr32 shmedia.dll /u</span></code></pre></td></tr></table></div></figure>
-
-
-<p>经过上面两步，应该可以减少explorer的cup占用率了。</p>
-
-<p>以后如果需要用上面的功能，再按照下面步骤打开</p>
-
-<p><strong>恢复上面功能</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>regsvr32 c:\windows\system32\zipfldr.dll
-</span><span class='line'>regsvr32 shmedia.dll</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/04/12/netcraft/">www.netcraft.com可以检测网站运行的操作系统和Web Server</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-04-12T00:00:00+08:00" pubdate data-updated="true">Apr 12<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://www.netcraft.com">http://www.netcraft.com/</a>
-可以通过</p>
-
-<p><strong>What&#8217;s that site running?</strong></p>
-
-<p>查询一个网站的服务器使用的什么操作系统,Web服务器用的什么软件..
-感觉很不错</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/6/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -1014,9 +1142,9 @@
 <h1>Categories</h1>
 <ul id="categories">
   <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
-<li class='category'><a href='/blog/categories/game/'>Game (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (11)</a></li>
 <li class='category'><a href='/blog/categories/host/'>Host (2)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (17)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (20)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>

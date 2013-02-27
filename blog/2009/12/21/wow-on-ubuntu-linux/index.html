@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>第一次安装LFS - 鑫的方向</title>
+  <title>ubuntu8.04 玩魔兽世界 2.4.3(8606) - 鑫的方向</title>
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="在经过了大约40小时左右，我的LFS终于顺利启动了。从内核到系统每一个软件都是自己从源代码编译的，感觉很爽。 本次安装采用LiveCD 6.3作为宿主系统，在VMware上的一个8G scsi盘上安装。 首先碰到的问题就是GCC编译出现问题。后来发现是因为我用的liveCD是64位的问题。 &hellip;">
+  <meta name="description" content="最近一直在用ubuntu 8.04当桌面系统。已经很少用windows了。随着采用ubuntu也就一直没有玩魔兽世界了。 今天将Windows下的WOW目录直接拷贝到了ubuntu下面。我的wine是用sudo apt-get install默认安装的，没有特殊设置。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://babodx.github.com/blog/2009/12/21/first-lfs/">
+  <link rel="canonical" href="http://babodx.github.com/blog/2009/12/21/wow-on-ubuntu-linux/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -67,7 +67,7 @@
   
   <header>
     
-      <h1 class="entry-title">第一次安装LFS</h1>
+      <h1 class="entry-title">ubuntu8.04 玩魔兽世界 2.4.3(8606)</h1>
     
     
       <p class="meta">
@@ -90,42 +90,37 @@
   </header>
 
 
-<div class="entry-content"><p>在经过了大约40小时左右，我的LFS终于顺利启动了。从内核到系统每一个软件都是自己从源代码编译的，感觉很爽。</p>
+<div class="entry-content"><p>最近一直在用ubuntu 8.04当桌面系统。已经很少用windows了。随着采用ubuntu也就一直没有玩魔兽世界了。</p>
 
-<p>本次安装采用LiveCD 6.3作为宿主系统，在VMware上的一个8G scsi盘上安装。</p>
+<p>今天将Windows下的WOW目录直接拷贝到了ubuntu下面。我的wine是用sudo apt-get install默认安装的，没有特殊设置。</p>
 
-<p>首先碰到的问题就是GCC编译出现问题。后来发现是因为我用的liveCD是64位的问题。</p>
+<p>将wow目录拷贝到了用户目录的 .wine/drive_c/Program Files目录下。然后直接双击wow.exe运行。</p>
 
-<p>换了liveCD 32位的。问题解决</p>
+<p>这个时候会提示如下画面的错误。</p>
 
-<p>第二个问题就是glibc总编译不过去，后来发现是我的Linux-2.6.22.5 API Headers从网上下的版本不对</p>
+<p><img src="http://farm9.staticflickr.com/8519/8512093598_321828a3ef.jpg" alt="wow报错" /></p>
 
-<p>我一直是看着LFS BOOK 6.2的中文手册安装的，而用的LiveCD和软件包都是6.3</p>
+<p>这个不要紧，我们在启动的时候加入-opengl 参数就可以解决。</p>
 
-<p>6.3里面的这个Linux-2.6.22.5 API Headers需要从Linux-2.6.22.5.tar.bz2里面获取</p>
+<p>下面这个是成功启动的命令和截图</p>
 
-<p>建议还是看liveCD启动后/usr/share/LFS-BOOK-6.3目录下的文档，这个文档和liveCD带的软件包配套的。</p>
+<p><code>wine .wine/drive_c/Program\ Files/World\ of\ Warcraft/Wow.exe -opengl -nosound</code></p>
 
-<p>或者参考中文的</p>
+<p><img src="http://farm9.staticflickr.com/8098/8510986535_97c4797180_z.jpg" alt="ubuntu运行wow" /></p>
 
-<p>手把手教你如何建立自己的Linux系统 第二版 作者：孙海勇</p>
+<p>已经成功启动了，感觉还不错。这个是在我IBM R61的笔记本上运行结果。</p>
 
-<p>其他就没有碰到什么大问题了。也就是忘记安装个软件包、或者关机重启后，如何从liveCD恢复到工作状态。</p>
+<p>下面进入游戏看看速度</p>
 
-<p>通过这次安装，让我觉得LFS真的是学习Linux的捷径。而且发现了一个牛人的博客，就是上面的孙海勇  网名 冲天飞豹  http://youbest.cublog.cn/</p>
+<p><img src="http://farm9.staticflickr.com/8376/8512101836_cf8ce35689_z.jpg" alt="IBM R61 wow速度" /></p>
 
-<p>博客里面有大量关于构建linux系统的技术文章，而且都是原创。</p>
+<p>开始的时候，我的运行速度不行。只有可怜的35帧每秒。</p>
 
-<p>而且这次通过安装LFS，也找到了Linux 如何在控制台显示UTF-8中文的办法。原来是要给内核打补丁才可以。</p>
+<p>在我关闭了所有特效后，速度到了惊人的100帧每秒。。。这个速度完全可以正常游戏了。</p>
 
-<p><img src="http://farm9.staticflickr.com/8530/8511996426_72a8bf974d.jpg" alt="utf8内核补丁" /></p>
+<p>再看看我桌面右侧的状态cpu 53%占用 内存709.88MB 感觉还可以吧。</p>
 
-<p>具体的办法可以看</p>
-
-<p>内核补丁：字符终端下显示UTF-8字符</p>
-
-<p>总结
-安装是顺利完成了，后面要学习的内容还有很多。比如安装时候的每一个包都包含的什么内容、每一条配置的用途。这些安装手册配置容易，如果没有手册自己弄起来就难了。所以后面的时间，就是自己看文档，消化这些知识了。至少顺利迈出第一步！</p>
+<p>虽然已经AFK了，但是ubuntu能玩魔兽世界，还是让我很开心的。</p>
 </div>
 
 
@@ -153,7 +148,7 @@
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/linux/'>Linux</a>
+    <a class='category' href='/blog/categories/game/'>Game</a>, <a class='category' href='/blog/categories/linux/'>Linux</a>
   
 </span>
 
@@ -162,7 +157,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2009/12/21/first-lfs/" data-via="" data-counturl="http://babodx.github.com/blog/2009/12/21/first-lfs/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2009/12/21/wow-on-ubuntu-linux/" data-via="" data-counturl="http://babodx.github.com/blog/2009/12/21/wow-on-ubuntu-linux/" >Tweet</a>
   
   
   
@@ -171,10 +166,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2009/12/21/defense-arp-attack-on-ubuntu/" title="Previous Post: ubuntu下arp攻击防御和反击！">&laquo; ubuntu下arp攻击防御和反击！</a>
+        <a class="basic-alignment left" href="/blog/2009/12/21/wow-memory-tools/" title="Previous Post: 魔兽世界内存分析，基于wow 2.4.2">&laquo; 魔兽世界内存分析，基于wow 2.4.2</a>
       
       
-        <a class="basic-alignment right" href="/blog/2009/12/21/get-xen-guestos-image/" title="Next Post: 获取XEN guestOS的images文件">获取XEN guestOS的images文件 &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2009/12/21/wow-plugin-teamqueue/" title="Next Post: 修改了一个大战场团排插件 TeamQueue 1.35">修改了一个大战场团排插件 TeamQueue 1.35 &raquo;</a>
       
     </p>
   </footer>

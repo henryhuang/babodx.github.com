@@ -4,7 +4,7 @@
   <title><![CDATA[鑫的方向]]></title>
   <link href="http://babodx.github.com/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-27T09:39:06+08:00</updated>
+  <updated>2013-02-27T10:07:49+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -172,6 +172,45 @@ git config user.email "youremail"
     <content type="html"><![CDATA[<p>为了让插件排队速度更快.只要和大战场军官对话,就自动进入到&#8221;首先可用&#8221;界面等待队长排队了.</p>
 
 <p><a href="http://bbs.game.mop.com/viewthread.php?tid=1544817&amp;extra=page%3D1">插件下载</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ubuntu8.04 玩魔兽世界 2.4.3(8606)]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/wow-on-ubuntu-linux/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/wow-on-ubuntu-linux</id>
+    <content type="html"><![CDATA[<p>最近一直在用ubuntu 8.04当桌面系统。已经很少用windows了。随着采用ubuntu也就一直没有玩魔兽世界了。</p>
+
+<p>今天将Windows下的WOW目录直接拷贝到了ubuntu下面。我的wine是用sudo apt-get install默认安装的，没有特殊设置。</p>
+
+<p>将wow目录拷贝到了用户目录的 .wine/drive_c/Program Files目录下。然后直接双击wow.exe运行。</p>
+
+<p>这个时候会提示如下画面的错误。</p>
+
+<p><img src="http://farm9.staticflickr.com/8519/8512093598_321828a3ef.jpg" alt="wow报错" /></p>
+
+<p>这个不要紧，我们在启动的时候加入-opengl 参数就可以解决。</p>
+
+<p>下面这个是成功启动的命令和截图</p>
+
+<p><code>wine .wine/drive_c/Program\ Files/World\ of\ Warcraft/Wow.exe -opengl -nosound</code></p>
+
+<p><img src="http://farm9.staticflickr.com/8098/8510986535_97c4797180_z.jpg" alt="ubuntu运行wow" /></p>
+
+<p>已经成功启动了，感觉还不错。这个是在我IBM R61的笔记本上运行结果。</p>
+
+<p>下面进入游戏看看速度</p>
+
+<p><img src="http://farm9.staticflickr.com/8376/8512101836_cf8ce35689_z.jpg" alt="IBM R61 wow速度" /></p>
+
+<p>开始的时候，我的运行速度不行。只有可怜的35帧每秒。</p>
+
+<p>在我关闭了所有特效后，速度到了惊人的100帧每秒。。。这个速度完全可以正常游戏了。</p>
+
+<p>再看看我桌面右侧的状态cpu 53%占用 内存709.88MB 感觉还可以吧。</p>
+
+<p>虽然已经AFK了，但是ubuntu能玩魔兽世界，还是让我很开心的。</p>
 ]]></content>
   </entry>
   
@@ -487,6 +526,22 @@ git config user.email "youremail"
 
 
 <p>启用新的swap系统。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ubuntu server 9.04 终端乱码问题]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/ubuntu-console-unread-chinese/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/ubuntu-console-unread-chinese</id>
+    <content type="html"><![CDATA[<p>安装了ubuntu server 9.04，安装的时候选择了中文环境。</p>
+
+<p>因为server是没有桌面的，发现终端里面显示提示信息，出错信息都变成乱码了。</p>
+
+<p><strong>解决办法</strong>
+修改/etc/default/locale文件</p>
+
+<p>将zh_CN修改为en_US</p>
 ]]></content>
   </entry>
   
@@ -1123,56 +1178,6 @@ That should be all you need to get this working.</p>
 
 
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rails下request.raw_post的一些问题]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/rails-request/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/rails-request</id>
-    <content type="html"><![CDATA[<p>我在学习Agile Web Development with Rails在第18章 Observers的例子中</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;%=text_field_tag :search%&gt;
-</span><span class='line'>&lt;%=observe_field( :search,
-</span><span class='line'>                  :frequency =&gt; 0.5,
-</span><span class='line'>                  :update =&gt; :results,
-</span><span class='line'>                  :url =&gt; {:action =&gt; :search})%&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>将text_field_tag里面的内容，每间隔0.5就提交给search这个action,然后将结果显示在<div id="results"></div>层</p>
-
-<p>在search方法里面可以通过request.raw_post获取提交的数据</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def search
-</span><span class='line'>     render:text=&gt;request.raw_post   
-</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
-
-
-<p>问题是上面这样返回的内容，总是在提交的内容后多一个=号</p>
-
-<p>比如在文本框输入div层显示的就是a=</p>
-
-<p>后来只能通过把最后2位抹去，来达到正常效果render:text=>request.raw_post.to(request.raw_post.length-2)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[rails实现图片验证码]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/rails-graphical-verification-code/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/rails-graphical-verification-code</id>
-    <content type="html"><![CDATA[<p>写在了babo.javaeye.com了</p>
-
-<p><a href="http://babo.javaeye.com/blog/72298">http://babo.javaeye.com/blog/72298</a></p>
 ]]></content>
   </entry>
   

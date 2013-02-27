@@ -41,6 +41,10 @@
         <lastmod>2013-02-26T15:13:28+08:00</lastmod>
     </url>
     <url>
+        <loc>http://babodx.github.com/blog/2009/12/21/centos-vpn-howto/</loc>
+        <lastmod>2013-02-27T09:53:07+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://babodx.github.com/blog/2009/12/21/centos-xen-memory-problem/</loc>
         <lastmod>2013-02-26T15:19:21+08:00</lastmod>
     </url>
@@ -153,6 +157,10 @@
         <lastmod>2013-02-27T09:21:44+08:00</lastmod>
     </url>
     <url>
+        <loc>http://babodx.github.com/blog/2009/12/21/ubuntu-console-unread-chinese/</loc>
+        <lastmod>2013-02-27T09:43:27+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://babodx.github.com/blog/2009/12/21/ubuntu-dynamic-resize-lvm/</loc>
         <lastmod>2013-02-26T15:36:15+08:00</lastmod>
     </url>
@@ -167,6 +175,10 @@
     <url>
         <loc>http://babodx.github.com/blog/2009/12/21/wow-memory-tools/</loc>
         <lastmod>2013-02-26T23:52:33+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://babodx.github.com/blog/2009/12/21/wow-on-ubuntu-linux/</loc>
+        <lastmod>2013-02-27T10:07:38+08:00</lastmod>
     </url>
     <url>
         <loc>http://babodx.github.com/blog/2009/12/21/wow-plugin-teamqueue/</loc>
@@ -198,11 +210,11 @@
     </url>
     <url>
         <loc>http://babodx.github.com/blog/archives/</loc>
-        <lastmod>2013-02-27T09:38:41+08:00</lastmod>
+        <lastmod>2013-02-27T10:07:38+08:00</lastmod>
     </url>
     <url>
         <loc>http://babodx.github.com/</loc>
-        <lastmod>2013-02-27T09:38:41+08:00</lastmod>
+        <lastmod>2013-02-27T10:07:38+08:00</lastmod>
     </url>
     <url>
         <loc>http://babodx.github.com/robots.txt</loc>

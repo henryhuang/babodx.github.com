@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>试用ubuntu 8.04和LVM动态增加分区 - 鑫的方向</title>
+  <title>CentOS 5.3架设VPN和619错误排除 - 鑫的方向</title>
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="我在虚拟机VMware里面安装了ubuntu 8.04. 安装的时候，只是选择了openssh这个服务。安装后感觉系统很干净 磁盘占用 1
-/dev/mapper/ubuntu-root                      5.6G 321M 5.3G   6% / 系统就用了不到400M &hellip;">
+  <meta name="description" content="我买这个VPS的主机，一个目的是用来做Blog空间，另外一个就是用来跑vpn。 先按照http://rashost.com/blog/centos5-pptpd-vpn这里的文章安装vpn服务。 内核支持 pptpd VPN需要内核支持mppe，我们的VPS自带的内核已经把mppe编译进去了， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://babodx.github.com/blog/2009/12/21/ubuntu-dynamic-resize-lvm/">
+  <link rel="canonical" href="http://babodx.github.com/blog/2009/12/21/centos-vpn-howto/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -68,7 +67,7 @@
   
   <header>
     
-      <h1 class="entry-title">试用ubuntu 8.04和LVM动态增加分区</h1>
+      <h1 class="entry-title">CentOS 5.3架设VPN和619错误排除</h1>
     
     
       <p class="meta">
@@ -91,112 +90,95 @@
   </header>
 
 
-<div class="entry-content"><p>我在虚拟机VMware里面安装了ubuntu 8.04.</p>
+<div class="entry-content"><p>我买这个VPS的主机，一个目的是用来做Blog空间，另外一个就是用来跑vpn。</p>
 
-<p>安装的时候，只是选择了openssh这个服务。安装后感觉系统很干净</p>
+<p>先按照<a href="http://rashost.com/blog/centos5-pptpd-vpn">http://rashost.com/blog/centos5-pptpd-vpn</a>这里的文章安装vpn服务。</p>
 
-<p><strong>磁盘占用</strong></p>
+<p><strong>内核支持</strong></p>
+
+<p>pptpd VPN需要内核支持mppe，我们的VPS自带的内核已经把mppe编译进去了，没有把mppe另外当作内核的模块。</p>
+
+<p><strong>软件安装</strong></p>
+
+<p>要安装pptpd VPN，ppp和iptables这两个软件是必须安装的，安装命令：<code>yum install -y ppp iptables</code></p>
+
+<p>然后到<a href="http://www.poptop.org/">http://www.poptop.org/</a>下载pptpd的rpm包并安装，下载的时候要注意下面几点：</p>
+
+<ul>
+<li>好像只有1.3.3版本有rpm包，其他版本只有源代码</li>
+<li>没有el5或者centos5的rpm包，用rh4的rpm包可以安装在centos 5上</li>
+<li>64位的系统要下载64位的rpm包，32位的系统要下载32位的rpm包，别搞错了</li>
+</ul>
+
+
+<p>64位系统安装命令：<code>rpm -ivh pptpd-1.3.3-1.rhel4.x86_64.rpm</code>
+32位系统安装命令：<code>&lt;pre&gt;rpm -ivh pptpd-1.3.3-1.rhel4.i386.rpm</code></p>
+
+<p>编辑配置文件 /etc/ppp/options.pptpd</p>
+
+<p>内容如下：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>/dev/mapper/ubuntu-root                      5.6G 321M 5.3G   6% /</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>name pptpd refuse-pap refuse-chap refuse-mschap require-mschap-v2 require-mppe-128 proxyarp lock nobsdcomp novj novjccomp nologfd ms-dns 208.67.222.222 ms-dns 208.67.220.220 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>系统就用了不到400M</p>
-
-<p><strong>内存</strong></p>
+<p>编辑配置文件 /etc/pptpd.conf 内容如下：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>                   total       used       free     shared    buffers     cached
-</span><span class='line'>Mem:           249         39        209          0          3         16</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>option /etc/ppp/options.pptpd logwtmp localip 192.168.92.1 remoteip 192.168.92.11-15</span></code></pre></td></tr></table></div></figure>
 
 
-<p>减掉buffers和cached的内容，还有我ssh远程连接的占用。实际系统启动后内存也就需要17M</p>
+<p>编辑配置文件 /etc/ppp/chap-secrets,配置用户名为johndoe，密码为password，内容如下：</p>
 
-<p><strong>LVM</strong></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>johndoe pptpd password *</span></code></pre></td></tr></table></div></figure>
 
-<p>安装系统的时候，我就选择了整个磁盘启用LVM，采用ubuntu默认分区的方式。</p>
 
-<p>ubuntu默认分了2个区/sda1和/sda5。sda1用来做/boot，sda5用来做LVM。文件系统都是默认的ext3。</p>
+<p>修改配置文件/etc/sysctl.conf中的相应内容如下：</p>
 
-<p>然后在LVM里面默认建立了2个LV( Logical volume)，一个/dev/ubuntu/root用来做/ ，一个/dev/ubuntu/swap_1用来做swap交换分区。我又手动修改了文件系统，采用reiserfs。</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>net.ipv4.ip_forward = 1</span></code></pre></td></tr></table></div></figure>
 
-<p><strong>动态添加/分区大小</strong></p>
 
-<p>我先添加了一个硬盘，系统识别为sdb</p>
+<p>配置iptables:</p>
 
-<p>对这个盘<strong>创建分区</strong>（LVM可以不用分区的，但是需要动态添加到/分区，所以需要有文件系统，不能添加后格式化/分区吧）</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>iptables -t nat -A POSTROUTING -o eth0 -s 192.168.92.0/24 -j MASQUERADE /etc/init.d/iptables save /etc/init.d/iptables restart</span></code></pre></td></tr></table></div></figure>
+
+
+<p>设置iptables和pptpd开机自动启动：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chkconfig pptpd on chkconfig iptables on</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后运行reboot重新启动即可</p>
+
+<h2>错误排除</h2>
+
+<p>完成以上配置，通过Windows拨号到VPN，一定提示619错误。</p>
+
+<p>引发619错误的原因有很多，比如密码不正确等，都报这个错误。</p>
+
+<p>我们可以通过/var/log/messages查看下日志，找到问题原因</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo fdisk /dev/sdb
-</span><span class='line'>n --&gt;创建分区
-</span><span class='line'>t --&gt;修改分区类型为8e
-</span><span class='line'>w --&gt;保存结果</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Dec 20 06:45:12 204-74-212-217 pptpd[18317]: CTRL: Client 221.223.48.186 control connection started
+</span><span class='line'>Dec 20 06:45:12 204-74-212-217 pptpd[18317]: CTRL: Starting call (launching pppd, opening GRE)
+</span><span class='line'>Dec 20 06:45:12 204-74-212-217 pppd[18318]: Plugin /usr/lib/pptpd/pptpd-logwtmp.so is for pppd version 2.4.3, this is 2.4.4
+</span><span class='line'>Dec 20 06:45:12 204-74-212-217 pptpd[18317]: GRE: read(fd=6,buffer=804e5a0,len=8196) from PTY failed: status = -1 error = Input/output error, usually caused by unexpected termination of pppd, check option syntax and pppd logs
+</span><span class='line'>Dec 20 06:45:12 204-74-212-217 pptpd[18317]: CTRL: PTY read or GRE write failed (pty,gre)=(6,7)
+</span><span class='line'>Dec 20 06:45:12 204-74-212-217 pptpd[18317]: CTRL: Client 221.223.48.186 control connection finished</span></code></pre></td></tr></table></div></figure>
 
 
-<p>现在系统可以识别/dev/sdb1这个设备了。</p>
-
-<p><strong>创建PV(Physical volume)</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo pvcreate /dev/sdb1</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>创建VG(Volume group)</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vgextend ubuntu /dev/sdb1</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>扩展LV(Logical volume)</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo lvextend -L +2G /dev/ubuntu/root&lt;br&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样就给/dev/ubuntu/root这个设备大小增加了2G。可以通过sudo lvdisply查看
-但是这个时候df -h还是没有变化的，需要调整文件系统。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo resize_reiserfs -s +2G /dev/ubuntu/root&lt;br&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样就完成了全部动态扩展分区。而且是服务器一直在线状态，不用关机。</p>
-
-<p>调整Swap</p>
-
-<p>还是和上面一样的情景，只要VG里面还有剩余空间就可以用来扩展swap用。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo swapoff -a</span></code></pre></td></tr></table></div></figure>
-
-
-<p>关闭正在用的swap分区</p>
-
-<p>然后</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo lvextend -L +200M /dev/ubuntu/swap_1</span></code></pre></td></tr></table></div></figure>
-
-
-<p>给/dev/ubuntu/swap_1扩展了200M容量</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo mkswap /dev/ubuntu/swap_1</span></code></pre></td></tr></table></div></figure>
-
-
-<p>建立swap的文件系统</p>
-
-<p>最后</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo swapon -a</span></code></pre></td></tr></table></div></figure>
-
-
-<p>启用新的swap系统。</p>
+<p>后来有找了一些文档查看，和一条一条屏蔽配置语法
+发现是logwtmp这个配置选项出现问题。最后编辑/etc/pptpd.conf文件
+注释掉logwtmp选项，重启pptpd服务，就可以正常登陆了。</p>
 </div>
 
 
@@ -233,7 +215,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2009/12/21/ubuntu-dynamic-resize-lvm/" data-via="" data-counturl="http://babodx.github.com/blog/2009/12/21/ubuntu-dynamic-resize-lvm/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2009/12/21/centos-vpn-howto/" data-via="" data-counturl="http://babodx.github.com/blog/2009/12/21/centos-vpn-howto/" >Tweet</a>
   
   
   
@@ -242,10 +224,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2009/12/21/ubuntu-console-unread-chinese/" title="Previous Post: ubuntu server 9.04 终端乱码问题">&laquo; ubuntu server 9.04 终端乱码问题</a>
+        <a class="basic-alignment left" href="/blog/2009/12/21/centos-install-xen/" title="Previous Post: CentOS 5.3下成功安装了Xen虚拟化服务。">&laquo; CentOS 5.3下成功安装了Xen虚拟化服务。</a>
       
       
-        <a class="basic-alignment right" href="/blog/2009/12/21/winphone-SynceWithUbuntu/" title="Next Post: ubuntu 8.10下同步wm6.1手机">ubuntu 8.10下同步wm6.1手机 &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2009/12/21/centos-xen-memory-problem/" title="Next Post: CentOS 5.3 安装虚拟化后的内存识别问题.">CentOS 5.3 安装虚拟化后的内存识别问题. &raquo;</a>
       
     </p>
   </footer>

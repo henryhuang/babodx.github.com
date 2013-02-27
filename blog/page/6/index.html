@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>第一次安装LFS - 鑫的方向</title>
+  <title>鑫的方向</title>
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="在经过了大约40小时左右，我的LFS终于顺利启动了。从内核到系统每一个软件都是自己从源代码编译的，感觉很爽。 本次安装采用LiveCD 6.3作为宿主系统，在VMware上的一个8G scsi盘上安装。 首先碰到的问题就是GCC编译出现问题。后来发现是因为我用的liveCD是64位的问题。 &hellip;">
+  <meta name="description" content="1 将zipfldr.dll注销掉 1
+regsvr32 c:\windows\system32\zipfldr.dll /u 2 关闭avi预览 1
+regsvr32 shmedia.dll /u 经过上面两步，应该可以减少explorer的cup占用率了。 以后如果需要用上面的功能， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://babodx.github.com/blog/2009/12/21/first-lfs/">
+  <link rel="canonical" href="http://babodx.github.com/blog/page/6/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -62,12 +64,15 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article class="hentry" role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
     
-      <h1 class="entry-title">第一次安装LFS</h1>
+      <h1 class="entry-title"><a href="/blog/2007/04/19/resolve-explorer-cpu-occupancy-reate/">解决explorer Cpu占用率高的一些办法</a></h1>
     
     
       <p class="meta">
@@ -83,105 +88,94 @@
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2007-04-19T00:00:00+08:00" pubdate data-updated="true">Apr 19<span>th</span>, 2007</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>在经过了大约40小时左右，我的LFS终于顺利启动了。从内核到系统每一个软件都是自己从源代码编译的，感觉很爽。</p>
+  <div class="entry-content"><p>1 将zipfldr.dll注销掉</p>
 
-<p>本次安装采用LiveCD 6.3作为宿主系统，在VMware上的一个8G scsi盘上安装。</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>regsvr32 c:\windows\system32\zipfldr.dll /u
+</span></code></pre></td></tr></table></div></figure>
 
-<p>首先碰到的问题就是GCC编译出现问题。后来发现是因为我用的liveCD是64位的问题。</p>
 
-<p>换了liveCD 32位的。问题解决</p>
+<p>2 关闭avi预览</p>
 
-<p>第二个问题就是glibc总编译不过去，后来发现是我的Linux-2.6.22.5 API Headers从网上下的版本不对</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>regsvr32 shmedia.dll /u</span></code></pre></td></tr></table></div></figure>
 
-<p>我一直是看着LFS BOOK 6.2的中文手册安装的，而用的LiveCD和软件包都是6.3</p>
 
-<p>6.3里面的这个Linux-2.6.22.5 API Headers需要从Linux-2.6.22.5.tar.bz2里面获取</p>
+<p>经过上面两步，应该可以减少explorer的cup占用率了。</p>
 
-<p>建议还是看liveCD启动后/usr/share/LFS-BOOK-6.3目录下的文档，这个文档和liveCD带的软件包配套的。</p>
+<p>以后如果需要用上面的功能，再按照下面步骤打开</p>
 
-<p>或者参考中文的</p>
+<p><strong>恢复上面功能</strong></p>
 
-<p>手把手教你如何建立自己的Linux系统 第二版 作者：孙海勇</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>regsvr32 c:\windows\system32\zipfldr.dll
+</span><span class='line'>regsvr32 shmedia.dll</span></code></pre></td></tr></table></div></figure>
 
-<p>其他就没有碰到什么大问题了。也就是忘记安装个软件包、或者关机重启后，如何从liveCD恢复到工作状态。</p>
-
-<p>通过这次安装，让我觉得LFS真的是学习Linux的捷径。而且发现了一个牛人的博客，就是上面的孙海勇  网名 冲天飞豹  http://youbest.cublog.cn/</p>
-
-<p>博客里面有大量关于构建linux系统的技术文章，而且都是原创。</p>
-
-<p>而且这次通过安装LFS，也找到了Linux 如何在控制台显示UTF-8中文的办法。原来是要给内核打补丁才可以。</p>
-
-<p><img src="http://farm9.staticflickr.com/8530/8511996426_72a8bf974d.jpg" alt="utf8内核补丁" /></p>
-
-<p>具体的办法可以看</p>
-
-<p>内核补丁：字符终端下显示UTF-8字符</p>
-
-<p>总结
-安装是顺利完成了，后面要学习的内容还有很多。比如安装时候的每一个包都包含的什么内容、每一条配置的用途。这些安装手册配置容易，如果没有手册自己弄起来就难了。所以后面的时间，就是自己看文档，消化这些知识了。至少顺利迈出第一步！</p>
 </div>
+  
+  
 
 
-  <footer>
-    <p class="meta">
+    </article>
+  
+  
+    <article>
       
-  
-
-<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/linux/'>Linux</a>
-  
-</span>
-
-
-    </p>
+  <header>
     
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2009/12/21/first-lfs/" data-via="" data-counturl="http://babodx.github.com/blog/2009/12/21/first-lfs/" >Tweet</a>
-  
-  
-  
-</div>
-
+      <h1 class="entry-title"><a href="/blog/2007/04/12/netcraft/">www.netcraft.com可以检测网站运行的操作系统和Web Server</a></h1>
     
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2009/12/21/defense-arp-attack-on-ubuntu/" title="Previous Post: ubuntu下arp攻击防御和反击！">&laquo; ubuntu下arp攻击防御和反击！</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2009/12/21/get-xen-guestos-image/" title="Next Post: 获取XEN guestOS的images文件">获取XEN guestOS的images文件 &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
+    
+      <p class="meta">
+        
 
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-04-12T00:00:00+08:00" pubdate data-updated="true">Apr 12<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.netcraft.com">http://www.netcraft.com/</a>
+可以通过</p>
+
+<p><strong>What&#8217;s that site running?</strong></p>
+
+<p>查询一个网站的服务器使用的什么操作系统,Web服务器用的什么软件..
+感觉很不错</p>
 </div>
+  
+  
 
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/5/">Newer &rarr;</a>
+    
+  </div>
+</div>
 <aside class="sidebar">
   
     <section>
@@ -220,7 +214,7 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2009/12/21/xerobank-browser/">一款匿名浏览器--XeroBank Browser</a>
+        <a href="/blog/2009/12/21/xerobank-browser/">一款匿名浏览器&#8211;XeroBank Browser</a>
       </li>
     
       <li class="post">
@@ -237,7 +231,6 @@
 
   
 </aside>
-
 
     </div>
   </div>

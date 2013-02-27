@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>第一次安装LFS - 鑫的方向</title>
+  <title>ubuntu server 9.04 终端乱码问题 - 鑫的方向</title>
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="在经过了大约40小时左右，我的LFS终于顺利启动了。从内核到系统每一个软件都是自己从源代码编译的，感觉很爽。 本次安装采用LiveCD 6.3作为宿主系统，在VMware上的一个8G scsi盘上安装。 首先碰到的问题就是GCC编译出现问题。后来发现是因为我用的liveCD是64位的问题。 &hellip;">
+  <meta name="description" content="安装了ubuntu server 9.04，安装的时候选择了中文环境。 因为server是没有桌面的，发现终端里面显示提示信息，出错信息都变成乱码了。 解决办法
+修改/etc/default/locale文件 将zh_CN修改为en_US
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://babodx.github.com/blog/2009/12/21/first-lfs/">
+  <link rel="canonical" href="http://babodx.github.com/blog/2009/12/21/ubuntu-console-unread-chinese/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -67,7 +69,7 @@
   
   <header>
     
-      <h1 class="entry-title">第一次安装LFS</h1>
+      <h1 class="entry-title">Ubuntu Server 9.04 终端乱码问题</h1>
     
     
       <p class="meta">
@@ -90,42 +92,14 @@
   </header>
 
 
-<div class="entry-content"><p>在经过了大约40小时左右，我的LFS终于顺利启动了。从内核到系统每一个软件都是自己从源代码编译的，感觉很爽。</p>
+<div class="entry-content"><p>安装了ubuntu server 9.04，安装的时候选择了中文环境。</p>
 
-<p>本次安装采用LiveCD 6.3作为宿主系统，在VMware上的一个8G scsi盘上安装。</p>
+<p>因为server是没有桌面的，发现终端里面显示提示信息，出错信息都变成乱码了。</p>
 
-<p>首先碰到的问题就是GCC编译出现问题。后来发现是因为我用的liveCD是64位的问题。</p>
+<p><strong>解决办法</strong>
+修改/etc/default/locale文件</p>
 
-<p>换了liveCD 32位的。问题解决</p>
-
-<p>第二个问题就是glibc总编译不过去，后来发现是我的Linux-2.6.22.5 API Headers从网上下的版本不对</p>
-
-<p>我一直是看着LFS BOOK 6.2的中文手册安装的，而用的LiveCD和软件包都是6.3</p>
-
-<p>6.3里面的这个Linux-2.6.22.5 API Headers需要从Linux-2.6.22.5.tar.bz2里面获取</p>
-
-<p>建议还是看liveCD启动后/usr/share/LFS-BOOK-6.3目录下的文档，这个文档和liveCD带的软件包配套的。</p>
-
-<p>或者参考中文的</p>
-
-<p>手把手教你如何建立自己的Linux系统 第二版 作者：孙海勇</p>
-
-<p>其他就没有碰到什么大问题了。也就是忘记安装个软件包、或者关机重启后，如何从liveCD恢复到工作状态。</p>
-
-<p>通过这次安装，让我觉得LFS真的是学习Linux的捷径。而且发现了一个牛人的博客，就是上面的孙海勇  网名 冲天飞豹  http://youbest.cublog.cn/</p>
-
-<p>博客里面有大量关于构建linux系统的技术文章，而且都是原创。</p>
-
-<p>而且这次通过安装LFS，也找到了Linux 如何在控制台显示UTF-8中文的办法。原来是要给内核打补丁才可以。</p>
-
-<p><img src="http://farm9.staticflickr.com/8530/8511996426_72a8bf974d.jpg" alt="utf8内核补丁" /></p>
-
-<p>具体的办法可以看</p>
-
-<p>内核补丁：字符终端下显示UTF-8字符</p>
-
-<p>总结
-安装是顺利完成了，后面要学习的内容还有很多。比如安装时候的每一个包都包含的什么内容、每一条配置的用途。这些安装手册配置容易，如果没有手册自己弄起来就难了。所以后面的时间，就是自己看文档，消化这些知识了。至少顺利迈出第一步！</p>
+<p>将zh_CN修改为en_US</p>
 </div>
 
 
@@ -162,7 +136,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2009/12/21/first-lfs/" data-via="" data-counturl="http://babodx.github.com/blog/2009/12/21/first-lfs/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2009/12/21/ubuntu-console-unread-chinese/" data-via="" data-counturl="http://babodx.github.com/blog/2009/12/21/ubuntu-console-unread-chinese/" >Tweet</a>
   
   
   
@@ -171,10 +145,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2009/12/21/defense-arp-attack-on-ubuntu/" title="Previous Post: ubuntu下arp攻击防御和反击！">&laquo; ubuntu下arp攻击防御和反击！</a>
+        <a class="basic-alignment left" href="/blog/2009/12/21/ubuntu-904-show-chinese-filename/" title="Previous Post: ubuntu server 9.04显示中文文件">&laquo; ubuntu server 9.04显示中文文件</a>
       
       
-        <a class="basic-alignment right" href="/blog/2009/12/21/get-xen-guestos-image/" title="Next Post: 获取XEN guestOS的images文件">获取XEN guestOS的images文件 &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2009/12/21/ubuntu-dynamic-resize-lvm/" title="Next Post: 试用ubuntu 8.04和LVM动态增加分区">试用ubuntu 8.04和LVM动态增加分区 &raquo;</a>
       
     </p>
   </footer>
