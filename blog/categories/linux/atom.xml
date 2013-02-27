@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-27T08:21:06+08:00</updated>
+  <updated>2013-02-27T09:39:06+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -280,299 +280,230 @@ sudo swapon -a
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[ubuntu 8.04升级到8.10]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/ubuntu-804-update-to-810/"/>
+    <title type="html"><![CDATA[ubuntu server 9.04显示中文文件]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/ubuntu-904-show-chinese-filename/"/>
     <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/ubuntu-804-update-to-810</id>
-    <content type="html"><![CDATA[<h1>升级</h1>
+    <id>http://babodx.github.com/blog/2009/12/21/ubuntu-904-show-chinese-filename</id>
+    <content type="html"><![CDATA[<p>前面提到了用VMware的share folder功能，可以将主机系统的一个目录，自动共享到ubuntu /mnt/hgfs目录下。</p>
 
-<p>昨天开始作的升级。</p>
+<p>但是winxp的中文目录，到了ubuntu server下面就显示乱码了。</p>
 
-<p>早上到单位，就开始<code>Alt+F2</code></p>
+<p><strong>解决办法</strong></p>
 
-<p>在弹出的命令行窗口输入
-<code>update-manager -d</code></p>
-
-<p>然后就进入了漫长的等待，单位网络那个垃圾。。。。。告诉我42天。。。。。</p>
-
-<p>一直到下班，下载了900多个文件，一共要下载1300多</p>
-
-<p>晚上到家继续update-manager -d 发现居然可以接着下载，还以为要重新来呢。家里好点，告诉我3个小时,后来就睡觉了。</p>
-
-<p>今天早上起来，发现已经下载完成了，开始到安装更新这一步了，弹出个窗口等我确认。</p>
-
-<p>我点上开始，就洗漱去了。一直到要上班也没有安装完成。（TMD，居然忘记今天星期五，不能开车。还是老婆提醒我，才想起来。）这次我可不敢关机了，怕升级一半，下次进不来系统。直接把本本和上盖子放包里了，下楼打车上班。</p>
-
-<p>在出租车里，完成了全部更新。关机。</p>
-
-<p><strong>启动</strong></p>
-
-<p>到了单位，发现系统总卡在进度条进不去。</p>
-
-<p>按Alt+F1然后 Alt+F8查看下文字模式的启动信息，发现一直卡在*Configuring network interfaces...</p>
-
-<p>这个第一次启动，没有办法（希望有好办法的，告诉下。）我就一直死等呀。。。感觉过了20分钟？？？</p>
-
-<p>进入系统了，3D显卡驱动不行。运行uname -a查看，内核还在用8.04的2.6.24-21.</p>
-
-<p>先修改网络吧
-<code>sudo gedit /etc/network/interfaces</code></p>
-
-<p>将里面的</p>
+<p>安装相关软件包</p>
 
 <p><code>
-auto eth0
-iface eth0 inet dhcp
-auto lo
-auto wlan0
+sudo apt-get install language-pack-zh
 </code></p>
 
-<p>都注释掉，变成下面样子</p>
+<p><strong>配置中文环境</strong></p>
 
-<p>```</p>
-
-<h1>auto lo</h1>
-
-<p>iface lo inet loopback</p>
-
-<h1>iface eth0 inet dhcp</h1>
-
-<p>address 10.11.10.164
-netmask 255.255.255.0
-gateway 10.11.10.254</p>
-
-<h1>nameserver 202.106.0.20</h1>
-
-<h1>auto eth0</h1>
-
-<p>iface wlan0 inet dhcp
-wpa-psk 7640768b3d6b31f834b63abc8d2d667ae10f8bc3c41a8e4e87ec2c104d963a1e
-wpa-driver wext
-wpa-key-mgmt WPA-PSK
-wpa-proto WPA
-wpa-ssid babohome</p>
-
-<h1>auto wlan0</h1>
-
-<p>```</p>
-
-<p>接着修改/etc/NetworkManager/nm-system-settings.conf文件
-<code>sudo gedit /etc/NetworkManager/nm-system-settings.conf</code></p>
-
-<p>将文件里的<code>[ifupdown] manager=false</code>改成<code>[ifupdown] manager=true</code></p>
-
-<p>这样基本启动速度的问题就正常</p>
-
-<p><strong>内核</strong></p>
-
-<p>再来说内核</p>
-
-<p>内核需要手动编辑下grub的启动配置文件了。其实2.6.27-7内核已经安装了，就是没有给我们加入的menu.lst文件里面。修改menu.lst</p>
-
-<p><code>sudo gedit /boot/grub/menu.lst</code></p>
-
-<p>我的修改如下，这个应该每个人的不太一样。大家可以拷贝以前自己的文件进行修改</p>
+<p>修改/etc/environment</p>
 
 <p><code>
-title        Ubuntu 8.04.1, kernel 2.6.27-7-generic
-root        (hd0,1)
-kernel        /boot/vmlinuz-2.6.27-7-generic root=UUID=614a1c10-6ed3-45c9-b24d-f7b3e39725b2 ro quiet splash locale=zh_CN
-initrd        /boot/initrd.img-2.6.27-7-generic
-quiet
-title        Ubuntu 8.04.1, kernel 2.6.27-7-generic (recovery mode)
-root        (hd0,1)
-kernel        /boot/vmlinuz-2.6.27-7-generic root=UUID=614a1c10-6ed3-45c9-b24d-f7b3e39725b2 ro single
-initrd        /boot/initrd.img-2.6.27-7-generic
+sudo vim /etc/environment
 </code></p>
 
-<p>这个修改后，先不要重新启动。因为我们还没有卸载显卡驱动，要不重启后，卸载驱动还要继续重启。</p>
+<p>将LANG和LANGUAGE内容修改为下面的</p>
 
-<p><strong>卸载现有的显卡驱动</strong></p>
+<p><code>
+LANG=zh_CN.UTF8&lt;br&gt;
+LANGUAGE="zh_CN:zh:en_US:en
+</code></p>
 
-<p>我原来显卡驱动是用envyng -t来安装的，现在还用这个工具卸载</p>
+<p>修改/etc/default/locale</p>
 
-<p>在终端<code>envyng -t</code></p>
+<p><code>
+sudo vim /etc/default/locale
+</code>
+修改内容如下</p>
 
-<p>然后选卸载驱动，安后等卸载完成后，重启就ok了</p>
+<p><code>
+LANG="zh_CN.UTF-8"&lt;br&gt;
+LANGUAGE="zh_CN:zh"
+</code></p>
 
-<p><strong>安装显卡驱动</strong></p>
+<p>保存后，重启系统。</p>
 
-<p>注意，如果内核还是2.6.24-21，新的驱动安装不上。</strong>这次我没有用envyng -t来安装，而是用系统->系统管理->硬件驱动来安装的</p>
+<p>现在用putty登陆，还是发现看中文乱码。我们还要继续设置putty才可以。</p>
 
-<p>推荐我的是nvidia 177.80的驱动</p>
+<p><strong>设置putty使用utf-8</strong></p>
 
-<p>等待安装完成后。 Ctrl+Alt+Backspace 重新启动X server</p>
+<p>putty的Windows->Translation->Received data assumed to be in which character set:选择UTF-8</p>
 
-<p>一切ok</p>
+<p><img src="http://farm9.staticflickr.com/8236/8512011412_e138d2c072.jpg" alt="putty使用utf8设置" /></p>
 
-<p><strong>一些问题</strong>
-在启动过程中，发现samba deamon启动fail还没有看是什么原因。</p>
+<p>这样设置后，就可以正确在putty里显示中文了。</p>
+
+<p><img src="http://farm9.staticflickr.com/8514/8510902673_84be6e3e30.jpg" alt="putty显示中文文件名" /></p>
+
+<p>以上这些就可以正常在putty里显示中文了。但是如果你用键盘鼠标从本地登陆ubuntu server，会发现，ubuntu server还是乱码。</p>
+
+<p>这个问题我查了一些文档，还是没有解决。有的说是console下的字体问题。但是/usr/share/consolefonts里的字体好像没有支持中文的。</p>
+
+<p>还有说console fonts最多支持256这个字符。。。</p>
+
+<p>反正最终这个问题没有解决掉。现在在linux自己的控制台里，显示还是乱码</p>
+
+<p>建议大家如果不是特别需要，其实服务器没有必要采用中文编码的。可以正常显示中文就好了。</p>
+
+<p>建议默认还是用en_US:UTF-8的好。</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[如何快速统计服务器访问量]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/quick-stats-server-visits/"/>
+    <title type="html"><![CDATA[ubuntu 9.04安装xen]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/ubuntu-904-install-xen/"/>
     <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/quick-stats-server-visits</id>
-    <content type="html"><![CDATA[<p>最近看了javaeye上面<strong>robbin</strong>的一篇文章，学习到了很多知识。</p>
+    <id>http://babodx.github.com/blog/2009/12/21/ubuntu-904-install-xen</id>
+    <content type="html"><![CDATA[<p>主要参考下面两旁文章，先贴过来，以后再整理。</p>
 
-<p><a href="http://robbin.javaeye.com/blog/97287">http://robbin.javaeye.com/blog/97287</a> 如何快速统计RoR网站的访问量</p>
+<p><a href="http://oceanobservatories.org/spaces/display/CIDev/Xen+on+Ubuntu+9.04+(Jaunty">http://oceanobservatories.org/spaces/display/CIDev/Xen+on+Ubuntu+9.04+(Jaunty)</a>)</p>
 
-<p>我的服务器是Apache+tomcat的配置，上面跑了几个网站。都是基于apache 虚拟主机配置的。</p>
+<p><a href="http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html">http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html</a></p>
 
-<p>apache配置如下</p>
+<p><strong>安装xen</strong></p>
 
-<p><code>
-Include conf/vhost_*.conf
-</code></p>
+<p>Xen on Ubuntu 9.04 (Jaunty)</p>
 
-<p>然后每个虚拟主机对应一个配置文件</p>
+<p>Added by <a href="http://oceanobservatories.org/spaces/display/~thim">Thomas Im</a> , last edited by <a href="http://oceanobservatories.org/spaces/display/~thim">Thomas Im</a> on Jun 11, 2009  (<a href="http://oceanobservatories.org/spaces/pages/diffpages.action?pageId=18353165&originalId=18353171">view change</a>)
+Labels: 
+(None)
+Following applies to Ubuntu 9.04 Jaunty 64-bit installation.  Notes taken from rebuild of 'amoeba' development system.
+Installation</p>
 
-<p>例如下面的(一些信息用???代替了，都是域名和姓名等个人信息)</p>
+<pre>sudo apt-get install ubuntu-xen-server # Jaunty Xen package does not include the dom0 Xen kernel so these must be installed separately  wget http://security.debian.org/debian-security/pool/updates/main/l/linux-2.6/linux-modules-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb wget http://security.debian.org/debian-security/pool/updates/main/l/linux-2.6/linux-image-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb  sudo dpkg -i linux-modules-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb linux-image-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb  sudo apt-get install python2.5 shutdown -r now   sudo vim /etc/network/interfaces .. auto eth0 iface eth0 inet static   address xxx.xxx.xxx.xxx   gateway xxx.xxx.xxx.xxx   netmask 255.255.255.0   sudo vim /etc/resolv.conf ... domain ucsd.edu search ucsd.edu  nameserver xxx.xxx.xxx.xxx nameserver xxx.xxx.xxx.xxx   sudo /etc/init.d/networking restart  </pre>
 
-<p><code>
-&lt;VirtualHost *:80&gt;
-    ServerAdmin ???&lt;a href="mailto:???@???.cn"&gt;@???.cn&lt;/a&gt;
-    DocumentRoot /home/???/www
-    ServerName &lt;a href="http://www./???.org"&gt;www.???.org&lt;/a&gt;
-    DirectoryIndex index.jsp index.htm
-    ErrorLog logs/abc-error_log
-    CustomLog "| /usr/sbin/rotatelogs /var/log/httpd/abc-access_%Y%m%d.log 86400" common
-    &lt;Location "/*.jsp"&gt;
-         JkUriSet worker ajp13:localhost:8009
-    &lt;/Location&gt;
-&lt;/VirtualHost&gt;
-</code></p>
 
-<p>这样配置后，就会在/var/log/httpd下面按照虚拟主机名字和日期，每天生成一个访问日志文件</p>
+<p>Create Jaunty DomU (Guest)
+[http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html]
+<img src="http://oceanobservatories.org/spaces/images/icons/emoticons/information.gif" border="0" width="16" height="16" align="absMiddle"><br><strong><strong>References:</strong></strong>
+<a href="https://help.ubuntu.com/community/Xen">https://help.ubuntu.com/community/Xen</a><br><a href="http://www.infohit.net/blog/adate/053109/archive/1.html">http://www.infohit.net/blog/adate/053109/archive/1.html</a><br><a href="http://www.chrisk.de/blog/2008/12/how-to-run-xen-in-ubuntu-intrepid-without-compiling-a-kernel-by-yourself/">http://www.chrisk.de/blog/2008/12/how-to-run-xen-in-ubuntu-intrepid-without-compiling-a-kernel-by-yourself/</a></p>
 
-<p><strong>统计每日动态请求处理总数</strong></p>
+<h3></h3>
 
-<p><code>
-cat /var/log/httpd/abc-access_20081116.log |grep "200 "|wc -l
-</code></p>
 
-<p><strong>统计URL的访问频度</strong></p>
-
-<p><code>
-cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $7}'|sort|uniq -c
-</code></p>
-
-<p><strong>统计时间访问频度</strong></p>
-
-<p><code>
-cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $4}'|awk -F : '{print $2}'|sort|uniq -c
-</code></p>
-
-<p><strong>以上这些是基于CentOS+apache+tomcat实现的</strong></p>
-
-<p><code>
-[root@ict ~]# cat /var/log/httpd/esdinchina-access_20081117.log |grep "200 "|awk '{print $4}'|awk -F : '{print $2}'|sort|uniq -c
-</code></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[安装和使用xen-shell]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/install-xen-shell/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/install-xen-shell</id>
-    <content type="html"><![CDATA[<p>转自：<a href="http://www.xen-tools.org/software/xen-shell/install.html">http://www.xen-tools.org/software/xen-shell/install.html</a></p>
-
-<p>Installing &amp; using the Xen-Shell</p>
-
-<p>This shell makes several assumptions in the way that it operates:</p>
+<p><strong>安装guest系统</strong>
+These are instructions for creating an Ubuntu Jaunty DomU on Debian Lenny Dom0 using Xen 3.2.1 that comes with Lenny.  I'm installing into an LVM rather than using a file image.  See <a href="http://www.howtoforge.com/xen-live-migration-of-an-lvm-based-virtual-machine-with-iscsi-on-debian-lenny">this HowtoForge article for background of my particular setup</a>.  This tutorial assumes you're working from a similar setup with an iscsi target and LVM-based VMs.
+The reason I'm posting this is because I had such a hard time finding some combination of tools that worked correctly to do this.  I tried a few options but had little success:</p>
 
 <ul>
-<li>That you have a Xen 3.x host running.</li>
-<li>Then Xen host has several guests running.</li>
-<li>That you don't wish to give your users shell access on the host.</li>
+<li>debootstrap - Didn't seem to work with Jaunty at all.  It would just crash </li>
+<li>vm-install - Doesn't support LVM-based VMs by default, but there is a procedure for converting the qcow image to an LVM</li>
 </ul>
 
 
-<p>If these assumptions are not valid for your environment then you might find that you have problems.</p>
+<p>What I found is that I could find no way of creating the LVM-based VM in Lenny.  I actually had to create a sid instance first and then install my open-iscsi and xen-utils into the sid VM, then use SID to populate the VM.  <br><u><strong>Perform the following actions in your SID vm or workstation</strong></u><br>
+Note:  You'll need your /etc/xen-tools/xen-tools.conf setup like the instructions in the HowtoForge article (things like gateway, netmask, broadcast, passwd, fs type, install-method, etc).<br>
+Whenever I would try to build the vm with the default partitions, it would always fail.  For some reason the resulting vm would have an fstab that shows something like sda1 and sda2 instead of xvda1 and xvda2.  I had to create my own partition scheme before anything would work right.  Here's mine: $ <strong>sudo cat /etc/xen-tools/partitions.d/with-data</strong><br>
+[root]<br>
+size=4G<br>
+type=ext3<br>
+mountpoint=/<br>
+options=sync,errors=remount-ro<br>
+[swap]<br>
+size=512M<br>
+type=swap<br>
+[data]<br>
+size=4G<br>
+type=ext3<br>
+mountpoint=/data<br>
+options=nodev
+You will need to create a symlink for jaunty so that the option is recognized at the command-line. 
+<strong>$ cd /usr/lib/xen-tools</strong>
+<strong>$ sudo ln -s edgy.d jaunty.d  </strong>
+Now, finally, you can create the image.  This step may take some time
+<strong>$ xen-create-image --hostname=myserver --dhcp --lvm=vg_xen --dist=jaunty --mirror=http://archive.ubuntu.com/ubuntu --size=4Gb --memory=512Mb --swap=512MB --arch=i386 --partitions=with-data</strong>
+Since you're building the LVM on a different machine than it will eventually run on, you'll need to  copy the resulting xen config to the correct server:
+<strong>$ scp /etc/xen/myserver.cfg root@realhost:/etc/xen/</strong>
+That should be all you need to get this working.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ubuntu 9.04 server 安装VMware Tools解决share folders问题]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/ubuntu-904-install-vmware-tools/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/ubuntu-904-install-vmware-tools</id>
+    <content type="html"><![CDATA[<p>我的主系统是Winxp在vmware 6.5.2 build-156735下安装的ubuntu server 9.04</p>
 
-<p><strong>Installation</strong></p>
+<p>因为安装vmware tools后，可以使用vmware 提供的share folders让winxp的主系统可以将某个目录映射到虚拟的ubuntu系统里。</p>
 
-<p>Download either <a href="http://www.xen-tools.org/releases.html">a release</a>, or a current version of <a href="http://www.xen-tools.org/cvs.html">the CVS repository</a> and install it by executing:</p>
+<p>我就开始在vmware里面安装vmware tools工具。下面是过程，包括不能用vmhgfs的解决办法</p>
 
-<p><code>make install</code></p>
+<p>**安装VMware tools</p>
 
-<p><strong>Configuring Users</strong></p>
-
-<p>Each user is expected to login directly to the xen-shell, and not have any other access to the host system. To do this change their login shell by running:</p>
-
-<p><code>chsh -s /usr/local/bin/xen-login-shell username</code></p>
-
-<p>This will ensure when they connect to the system they will login to the shell, and run it within GNU Screen.</p>
-
-<p><strong>Note:</strong>CVS and Debian binary packages use /usr/bin instead of /usr/local/.
-Once you've changed the shell for the user you must update your Xen configuration files so that they include the username(s) of the users who can control them.
-To allow the user "bob" and the user "steve" to control the Xen guest "builder.my.flat" you would add the following to /etc/xen/builder.my.flat.cfg:</p>
-
-<p>```</p>
-
-<h1>All instances must have a name name = 'builder.my.flat'    </h1>
-
-<h1>These users may control this instance. xen_shell = 'bob, steve'</h1>
-
-<p>```</p>
-
-<p><strong>Bandwidth Accounting</strong></p>
-
-<p>The shell allows the user to view the bandwidth they have transferred over a given period, using the bandwidth command.
-For this to work the vnstat tool must be installed and configured upon dom0. It is assumed that each Xen guest will have their network interface named the same as the guest name.
-For example a Xen guest called 'skx' will have a network interface 'skx' upon dom0. If you're using the standard Xen configuration setup you can achieve this by changing your skx.cfg file to read:</p>
-
-<p><code>vif = [ 'vifname=skx,ip=1.2.3.4' ]</code></p>
-
-<p><strong>Note:</strong> if you have more than one IP address allocated to a guest you will have to create a more complicated setup.</p>
-
-<p><strong>Security</strong></p>
-
-<p>Since the xen administrator command xm requires root privileges to run you will need to configure sudo to allow the users who are running your shell to execute that command, without being prompted for a password, as root.
-Add something similar to the following to your /etc/sudoers file:</p>
+<p>安装前，先安装需要的软件包</p>
 
 <p><code>
-User_Alias   XENUSERS = steve,bob,fred,foo
-Cmnd_Alias   XEN      = /usr/sbin/xm
-Cmnd_Alias   XENIMG   = /usr/bin/xen-create-image
-XENUSERS     ALL      = NOPASSWD: XEN,XENIMG
+apt-get install autoconf automake binutils make cpp gcc linux-headers-$(uname -r)
 </code></p>
 
-<p><strong>Note:</strong>you only need to grant the ability to run xen-create-image if you wish to enable reimaging support in the shell.</p>
+<p>安装后，在vmware上面选择VM-》Install Vmware Tools</p>
 
-<p><strong>DNS Updates</strong></p>
+<p>然后切换到ubuntu server 9.04里，运行mount命令，将Vmware tools的光盘挂载
+<code>sudo mount /dev/cdrom /mnt</code></p>
 
-<p>When the shell starts it will look for the file ips.txt in the home directory of the user who connects. If that file doesn't exist then the rdns command will be disabled.</p>
+<p>拷贝安装VMware Tools需要的安装文件到/tmp目录
+<code>sudo cp /mnt/VMwareTools-7.8.5-156735.tar.gz /tmp</code></p>
 
-<p>If you wish to allow users to control their reverse DNS create that file and give it contents such as these:</p>
+<p>卸载/mnt目录，因为安装的时候，需要在/mnt目录下创建hgfs目录，如果这时候挂载着CDROM，就会导致创建hgfs目录失败。<code>sudo /mnt</code></p>
 
-<p><code>192.168.1.1 foo.my.domain 192.168.1.2 bar.my.domain</code></p>
+<p>解压安装文件并修改会出现问题的page.c文件</p>
 
-<p>This file will be updated by the user when they invoke the rdns command. It is up to you to read the files and create the corresponding zonefiles / DNS updates. The shell will only manipulate the file - not push DNS updates itself.</p>
+<p><code>
+cd /tmp
+tar zxvf VMwareTools-7.8.5-156735.tar.gz
+cd /tmp/vmware-tools-distrib/lib/modules/source&lt;/span&gt;
+sudo cp ./vmhgfs.tar /tmp/&lt;/span&gt;
+tar xvf vmhgfs.tar &lt;/span&gt;
+cd vmhgfs-only/
+sudo vi page.c
+</code></p>
 
-<p><strong>Reimaging Support</strong></p>
+<p>修改page.c里面867行的一个错误函数，</p>
 
-<p>If a user connects to the shell and has the executable file image.sh in their home directory the reimage command will be enabled.
-When the user invokes the command the image.sh script is executed after prompting for confirmation, and performing a last-chance count-down.
-It is up to you to create and configure this script to do the right thing. A sample file for user bob could look like this:</p>
+<p><code>
+page = __grab_cache_page(mapping, index);
+</code></p>
 
-<p>```</p>
+<p>将这个函数修改为</p>
 
-<h1>!/bin/sh /usr/bin/xen-create-image --hostname=bob \  </h1>
+<p><code>
+page = grab_cache_page_write_begin(mapping, index,flags);
+</code>
+这个函数是在/usr/src/linux-headers-2.6.28-11-server/include/linux$下的，pagemap.h里面定义的，内容如下</p>
 
-<p>--ip=192.168.1.1  \  
---ip=192.168.1.2 \  
---size=9.5G \  
---swap=512M  --mem=256M \  
---force
-```</p>
+<p><code>
+struct page *grab_cache_page_write_begin(struct address_space *mapping,
+                        pgoff_t index, unsigned flags);
+</code></p>
 
-<p>This will require a correctly configured instance of <a href="http://www.xen-tools.org/software/xen-tools/">xen-tools</a> and the sudoer file to contain the ability for the user to run xen-create-image.</p>
+<p>修改后，保存。然后重新打包成vmhgfs.tar文件，放置到/tmp/vmware-tools-distrib/lib/modules/source目录下。
+完成上面工作后，就可以</p>
 
-<p>Any remaining questions? <a href="http://www.xen-tools.org/contact/">contact the author</a></p>
+<p><code>
+cd /tmp/vmware-tools-distrib
+sudo ./vmware-install.pl
+</code></p>
+
+<p>安装提示安装就可以了。</p>
+
+<p>当看到如下提示，代表已经正确编译了vmhgfs模块了。应该可以顺利使用share folders功能。</p>
+
+<p>The vmhgfs module loads perfectly into the running kernel.</p>
+
+<p>也可以运行</p>
+
+<p><code>lsmod |grep vmhgfs</code></p>
+
+<p>如果有如下显示，表示安装成功</p>
+
+<p><code>
+vmhgfs                 53728  1
+</code></p>
+
+<p>这样就可以用vmware提供的share folders功能和ubuntu server 9.04共享文件了。</p>
 ]]></content>
   </entry>
   

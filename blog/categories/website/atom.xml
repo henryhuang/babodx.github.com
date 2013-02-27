@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Website | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/website/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-02-27T09:39:06+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[www.netcraft.com可以检测网站运行的操作系统和Web Server]]></title>
+    <link href="http://babodx.github.com/blog/2007/04/12/netcraft/"/>
+    <updated>2007-04-12T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2007/04/12/netcraft</id>
+    <content type="html"><![CDATA[<p><a href="http://www.netcraft.com">http://www.netcraft.com/</a>
+可以通过</p>
+
+<p><strong>What's that site running?</strong></p>
+
+<p>查询一个网站的服务器使用的什么操作系统,Web服务器用的什么软件..
+感觉很不错</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,6 +1,30 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
+        <loc>http://babodx.github.com/blog/2007/04/12/netcraft/</loc>
+        <lastmod>2013-02-27T09:00:59+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://babodx.github.com/blog/2007/04/19/resolve-explorer-cpu-occupancy-reate/</loc>
+        <lastmod>2013-02-27T08:39:55+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://babodx.github.com/blog/2007/04/27/vista-slow/</loc>
+        <lastmod>2013-02-27T08:42:18+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://babodx.github.com/blog/2007/12/14/vista-wireless-problem/</loc>
+        <lastmod>2013-02-27T08:51:04+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://babodx.github.com/blog/2009/07/17/blog-migrate-to-spaces-live/</loc>
+        <lastmod>2013-02-27T08:35:45+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://babodx.github.com/blog/2009/08/02/tearcopy/</loc>
+        <lastmod>2013-02-27T08:55:52+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://babodx.github.com/blog/2009/12/19/Centos-Virtualization/</loc>
         <lastmod>2013-02-26T14:57:33+08:00</lastmod>
     </url>
@@ -35,6 +59,10 @@
     <url>
         <loc>http://babodx.github.com/blog/2009/12/21/defense-arp-attack-on-ubuntu/</loc>
         <lastmod>2013-02-26T17:46:26+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://babodx.github.com/blog/2009/12/21/first-lfs/</loc>
+        <lastmod>2013-02-27T09:12:18+08:00</lastmod>
     </url>
     <url>
         <loc>http://babodx.github.com/blog/2009/12/21/get-xen-guestos-image/</loc>
@@ -113,6 +141,18 @@
         <lastmod>2013-02-26T17:34:02+08:00</lastmod>
     </url>
     <url>
+        <loc>http://babodx.github.com/blog/2009/12/21/ubuntu-904-install-vmware-tools/</loc>
+        <lastmod>2013-02-27T09:38:41+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://babodx.github.com/blog/2009/12/21/ubuntu-904-install-xen/</loc>
+        <lastmod>2013-02-27T09:05:23+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://babodx.github.com/blog/2009/12/21/ubuntu-904-show-chinese-filename/</loc>
+        <lastmod>2013-02-27T09:21:44+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://babodx.github.com/blog/2009/12/21/ubuntu-dynamic-resize-lvm/</loc>
         <lastmod>2013-02-26T15:36:15+08:00</lastmod>
     </url>
@@ -141,6 +181,10 @@
         <lastmod>2013-02-26T23:54:04+08:00</lastmod>
     </url>
     <url>
+        <loc>http://babodx.github.com/blog/2009/12/21/xerobank-browser/</loc>
+        <lastmod>2013-02-27T08:45:08+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://babodx.github.com/blog/2013/02/13/kai-shi-shi-yong-octopress/</loc>
         <lastmod>2013-02-26T14:58:16+08:00</lastmod>
     </url>
@@ -154,11 +198,11 @@
     </url>
     <url>
         <loc>http://babodx.github.com/blog/archives/</loc>
-        <lastmod>2013-02-27T08:20:42+08:00</lastmod>
+        <lastmod>2013-02-27T09:38:41+08:00</lastmod>
     </url>
     <url>
         <loc>http://babodx.github.com/</loc>
-        <lastmod>2013-02-27T08:20:42+08:00</lastmod>
+        <lastmod>2013-02-27T09:38:41+08:00</lastmod>
     </url>
     <url>
         <loc>http://babodx.github.com/robots.txt</loc>
