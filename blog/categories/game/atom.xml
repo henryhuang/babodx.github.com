@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Game | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/game/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-27T10:07:49+08:00</updated>
+  <updated>2013-02-27T11:23:29+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,150 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[windows 7平台下按键精灵的后台运行]]></title>
+    <link href="http://babodx.github.com/blog/2010/01/07/quickmacro-on-win7/"/>
+    <updated>2010-01-07T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/01/07/quickmacro-on-win7</id>
+    <content type="html"><![CDATA[<p>上次写了一篇野D带黑上，后台挂机按键精灵代码</a>，有人反映win7下按键精灵后台代码不能运行。</p>
+
+<p>这里单独说明下。首先的我win7系统是32为的windows7 旗舰版，按键精灵版本是7.20.5292 免费版。在刚一开按键精灵的时候，会提示Init Seg Error。</p>
+
+<p>这个不用管，直接点确定就可以。然后打开按键精灵后，我们点“设置”按钮</p>
+
+<p><img src="http://farm9.staticflickr.com/8510/8512206738_6e55d4f97b.jpg" alt="设置按钮" /></p>
+
+<p>然后在弹出来的设置界面中，将热键模式选择为增强模式，如下图所示。</p>
+
+<p><img src="http://farm9.staticflickr.com/8515/8511095399_75fe398ca4.jpg" alt="增强模式截图" /></p>
+
+<p>点确定后，返回按键精灵主界面。</p>
+
+<p><strong>创建带黑上脚本</strong>点击新建按钮，进入“按键精灵-我的脚本”界面。然后点击这个界面中的“源文件”标签，如下图所示（注意红色三角标记）</p>
+
+<p><img src="http://farm9.staticflickr.com/8097/8512207532_e622ca5a45_z.jpg" alt="导入截图" /></p>
+
+<p>然后将带黑上脚本的代码粘贴进来。并在右侧“描述”里，写上黑上后台。点击保存退出，如下图所示</p>
+
+<p><img src="http://farm9.staticflickr.com/8095/8511096257_a2cfe36526_z.jpg" alt="保存截图" /></p>
+
+<p>到这里按键精灵设置完毕。只要打开刷黑上的小德号窗口，按F10启动脚本就可以了。然后再切换窗口双开，上网都可以。这个脚本会一直往小德号的窗口发送指令的。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[野D带黑上，后台挂机按键精灵代码]]></title>
+    <link href="http://babodx.github.com/blog/2010/01/03/druid-ubrs-quickmacro-code/"/>
+    <updated>2010-01-03T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/01/03/druid-ubrs-quickmacro-code</id>
+    <content type="html"><![CDATA[<p>代码是运行在按键精灵里的。在winxp+按键精灵7和win7+按键精灵7下测试通过</p>
+
+<p>```
+Plugin hwnd=Window.GetKeyFocusWnd()
+Rem start
+For 30
+Plugin Bkgnd.KeyPress(hwnd,70)
+Delay 300
+EndFor
+Delay 1000
+Plugin Bkgnd.KeyDown(hwnd,16)
+Plugin Bkgnd.KeyPress(hwnd,87)
+Plugin Bkgnd.KeyUp(hwnd,16)
+Delay 500
+For 30
+Plugin Bkgnd.KeyPress(hwnd,70)
+Delay 300
+EndFor
+Delay 1000
+Plugin Bkgnd.KeyDown(hwnd,18)
+Plugin Bkgnd.KeyPress(hwnd,68)
+Plugin Bkgnd.KeyUp(hwnd,18)
+Delay 500
+For 30
+Plugin Bkgnd.KeyPress(hwnd,70)
+Delay 300
+EndFor
+Delay 1000
+For 8
+Plugin Bkgnd.KeyDown(hwnd,16)
+Plugin Bkgnd.KeyPress(hwnd,82)
+Plugin Bkgnd.KeyUp(hwnd,16)
+EndFor
+Delay 500
+Goto start</p>
+
+<p>```
+代码说明：</p>
+
+<p>上面是我自己使用的代码，我的快捷键设置和大家不一样，所以别人使用，请注意修改快捷键。</p>
+
+<p>精灵之火（野性） Shift+R</p>
+
+<p>树皮 Shift+W</p>
+
+<p>狂暴回复 Alt+D</p>
+
+<p>横扫+重殴 宏 F （其实就是个AOE宏，需要不断切换目标，保证重殴可以放出来就可以）</p>
+
+<p>以上就是我带刷的代码，基本保证装备不红，人物不死。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[国服3.13 德鲁伊带小号快速升级（1-70全程带）]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/22/wow-1-70-Express-Upgrade/"/>
+    <updated>2009-12-22T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/22/wow-1-70-Express-Upgrade</id>
+    <content type="html"><![CDATA[<p>魔兽世界已经快开85了，而国内还坚持在70级。没有玩的乐趣了，就研究研究带小号速度升级吧。</p>
+
+<p><strong>带小号的职业选择</strong></p>
+
+<p>一般带小号的职业，需要可以AOE，有强力的dps，最好自己还可以扛打。所以就是法师、术士、骑士、德鲁伊这几个职业里选择。FS是AOE的王者，原来一直也是带小号的首选。</p>
+
+<p>目前来看也不错。但是破碎现在的效率不如以前了，STSM法师带着对操作要求太高，容易累。SS可以AOE，但是没有FS的控制技能，怪多了，扛不住。QS对于小副本，AOE来说很强力，尤其是学生和STSM，效率很高。但是对于ZUL这样的本，因为QS的短腿，不推荐。</p>
+
+<p><strong>德鲁伊</strong>如果装备合适，目前我认为才是带小号的最佳人选。</p>
+
+<p>从1-70，全部有适合的副本和技巧让小德来带小号升级。下面说说我的经验因为德鲁伊是T里面dps最高的，FS AOE靠dps，但是没有我们能抗，还要喝水。QS AOE靠反弹，没有我们能打。而且小德的移动速度快，就意味着拉同样路线的怪，我们时间少，效率高。所以对于血色、ZUL这些副本，小德效率最高。STSM不适合小德，不是不能刷，是麻烦，我们不会解疾病。所以我带小号的路线是</p>
+
+<ul>
+<li><p>1-10级，小德辅助小号独立升级。</p></li>
+<li><p>10-20带影牙，</p></li>
+<li><p>20-35血色，</p></li>
+<li><p>35-45祖尔法拉克，</p></li>
+<li><p>45-65黑石塔上，</p></li>
+<li><p>65-70监狱。</p></li>
+</ul>
+
+
+<p><strong>1-10级 快速升级经验</strong></p>
+
+<p>1-10级其实有个很好的办法升级，只是大家很少注意到。首先是70级的小德，不要和小号组队，然后洗平衡天赋最好，治疗天赋也凑合。穿上最高的法伤装备，然后给小号上荆棘术。小号带着这个10分钟的荆棘术buff，去打怪，基本弹怪1次-3次伤害，怪就死了。完全可以自己AOE了，什么技能也不用，就跑过去普通攻击一下怪，然后继续开一下个怪，怪打你1-3下，自己就死了。这样1-10级，比去任何地方都快。</p>
+
+<p><strong>注意</strong> 必须自己先打怪1下，如果是怪先打你被经技术弹死了，就没有经验了。</p>
+
+<p><strong>10-20级 快速升级经验</strong></p>
+
+<p>10-20级，就要去影牙副本了。大号先进入副本，因为小号级别低的时候，一进入就引怪。小号就放在副本门口就可以，大号进入副本aoe。注意最后的boss一定要拉出来杀，不然小号分不到经验。影牙副本是一个塔的建筑结构，所以小号放在副本，大号在小地图观察，只要可以看到小号的位置，就可以杀一次怪，我一般是分3次杀。第一次拉广场上的，第2次拉到狼boss那里，就是杀了boss出先4个蓝胖子的地方。第3次拉到最后boss门前面。</p>
+
+<p><strong>20-35级 快速升级经验</strong></p>
+
+<p>20-35级是快速升级的开始，小德因为移动速度和dps的优势，可以在这里3门同时刷。刷2门，肯定爆本。先刷教堂，然后出本刷军械库，最后刷次图书馆。图书馆经验不多，就是为了不爆本，凑点时间。小号愿意，也可以放弃图书馆，让他们捡些布呀什么的。这里建议小德穿最强的DPS装备，如果网络好，不怕掉线，可以拿 烈焰之怒 武器。（俗名：掉线之怒）。武器FM推荐 作战专家</p>
+
+<p><strong>35-45 快速升级经验</strong></p>
+
+<p>35-45 选择祖尔法拉克最好，小德可以一波流全部拉完。一次的经验在2.8w-3.5w。这里需要一些装备和技巧。首先最好有4件军装，这样移动速度提高15%。我尝试过，4件军装，比你骑60%速度的马还快。网上有zul的一波流视频，是个骑马拉全副本的，我觉得不现实，至少我经常拉几波，就给打下马了。所以我推荐直接穿4件军装，旅行形态拉。再有一点就是要带上部落徽记，因为有个蜥蜴怪，可以给你一个晕的状态，让你没有任何躲闪而且不能攻击。这样基本一次就快死了。所以一定要及时用徽章解这个状态。只要保持攻击，就可以满血。我一般带英雄卡片和部落徽记。</p>
+
+<p><strong>45-65 快速升级经验</strong></p>
+
+<p>45-65 这里只有小德带最效率，就是去黑上升级。卡召唤师。一般卡2个召唤师，速度相当与STSM。一般卡7个召唤师的小德，带45级的小号，1个小时3级半。这里一定要舍得吃药和加buff。具体如何卡黑上，我以后会写文章介绍。目前我可以卡5-7个，成功率85%吧</p>
+
+<p><strong>65-70 快速升级经验</strong></p>
+
+<p>65-70就找术士拉小号去监狱，然后小德带监狱，65-70大约200分钟吧。要求小德穿DPS装备和少量回血装备。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[有想恶补三角函数的冲动！]]></title>
@@ -32,69 +176,6 @@
     <updated>2009-12-21T00:00:00+08:00</updated>
     <id>http://babodx.github.com/blog/2009/12/21/wow-robot-battlegroud</id>
     <content type="html"><![CDATA[<p>目前TBC 2.3了，荣誉又开始有用处了，可以购买S1装备。但是如何挂战场呢？毕竟不是每个人都能不上班，每天玩10个小时。。。我目前的办法是使用国外开发的一款练级外挂glider，再配合一个自己些的程序和修改过的一个插件来实现的。glider可以控制人物按照设定的线路跑动和打怪。我用c#些一个程序，来监控着角色，如果死亡了，就停止wowglider，等待复活。如果复活了，就开glider。战斗结束了，就点npc排队。然后用我写的插件回答GM问题。。。。总之还算可以吧。用了大约1-2个晚上也业余时间解决的。c#确实使用起来很简单，至少之前我没有用过c#。但写个简单的网络程序，负责控制其它程序，实现起来很容易。基本都是采用TcpClient类，就可以了<a href="http://www.pvpbot.com/">www.pvpbot.com</a>也是个选择，但是收费比较贵。其实可以考虑用c#写个简单的web服务器，通过dns欺骗，来对pvpbot的bgtool做本地验证。关于pvpbot的验证，确实不怎么好。至少我用了不到1个小时抓包，分析和测试。已经可以本地验证了，不过懒得写个简单web服务器实现验证了。（以前没有写过，还要查资料。。）关于网络验证，glider做的就比较好。我觉得至少要对时间和硬件编号和用户名同时加密发送到服务器。然后再服务器验证后，对那个时间和是否验证通过等信息再加密，大乱顺序后发送回来。这样就算抓包，因为每次发送的时间不同，每次抓到的信息也不同。如果不知道算法，很难实现本地验证。不过c#的代码保护太差，反编译后和看源代码差不多。。。。。。这个很难解决。。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[修改了一个大战场团排插件 TeamQueue 1.35]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/wow-plugin-teamqueue/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/wow-plugin-teamqueue</id>
-    <content type="html"><![CDATA[<p>为了让插件排队速度更快.只要和大战场军官对话,就自动进入到"首先可用"界面等待队长排队了.</p>
-
-<p><a href="http://bbs.game.mop.com/viewthread.php?tid=1544817&amp;extra=page%3D1">插件下载</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ubuntu8.04 玩魔兽世界 2.4.3(8606)]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/wow-on-ubuntu-linux/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/wow-on-ubuntu-linux</id>
-    <content type="html"><![CDATA[<p>最近一直在用ubuntu 8.04当桌面系统。已经很少用windows了。随着采用ubuntu也就一直没有玩魔兽世界了。</p>
-
-<p>今天将Windows下的WOW目录直接拷贝到了ubuntu下面。我的wine是用sudo apt-get install默认安装的，没有特殊设置。</p>
-
-<p>将wow目录拷贝到了用户目录的 .wine/drive_c/Program Files目录下。然后直接双击wow.exe运行。</p>
-
-<p>这个时候会提示如下画面的错误。</p>
-
-<p><img src="http://farm9.staticflickr.com/8519/8512093598_321828a3ef.jpg" alt="wow报错" /></p>
-
-<p>这个不要紧，我们在启动的时候加入-opengl 参数就可以解决。</p>
-
-<p>下面这个是成功启动的命令和截图</p>
-
-<p><code>wine .wine/drive_c/Program\ Files/World\ of\ Warcraft/Wow.exe -opengl -nosound</code></p>
-
-<p><img src="http://farm9.staticflickr.com/8098/8510986535_97c4797180_z.jpg" alt="ubuntu运行wow" /></p>
-
-<p>已经成功启动了，感觉还不错。这个是在我IBM R61的笔记本上运行结果。</p>
-
-<p>下面进入游戏看看速度</p>
-
-<p><img src="http://farm9.staticflickr.com/8376/8512101836_cf8ce35689_z.jpg" alt="IBM R61 wow速度" /></p>
-
-<p>开始的时候，我的运行速度不行。只有可怜的35帧每秒。</p>
-
-<p>在我关闭了所有特效后，速度到了惊人的100帧每秒。。。这个速度完全可以正常游戏了。</p>
-
-<p>再看看我桌面右侧的状态cpu 53%占用 内存709.88MB 感觉还可以吧。</p>
-
-<p>虽然已经AFK了，但是ubuntu能玩魔兽世界，还是让我很开心的。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[魔兽世界内存分析，基于wow 2.4.2]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/wow-memory-tools/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/wow-memory-tools</id>
-    <content type="html"><![CDATA[<p>今天基于wow 2.4.2分析了下魔兽世界的内存，并做了如下软件。</p>
-
-<p><img src="http://farm9.staticflickr.com/8227/8509559819_61b2546573.jpg" alt="wow外挂" /></p>
-
-<p>全部采用C#编写，实现如下功能加速3.5%.--（这个服务器有限制，超过4%就掉线）。这个加速是修改人物速度出来的，和那些变速齿轮不一样。这样修改后，别人看你的速度也是正常的，就好像你穿了加速的鞋子一样。无阻力爬山--只要不是90度的山，多陡都能爬上去。超级跳--可以让跳跃的高度自己设置Z+--直接传送到任意高度目前就分析出来了这些，其实这些小功能只能自己在副本娱乐下。估计出了副本。。大街上没有人敢用。呵呵主要锻炼下自己对C#实现内存读写，还有就是分析内存的基地址和最终目的地址。</p>
 ]]></content>
   </entry>
   

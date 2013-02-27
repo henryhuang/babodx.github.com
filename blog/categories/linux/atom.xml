@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-27T10:07:49+08:00</updated>
+  <updated>2013-02-27T11:23:29+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -14,395 +14,372 @@
 
   
   <entry>
-    <title type="html"><![CDATA[ubuntu8.04 玩魔兽世界 2.4.3(8606)]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/wow-on-ubuntu-linux/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/wow-on-ubuntu-linux</id>
-    <content type="html"><![CDATA[<p>最近一直在用ubuntu 8.04当桌面系统。已经很少用windows了。随着采用ubuntu也就一直没有玩魔兽世界了。</p>
+    <title type="html"><![CDATA[postfix+extmail的附件大小显示和限制问题解决办法]]></title>
+    <link href="http://babodx.github.com/blog/2010/01/24/postfix-extmail-attachment-bug/"/>
+    <updated>2010-01-24T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/01/24/postfix-extmail-attachment-bug</id>
+    <content type="html"><![CDATA[<p>最近在给一个公司部署了postfix+extmail的邮件系统后，遇到了附件大小限制问题。</p>
 
-<p>今天将Windows下的WOW目录直接拷贝到了ubuntu下面。我的wine是用sudo apt-get install默认安装的，没有特殊设置。</p>
+<p>extmail默认设置是5M，但是由于extmail的统计大小方法问题，一般附件限制比设置的小了1/3。也就是你设置了5M，也就能到3M多。</p>
 
-<p>将wow目录拷贝到了用户目录的 .wine/drive_c/Program Files目录下。然后直接双击wow.exe运行。</p>
+<p>这里先说下大小限制的配置。</p>
 
-<p>这个时候会提示如下画面的错误。</p>
+<p>一、修改extmail的webmail.cf文件</p>
 
-<p><img src="http://farm9.staticflickr.com/8519/8512093598_321828a3ef.jpg" alt="wow报错" /></p>
+<p>```
+SYS_MESSAGE_SIZE_LIMIT = 5242880 注意：以位为单位为5M字节。</p>
 
-<p>这个不要紧，我们在启动的时候加入-opengl 参数就可以解决。</p>
+<p>SYS_MESSAGE_SIZE_LIMIT = xxx
+```</p>
 
-<p>下面这个是成功启动的命令和截图</p>
+<p>二、修改/etc/postfix/main.cf文件，</p>
 
-<p><code>wine .wine/drive_c/Program\ Files/World\ of\ Warcraft/Wow.exe -opengl -nosound</code></p>
+<p><code>
+message_size_limit = xxx
+</code></p>
 
-<p><img src="http://farm9.staticflickr.com/8098/8510986535_97c4797180_z.jpg" alt="ubuntu运行wow" /></p>
+<p>三、重启postfix即可，<code>service postfix restrart</code> 和重启apache，<code>service httpd restart</code></p>
 
-<p>已经成功启动了，感觉还不错。这个是在我IBM R61的笔记本上运行结果。</p>
+<p><strong>如何解决附件限制大小和系统文件大小相差1/3呢？</strong></p>
 
-<p>下面进入游戏看看速度</p>
+<p>首先是修改/var/www/extsuite/extmail/libs/Ext/App目录下的Compose.pm文件</p>
 
-<p><img src="http://farm9.staticflickr.com/8376/8512101836_cf8ce35689_z.jpg" alt="IBM R61 wow速度" /></p>
+<p>```
+sub is_oversize {</p>
 
-<p>开始的时候，我的运行速度不行。只有可怜的35帧每秒。</p>
+<pre><code>my $self = shift;   
+my $sys = $self-&gt;{sysconfig};   
+my $maxsize = $sys-&gt;{SYS_MESSAGE_SIZE_LIMIT};   
+my $tsize = shift;   
 
-<p>在我关闭了所有特效后，速度到了惊人的100帧每秒。。。这个速度完全可以正常游戏了。</p>
+return 0 unless defined $maxsize and $maxsize &gt; 0;   
+return 0 unless defined $tsize and $tsize &gt; 0;   
 
-<p>再看看我桌面右侧的状态cpu 53%占用 内存709.88MB 感觉还可以吧。</p>
+if ($tsize &gt;= $maxsize) {   
+    return $maxsize;   
+}   
+0;   
+</code></pre>
 
-<p>虽然已经AFK了，但是ubuntu能玩魔兽世界，还是让我很开心的。</p>
+<p>} <br/>
+```</p>
+
+<p>注意到上面的if ($tsize >= $maxsize)了吧，修改为if ($tsize >= 1.29*$maxsize)</p>
+
+<p>这样修改后，基本extmail的附件限制大小就和系统显示的文件大小一样。</p>
+
+<p>目前还有一个文件，就是我们上传一个1M的内容，显示出来的附件大小大约是1.3M，这个问题需要修改一个human函数解决。</p>
+
+<p>在/var/www/extsuite/extmail/libs/Ext目录下，打开Utils.pm文件</p>
+
+<p>找到如下函数</p>
+
+<p>```
+sub human_size {</p>
+
+<pre><code>my $s = $_[0];   
+if($s&lt;1024) {   
+    return sprintf("%0.2f", $s/1024)."K";   
+}elsif($s&lt;1024*1024) {   
+    return sprintf("%0.1f", $s/1024)."K";   
+}else {   
+    return sprintf("%0.1f", $s/(1024*1024))."M";   
+}   
+</code></pre>
+
+<p>} <br/>
+```
+将函数修改如下</p>
+
+<p>```
+sub human_size {</p>
+
+<pre><code>my $s = $_[0];   
+if($s&lt;1024) {   
+    return sprintf("%0.2f", $s/1024/1.36)."K";   
+}elsif($s&lt;1024*1024) {   
+    return sprintf("%0.1f", $s/1024/1.36)."K";   
+}else {   
+    return sprintf("%0.1f", $s/(1024*1024*1.36))."M";   
+}   
+</code></pre>
+
+<p>} <br/>
+```</p>
+
+<p>这样就解决了extmail的附件大小显示和限制问题。</p>
+
+<p>目前还有一个遗留问题，就是在folder.htm模板界面里显示的邮件大小还是比系统文件大1/3。这个不知道怎么修改了。找到了对应函数，但是它直接显示的多少M或者多少K，用除1.36会出现问题。。。。这个期待高手解决了。</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[ubuntu 8.10下同步wm6.1手机]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/winphone-SynceWithUbuntu/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/winphone-SynceWithUbuntu</id>
-    <content type="html"><![CDATA[<p>参考了</p>
+    <title type="html"><![CDATA[extman后台登陆问题解决方法]]></title>
+    <link href="http://babodx.github.com/blog/2010/01/19/extman/"/>
+    <updated>2010-01-19T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/01/19/extman</id>
+    <content type="html"><![CDATA[<p>前一阵子给一个公司架设了postfix+mysql+extmail的邮件系统。</p>
 
-<ul>
-<li><a href="http://www.synce.org/moin/SynceWithUbuntu">http://www.synce.org/moin/SynceWithUbuntu</a></li>
-<li>http://hi.baidu.com/john_zhy/blog/item/50e39f317240141febc4af5a.html</li>
-</ul>
-
-
-<p>我的本本 IBM R61</p>
-
-<p>系统 ubuntu 8.10从 8.04升级上来的。</p>
-
-<p>手机 eten X800 wm6.1英文系统</p>
-
-<p>原来一直不能在ubuntu下面同步手机资料，昨天参考了上面两个帖子，最后成功了。</p>
-
-<p>1、首先添加源</p>
+<p>用了一段时间后，发现后台管理的extman不能登录了，提示如下</p>
 
 <p><code>
-sudo gedit   /etc/apt/sources.list
+Can't open /tmp/extman//sid_26da75f9aec35f2cbc6b4fa425ab525e, No such file or directory
 </code></p>
 
-<p>在末尾添加</p>
+<p>后来发现是/tmp目录下的extman目录被系统清除了。。</p>
 
-<p>```
-deb <a href="http://ppa.launchpad.net/synce/ubuntu" target="_blank">http://ppa.launchpad.net/synce/ubuntu</a> hardy main</p>
+<p>然后再网络上找了一些解决办法，说是Linux系统在启动的时候，会清理/tmp目录。建议将这个目录设置在/var/tmp目录下。</p>
 
-<p>deb-src <a href="http://ppa.launchpad.net/synce/ubuntu" target="_blank">http://ppa.launchpad.net/synce/ubuntu</a> hardy main
-```</p>
+<p>结果用了一段时间后，发现一样是被清理。。。。</p>
 
-<p>保存，关闭</p>
+<p>我的系统是CentOS 5.3 64bit</p>
 
-<p><code>
-sudo apt-get update
-</code></p>
-
-<p>我没有更新源，但是也成功。可能是8.10的缘故</p>
-
-<p>2、更新usb驱动（仅内核在2.6.24-19之前的，如果比这个新请跳过本步骤）</p>
-
-<p><code>
-sudo rmmod rndis_host cdc_ether usbnet
-sudo rm /lib/modules/`uname -r`/kernel/drivers/net/usb/{rndis_host,cdc_ether,usbnet}.ko
-sudo apt-get install usb-rndis-source cdbs
-sudo module-assistant auto-install usb-rndis
-sudo apt-get install synce-hal librra0-tools librapi2-tools
-</code></p>
-
-<p>因为我的内核是2.6.27-7的，所以跳过了这步。但是我安装了后面的软件包</p>
-
-<p><code>
-sudo apt-get install synce-hal librra0-tools librapi2-tools
-</code></p>
-
-<p>3、安装<strong>SynCE-GNOME</strong></p>
-
-<p><code>
-sudo apt-get install python-setuptools
-</code></p>
-
-<p> 下载<a href="http://downloads.sourceforge.net/synce/synce-gnome-0.11.tar.gz">synce-gnome-0.11.tar.gz</a></p>
-
-<p> 解压，在终端进入其目录，运行</p>
-
-<p><code>
-python setup.py build
-sudo python setup.py install
-</code></p>
-
-<p>安装<strong>notification-daemon</strong>（如果没有安装过的话，用新得立软件包管理器搜索一下就可以了）</p>
-
-<p>这个步骤完全做了一次，notification-daemon系统已经安装过了</p>
-
-<p>4、连接好手机，运行</p>
-
-<p><code>
-/sbin/ifconfig -a | grep 80:00:60:0f:e8:00   | cut -d " " -f 1
-</code></p>
-
-<p>记下他输出的东西</p>
-
-<p><code>
-sudo gedit   /etc/network/interfaces
-</code></p>
-
-<p>在末尾添加<code>iface &lt;rndis0&gt; inet dhcp</code></p>
-
-<p>ps:"&lt;>"里面的是我在上面那步里输出的，你应该更换成你自己的，不带“&lt;>“ 保存并关闭，然后运行</p>
-
-<p><code>
-sudo /etc/init.d/networking restart
-</code></p>
-
-<p>这次也是按照作的，我的网卡是多出来一个eth1(这个根据自己系统决定)。所以我在interfaces文件后面加入了</p>
-
-<p><code>
-iface eth1 inet dhcp
-</code></p>
-
-<p>5、安装OpenSync</p>
-
-<p><code>
-sudo apt-get install multisync-tools opensync-plugin-evolution opensync-plugin-synce
-</code></p>
-
-<p>6、现在该安装的都安装好了，就可以开始同步了<code>synce-sync-engine</code>如果出现如下错误</p>
-
-<p>```
-File "/usr/bin/sync-engine", line 84, in <module></p>
-
-<p> configObj = Config.Config(progopts)</p>
-
-<p>   File "/usr/lib/python2.5/site-packages/SyncEngine/config.py", line 292, in <strong>init</strong></p>
-
-<p> oldconf = os.path.join(self.path,"config.xml")</p>
-
-<p>AttributeError: Config instance has no attribute 'path'</p>
+<p>最后我通过修改，/var/www/extsuite/extman/webmail.cf文件里面的配置</p>
 
 <p>```</p>
 
-<p>请下载<a href="http://synce.svn.sf.net/svnroot/synce/releases/0.11.1/sync-engine/config/config.xml">config.xml</a>，保存为~/.synce/config.xml（提示："~"为自己的家目录)</p>
+<h1>sys_sess_dir, the session dir</h1>
 
-<p>创建同步项目<strong>synce-create-partnership "Linux desktop" "Contacts,Calendar"</strong></p>
-
-<p>ps：还有别的，可自行选择Contacts， Calendar， Tasks， Files 等</p>
-
-<p>创建OpenSync group</p>
-
-<p>```
-msynctool --addgroup synce-sync</p>
-
-<p>msynctool --addmember synce-sync synce-opensync-plugin</p>
-
-<p>msynctool --addmember synce-sync evo2-sync
+<p>SYS_SESS_DIR = /tmp/extman/
 ```</p>
 
-<p>然后同步synce-sync-engine</p>
+<p>将SYS_SESS_DIR指定到了/data/extman下面了。估计这次系统不会清除这个目录了吧</p>
+
+<p>还有一种常见错误就是提示</p>
 
 <p><code>
-msynctool --sync synce-sync
+Can't open /tmp/extman//sid_89b33ec5ce0b5903f24035aa4ad76d15, Permission denied
 </code></p>
 
-<p>他会同步到evolution里面</p>
+<p>这个是因为extman 那个临时目录的权限不对。</p>
 
-<p>我上面的照着做，全部成功了。</p>
-
-<p><strong>我的一些问题</strong></p>
-
-<p>据说安装了synce-gnomevfs后，可以在Nautilus里面看手机里的内容，但是我没有成功
-目前只能通过synce-pls、synce-pcp等命令，来操作手机里面文件。</p>
+<p>可以设置为777就ok了</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[试用ubuntu 8.04和LVM动态增加分区]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/ubuntu-dynamic-resize-lvm/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/ubuntu-dynamic-resize-lvm</id>
-    <content type="html"><![CDATA[<p>我在虚拟机VMware里面安装了ubuntu 8.04.</p>
+    <title type="html"><![CDATA[drupal在nginx 0.8.15下的简洁URL配置]]></title>
+    <link href="http://babodx.github.com/blog/2010/01/01/druapl-url-nginx-rewrite/"/>
+    <updated>2010-01-01T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/01/01/druapl-url-nginx-rewrite</id>
+    <content type="html"><![CDATA[<p>最近在学习drupal，发现这个程序比xoops、joomla都灵活，对应的学习曲线也高。反正安装后，根本不知道真没设置。呵呵</p>
 
-<p>安装的时候，只是选择了openssh这个服务。安装后感觉系统很干净</p>
+<p>下面先在nginx上配置了rewrite规则，让drupal支持简洁的URL</p>
 
-<p><strong>磁盘占用</strong>
-<code>
-/dev/mapper/ubuntu-root                      5.6G 321M 5.3G   6% /
-</code></p>
+<p>```
+server
+{
+listen 80;
+server_name drupal.xinlogs.com;
+index index.html index.htm index.php;
+root /data0/htdocs/drupal;</p>
 
-<p>系统就用了不到400M</p>
+<h1>limit_conn crawler 20;</h1>
 
-<p><strong>内存</strong></p>
+<p>location = / {
+index index.php;
+}</p>
+
+<p>location / {
+index index.php index.html;</p>
+
+<p>if (!-f $request_filename) {
+rewrite ^(.*)$ /index.php?q=$1 last;
+break;
+}</p>
+
+<p>if (!-d $request_filename) {
+rewrite ^(.*)$ /index.php?q=$1 last;
+break;
+}
+}</p>
+
+<p>location ~ .*.(php|php5)?$
+{
+fastcgi_pass unix:/tmp/php-cgi.sock;</p>
+
+<h1>fastcgi_pass 127.0.0.1:9000;</h1>
+
+<p>fastcgi_index index.php;
+include fcgi.conf;
+}</p>
+
+<p>location ~ .*.(gif|jpg|jpeg|png|bmp|swf)$
+{
+expires 30d;
+}</p>
+
+<p>location ~ .*.(js|css)?$
+{
+expires 1h;
+}</p>
+
+<p>log_format drupal_access '$remote_addr - $remote_user [$time_local] "$request" '
+'$status $body_bytes_sent "$http_referer" '
+'"$http_user_agent" $http_x_forwarded_for';
+access_log /data1/logs/drupal_access.log drupal_access;
+}
+```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[apache下多虚拟主机的配置与管理]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/30/apache-VirtualHost-Configure/"/>
+    <updated>2009-12-30T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/30/apache-VirtualHost-Configure</id>
+    <content type="html"><![CDATA[<p>当一台服务器想给多个域名提供web服务的时候，我们可以使用apache虚拟主机配置。</p>
+
+<p>apache的配置文件在centos系统下，默认放在/etc/httpd/conf目录下的httpd.conf文件里。</p>
+
+<p>虚拟主机的配置如下</p>
+
+<p>```</p>
+
+<h6>#######TEST VirtualHost</h6>
+
+<p><VirtualHost *:80>
+ServerAdmin babodx@gmail.com
+DocumentRoot "/home/babo"
+ServerName www.xinlogs.com
+DirectoryIndex index.html
+ErrorLog logs/www.xinlogs.com_error_log
+CustomLog logs/www.xinlogs.com-access_log common</p>
+
+<p></VirtualHost></p>
+
+<p>```</p>
+
+<p>如果我们apache给10个或更多的域名提供web服务，这样的话，我们的httpd.conf就会有很多<VirtualHost *:80>这样的配置段落，看起来很长，管理起来也很麻烦。而且一个apache同时给几十个web域名提供虚拟主机，完全没有问题。那该如何写配置文件便于我们管理呢？</p>
+
+<h2>解决办法</h2>
+
+<p>为了管理方便，配置文件的结构清晰。</p>
+
+<p>我们完全可以将每个虚拟主机的配置文件放在独立文件中，这样apache的主要配置文件httpd.conf看上去很简洁。</p>
+
+<p>只要在最后加入</p>
 
 <p><code>
-                   total       used       free     shared    buffers     cached
-Mem:           249         39        209          0          3         16
+Include conf/vhost_*.conf
 </code>
-减掉buffers和cached的内容，还有我ssh远程连接的占用。实际系统启动后内存也就需要17M</p>
+ 
+然后再conf目录里，每个虚拟主机的文件只要以vhost_开头，后面可以用自己的域名加.conf后缀。比如有个test.com的域名要做web。</p>
 
-<p><strong>LVM</strong></p>
+<p>我们就可以直接在conf目录创建一个vhost_test.com.conf文件，文件里写入虚拟主机配置，比如</p>
 
-<p>安装系统的时候，我就选择了整个磁盘启用LVM，采用ubuntu默认分区的方式。</p>
+<p>```</p>
 
-<p>ubuntu默认分了2个区/sda1和/sda5。sda1用来做/boot，sda5用来做LVM。文件系统都是默认的ext3。</p>
+<h6>#######TEST VirtualHost</h6>
 
-<p>然后在LVM里面默认建立了2个LV( Logical volume)，一个/dev/ubuntu/root用来做/ ，一个/dev/ubuntu/swap_1用来做swap交换分区。我又手动修改了文件系统，采用reiserfs。</p>
+<p><VirtualHost *:80>
+ServerAdmin babodx@gmail.com
+DocumentRoot "/home/test.com"
+ServerName test.com
+DirectoryIndex index.html
+ErrorLog logs/test.com_error_log
+CustomLog logs/test.com-access_log common</p>
 
-<p><strong>动态添加/分区大小</strong></p>
-
-<p>我先添加了一个硬盘，系统识别为sdb</p>
-
-<p>对这个盘<strong>创建分区</strong>（LVM可以不用分区的，但是需要动态添加到/分区，所以需要有文件系统，不能添加后格式化/分区吧）</p>
-
-<p><code>
-sudo fdisk /dev/sdb
-n --&gt;创建分区
-t --&gt;修改分区类型为8e
-w --&gt;保存结果
-</code></p>
-
-<p>现在系统可以识别/dev/sdb1这个设备了。</p>
-
-<p><strong>创建PV(Physical volume)</strong></p>
-
-<p><code>
-sudo pvcreate /dev/sdb1
-</code></p>
-
-<p><strong>创建VG(Volume group)</strong></p>
-
-<p><code>
-sudo vgextend ubuntu /dev/sdb1
-</code></p>
-
-<p><strong>扩展LV(Logical volume)</strong></p>
-
-<p><code>
-sudo lvextend -L +2G /dev/ubuntu/root&lt;br&gt;
-</code></p>
-
-<p>这样就给/dev/ubuntu/root这个设备大小增加了2G。可以通过sudo lvdisply查看
-但是这个时候df -h还是没有变化的，需要调整文件系统。</p>
-
-<p><code>
-sudo resize_reiserfs -s +2G /dev/ubuntu/root&lt;br&gt;
-</code></p>
-
-<p>这样就完成了全部动态扩展分区。而且是服务器一直在线状态，不用关机。</p>
-
-<p>调整Swap</p>
-
-<p>还是和上面一样的情景，只要VG里面还有剩余空间就可以用来扩展swap用。</p>
-
-<p><code>
-sudo swapoff -a
-</code></p>
-
-<p>关闭正在用的swap分区</p>
-
-<p>然后</p>
-
-<p><code>
-sudo lvextend -L +200M /dev/ubuntu/swap_1
-</code></p>
-
-<p>给/dev/ubuntu/swap_1扩展了200M容量</p>
-
-<p><code>
-sudo mkswap /dev/ubuntu/swap_1
-</code></p>
-
-<p>建立swap的文件系统</p>
-
-<p>最后</p>
-
-<p><code>
-sudo swapon -a
-</code></p>
-
-<p>启用新的swap系统。</p>
+<p></VirtualHost>
+```
+通过这种配置结构，我们管理再多的虚拟主机也不用怕。只要修改conf目录下对应虚拟主机的配置文件即可。</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[ubuntu server 9.04 终端乱码问题]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/ubuntu-console-unread-chinese/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/ubuntu-console-unread-chinese</id>
-    <content type="html"><![CDATA[<p>安装了ubuntu server 9.04，安装的时候选择了中文环境。</p>
+    <title type="html"><![CDATA[解决Linux下Tomcat不能重启和停止问题]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/28/Tomcat-reboot-problems/"/>
+    <updated>2009-12-28T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/28/Tomcat-reboot-problems</id>
+    <content type="html"><![CDATA[<p>我的Tomcat 5.5.28安装在CentOS 5.3 64bit系统上</p>
 
-<p>因为server是没有桌面的，发现终端里面显示提示信息，出错信息都变成乱码了。</p>
+<p>每次重启都停住，只要要等5-10分钟才可以。</p>
 
-<p><strong>解决办法</strong>
-修改/etc/default/locale文件</p>
+<p>系统reboot或者shutdown也都卡在关闭tomcat的过程中</p>
 
-<p>将zh_CN修改为en_US</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ubuntu server 9.04显示中文文件]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/ubuntu-904-show-chinese-filename/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/ubuntu-904-show-chinese-filename</id>
-    <content type="html"><![CDATA[<p>前面提到了用VMware的share folder功能，可以将主机系统的一个目录，自动共享到ubuntu /mnt/hgfs目录下。</p>
+<p>后来发现直接用/usr/local/tomcat/bin/shutdown.sh一样存在问题，但是如果Tomcat什么项目都不加载，却正常。</p>
 
-<p>但是winxp的中文目录，到了ubuntu server下面就显示乱码了。</p>
+<p>我怀疑是tomcat加载的lib或者jar文件一多，重启和关闭就会慢的巨慢。。。甚至10分钟以上。</p>
 
-<p><strong>解决办法</strong></p>
+<p>为了解决这个问题，我修改了/etc/init.d/目录下的tomcat文件，让关闭或者重启的时候，直接通过kill命令杀掉tomcat进程。</p>
 
-<p>安装相关软件包</p>
+<p>下面是我/etc/init.d/tomcat文件</p>
 
-<p><code>
-sudo apt-get install language-pack-zh
-</code></p>
+<p>```</p>
 
-<p><strong>配置中文环境</strong></p>
+<h1>!/bin/bash</h1>
 
-<p>修改/etc/environment</p>
+<p>#</p>
 
-<p><code>
-sudo vim /etc/environment
-</code></p>
+<h1>Startup script for the tomcat</h1>
 
-<p>将LANG和LANGUAGE内容修改为下面的</p>
+<p>#</p>
 
-<p><code>
-LANG=zh_CN.UTF8&lt;br&gt;
-LANGUAGE="zh_CN:zh:en_US:en
-</code></p>
+<h1>chkconfig: 345 80 15</h1>
 
-<p>修改/etc/default/locale</p>
+<h1>description: Tomcat is a Servlet+JSP Engine.</h1>
 
-<p><code>
-sudo vim /etc/default/locale
-</code>
-修改内容如下</p>
+<h1>Source function library.</h1>
 
-<p><code>
-LANG="zh_CN.UTF-8"&lt;br&gt;
-LANGUAGE="zh_CN:zh"
-</code></p>
+<p>. /etc/rc.d/init.d/functions</p>
 
-<p>保存后，重启系统。</p>
+<p>export JAVA_HOME=/usr/local/jdk1.6.0_16
+export CLASSPATH=.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+export PATH=$PATH:$JAVA_HOME/bin</p>
 
-<p>现在用putty登陆，还是发现看中文乱码。我们还要继续设置putty才可以。</p>
+<p>export CATALINA_BASE=/usr/local/tomcat
+export CATALINA_HOME=/usr/local/tomcat
+export CATALINA_TMPDIR=/usr/local/tomcat/temp
+export JRE_HOME=/usr/local/jdk1.6.0_16</p>
 
-<p><strong>设置putty使用utf-8</strong></p>
+<p>start(){
+if [ -z $(/sbin/pidof java) ]; then
+echo "Starting tomcat"
+/usr/local/tomcat/bin/startup.sh
+touch /var/lock/subsys/tomcat
+else
+echo "tomcat allready running"
+fi
+}</p>
 
-<p>putty的Windows->Translation->Received data assumed to be in which character set:选择UTF-8</p>
+<p>stop(){
+if [ ! -z $(/sbin/pidof java) ]; then
+echo "Shutting down tomcat"</p>
 
-<p><img src="http://farm9.staticflickr.com/8236/8512011412_e138d2c072.jpg" alt="putty使用utf8设置" /></p>
+<h1>下面就是关闭的核心代码了，用ps获取tomcat进程id，直接kill掉</h1>
 
-<p>这样设置后，就可以正确在putty里显示中文了。</p>
+<p>ps aux|grep tomcat|grep startup|awk '{print $2}'|xargs kill -9</p>
 
-<p><img src="http://farm9.staticflickr.com/8514/8510902673_84be6e3e30.jpg" alt="putty显示中文文件名" /></p>
+<h1>/usr/local/tomcat/bin/shutdown.sh</h1>
 
-<p>以上这些就可以正常在putty里显示中文了。但是如果你用键盘鼠标从本地登陆ubuntu server，会发现，ubuntu server还是乱码。</p>
+<p>until [ -z $(/sbin/pidof java) ]; do :; done
+rm -f /var/lock/subsys/tomcat
+else
+echo "tomcat not running"
+fi
+}</p>
 
-<p>这个问题我查了一些文档，还是没有解决。有的说是console下的字体问题。但是/usr/share/consolefonts里的字体好像没有支持中文的。</p>
+<p>case "$1" in
+start)
+start
+;;
+stop)
+stop
+;;
+restart)
+stop
+start
+;;
+status)
+/usr/local/tomcat/bin/catalina.sh version
+;;
+*)
+echo "Usage: $0 {start|stop|restart|status}"
+esac</p>
 
-<p>还有说console fonts最多支持256这个字符。。。</p>
+<p>exit 0</p>
 
-<p>反正最终这个问题没有解决掉。现在在linux自己的控制台里，显示还是乱码</p>
-
-<p>建议大家如果不是特别需要，其实服务器没有必要采用中文编码的。可以正常显示中文就好了。</p>
-
-<p>建议默认还是用en_US:UTF-8的好。</p>
+<p>```</p>
 ]]></content>
   </entry>
   

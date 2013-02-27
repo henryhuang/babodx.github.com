@@ -214,7 +214,7 @@ git config user.email "youremail"
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/xerobank-browser/">一款匿名浏览器&#8211;XeroBank Browser</a></h1>
+      <h1 class="entry-title"><a href="/blog/2010/01/24/postfix-extmail-attachment-bug/">Postfix+extmail的附件大小显示和限制问题解决办法</a></h1>
     
     
       <p class="meta">
@@ -230,14 +230,130 @@ git config user.email "youremail"
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2010-01-24T00:00:00+08:00" pubdate data-updated="true">Jan 24<span>th</span>, 2010</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>XeroBank Browser 用来上网，可以很好的隐藏你的ip地址。利用Tor(The Onion Router)可以自动通过多层代理跳转，来隐藏你的IP因为是通过代理的，所以速度肯定要慢一些。但可以访问一些国内封锁的IP地址</p>
+  <div class="entry-content"><p>最近在给一个公司部署了postfix+extmail的邮件系统后，遇到了附件大小限制问题。</p>
+
+<p>extmail默认设置是5M，但是由于extmail的统计大小方法问题，一般附件限制比设置的小了1/3。也就是你设置了5M，也就能到3M多。</p>
+
+<p>这里先说下大小限制的配置。</p>
+
+<p>一、修改extmail的webmail.cf文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SYS_MESSAGE_SIZE_LIMIT = 5242880 注意：以位为单位为5M字节。 
+</span><span class='line'>
+</span><span class='line'>SYS_MESSAGE_SIZE_LIMIT = xxx</span></code></pre></td></tr></table></div></figure>
+
+
+<p>二、修改/etc/postfix/main.cf文件，</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>message_size_limit = xxx</span></code></pre></td></tr></table></div></figure>
+
+
+<p>三、重启postfix即可，<code>service postfix restrart</code> 和重启apache，<code>service httpd restart</code></p>
+
+<p><strong>如何解决附件限制大小和系统文件大小相差1/3呢？</strong></p>
+
+<p>首先是修改/var/www/extsuite/extmail/libs/Ext/App目录下的Compose.pm文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sub is_oversize {   
+</span><span class='line'>    my $self = shift;   
+</span><span class='line'>    my $sys = $self-&gt;{sysconfig};   
+</span><span class='line'>    my $maxsize = $sys-&gt;{SYS_MESSAGE_SIZE_LIMIT};   
+</span><span class='line'>    my $tsize = shift;   
+</span><span class='line'>  
+</span><span class='line'>    return 0 unless defined $maxsize and $maxsize &gt; 0;   
+</span><span class='line'>    return 0 unless defined $tsize and $tsize &gt; 0;   
+</span><span class='line'>  
+</span><span class='line'>    if ($tsize &gt;= $maxsize) {   
+</span><span class='line'>        return $maxsize;   
+</span><span class='line'>    }   
+</span><span class='line'>    0;   
+</span><span class='line'>}   </span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意到上面的if ($tsize >= $maxsize)了吧，修改为if ($tsize >= 1.29*$maxsize)</p>
+
+<p>这样修改后，基本extmail的附件限制大小就和系统显示的文件大小一样。</p>
+
+<p>目前还有一个文件，就是我们上传一个1M的内容，显示出来的附件大小大约是1.3M，这个问题需要修改一个human函数解决。</p>
+
+<p>在/var/www/extsuite/extmail/libs/Ext目录下，打开Utils.pm文件</p>
+
+<p>找到如下函数</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sub human_size {   
+</span><span class='line'>    my $s = $_[0];   
+</span><span class='line'>    if($s&lt;1024) {   
+</span><span class='line'>        return sprintf("%0.2f", $s/1024)."K";   
+</span><span class='line'>    }elsif($s&lt;1024*1024) {   
+</span><span class='line'>        return sprintf("%0.1f", $s/1024)."K";   
+</span><span class='line'>    }else {   
+</span><span class='line'>        return sprintf("%0.1f", $s/(1024*1024))."M";   
+</span><span class='line'>    }   
+</span><span class='line'>}   </span></code></pre></td></tr></table></div></figure>
+
+
+<p>将函数修改如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sub human_size {   
+</span><span class='line'>    my $s = $_[0];   
+</span><span class='line'>    if($s&lt;1024) {   
+</span><span class='line'>        return sprintf("%0.2f", $s/1024/1.36)."K";   
+</span><span class='line'>    }elsif($s&lt;1024*1024) {   
+</span><span class='line'>        return sprintf("%0.1f", $s/1024/1.36)."K";   
+</span><span class='line'>    }else {   
+</span><span class='line'>        return sprintf("%0.1f", $s/(1024*1024*1.36))."M";   
+</span><span class='line'>    }   
+</span><span class='line'>}   </span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就解决了extmail的附件大小显示和限制问题。</p>
+
+<p>目前还有一个遗留问题，就是在folder.htm模板界面里显示的邮件大小还是比系统文件大1/3。这个不知道怎么修改了。找到了对应函数，但是它直接显示的多少M或者多少K，用除1.36会出现问题。。。。这个期待高手解决了。</p>
 </div>
   
   
@@ -250,7 +366,7 @@ git config user.email "youremail"
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-xyz/">有想恶补三角函数的冲动！</a></h1>
+      <h1 class="entry-title"><a href="/blog/2010/01/19/extman/">Extman后台登陆问题解决方法</a></h1>
     
     
       <p class="meta">
@@ -266,18 +382,48 @@ git config user.email "youremail"
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2010-01-19T00:00:00+08:00" pubdate data-updated="true">Jan 19<span>th</span>, 2010</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>最近在咕哝魔兽世界的坐标系统，发现这个游戏的坐标系统如下图所示</p>
+  <div class="entry-content"><p>前一阵子给一个公司架设了postfix+mysql+extmail的邮件系统。</p>
 
-<p><img src="http://farm9.staticflickr.com/8228/8510673160_84e4f8b348.jpg" alt="wow坐标系统" /></p>
+<p>用了一段时间后，发现后台管理的extman不能登录了，提示如下</p>
 
-<p>游戏的平面坐标为X,Y,用2π代表360度的方向。Z为高度，我们可以不用考虑。现在如果我们知道A点坐标X=2,Y=2 ，B点坐标X=4,Y=3那要想从A点出发到B点，我们的方向应该是多少呢？(目前我就知道Y轴正方向的话，角度为0 。X轴正方向 为π/4=90度)该怎么写这个三角函数得到这个角的的数值呢？</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Can't open /tmp/extman//sid_26da75f9aec35f2cbc6b4fa425ab525e, No such file or directory</span></code></pre></td></tr></table></div></figure>
+
+
+<p>后来发现是/tmp目录下的extman目录被系统清除了。。</p>
+
+<p>然后再网络上找了一些解决办法，说是Linux系统在启动的时候，会清理/tmp目录。建议将这个目录设置在/var/tmp目录下。</p>
+
+<p>结果用了一段时间后，发现一样是被清理。。。。</p>
+
+<p>我的系统是CentOS 5.3 64bit</p>
+
+<p>最后我通过修改，/var/www/extsuite/extman/webmail.cf文件里面的配置</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#sys_sess_dir, the session dir
+</span><span class='line'>SYS_SESS_DIR = /tmp/extman/</span></code></pre></td></tr></table></div></figure>
+
+
+<p>将SYS_SESS_DIR指定到了/data/extman下面了。估计这次系统不会清除这个目录了吧</p>
+
+<p>还有一种常见错误就是提示</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Can't open /tmp/extman//sid_89b33ec5ce0b5903f24035aa4ad76d15, Permission denied</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个是因为extman 那个临时目录的权限不对。</p>
+
+<p>可以设置为777就ok了</p>
 </div>
   
   
@@ -290,7 +436,7 @@ git config user.email "youremail"
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-robot-battlegroud/">TBC 2.3如何挂战场</a></h1>
+      <h1 class="entry-title"><a href="/blog/2010/01/12/open-telnet-win7/">Win7下启动telnet&#8211;转载</a></h1>
     
     
       <p class="meta">
@@ -306,14 +452,33 @@ git config user.email "youremail"
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2010-01-12T00:00:00+08:00" pubdate data-updated="true">Jan 12<span>th</span>, 2010</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>目前TBC 2.3了，荣誉又开始有用处了，可以购买S1装备。但是如何挂战场呢？毕竟不是每个人都能不上班，每天玩10个小时。。。我目前的办法是使用国外开发的一款练级外挂glider，再配合一个自己些的程序和修改过的一个插件来实现的。glider可以控制人物按照设定的线路跑动和打怪。我用c#些一个程序，来监控着角色，如果死亡了，就停止wowglider，等待复活。如果复活了，就开glider。战斗结束了，就点npc排队。然后用我写的插件回答GM问题。。。。总之还算可以吧。用了大约1-2个晚上也业余时间解决的。c#确实使用起来很简单，至少之前我没有用过c#。但写个简单的网络程序，负责控制其它程序，实现起来很容易。基本都是采用TcpClient类，就可以了<a href="http://www.pvpbot.com/">www.pvpbot.com</a>也是个选择，但是收费比较贵。其实可以考虑用c#写个简单的web服务器，通过dns欺骗，来对pvpbot的bgtool做本地验证。关于pvpbot的验证，确实不怎么好。至少我用了不到1个小时抓包，分析和测试。已经可以本地验证了，不过懒得写个简单web服务器实现验证了。（以前没有写过，还要查资料。。）关于网络验证，glider做的就比较好。我觉得至少要对时间和硬件编号和用户名同时加密发送到服务器。然后再服务器验证后，对那个时间和是否验证通过等信息再加密，大乱顺序后发送回来。这样就算抓包，因为每次发送的时间不同，每次抓到的信息也不同。如果不知道算法，很难实现本地验证。不过c#的代码保护太差，反编译后和看源代码差不多。。。。。。这个很难解决。。</p>
+  <div class="entry-content"><p>因为我日常需要用到telnet来管理交换机，所以经常用到telnet。</p>
+
+<p>升级到win7后，发现telnet不能用了，提示如下</p>
+
+<p><img src="http://farm9.staticflickr.com/8382/8512218888_459238840f.jpg" alt="telnet报错截图" />
+后来查找资料发现</p>
+
+<p>Windows 7出于安全性考虑屏蔽了Telnet。</p>
+
+<p>如何开启呢？</p>
+
+<p>在开始菜单-》控制面板-》程序界面中，点“打开或关闭Windows功能”如下图</p>
+
+<p><img src="http://farm9.staticflickr.com/8378/8512221634_b60d3f0c62.jpg" alt="添加功能" /></p>
+
+<p>然后在弹出的&#8221;Windows功能&#8221;界面中，选择上Telnet客户端，点击确定按钮。如下图</p>
+
+<p><img src="http://farm9.staticflickr.com/8526/8512222420_fd27aa15fe.jpg" alt="打开telnet客户端" /></p>
+
+<p>通过上面这些设置，就打开了Windows默认屏蔽的Telnet功能了。</p>
 </div>
   
   
@@ -326,7 +491,7 @@ git config user.email "youremail"
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-plugin-teamqueue/">修改了一个大战场团排插件 TeamQueue 1.35</a></h1>
+      <h1 class="entry-title"><a href="/blog/2010/01/07/quickmacro-on-win7/">Windows 7平台下按键精灵的后台运行</a></h1>
     
     
       <p class="meta">
@@ -342,16 +507,36 @@ git config user.email "youremail"
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2010-01-07T00:00:00+08:00" pubdate data-updated="true">Jan 7<span>th</span>, 2010</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>为了让插件排队速度更快.只要和大战场军官对话,就自动进入到&#8221;首先可用&#8221;界面等待队长排队了.</p>
+  <div class="entry-content"><p>上次写了一篇野D带黑上，后台挂机按键精灵代码</a>，有人反映win7下按键精灵后台代码不能运行。</p>
 
-<p><a href="http://bbs.game.mop.com/viewthread.php?tid=1544817&amp;extra=page%3D1">插件下载</a></p>
+<p>这里单独说明下。首先的我win7系统是32为的windows7 旗舰版，按键精灵版本是7.20.5292 免费版。在刚一开按键精灵的时候，会提示Init Seg Error。</p>
+
+<p>这个不用管，直接点确定就可以。然后打开按键精灵后，我们点“设置”按钮</p>
+
+<p><img src="http://farm9.staticflickr.com/8510/8512206738_6e55d4f97b.jpg" alt="设置按钮" /></p>
+
+<p>然后在弹出来的设置界面中，将热键模式选择为增强模式，如下图所示。</p>
+
+<p><img src="http://farm9.staticflickr.com/8515/8511095399_75fe398ca4.jpg" alt="增强模式截图" /></p>
+
+<p>点确定后，返回按键精灵主界面。</p>
+
+<p><strong>创建带黑上脚本</strong>点击新建按钮，进入“按键精灵-我的脚本”界面。然后点击这个界面中的“源文件”标签，如下图所示（注意红色三角标记）</p>
+
+<p><img src="http://farm9.staticflickr.com/8097/8512207532_e622ca5a45_z.jpg" alt="导入截图" /></p>
+
+<p>然后将带黑上脚本的代码粘贴进来。并在右侧“描述”里，写上黑上后台。点击保存退出，如下图所示</p>
+
+<p><img src="http://farm9.staticflickr.com/8095/8511096257_a2cfe36526_z.jpg" alt="保存截图" /></p>
+
+<p>到这里按键精灵设置完毕。只要打开刷黑上的小德号窗口，按F10启动脚本就可以了。然后再切换窗口双开，上网都可以。这个脚本会一直往小德号的窗口发送指令的。</p>
 </div>
   
   
@@ -364,7 +549,7 @@ git config user.email "youremail"
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-on-ubuntu-linux/">ubuntu8.04 玩魔兽世界 2.4.3(8606)</a></h1>
+      <h1 class="entry-title"><a href="/blog/2010/01/03/druid-ubrs-quickmacro-code/">野D带黑上，后台挂机按键精灵代码</a></h1>
     
     
       <p class="meta">
@@ -380,44 +565,95 @@ git config user.email "youremail"
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2010-01-03T00:00:00+08:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2010</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>最近一直在用ubuntu 8.04当桌面系统。已经很少用windows了。随着采用ubuntu也就一直没有玩魔兽世界了。</p>
+  <div class="entry-content"><p>代码是运行在按键精灵里的。在winxp+按键精灵7和win7+按键精灵7下测试通过</p>
 
-<p>今天将Windows下的WOW目录直接拷贝到了ubuntu下面。我的wine是用sudo apt-get install默认安装的，没有特殊设置。</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Plugin hwnd=Window.GetKeyFocusWnd()
+</span><span class='line'>Rem start
+</span><span class='line'>For 30
+</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,70)
+</span><span class='line'>Delay 300
+</span><span class='line'>EndFor
+</span><span class='line'>Delay 1000
+</span><span class='line'>Plugin Bkgnd.KeyDown(hwnd,16)
+</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,87)
+</span><span class='line'>Plugin Bkgnd.KeyUp(hwnd,16)
+</span><span class='line'>Delay 500
+</span><span class='line'>For 30
+</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,70)
+</span><span class='line'>Delay 300
+</span><span class='line'>EndFor
+</span><span class='line'>Delay 1000
+</span><span class='line'>Plugin Bkgnd.KeyDown(hwnd,18)
+</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,68)
+</span><span class='line'>Plugin Bkgnd.KeyUp(hwnd,18)
+</span><span class='line'>Delay 500
+</span><span class='line'>For 30
+</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,70)
+</span><span class='line'>Delay 300
+</span><span class='line'>EndFor
+</span><span class='line'>Delay 1000
+</span><span class='line'>For 8
+</span><span class='line'>Plugin Bkgnd.KeyDown(hwnd,16)
+</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,82)
+</span><span class='line'>Plugin Bkgnd.KeyUp(hwnd,16)
+</span><span class='line'>EndFor
+</span><span class='line'>Delay 500
+</span><span class='line'>Goto start
+</span></code></pre></td></tr></table></div></figure>
 
-<p>将wow目录拷贝到了用户目录的 .wine/drive_c/Program Files目录下。然后直接双击wow.exe运行。</p>
 
-<p>这个时候会提示如下画面的错误。</p>
+<p>代码说明：</p>
 
-<p><img src="http://farm9.staticflickr.com/8519/8512093598_321828a3ef.jpg" alt="wow报错" /></p>
+<p>上面是我自己使用的代码，我的快捷键设置和大家不一样，所以别人使用，请注意修改快捷键。</p>
 
-<p>这个不要紧，我们在启动的时候加入-opengl 参数就可以解决。</p>
+<p>精灵之火（野性） Shift+R</p>
 
-<p>下面这个是成功启动的命令和截图</p>
+<p>树皮 Shift+W</p>
 
-<p><code>wine .wine/drive_c/Program\ Files/World\ of\ Warcraft/Wow.exe -opengl -nosound</code></p>
+<p>狂暴回复 Alt+D</p>
 
-<p><img src="http://farm9.staticflickr.com/8098/8510986535_97c4797180_z.jpg" alt="ubuntu运行wow" /></p>
+<p>横扫+重殴 宏 F （其实就是个AOE宏，需要不断切换目标，保证重殴可以放出来就可以）</p>
 
-<p>已经成功启动了，感觉还不错。这个是在我IBM R61的笔记本上运行结果。</p>
-
-<p>下面进入游戏看看速度</p>
-
-<p><img src="http://farm9.staticflickr.com/8376/8512101836_cf8ce35689_z.jpg" alt="IBM R61 wow速度" /></p>
-
-<p>开始的时候，我的运行速度不行。只有可怜的35帧每秒。</p>
-
-<p>在我关闭了所有特效后，速度到了惊人的100帧每秒。。。这个速度完全可以正常游戏了。</p>
-
-<p>再看看我桌面右侧的状态cpu 53%占用 内存709.88MB 感觉还可以吧。</p>
-
-<p>虽然已经AFK了，但是ubuntu能玩魔兽世界，还是让我很开心的。</p>
+<p>以上就是我带刷的代码，基本保证装备不红，人物不死。</p>
 </div>
   
   
@@ -430,7 +666,7 @@ git config user.email "youremail"
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-memory-tools/">魔兽世界内存分析，基于wow 2.4.2</a></h1>
+      <h1 class="entry-title"><a href="/blog/2010/01/03/2010-snow-first/">2010年北京第一场雪</a></h1>
     
     
       <p class="meta">
@@ -446,18 +682,16 @@ git config user.email "youremail"
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2010-01-03T00:00:00+08:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2010</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>今天基于wow 2.4.2分析了下魔兽世界的内存，并做了如下软件。</p>
-
-<p><img src="http://farm9.staticflickr.com/8227/8509559819_61b2546573.jpg" alt="wow外挂" /></p>
-
-<p>全部采用C#编写，实现如下功能加速3.5%.&#8211;（这个服务器有限制，超过4%就掉线）。这个加速是修改人物速度出来的，和那些变速齿轮不一样。这样修改后，别人看你的速度也是正常的，就好像你穿了加速的鞋子一样。无阻力爬山&#8211;只要不是90度的山，多陡都能爬上去。超级跳&#8211;可以让跳跃的高度自己设置Z+&#8211;直接传送到任意高度目前就分析出来了这些，其实这些小功能只能自己在副本娱乐下。估计出了副本。。大街上没有人敢用。呵呵主要锻炼下自己对C#实现内存读写，还有就是分析内存的基地址和最终目的地址。</p>
+  <div class="entry-content"><p>2010年1月2日凌晨，北京开始飘落第一场雪。雪花很小。。。只有薄薄一层。。。。到了2日晚上雪花开始变大。。。
+现在3日早上。。。大大的雪花，厚厚一层雪。。。
+下午打算带老婆孩子玩学去了。</p>
 </div>
   
   
@@ -470,7 +704,7 @@ git config user.email "youremail"
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-5v5/">5v5打到1600+了，庆祝一下！</a></h1>
+      <h1 class="entry-title"><a href="/blog/2010/01/01/druapl-url-nginx-rewrite/">Drupal在nginx 0.8.15下的简洁URL配置</a></h1>
     
     
       <p class="meta">
@@ -486,16 +720,118 @@ git config user.email "youremail"
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2010-01-01T00:00:00+08:00" pubdate data-updated="true">Jan 1<span>st</span>, 2010</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>今天5v5我们上1600了。庆祝下。</p>
+  <div class="entry-content"><p>最近在学习drupal，发现这个程序比xoops、joomla都灵活，对应的学习曲线也高。反正安装后，根本不知道真没设置。呵呵</p>
 
-<p><img src="http://farm9.staticflickr.com/8527/8509573735_f7c64d2b5c_z.jpg" alt="wow 5v5" /></p>
+<p>下面先在nginx上配置了rewrite规则，让drupal支持简洁的URL</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>server
+</span><span class='line'>{
+</span><span class='line'>listen 80;
+</span><span class='line'>server_name drupal.xinlogs.com;
+</span><span class='line'>index index.html index.htm index.php;
+</span><span class='line'>root /data0/htdocs/drupal;
+</span><span class='line'> 
+</span><span class='line'>#limit_conn crawler 20;
+</span><span class='line'>location = / {
+</span><span class='line'>index index.php;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>location / {
+</span><span class='line'>index index.php index.html;
+</span><span class='line'> 
+</span><span class='line'>if (!-f $request_filename) {
+</span><span class='line'>rewrite ^(.*)$ /index.php?q=$1 last;
+</span><span class='line'>break;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>if (!-d $request_filename) {
+</span><span class='line'>rewrite ^(.*)$ /index.php?q=$1 last;
+</span><span class='line'>break;
+</span><span class='line'>}
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>location ~ .*.(php|php5)?$
+</span><span class='line'>{
+</span><span class='line'>fastcgi_pass unix:/tmp/php-cgi.sock;
+</span><span class='line'>#fastcgi_pass 127.0.0.1:9000;
+</span><span class='line'>fastcgi_index index.php;
+</span><span class='line'>include fcgi.conf;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>location ~ .*.(gif|jpg|jpeg|png|bmp|swf)$
+</span><span class='line'>{
+</span><span class='line'>expires 30d;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>location ~ .*.(js|css)?$
+</span><span class='line'>{
+</span><span class='line'>expires 1h;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>log_format drupal_access '$remote_addr - $remote_user [$time_local] "$request" '
+</span><span class='line'>'$status $body_bytes_sent "$http_referer" '
+</span><span class='line'>'"$http_user_agent" $http_x_forwarded_for';
+</span><span class='line'>access_log /data1/logs/drupal_access.log drupal_access;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+
 </div>
   
   
@@ -517,17 +853,20 @@ git config user.email "youremail"
 <h1>Categories</h1>
 <ul id="categories">
   <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
-<li class='category'><a href='/blog/categories/game/'>Game (11)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (14)</a></li>
 <li class='category'><a href='/blog/categories/host/'>Host (2)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (20)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (1)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (26)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (1)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (5)</a></li>
 <li class='category'><a href='/blog/categories/virtualization/'>Virtualization (8)</a></li>
 <li class='category'><a href='/blog/categories/website/'>Website (1)</a></li>
-<li class='category'><a href='/blog/categories/windows/'>Windows (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (5)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
 
 </ul>
@@ -549,11 +888,11 @@ git config user.email "youremail"
       </li>
     
       <li class="post">
-        <a href="/blog/2009/12/21/xerobank-browser/">一款匿名浏览器&#8211;XeroBank Browser</a>
+        <a href="/blog/2010/01/24/postfix-extmail-attachment-bug/">postfix+extmail的附件大小显示和限制问题解决办法</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2009/12/21/wow-xyz/">有想恶补三角函数的冲动！</a>
+        <a href="/blog/2010/01/19/extman/">extman后台登陆问题解决方法</a>
       </li>
     
   </ul>

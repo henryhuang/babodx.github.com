@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Windows | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/windows/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-27T10:07:49+08:00</updated>
+  <updated>2013-02-27T11:23:29+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[win7下启动telnet--转载]]></title>
+    <link href="http://babodx.github.com/blog/2010/01/12/open-telnet-win7/"/>
+    <updated>2010-01-12T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/01/12/open-telnet-win7</id>
+    <content type="html"><![CDATA[<p>因为我日常需要用到telnet来管理交换机，所以经常用到telnet。</p>
+
+<p>升级到win7后，发现telnet不能用了，提示如下</p>
+
+<p><img src="http://farm9.staticflickr.com/8382/8512218888_459238840f.jpg" alt="telnet报错截图" />
+后来查找资料发现</p>
+
+<p>Windows 7出于安全性考虑屏蔽了Telnet。</p>
+
+<p>如何开启呢？</p>
+
+<p>在开始菜单-》控制面板-》程序界面中，点“打开或关闭Windows功能”如下图</p>
+
+<p><img src="http://farm9.staticflickr.com/8378/8512221634_b60d3f0c62.jpg" alt="添加功能" /></p>
+
+<p>然后在弹出的"Windows功能"界面中，选择上Telnet客户端，点击确定按钮。如下图</p>
+
+<p><img src="http://farm9.staticflickr.com/8526/8512222420_fd27aa15fe.jpg" alt="打开telnet客户端" /></p>
+
+<p>通过上面这些设置，就打开了Windows默认屏蔽的Telnet功能了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[windows下的拷贝利器teracopy]]></title>

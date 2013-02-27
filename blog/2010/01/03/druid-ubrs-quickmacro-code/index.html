@@ -1,0 +1,354 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>野D带黑上，后台挂机按键精灵代码 - 鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="代码是运行在按键精灵里的。在winxp+按键精灵7和win7+按键精灵7下测试通过 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+Plugin hwnd=Window. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/2010/01/03/druid-ubrs-quickmacro-code/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">野D带黑上，后台挂机按键精灵代码</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-03T00:00:00+08:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>代码是运行在按键精灵里的。在winxp+按键精灵7和win7+按键精灵7下测试通过</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Plugin hwnd=Window.GetKeyFocusWnd()
+</span><span class='line'>Rem start
+</span><span class='line'>For 30
+</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,70)
+</span><span class='line'>Delay 300
+</span><span class='line'>EndFor
+</span><span class='line'>Delay 1000
+</span><span class='line'>Plugin Bkgnd.KeyDown(hwnd,16)
+</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,87)
+</span><span class='line'>Plugin Bkgnd.KeyUp(hwnd,16)
+</span><span class='line'>Delay 500
+</span><span class='line'>For 30
+</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,70)
+</span><span class='line'>Delay 300
+</span><span class='line'>EndFor
+</span><span class='line'>Delay 1000
+</span><span class='line'>Plugin Bkgnd.KeyDown(hwnd,18)
+</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,68)
+</span><span class='line'>Plugin Bkgnd.KeyUp(hwnd,18)
+</span><span class='line'>Delay 500
+</span><span class='line'>For 30
+</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,70)
+</span><span class='line'>Delay 300
+</span><span class='line'>EndFor
+</span><span class='line'>Delay 1000
+</span><span class='line'>For 8
+</span><span class='line'>Plugin Bkgnd.KeyDown(hwnd,16)
+</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,82)
+</span><span class='line'>Plugin Bkgnd.KeyUp(hwnd,16)
+</span><span class='line'>EndFor
+</span><span class='line'>Delay 500
+</span><span class='line'>Goto start
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>代码说明：</p>
+
+<p>上面是我自己使用的代码，我的快捷键设置和大家不一样，所以别人使用，请注意修改快捷键。</p>
+
+<p>精灵之火（野性） Shift+R</p>
+
+<p>树皮 Shift+W</p>
+
+<p>狂暴回复 Alt+D</p>
+
+<p>横扫+重殴 宏 F （其实就是个AOE宏，需要不断切换目标，保证重殴可以放出来就可以）</p>
+
+<p>以上就是我带刷的代码，基本保证装备不红，人物不死。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-03T00:00:00+08:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/game/'>Game</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2010/01/03/druid-ubrs-quickmacro-code/" data-via="" data-counturl="http://babodx.github.com/blog/2010/01/03/druid-ubrs-quickmacro-code/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/01/03/2010-snow-first/" title="Previous Post: 2010年北京第一场雪">&laquo; 2010年北京第一场雪</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2010/01/07/quickmacro-on-win7/" title="Next Post: windows 7平台下按键精灵的后台运行">windows 7平台下按键精灵的后台运行 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (14)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (2)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (1)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (26)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (1)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (5)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (8)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (1)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (5)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/01/24/postfix-extmail-attachment-bug/">postfix+extmail的附件大小显示和限制问题解决办法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/01/19/extman/">extman后台登陆问题解决方法</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

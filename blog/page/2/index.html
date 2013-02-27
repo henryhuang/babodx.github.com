@@ -9,8 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="参考了 http://www.synce.org/moin/SynceWithUbuntu
-http://hi.baidu.com/john_zhy/blog/item/50e39f317240141febc4af5a.html 我的本本 IBM R61 系统 ubuntu 8.10从 8. &hellip;">
+  <meta name="description" content="刚开始使用的bo-blog的时候也不知道如何加入google广告条，经过这几天的咕哝，现在已经成功在右边和下面加入。方法记录如下 右侧边栏加入google广告 进入后台管理->常规管理->模块配置 点击左侧的新建/编辑项目 如图 然后在手动添加项目中选择侧边模块，确定。如图 确认后，进入到新增/ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -71,7 +70,7 @@ http://hi.baidu.com/john_zhy/blog/item/50e39f317240141febc4af5a.html 我的本�
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/winphone-SynceWithUbuntu/">Ubuntu 8.10下同步wm6.1手机</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/12/31/bo-blog-insert-googleadsense/">Bo-blog 2.1.1如何加入google广告条</a></h1>
     
     
       <p class="meta">
@@ -87,126 +86,304 @@ http://hi.baidu.com/john_zhy/blog/item/50e39f317240141febc4af5a.html 我的本�
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2009-12-31T00:00:00+08:00" pubdate data-updated="true">Dec 31<span>st</span>, 2009</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>参考了</p>
+  <div class="entry-content"><p>刚开始使用的bo-blog的时候也不知道如何加入google广告条，经过这几天的咕哝，现在已经成功在右边和下面加入。方法记录如下</p>
 
-<ul>
-<li><a href="http://www.synce.org/moin/SynceWithUbuntu">http://www.synce.org/moin/SynceWithUbuntu</a></li>
-<li>http://hi.baidu.com/john_zhy/blog/item/50e39f317240141febc4af5a.html</li>
-</ul>
+<p><strong>右侧边栏加入google广告</strong></p>
 
+<p>进入后台管理->常规管理->模块配置</p>
 
-<p>我的本本 IBM R61</p>
+<p>点击左侧的新建/编辑项目 如图</p>
 
-<p>系统 ubuntu 8.10从 8.04升级上来的。</p>
+<p><img src="http://farm9.staticflickr.com/8102/8512175362_3d5fd9e7c9.jpg" alt="编辑项目截图" /></p>
 
-<p>手机 eten X800 wm6.1英文系统</p>
+<p>然后在手动添加项目中选择侧边模块，确定。如图</p>
 
-<p>原来一直不能在ubuntu下面同步手机资料，昨天参考了上面两个帖子，最后成功了。</p>
+<p><img src="http://farm9.staticflickr.com/8370/8512175480_2bb7b4d188.jpg" alt="侧边截图" /></p>
 
-<p>1、首先添加源</p>
+<p>确认后，进入到新增/编辑项目页面</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo gedit   /etc/apt/sources.list</span></code></pre></td></tr></table></div></figure>
+<p>项目名称&#8211;这个是在后台编辑的时候，给自己分辨模块用的，随意命名。我的叫做googleadsense，注意：只能字母和数字</p>
 
+<p>项目描述&#8211;随意填写</p>
 
-<p>在末尾添加</p>
+<p>抬头文字&#8211;显示在首页侧边栏上，我的叫做广告栏，根据个人情况写</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>deb &lt;a href="http://ppa.launchpad.net/synce/ubuntu" target="_blank"&gt;http://ppa.launchpad.net/synce/ubuntu&lt;/a&gt; hardy main
-</span><span class='line'>
-</span><span class='line'>deb-src &lt;a href="http://ppa.launchpad.net/synce/ubuntu" target="_blank"&gt;http://ppa.launchpad.net/synce/ubuntu&lt;/a&gt; hardy main</span></code></pre></td></tr></table></div></figure>
+<p>栏目内容&#8211;这里写入google的广告代码就可以了</p>
 
+<p>这个办法最容易，不用修改模板。如果加入后，首页显示google广告栏，里面内容是白的，不要着急，过段时间就可以显示了。我第一个广告大约在30分钟后，才正确显示出来。</p>
 
-<p>保存，关闭</p>
+<p>博客底部加入google广告</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get update</span></code></pre></td></tr></table></div></figure>
+<p>底部加入广告，也可以用上面类似的办法，通过加入底部模块实现。但是我尝试了，不好对齐，而且有的模板会破坏底部风格。所以我没有用添加底部模块的办法。</p>
 
+<p>我采用直接修改模板的elements.php文件方法。</p>
 
-<p>我没有更新源，但是也成功。可能是8.10的缘故</p>
+<p>到bo-blog的template目录下，找到自己使用的模板文件夹，我用的neowin2，所以对应目录就是neowin2</p>
 
-<p>2、更新usb驱动（仅内核在2.6.24-19之前的，如果比这个新请跳过本步骤）</p>
+<p>在模板目录下，打开elements.php文件。找到文件里的displayfooter位置，在displayfooter段里面加入google广告代码。入下所示</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo rmmod rndis_host cdc_ether usbnet
-</span><span class='line'>sudo rm /lib/modules/`uname -r`/kernel/drivers/net/usb/{rndis_host,cdc_ether,usbnet}.ko
-</span><span class='line'>sudo apt-get install usb-rndis-source cdbs
-</span><span class='line'>sudo module-assistant auto-install usb-rndis
-</span><span class='line'>sudo apt-get install synce-hal librra0-tools librapi2-tools</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">$elements[&#39;displayfooter&#39;]=&lt;&lt;&lt;eot</span>
+</span><span class='line'><span class="x">&lt;div class=&quot;clear&quot;&gt; &lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;div class=&quot;content-box-b&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;div class=&quot;content-box-b-r&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;div class=&quot;content-box-b-l&quot;&gt;&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">/* 下面为google广告代码 */</span>
+</span><span class='line'><span class="x">&lt;center&gt;</span>
+</span><span class='line'><span class="x">&lt;script type=&quot;text/javascript&quot;&gt;&lt;!--</span>
+</span><span class='line'><span class="x">google_ad_client = &quot;pub-2759888315234430&quot;;</span>
+</span><span class='line'><span class="x">/* 728x90, ... 09-12-21 */</span>
+</span><span class='line'><span class="x">google_ad_slot = &quot;9531615827&quot;;</span>
+</span><span class='line'><span class="x">google_ad_width = 728;</span>
+</span><span class='line'><span class="x">google_ad_height = 90;</span>
+</span><span class='line'><span class="x">//--&gt;</span>
+</span><span class='line'><span class="x">&lt;/script&gt;</span>
+</span><span class='line'><span class="x">&lt;script type=&quot;text/javascript&quot;</span>
+</span><span class='line'><span class="x">src=&quot;http://pagead2.googlesyndication.com/pagead/show_ads.js&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;/script&gt;</span>
+</span><span class='line'><span class="x">&lt;/center&gt;</span>
+</span><span class='line'><span class="x">/*google广告代码结束*/</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;footer&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;footer-r&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;footer-l&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;footer-misc&quot;&gt;</span>
+</span><span class='line'><span class="x">Skin By &lt;a href=&quot;http://www.neowin.net/&quot; target=&quot;_blank&quot;&gt;Neowin&lt;/a&gt;&lt;br /&gt;</span>
+</span><span class='line'><span class="x">Transplanted By &lt;a href=&quot;http://blog.meiu.cn/&quot; target=&quot;_blank&quot;&gt;Lingter&lt;/a&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;footer-copyright&quot;&gt;</span>
+</span><span class='line'><span class="x">{section_foot_components}</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;processtime&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;div class=&quot;clear&quot;&gt;&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">eot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>因为我的内核是2.6.27-7的，所以跳过了这步。但是我安装了后面的软件包</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install synce-hal librra0-tools librapi2-tools</span></code></pre></td></tr></table></div></figure>
-
-
-<p>3、安装<strong>SynCE-GNOME</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install python-setuptools</span></code></pre></td></tr></table></div></figure>
+<p>上面的代码就是在博客下面，footer信息的上面，加入一条google广告。</p>
+</div>
+  
+  
 
 
-<p> 下载<a href="http://downloads.sourceforge.net/synce/synce-gnome-0.11.tar.gz">synce-gnome-0.11.tar.gz</a></p>
-
-<p> 解压，在终端进入其目录，运行</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>python setup.py build
-</span><span class='line'>sudo python setup.py install</span></code></pre></td></tr></table></div></figure>
-
-
-<p>安装<strong>notification-daemon</strong>（如果没有安装过的话，用新得立软件包管理器搜索一下就可以了）</p>
-
-<p>这个步骤完全做了一次，notification-daemon系统已经安装过了</p>
-
-<p>4、连接好手机，运行</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>/sbin/ifconfig -a | grep 80:00:60:0f:e8:00   | cut -d " " -f 1</span></code></pre></td></tr></table></div></figure>
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/30/playframework-installation-guide/">playframework&#8211;Installation Guide 安装手册【翻译】</a></h1>
+    
+    
+      <p class="meta">
+        
 
 
-<p>记下他输出的东西</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo gedit   /etc/network/interfaces</span></code></pre></td></tr></table></div></figure>
 
 
-<p>在末尾添加<code>iface &lt;rndis0&gt; inet dhcp</code></p>
-
-<p>ps:&#8221;&lt;>&#8221;里面的是我在上面那步里输出的，你应该更换成你自己的，不带“&lt;>“ 保存并关闭，然后运行</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo /etc/init.d/networking restart</span></code></pre></td></tr></table></div></figure>
 
 
-<p>这次也是按照作的，我的网卡是多出来一个eth1(这个根据自己系统决定)。所以我在interfaces文件后面加入了</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>iface eth1 inet dhcp</span></code></pre></td></tr></table></div></figure>
 
 
-<p>5、安装OpenSync</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install multisync-tools opensync-plugin-evolution opensync-plugin-synce</span></code></pre></td></tr></table></div></figure>
+  
 
 
-<p>6、现在该安装的都安装好了，就可以开始同步了<code>synce-sync-engine</code>如果出现如下错误</p>
+<time datetime="2009-12-30T00:00:00+08:00" pubdate data-updated="true">Dec 30<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1 id="Installationguide">Installation guide 安装手册</h1>
+
+
+<h2 id="aPrerequisitesa">
+<a>Prerequisites</a> 前提条件</h2>
+
+
+<p>To run the play framework, you need <a href="http://java.sun.com">Java 5 or later</a>. If you wish to build play from source, you will need the <a href="http://bazaar-vcs.org/">Bazaar source control client</a> to fetch the source code and <a href="http://ant.apache.org/">Ant</a> to build it.
+要运行Play框架，你需要Java 5以后的的JDK。如果你想从源码构建play框架，你需要用Bazaar源码控制的客户端去获取源代码并用Ant创建它。
+If you are using MacOS, java is just built-in. If you are using linux, make sure to use either the Sun-JDK or OpenJDK (and not gcj which is the default java command on many linux distro). If you are using Windows, just download and install the latest JDK package.
+如果你用MacOS系统，java是内建的。如果你用Linux系统，确定你使用的是Sun-JDK或者OpenJDK（不要是gcj，很多linux发行版默认都用gcj作为默认的java环境）。如果你用Windows系统，只要下载并安装最新发行的JDK包。
+Be sure to have java in the current path (try to type <b>java -version</b> to check). Play will use the default java or the one available at the <b>$JAVA_HOME</b> path if defined.
+确定java在当前路径（可以通过在命令行输入<strong>java -version</strong>检查）。Play框架将调用默认java或者一个在<strong>$JAVA_HOME</strong>环境变量声明的路径里的java。
+The play command line utility uses python. So it should work out of the box on any UNIX system. If you’re running Windows, don’t worry, a python runtime is bundled with the framework.
+play框架的命令行工具是用python写的。所以它应该可以在任意Unix系统上工作，如果你是Windows系统，别担心，一个python的运行环境已经内建在框架里了。</p>
+
+<h2 id="aDownloadthebinarypackagea">
+<a>Download the binary package</a> 下载二进制包</h2>
+
+
+<p>Download the latest <a href="http://download.playframework.org/">play binary package</a> and extract the archive. For convenience, you should add the framework installation directory to your system PATH. If you’re on UNIX, make sure that the <em>play</em> script is runnable (otherwise simply do a <b>chmod +x play</b>). That’s all.
+下载最新的play框架二进制包并解压缩。为了方便，你应该将play框架的安装目录添加到你系统的path环境变量里。如果你用unix，确认play脚本可以运行（否则可以执行<strong>chmod +x play</strong>）<strong>.</strong>
+<strong>Tip 建议</strong><br><br>
+If you need to rebuild the framework for whatever reason, run <strong>ant</strong> from the <strong>$PLAY_HOME/framework</strong> directory.
+如果你需要重建框架，从 <strong>$PLAY_HOME/framework</strong> 目录运行<strong>ant</strong>。</p>
+
+<h2 id="aBuildfromthelatestsourcesa">
+<a>Build from the latest sources</a> 从最新源码建立</h2>
+
+
+<p>To benefit from the latest improvements and bug fixes, you may want to compile play from sources. You’ll need a <a href="http://bazaar-vcs.org/Download">Bazaar client</a> to fetch the sources and <a href="http://ant.apache.org/">Ant</a> to build the framework.
+为了最新的改善和bug修复，你也许想从源代码编译play框架。你将需要一个Bazaar客户端去获取源代码并用Ant建立play框架。
+From the command line:
+通过下面的命令行建立</p>
+
+<pre><code># bzr checkout lp:play
+# cd play/framework
+# ant
+</code></pre>
+
+
+<p>The Play framework is ready to use.
+lp:play currently aliases to http:bazaar.launchpad.net/%7Eplay-developers/play/1.0/</p>
+
+<h2 id="aUsingtheplaycommanda">
+<a>Using the play command</a> 是用play命令</h2>
+
+
+<p>When the framework is correctly installed, open a shell and execute <strong>play</strong>.
+当框架正确安装后，打开一个shell并执行<strong>play</strong></p>
+
+<pre><code>$ play
+</code></pre>
+
+
+<p>You should see the play default message:
+你应该看到play的默认信息
+<img border="0" alt="" src="http://www.playframework.org/documentation/1.0/images/help">
+You can get more help on any specific command using <strong>play help any-command-name-here</strong>. For example, try:
+你可以获得更多帮助在任何具体命令上用 <strong>play help any-command-name-here例如，尝试</strong></p>
+
+<pre><code># play help run
+</code></pre>
+
+
+<h2 id="aCreatinganewapplicationa">
+<a>Creating a new application</a> 创建一个新的应用</h2>
+
+
+<p>Use the <b>new</b> command to create a new application. You must give a non-existent path where the application will be created.
+用<strong>new</strong>命令创建一个新的应用。你必须给一个不存在的名字，才可以创建应用（就是给一个以前没有的项目名字）</p>
+
+<pre><code># play new myApp
+</code></pre>
+
+
+<p><img border="0" alt="" src="http://www.playframework.org/documentation/1.0/images/guide1-1">
+Will create a new application. Start it with:
+创建一个新的应用，用下面命令</p>
+
+<pre><code># play run myApp
+</code></pre>
+
+
+<p>You can then open a browser at <a href="http://localhost:9000">http://localhost:9000</a> and see the default page for the application.
+你可以用浏览器访问 <a href="http://localhost:9000">http://localhost:9000</a>并看到应用的默认页面。
+<img border="0" alt="" src="http://www.playframework.org/documentation/1.0/images/guide1-2">
+<b>Your play environnement is ready</b><br>
+ 
+<b>你的play框架已经准备好了</b>
+<b>关于如何使用play框架，可以参考视频</b>
+<b><a href="http://www.xinlogs.com/playframework-video/">http://www.xinlogs.com/playframework-video/</a></b><div id="related_log" style="font-size:12px">
+<b>相关日志：</b><a href="http://xinlogs.com/playframework">playframework&#8211;play！java on rails框架</a><a href="http://xinlogs.com/playframework-video">playframework&#8211;开发视频</a><a href="http://xinlogs.com/playframework-helloworld">playframework&#8211;helloworld程序编写</a>
+</div></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/30/apache-VirtualHost-Configure/">Apache下多虚拟主机的配置与管理</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-30T00:00:00+08:00" pubdate data-updated="true">Dec 30<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>当一台服务器想给多个域名提供web服务的时候，我们可以使用apache虚拟主机配置。</p>
+
+<p>apache的配置文件在centos系统下，默认放在/etc/httpd/conf目录下的httpd.conf文件里。</p>
+
+<p>虚拟主机的配置如下</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -217,495 +394,38 @@ http://hi.baidu.com/john_zhy/blog/item/50e39f317240141febc4af5a.html 我的本�
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>File "/usr/bin/sync-engine", line 84, in &lt;module&gt;
-</span><span class='line'>
-</span><span class='line'> configObj = Config.Config(progopts)
-</span><span class='line'>
-</span><span class='line'>   File "/usr/lib/python2.5/site-packages/SyncEngine/config.py", line 292, in __init__
-</span><span class='line'>
-</span><span class='line'> oldconf = os.path.join(self.path,"config.xml")
-</span><span class='line'>
-</span><span class='line'>AttributeError: Config instance has no attribute 'path'
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#############TEST VirtualHost
+</span><span class='line'>&lt;VirtualHost *:80&gt;
+</span><span class='line'>ServerAdmin babodx@gmail.com
+</span><span class='line'>DocumentRoot "/home/babo"
+</span><span class='line'>ServerName www.xinlogs.com
+</span><span class='line'>DirectoryIndex index.html
+</span><span class='line'>ErrorLog logs/www.xinlogs.com_error_log
+</span><span class='line'>CustomLog logs/www.xinlogs.com-access_log common
+</span><span class='line'> 
+</span><span class='line'>&lt;/VirtualHost&gt;
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>请下载<a href="http://synce.svn.sf.net/svnroot/synce/releases/0.11.1/sync-engine/config/config.xml">config.xml</a>，保存为~/.synce/config.xml（提示：&#8221;~&#8221;为自己的家目录)</p>
+<p>如果我们apache给10个或更多的域名提供web服务，这样的话，我们的httpd.conf就会有很多<VirtualHost *:80>这样的配置段落，看起来很长，管理起来也很麻烦。而且一个apache同时给几十个web域名提供虚拟主机，完全没有问题。那该如何写配置文件便于我们管理呢？</p>
 
-<p>创建同步项目<strong>synce-create-partnership &#8220;Linux desktop&#8221; &#8220;Contacts,Calendar&#8221;</strong></p>
+<h2>解决办法</h2>
 
-<p>ps：还有别的，可自行选择Contacts， Calendar， Tasks， Files 等</p>
+<p>为了管理方便，配置文件的结构清晰。</p>
 
-<p>创建OpenSync group</p>
+<p>我们完全可以将每个虚拟主机的配置文件放在独立文件中，这样apache的主要配置文件httpd.conf看上去很简洁。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>msynctool --addgroup synce-sync
-</span><span class='line'>
-</span><span class='line'>msynctool --addmember synce-sync synce-opensync-plugin
-</span><span class='line'>
-</span><span class='line'>msynctool --addmember synce-sync evo2-sync</span></code></pre></td></tr></table></div></figure>
-
-
-<p>然后同步synce-sync-engine</p>
+<p>只要在最后加入</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>msynctool --sync synce-sync</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Include conf/vhost_*.conf</span></code></pre></td></tr></table></div></figure>
 
 
-<p>他会同步到evolution里面</p>
+<p> 
+然后再conf目录里，每个虚拟主机的文件只要以vhost_开头，后面可以用自己的域名加.conf后缀。比如有个test.com的域名要做web。</p>
 
-<p>我上面的照着做，全部成功了。</p>
-
-<p><strong>我的一些问题</strong></p>
-
-<p>据说安装了synce-gnomevfs后，可以在Nautilus里面看手机里的内容，但是我没有成功
-目前只能通过synce-pls、synce-pcp等命令，来操作手机里面文件。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-dynamic-resize-lvm/">试用ubuntu 8.04和LVM动态增加分区</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>我在虚拟机VMware里面安装了ubuntu 8.04.</p>
-
-<p>安装的时候，只是选择了openssh这个服务。安装后感觉系统很干净</p>
-
-<p><strong>磁盘占用</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>/dev/mapper/ubuntu-root                      5.6G 321M 5.3G   6% /</span></code></pre></td></tr></table></div></figure>
-
-
-<p>系统就用了不到400M</p>
-
-<p><strong>内存</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>                   total       used       free     shared    buffers     cached
-</span><span class='line'>Mem:           249         39        209          0          3         16</span></code></pre></td></tr></table></div></figure>
-
-
-<p>减掉buffers和cached的内容，还有我ssh远程连接的占用。实际系统启动后内存也就需要17M</p>
-
-<p><strong>LVM</strong></p>
-
-<p>安装系统的时候，我就选择了整个磁盘启用LVM，采用ubuntu默认分区的方式。</p>
-
-<p>ubuntu默认分了2个区/sda1和/sda5。sda1用来做/boot，sda5用来做LVM。文件系统都是默认的ext3。</p>
-
-<p>然后在LVM里面默认建立了2个LV( Logical volume)，一个/dev/ubuntu/root用来做/ ，一个/dev/ubuntu/swap_1用来做swap交换分区。我又手动修改了文件系统，采用reiserfs。</p>
-
-<p><strong>动态添加/分区大小</strong></p>
-
-<p>我先添加了一个硬盘，系统识别为sdb</p>
-
-<p>对这个盘<strong>创建分区</strong>（LVM可以不用分区的，但是需要动态添加到/分区，所以需要有文件系统，不能添加后格式化/分区吧）</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo fdisk /dev/sdb
-</span><span class='line'>n --&gt;创建分区
-</span><span class='line'>t --&gt;修改分区类型为8e
-</span><span class='line'>w --&gt;保存结果</span></code></pre></td></tr></table></div></figure>
-
-
-<p>现在系统可以识别/dev/sdb1这个设备了。</p>
-
-<p><strong>创建PV(Physical volume)</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo pvcreate /dev/sdb1</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>创建VG(Volume group)</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vgextend ubuntu /dev/sdb1</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>扩展LV(Logical volume)</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo lvextend -L +2G /dev/ubuntu/root&lt;br&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样就给/dev/ubuntu/root这个设备大小增加了2G。可以通过sudo lvdisply查看
-但是这个时候df -h还是没有变化的，需要调整文件系统。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo resize_reiserfs -s +2G /dev/ubuntu/root&lt;br&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样就完成了全部动态扩展分区。而且是服务器一直在线状态，不用关机。</p>
-
-<p>调整Swap</p>
-
-<p>还是和上面一样的情景，只要VG里面还有剩余空间就可以用来扩展swap用。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo swapoff -a</span></code></pre></td></tr></table></div></figure>
-
-
-<p>关闭正在用的swap分区</p>
-
-<p>然后</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo lvextend -L +200M /dev/ubuntu/swap_1</span></code></pre></td></tr></table></div></figure>
-
-
-<p>给/dev/ubuntu/swap_1扩展了200M容量</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo mkswap /dev/ubuntu/swap_1</span></code></pre></td></tr></table></div></figure>
-
-
-<p>建立swap的文件系统</p>
-
-<p>最后</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo swapon -a</span></code></pre></td></tr></table></div></figure>
-
-
-<p>启用新的swap系统。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-console-unread-chinese/">Ubuntu Server 9.04 终端乱码问题</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>安装了ubuntu server 9.04，安装的时候选择了中文环境。</p>
-
-<p>因为server是没有桌面的，发现终端里面显示提示信息，出错信息都变成乱码了。</p>
-
-<p><strong>解决办法</strong>
-修改/etc/default/locale文件</p>
-
-<p>将zh_CN修改为en_US</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-904-show-chinese-filename/">Ubuntu Server 9.04显示中文文件</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>前面提到了用VMware的share folder功能，可以将主机系统的一个目录，自动共享到ubuntu /mnt/hgfs目录下。</p>
-
-<p>但是winxp的中文目录，到了ubuntu server下面就显示乱码了。</p>
-
-<p><strong>解决办法</strong></p>
-
-<p>安装相关软件包</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install language-pack-zh</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>配置中文环境</strong></p>
-
-<p>修改/etc/environment</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vim /etc/environment</span></code></pre></td></tr></table></div></figure>
-
-
-<p>将LANG和LANGUAGE内容修改为下面的</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>LANG=zh_CN.UTF8&lt;br&gt;
-</span><span class='line'>LANGUAGE="zh_CN:zh:en_US:en </span></code></pre></td></tr></table></div></figure>
-
-
-<p>修改/etc/default/locale</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vim /etc/default/locale</span></code></pre></td></tr></table></div></figure>
-
-
-<p>
-修改内容如下</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>LANG="zh_CN.UTF-8"&lt;br&gt;
-</span><span class='line'>LANGUAGE="zh_CN:zh" </span></code></pre></td></tr></table></div></figure>
-
-
-<p>保存后，重启系统。</p>
-
-<p>现在用putty登陆，还是发现看中文乱码。我们还要继续设置putty才可以。</p>
-
-<p><strong>设置putty使用utf-8</strong></p>
-
-<p>putty的Windows->Translation->Received data assumed to be in which character set:选择UTF-8</p>
-
-<p><img src="http://farm9.staticflickr.com/8236/8512011412_e138d2c072.jpg" alt="putty使用utf8设置" /></p>
-
-<p>这样设置后，就可以正确在putty里显示中文了。</p>
-
-<p><img src="http://farm9.staticflickr.com/8514/8510902673_84be6e3e30.jpg" alt="putty显示中文文件名" /></p>
-
-<p>以上这些就可以正常在putty里显示中文了。但是如果你用键盘鼠标从本地登陆ubuntu server，会发现，ubuntu server还是乱码。</p>
-
-<p>这个问题我查了一些文档，还是没有解决。有的说是console下的字体问题。但是/usr/share/consolefonts里的字体好像没有支持中文的。</p>
-
-<p>还有说console fonts最多支持256这个字符。。。</p>
-
-<p>反正最终这个问题没有解决掉。现在在linux自己的控制台里，显示还是乱码</p>
-
-<p>建议大家如果不是特别需要，其实服务器没有必要采用中文编码的。可以正常显示中文就好了。</p>
-
-<p>建议默认还是用en_US:UTF-8的好。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-904-install-xen/">Ubuntu 9.04安装xen</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>主要参考下面两旁文章，先贴过来，以后再整理。</p>
-
-<p><a href="http://oceanobservatories.org/spaces/display/CIDev/Xen+on+Ubuntu+9.04+(Jaunty">http://oceanobservatories.org/spaces/display/CIDev/Xen+on+Ubuntu+9.04+(Jaunty)</a>)</p>
-
-<p><a href="http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html">http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html</a></p>
-
-<p><strong>安装xen</strong></p>
-
-<p>Xen on Ubuntu 9.04 (Jaunty)</p>
-
-<p>Added by <a href="http://oceanobservatories.org/spaces/display/~thim">Thomas Im</a> , last edited by <a href="http://oceanobservatories.org/spaces/display/~thim">Thomas Im</a> on Jun 11, 2009  (<a href="http://oceanobservatories.org/spaces/pages/diffpages.action?pageId=18353165&originalId=18353171">view change</a>)
-Labels: 
-(None)
-Following applies to Ubuntu 9.04 Jaunty 64-bit installation.  Notes taken from rebuild of &#8216;amoeba&#8217; development system.
-Installation</p>
-
-<pre>sudo apt-get install ubuntu-xen-server # Jaunty Xen package does not include the dom0 Xen kernel so these must be installed separately  wget http://security.debian.org/debian-security/pool/updates/main/l/linux-2.6/linux-modules-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb wget http://security.debian.org/debian-security/pool/updates/main/l/linux-2.6/linux-image-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb  sudo dpkg -i linux-modules-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb linux-image-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb  sudo apt-get install python2.5 shutdown -r now   sudo vim /etc/network/interfaces .. auto eth0 iface eth0 inet static   address xxx.xxx.xxx.xxx   gateway xxx.xxx.xxx.xxx   netmask 255.255.255.0   sudo vim /etc/resolv.conf ... domain ucsd.edu search ucsd.edu  nameserver xxx.xxx.xxx.xxx nameserver xxx.xxx.xxx.xxx   sudo /etc/init.d/networking restart  </pre>
-
-
-<p>Create Jaunty DomU (Guest)
-[http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html]
-<img src="http://oceanobservatories.org/spaces/images/icons/emoticons/information.gif" border="0" width="16" height="16" align="absMiddle"><br><strong><strong>References:</strong></strong>
-<a href="https://help.ubuntu.com/community/Xen">https://help.ubuntu.com/community/Xen</a><br><a href="http://www.infohit.net/blog/adate/053109/archive/1.html">http://www.infohit.net/blog/adate/053109/archive/1.html</a><br><a href="http://www.chrisk.de/blog/2008/12/how-to-run-xen-in-ubuntu-intrepid-without-compiling-a-kernel-by-yourself/">http://www.chrisk.de/blog/2008/12/how-to-run-xen-in-ubuntu-intrepid-without-compiling-a-kernel-by-yourself/</a></p>
-
-<h3></h3>
-
-
-<p><strong>安装guest系统</strong>
-These are instructions for creating an Ubuntu Jaunty DomU on Debian Lenny Dom0 using Xen 3.2.1 that comes with Lenny.  I&#8217;m installing into an LVM rather than using a file image.  See <a href="http://www.howtoforge.com/xen-live-migration-of-an-lvm-based-virtual-machine-with-iscsi-on-debian-lenny">this HowtoForge article for background of my particular setup</a>.  This tutorial assumes you&#8217;re working from a similar setup with an iscsi target and LVM-based VMs.
-The reason I&#8217;m posting this is because I had such a hard time finding some combination of tools that worked correctly to do this.  I tried a few options but had little success:</p>
-
-<ul>
-<li>debootstrap - Didn&#8217;t seem to work with Jaunty at all.  It would just crash </li>
-<li>vm-install - Doesn&#8217;t support LVM-based VMs by default, but there is a procedure for converting the qcow image to an LVM</li>
-</ul>
-
-
-<p>What I found is that I could find no way of creating the LVM-based VM in Lenny.  I actually had to create a sid instance first and then install my open-iscsi and xen-utils into the sid VM, then use SID to populate the VM.  <br><u><strong>Perform the following actions in your SID vm or workstation</strong></u><br>
-Note:  You&#8217;ll need your /etc/xen-tools/xen-tools.conf setup like the instructions in the HowtoForge article (things like gateway, netmask, broadcast, passwd, fs type, install-method, etc).<br>
-Whenever I would try to build the vm with the default partitions, it would always fail.  For some reason the resulting vm would have an fstab that shows something like sda1 and sda2 instead of xvda1 and xvda2.  I had to create my own partition scheme before anything would work right.  Here&#8217;s mine: $ <strong>sudo cat /etc/xen-tools/partitions.d/with-data</strong><br>
-[root]<br>
-size=4G<br>
-type=ext3<br>
-mountpoint=/<br>
-options=sync,errors=remount-ro<br>
-[swap]<br>
-size=512M<br>
-type=swap<br>
-[data]<br>
-size=4G<br>
-type=ext3<br>
-mountpoint=/data<br>
-options=nodev
-You will need to create a symlink for jaunty so that the option is recognized at the command-line. 
-<strong>$ cd /usr/lib/xen-tools</strong>
-<strong>$ sudo ln -s edgy.d jaunty.d  </strong>
-Now, finally, you can create the image.  This step may take some time
-<strong>$ xen-create-image &#8211;hostname=myserver &#8211;dhcp &#8211;lvm=vg_xen &#8211;dist=jaunty &#8211;mirror=http://archive.ubuntu.com/ubuntu &#8211;size=4Gb &#8211;memory=512Mb &#8211;swap=512MB &#8211;arch=i386 &#8211;partitions=with-data</strong>
-Since you&#8217;re building the LVM on a different machine than it will eventually run on, you&#8217;ll need to  copy the resulting xen config to the correct server:
-<strong>$ scp /etc/xen/myserver.cfg root@realhost:/etc/xen/</strong>
-That should be all you need to get this working.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-904-install-vmware-tools/">Ubuntu 9.04 Server 安装VMware Tools解决share Folders问题</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>我的主系统是Winxp在vmware 6.5.2 build-156735下安装的ubuntu server 9.04</p>
-
-<p>因为安装vmware tools后，可以使用vmware 提供的share folders让winxp的主系统可以将某个目录映射到虚拟的ubuntu系统里。</p>
-
-<p>我就开始在vmware里面安装vmware tools工具。下面是过程，包括不能用vmhgfs的解决办法</p>
-
-<p>**安装VMware tools</p>
-
-<p>安装前，先安装需要的软件包</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>apt-get install autoconf automake binutils make cpp gcc linux-headers-$(uname -r)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>安装后，在vmware上面选择VM-》Install Vmware Tools</p>
-
-<p>然后切换到ubuntu server 9.04里，运行mount命令，将Vmware tools的光盘挂载
-<code>sudo mount /dev/cdrom /mnt</code></p>
-
-<p>拷贝安装VMware Tools需要的安装文件到/tmp目录
-<code>sudo cp /mnt/VMwareTools-7.8.5-156735.tar.gz /tmp</code></p>
-
-<p>卸载/mnt目录，因为安装的时候，需要在/mnt目录下创建hgfs目录，如果这时候挂载着CDROM，就会导致创建hgfs目录失败。<code>sudo /mnt</code></p>
-
-<p>解压安装文件并修改会出现问题的page.c文件</p>
+<p>我们就可以直接在conf目录创建一个vhost_test.com.conf文件，文件里写入虚拟主机配置，比如</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -714,62 +434,22 @@ That should be all you need to get this working.</p>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cd /tmp 
-</span><span class='line'>tar zxvf VMwareTools-7.8.5-156735.tar.gz
-</span><span class='line'>cd /tmp/vmware-tools-distrib/lib/modules/source&lt;/span&gt; 
-</span><span class='line'>sudo cp ./vmhgfs.tar /tmp/&lt;/span&gt; 
-</span><span class='line'>tar xvf vmhgfs.tar &lt;/span&gt;
-</span><span class='line'>cd vmhgfs-only/ 
-</span><span class='line'>sudo vi page.c </span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#############TEST VirtualHost
+</span><span class='line'>&lt;VirtualHost *:80&gt;
+</span><span class='line'>ServerAdmin babodx@gmail.com
+</span><span class='line'>DocumentRoot "/home/test.com"
+</span><span class='line'>ServerName test.com
+</span><span class='line'>DirectoryIndex index.html
+</span><span class='line'>ErrorLog logs/test.com_error_log
+</span><span class='line'>CustomLog logs/test.com-access_log common
+</span><span class='line'> 
+</span><span class='line'>&lt;/VirtualHost&gt;</span></code></pre></td></tr></table></div></figure>
 
 
-<p>修改page.c里面867行的一个错误函数，</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>page = __grab_cache_page(mapping, index); </span></code></pre></td></tr></table></div></figure>
-
-
-<p>将这个函数修改为</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>page = grab_cache_page_write_begin(mapping, index,flags);</span></code></pre></td></tr></table></div></figure>
-
-
-<p>
-这个函数是在/usr/src/linux-headers-2.6.28-11-server/include/linux$下的，pagemap.h里面定义的，内容如下</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>struct page *grab_cache_page_write_begin(struct address_space *mapping,
-</span><span class='line'>                        pgoff_t index, unsigned flags); </span></code></pre></td></tr></table></div></figure>
-
-
-<p>修改后，保存。然后重新打包成vmhgfs.tar文件，放置到/tmp/vmware-tools-distrib/lib/modules/source目录下。
-完成上面工作后，就可以</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cd /tmp/vmware-tools-distrib
-</span><span class='line'>sudo ./vmware-install.pl</span></code></pre></td></tr></table></div></figure>
-
-
-<p>安装提示安装就可以了。</p>
-
-<p>当看到如下提示，代表已经正确编译了vmhgfs模块了。应该可以顺利使用share folders功能。</p>
-
-<p>The vmhgfs module loads perfectly into the running kernel.</p>
-
-<p>也可以运行</p>
-
-<p><code>lsmod |grep vmhgfs</code></p>
-
-<p>如果有如下显示，表示安装成功</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vmhgfs                 53728  1 </span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样就可以用vmware提供的share folders功能和ubuntu server 9.04共享文件了。</p>
+<p>通过这种配置结构，我们管理再多的虚拟主机也不用怕。只要修改conf目录下对应虚拟主机的配置文件即可。</p>
 </div>
   
   
@@ -782,7 +462,7 @@ That should be all you need to get this working.</p>
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-804-update-to-810/">Ubuntu 8.04升级到8.10</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/12/28/Tomcat-reboot-problems/">解决Linux下Tomcat不能重启和停止问题</a></h1>
     
     
       <p class="meta">
@@ -798,60 +478,26 @@ That should be all you need to get this working.</p>
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2009-12-28T00:00:00+08:00" pubdate data-updated="true">Dec 28<span>th</span>, 2009</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><h1>升级</h1>
+  <div class="entry-content"><p>我的Tomcat 5.5.28安装在CentOS 5.3 64bit系统上</p>
 
-<p>昨天开始作的升级。</p>
+<p>每次重启都停住，只要要等5-10分钟才可以。</p>
 
-<p>早上到单位，就开始<code>Alt+F2</code></p>
+<p>系统reboot或者shutdown也都卡在关闭tomcat的过程中</p>
 
-<p>在弹出的命令行窗口输入
-<code>update-manager -d</code></p>
+<p>后来发现直接用/usr/local/tomcat/bin/shutdown.sh一样存在问题，但是如果Tomcat什么项目都不加载，却正常。</p>
 
-<p>然后就进入了漫长的等待，单位网络那个垃圾。。。。。告诉我42天。。。。。</p>
+<p>我怀疑是tomcat加载的lib或者jar文件一多，重启和关闭就会慢的巨慢。。。甚至10分钟以上。</p>
 
-<p>一直到下班，下载了900多个文件，一共要下载1300多</p>
+<p>为了解决这个问题，我修改了/etc/init.d/目录下的tomcat文件，让关闭或者重启的时候，直接通过kill命令杀掉tomcat进程。</p>
 
-<p>晚上到家继续update-manager -d 发现居然可以接着下载，还以为要重新来呢。家里好点，告诉我3个小时,后来就睡觉了。</p>
-
-<p>今天早上起来，发现已经下载完成了，开始到安装更新这一步了，弹出个窗口等我确认。</p>
-
-<p>我点上开始，就洗漱去了。一直到要上班也没有安装完成。（TMD，居然忘记今天星期五，不能开车。还是老婆提醒我，才想起来。）这次我可不敢关机了，怕升级一半，下次进不来系统。直接把本本和上盖子放包里了，下楼打车上班。</p>
-
-<p>在出租车里，完成了全部更新。关机。</p>
-
-<p><strong>启动</strong></p>
-
-<p>到了单位，发现系统总卡在进度条进不去。</p>
-
-<p>按Alt+F1然后 Alt+F8查看下文字模式的启动信息，发现一直卡在*Configuring network interfaces&#8230;</p>
-
-<p>这个第一次启动，没有办法（希望有好办法的，告诉下。）我就一直死等呀。。。感觉过了20分钟？？？</p>
-
-<p>进入系统了，3D显卡驱动不行。运行uname -a查看，内核还在用8.04的2.6.24-21.</p>
-
-<p>先修改网络吧
-<code>sudo gedit /etc/network/interfaces</code></p>
-
-<p>将里面的</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>auto eth0
-</span><span class='line'>iface eth0 inet dhcp
-</span><span class='line'>auto lo
-</span><span class='line'>auto wlan0</span></code></pre></td></tr></table></div></figure>
-
-
-<p>都注释掉，变成下面样子</p>
+<p>下面是我/etc/init.d/tomcat文件</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -868,410 +514,466 @@ That should be all you need to get this working.</p>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#auto lo
-</span><span class='line'>iface lo inet loopback
-</span><span class='line'>#iface eth0 inet dhcp
-</span><span class='line'>address 10.11.10.164
-</span><span class='line'>netmask 255.255.255.0
-</span><span class='line'>gateway 10.11.10.254
-</span><span class='line'>#nameserver 202.106.0.20
-</span><span class='line'>#auto eth0
-</span><span class='line'>iface wlan0 inet dhcp
-</span><span class='line'>wpa-psk 7640768b3d6b31f834b63abc8d2d667ae10f8bc3c41a8e4e87ec2c104d963a1e
-</span><span class='line'>wpa-driver wext
-</span><span class='line'>wpa-key-mgmt WPA-PSK
-</span><span class='line'>wpa-proto WPA
-</span><span class='line'>wpa-ssid babohome
-</span><span class='line'>#auto wlan0</span></code></pre></td></tr></table></div></figure>
-
-
-<p>接着修改/etc/NetworkManager/nm-system-settings.conf文件
-<code>sudo gedit /etc/NetworkManager/nm-system-settings.conf</code></p>
-
-<p>将文件里的<code>[ifupdown] manager=false</code>改成<code>[ifupdown] manager=true</code></p>
-
-<p>这样基本启动速度的问题就正常</p>
-
-<p><strong>内核</strong></p>
-
-<p>再来说内核</p>
-
-<p>内核需要手动编辑下grub的启动配置文件了。其实2.6.27-7内核已经安装了，就是没有给我们加入的menu.lst文件里面。修改menu.lst</p>
-
-<p><code>sudo gedit /boot/grub/menu.lst</code></p>
-
-<p>我的修改如下，这个应该每个人的不太一样。大家可以拷贝以前自己的文件进行修改</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>title        Ubuntu 8.04.1, kernel 2.6.27-7-generic
-</span><span class='line'>root        (hd0,1)
-</span><span class='line'>kernel        /boot/vmlinuz-2.6.27-7-generic root=UUID=614a1c10-6ed3-45c9-b24d-f7b3e39725b2 ro quiet splash locale=zh_CN
-</span><span class='line'>initrd        /boot/initrd.img-2.6.27-7-generic
-</span><span class='line'>quiet
-</span><span class='line'>title        Ubuntu 8.04.1, kernel 2.6.27-7-generic (recovery mode)
-</span><span class='line'>root        (hd0,1)
-</span><span class='line'>kernel        /boot/vmlinuz-2.6.27-7-generic root=UUID=614a1c10-6ed3-45c9-b24d-f7b3e39725b2 ro single
-</span><span class='line'>initrd        /boot/initrd.img-2.6.27-7-generic</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这个修改后，先不要重新启动。因为我们还没有卸载显卡驱动，要不重启后，卸载驱动还要继续重启。</p>
-
-<p><strong>卸载现有的显卡驱动</strong></p>
-
-<p>我原来显卡驱动是用envyng -t来安装的，现在还用这个工具卸载</p>
-
-<p>在终端<code>envyng -t</code></p>
-
-<p>然后选卸载驱动，安后等卸载完成后，重启就ok了</p>
-
-<p><strong>安装显卡驱动</strong></p>
-
-<p>注意，如果内核还是2.6.24-21，新的驱动安装不上。</strong>这次我没有用envyng -t来安装，而是用系统->系统管理->硬件驱动来安装的</p>
-
-<p>推荐我的是nvidia 177.80的驱动</p>
-
-<p>等待安装完成后。 Ctrl+Alt+Backspace 重新启动X server</p>
-
-<p>一切ok</p>
-
-<p><strong>一些问题</strong>
-在启动过程中，发现samba deamon启动fail还没有看是什么原因。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/study-ruby-1/">学习Ruby中&#8230;&#8230;</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h4>学习Ruby中&#8230;&#8230;</h4>
-
-<p>终于拿到了Programming Ruby 中文第2版.开始认真学习Ruby</p>
-
-<p>不过感觉翻译的不是很好</p>
-
-<p>而且有网友已经整理了勘误表
-<a href="http://blogs.sun.com/yongsun/entry/programming_ruby_%C3%A7%C2%AC%C2%AC%C3%A4%C2%BA%C2%8C%C3%A7%C2%89%C2%88_%C3%A4%C2%B8%C2%AD%C3%A6%C2%96%C2%87%C3%A7%C2%89%C2%88_%C3%A5%C2%8B%C2%98%C3%A8%C2%AF%C2%AF">http://farm9.staticflickr.com/8527/8509573735_f7c64d2b5c_z.jpg</a></p>
-
-<p>我在阅读的时候,也发现了一些翻译的不是很明白的地方</p>
-
-<ul>
-<li><p>16页 第2章 2.3</p></li>
-<li><p>Ruby的数组(arrays)和散列表(hashes)是被索引的收集.(indexed collections)</p></li>
-</ul>
-
-
-<p>原文:Ruby&#8217;s arrays and hashes are indexed collections</p>
-
-<p>我感觉这句话的意思应该是说:Ruby的数组和哈希表是有(被)索引的集合</p>
-
-<p>在后面的哈希表里面,也有讲解</p>
-
-<p>Hashes (some times known as associative arrays, maps,or dictionaries) are similar to arrays in that they are indexed collections of object references.
-哈希表(有时也称关系数组,映射或者词典) 和数组的相似之处是他们都是有(被)索引的对象引用的集合</p>
-
-<ul>
-<li>45页 第4章 4.1 倒数第8行</li>
-</ul>
-
-
-<p>使用这些方法,你可以用数组来实现栈(stack),收集(set),队列(queue),双向队列(dequeue)和先进先出队列(fifo)</p>
-
-<p>原文:Using these,you can treat arrays as stacks,sets,queues,dequeues,and fifos</p>
-
-<p>我感觉这里的set应该是集合,就是说可以用数组实现集合</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-use-sqlite3/">Rails下使用sqlite3</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>参考<a href="http://wiki.rubyonrails.org/rails/pages/HowtoUseSQLite">http://wiki.rubyonrails.org/rails/pages/HowtoUseSQLite</a></p>
-
-<p><strong>安装SQLite</strong></p>
-
-<p>SQLite 是一个轻量级的sql风格数据库.可以执行大部分sql92标准SQLite全部安装只有244kb,包括命令行客户端和DLL文件SQLite不用安装服务进程，就像Access数据库一样使用方便安装只需要2个文件</p>
-
-<ul>
-<li>SQLite DLL</span></li>
-<li>SQLite command-line client for creating tables</li>
-</ul>
-
-
-<p>添加sqlite3.exe 和sqlite3.dll 到系统的path下，我放在了c:\windows\system32下了</p>
-
-<p><strong>安装sqlite3-ruby.gem</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>gem install sqlite3-rubyAttempting local installation of 'sqlite3'
-</span><span class='line'>Local gem file not found: sqlite3*.gem
-</span><span class='line'>Attempting remote installation of 'sqlite3'
-</span><span class='line'>Select which gem to install for your platform (i386-mswin32)
-</span><span class='line'>1. sqlite3-ruby 1.1.0 (mswin32)
-</span><span class='line'>2. sqlite3-ruby 1.1.0 (ruby)
-</span><span class='line'>3. sqlite3-ruby 1.0.1 (ruby)
-</span><span class='line'>...
-</span><span class='line'>&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>选择 1 安装sqlite3-ruby 1.1.0(mswin32) 现在好像2才是sqlite3-ruby 1.1.0(mswin32),总之选择(mswin32)就对了</p>
-
-<p><strong>安装图像管理工具</strong>（也可以不用，直接用命令行也很方便）<a href="http://sqlitebrowser.sourceforge.net/">http://sqlitebrowser.sourceforge.net/</a></p>
-
-<p><strong>创建数据库</strong></p>
-
-<p>进入项目所在目录，比如我的项目是testsqld:\work\testsql>sqlite db\test.db上面命令就在db目录下，创建了一个test.db数据库</p>
-
-<p><strong>配置database.yml文件，访问test.db数据库</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>development:
-</span><span class='line'>   adapter: sqlite3
-</span><span class='line'>   database: db/test.db   #username: root
-</span><span class='line'>   #password: 
-</span><span class='line'>   #host: localhost</span></code></pre></td></tr></table></div></figure>
-
-
-<p>后面如何操作，就和使用mysql数据库一样了。建立数据表可以用db:migrate来完成</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-upload-unread/">Rails下上传文件并且解决乱码问题</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>这个问题是我在<a href="http://www.javaeye.com/">www.javaeye.com</a>论坛上提出的，并且由mathsfan给出了解决办法</p>
-
-<p>首先创建一个项目，叫<strong>test</strong></p>
-
-<p>在app目录下的controllers目录下，找到<strong>test_controller.rb</strong>文件</p>
-
-<p>添加一个upload的action</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def upload
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/bash
+</span><span class='line'>#
+</span><span class='line'># Startup script for the tomcat
+</span><span class='line'>#
+</span><span class='line'># chkconfig: 345 80 15
+</span><span class='line'># description: Tomcat is a Servlet+JSP Engine.
+</span><span class='line'> 
+</span><span class='line'># Source function library.
+</span><span class='line'>. /etc/rc.d/init.d/functions
+</span><span class='line'> 
+</span><span class='line'> 
+</span><span class='line'>export JAVA_HOME=/usr/local/jdk1.6.0_16
+</span><span class='line'>export CLASSPATH=.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+</span><span class='line'>export PATH=$PATH:$JAVA_HOME/bin
+</span><span class='line'> 
+</span><span class='line'>export CATALINA_BASE=/usr/local/tomcat
+</span><span class='line'>export CATALINA_HOME=/usr/local/tomcat
+</span><span class='line'>export CATALINA_TMPDIR=/usr/local/tomcat/temp
+</span><span class='line'>export JRE_HOME=/usr/local/jdk1.6.0_16
+</span><span class='line'> 
+</span><span class='line'>start(){
+</span><span class='line'>if [ -z $(/sbin/pidof java) ]; then
+</span><span class='line'>echo "Starting tomcat"
+</span><span class='line'>/usr/local/tomcat/bin/startup.sh
+</span><span class='line'>touch /var/lock/subsys/tomcat
+</span><span class='line'>else
+</span><span class='line'>echo "tomcat allready running"
+</span><span class='line'>fi
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'> 
+</span><span class='line'>stop(){
+</span><span class='line'>if [ ! -z $(/sbin/pidof java) ]; then
+</span><span class='line'>echo "Shutting down tomcat"
+</span><span class='line'>#下面就是关闭的核心代码了，用ps获取tomcat进程id，直接kill掉
 </span><span class='line'>
-</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>ps aux|grep tomcat|grep startup|awk '{print $2}'|xargs kill -9
+</span><span class='line'>#/usr/local/tomcat/bin/shutdown.sh
+</span><span class='line'>until [ -z $(/sbin/pidof java) ]; do :; done
+</span><span class='line'>rm -f /var/lock/subsys/tomcat
+</span><span class='line'>else
+</span><span class='line'>echo "tomcat not running"
+</span><span class='line'>fi
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'> 
+</span><span class='line'>case "$1" in
+</span><span class='line'>start)
+</span><span class='line'>start
+</span><span class='line'>;;
+</span><span class='line'>stop)
+</span><span class='line'>stop
+</span><span class='line'>;;
+</span><span class='line'>restart)
+</span><span class='line'>stop
+</span><span class='line'>start
+</span><span class='line'>;;
+</span><span class='line'>status)
+</span><span class='line'>/usr/local/tomcat/bin/catalina.sh version
+</span><span class='line'>;;
+</span><span class='line'>*)
+</span><span class='line'>echo "Usage: $0 {start|stop|restart|status}"
+</span><span class='line'>esac
+</span><span class='line'> 
+</span><span class='line'>exit 0
+</span><span class='line'> </span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
 
 
-<p>然后在view目录下的test目录下，创建一个<strong>upload.rhtml</strong>文件</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;%=form_tag({:action=&gt;'save'},:multipart=&gt;true)%&gt;
-</span><span class='line'>&lt;br/&gt;upload your file:&lt;%=file_field("file","file")%&gt;
-</span><span class='line'>&lt;br/&gt;
-</span><span class='line'>&lt;%=submit_tag("upload")%&gt;
-</span><span class='line'>&lt;%=end_form_tag%&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>现在访问<a href="http://localhost:3000/test/upload">http://localhost:3000/test/upload</a>，应该可以看到一个上传的界面了。</p>
-
-<p>不过还没有处理上传后的方法呢，所以还不能实现上传。因为上面的表单是提交给save这个action 的，现在还没有写呢。</p>
-
-<p>在写save之前，先要完成一些相关的方法</p>
-
-<p>在<strong>application.rb</strong>文件里，加入</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def uploadFile(file) #处理上传后的文件保存
-</span><span class='line'>       if !file.original_filename.empty? 
-</span><span class='line'>          #生成一个随机的文件名
-</span><span class='line'>          @filename=getFileName(file.original_filename) 
-</span><span class='line'>          #向dir目录写入文件 
-</span><span class='line'>          File.open("#{RAILS_ROOT}/public/images/#{@filename}", "wb") do |f|
-</span><span class='line'>           f.write(file.read) 
-</span><span class='line'>          end 
-</span><span class='line'>          #返回文件名称
-</span><span class='line'>          return @filename 
-</span><span class='line'>        end 
-</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def getFileName(filename) 
-</span><span class='line'>#获取文件名
-</span><span class='line'>  if !filename.nil? 
-</span><span class='line'>     return filename 
-</span><span class='line'>  end 
-</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
-
-
-<p>现在在<strong>test_controller.rb</strong>里写出save的action</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def save 
-</span><span class='line'>  unless request.get? 
-</span><span class='line'>    if filename=uploadFile(params[:file]['file']) #调用application.rb&lt;/strong&gt;里写的uploadFile对文件保存
-</span><span class='line'>       render :text=&gt;filename 
-</span><span class='line'>    end 
-</span><span class='line'>  end 
-</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
-
-
-<p>文件可以正确上传到public/images下
-但是中文文件名变为了乱码,但是render :text=>filename返回的名字,并不是乱码.</p>
-
-<p> ###解决办法###</p>
-
-<p>在ApplicationController加上：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>before_filter:set_charset 
-</span><span class='line'>
-</span><span class='line'>def set_charset 
-</span><span class='line'>     @headers["Content-Type"]="text/html;charset=gb2312" 
-</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
-
-
-<p>我试验了一下，用utf8也可以正常处理,比如按照如下写法</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def set_charset
-</span><span class='line'>  @headers["Content-Type"]="text/html;charset=utf8" 
-</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/27/playframework-video/">Playframework&#8211;开发视频</a></h1>
+    
+    
+      <p class="meta">
+        
 
 
 
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-27T00:00:00+08:00" pubdate data-updated="true">Dec 27<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="www.playframework.org">http://www.playframework.org/</a></p>
+
+<p>网站上本来首页有一段大约10分钟的视频。内容是10分钟开发一个web程序，包括数据库的curd操作。</p>
+
+<p>但是由于视频是放在了<a href="http://vimeo.com/">http://vimeo.com/</a>国内正常情况下访问不到。</p>
+
+<p>我在浏览首页的时候，发现可以通过<a href="www.playframework.org">http://www.playframework.org/</a>下载mp4的视频观看。</p>
+
+<p>&lt;下面给出下载地址，感兴趣的朋友可以下载观看http://download.playframework.org/presentations/screencast.mp4</p>
+
+<p><img src="http://www.playframework.org/images/screen.png" alt="视频截图" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/26/playframework/">Playframework&#8211;play！java on Rails框架</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-26T00:00:00+08:00" pubdate data-updated="true">Dec 26<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天看程序员，发现了play！framework这个java web框架。</p>
+
+<p>以前也接触过SSH框架，struts+spring+hibernate。。。看着每一个部分那厚厚的参考书。。我就害怕。</p>
+
+<p>后来就看了一阵子ruby on rails。彻底喜欢上了那种简洁的风格，约定优先配置也很棒。</p>
+
+<p>直到发现play框架，才知道原来java也可以这样简洁。play框架扔掉了J2EE的各种规范。。。完全像rails一样简洁了</p>
+
+<p><strong>Play！的主要特性： </strong>
+* 简单的开发周期。该框架可自动编译和重新装载已改变的源文件。
+* 智能绑定HTTP参数到Java方法参数。
+* 基于Apache Mina的快速HTTP服务器<a href="http://mina.apache.org">http://mina.apache.org/</a>
+* 一个基于Groovy的强大的模板引擎，可实现多层继承，定制用户标签等功能。
+* 优秀的错误报告功能：发生异常时，该框架会直接显示出错误的源代码，甚至是模板代码。</p>
+
+<p>目前playframework网站的资料也比较全。从安装入门到开发实例应有尽有。我打算有时间慢慢翻译过来，发布在我的博客上。也是对自己学习的一种激励。</p>
+
+<p><strong>官方网站</strong></p>
+
+<p><a href="http://www.playframework.org/">http://www.playframework.org/</a></p>
+
+<p>各种实例</p>
+
+<h2>Yet Another Blog Engine</h2>
+
+
+<p>The final application from the <a href="http://www.playframework.org/documentation/1.0/guide1">play guide</a> tutorial.<img src="http://www.playframework.org/documentation/1.0/images/yabe" border="0" width="1050" height="612"><h2>Forum</h2>A simple forum application using JPA.<img src="http://www.playframework.org/documentation/1.0/images/forum" border="0" width="996" height="649"><h2>Jobboard</h2>A full faetured job board application that uses the CRUD module to automatically generate the administration area. <img src="http://www.playframework.org/documentation/1.0/images/jobboard" border="0" width="996" height="649"><h2>Chat</h2>An HTTP based chat application. We use the asynchronous request model to be able to handle a lot of simultaneous connected users without resources waste.<img src="http://www.playframework.org/documentation/1.0/images/chat" border="0" width="996" height="649"><h2>Stock watcher</h2>Based on the default GWT tutorial, it shows how to use GWT within a play application.<img src="http://www.playframework.org/documentation/1.0/images/stocks" border="0" width="996" height="649"><h2>My lists</h2>A clone of the the well known 37Signals TadaList application built using the Google App Engine support. It uses Siena as persistence engine.<img src="http://www.playframework.org/documentation/1.0/images/lists" border="0" width="996" height="649"></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/24/nginx-epool-events/">Nginx采用epoll的事件模型，为何效率高。</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-24T00:00:00+08:00" pubdate data-updated="true">Dec 24<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>以前就知道在linux下nginx采用epoll事件模型，处理效率高。但是一直不知道具体为什么，今天查看了下文档，了解了原因。</p>
+
+<p>首先nginx支持一下这些事件模型（才考nginx的wiki）</p>
+
+<p>Nginx支持如下处理连接的方法（I/O复用方法），这些方法可以通过use指令指定。</p>
+
+<ul>
+<li>select - 标准方法。 如果当前平台没有更有效的方法，它是编译时默认的方法。你可以使用配置参数 &#8211;with-select_module 和 &#8211;without-select_module 来启用或禁用这个模块。</li>
+<li>poll - 标准方法。 如果当前平台没有更有效的方法，它是编译时默认的方法。你可以使用配置参数 &#8211;with-poll_module 和 &#8211;without-poll_module 来启用或禁用这个模块。</li>
+<li>kqueue - 高效的方法，使用于 FreeBSD 4.1+, OpenBSD 2.9+, NetBSD 2.0 和 MacOS X. 使用双处理器的MacOS X系统使用kqueue可能会造成内核崩溃。</li>
+<li>epoll - 高效的方法，使用于Linux内核2.6版本及以后的系统。在某些发行版本中，如SuSE 8.2, 有让2.4版本的内核支持epoll的补丁。</li>
+<li>rtsig - 可执行的实时信号，使用于Linux内核版本2.2.19以后的系统。默认情况下整个系统中不能出现大于1024个POSIX实时(排队)信号。这种情况对于高负载的服务器来说是低效的；所以有必要通过调节内核参数 /proc/sys/kernel/rtsig-max 来增加队列的大小。可是从Linux内核版本2.6.6-mm2开始， 这个参数就不再使用了，并且对于每个进程有一个独立的信号队列，这个队列的大小可以用 RLIMIT_SIGPENDING 参数调节。当这个队列过于拥塞，nginx就放弃它并且开始使用 poll 方法来处理连接直到恢复正常。</li>
+<li>/dev/poll - 高效的方法，使用于 Solaris 7 11/99+, HP/UX 11.22+ (eventport), IRIX 6.5.15+ 和 Tru64 UNIX 5.1A+.</li>
+<li>eventport - 高效的方法，使用于 Solaris 10. 为了防止出现内核崩溃的问题， 有必要安装 这个 安全补丁。</li>
+</ul>
+
+
+<p>在linux下面，只有epoll是高效的方法。</p>
+
+<p>下面再来看看epoll到底是如何高效的</p>
+
+<p>Epoll是Linux内核为处理大批量句柄而作了改进的poll。要使用epoll只需要这三个系统调用：epoll_create(2)， epoll_ctl(2)， epoll_wait(2)。它是在2.5.44内核中被引进的(epoll(4) is a new API introduced in Linux kernel 2.5.44)，在2.6内核中得到广泛应用。</p>
+
+<p>epoll的优点</p>
+
+<p>支持一个进程打开大数目的socket描述符(FD)
+select 最不能忍受的是一个进程所打开的FD是有一定限制的，由FD_SETSIZE设置，默认值是2048。对于那些需要支持的上万连接数目的IM服务器来说显然太少了。这时候你一是可以选择修改这个宏然后重新编译内核，不过资料也同时指出这样会带来网络效率的下降，二是可以选择多进程的解决方案(传统的Apache方案)，不过虽然linux上面创建进程的代价比较小，但仍旧是不可忽视的，加上进程间数据同步远比不上线程间同步的高效，所以也不是一种完美的方案。不过 epoll则没有这个限制，它所支持的FD上限是最大可以打开文件的数目，这个数字一般远大于2048,举个例子,在1GB内存的机器上大约是10万左右，具体数目可以cat /proc/sys/fs/file-max察看,一般来说这个数目和系统内存关系很大。</p>
+
+<p>IO效率不随FD数目增加而线性下降
+传统的select/poll另一个致命弱点就是当你拥有一个很大的socket集合，不过由于网络延时，任一时间只有部分的socket是&#8221;活跃&#8221;的，但是select/poll每次调用都会线性扫描全部的集合，导致效率呈现线性下降。但是epoll不存在这个问题，它只会对&#8221;活跃&#8221;的socket进行操作&#8212;这是因为在内核实现中epoll是根据每个fd上面的callback函数实现的。那么，只有&#8221;活跃&#8221;的socket才会主动的去调用 callback函数，其他idle状态socket则不会，在这点上，epoll实现了一个&#8221;伪&#8221;AIO，因为这时候推动力在os内核。在一些 benchmark中，如果所有的socket基本上都是活跃的&#8212;比如一个高速LAN环境，epoll并不比select/poll有什么效率，相反，如果过多使用epoll_ctl,效率相比还有稍微的下降。但是一旦使用idle connections模拟WAN环境,epoll的效率就远在select/poll之上了。</p>
+
+<p>使用mmap加速内核与用户空间的消息传递。
+这点实际上涉及到epoll的具体实现了。无论是select,poll还是epoll都需要内核把FD消息通知给用户空间，如何避免不必要的内存拷贝就很重要，在这点上，epoll是通过内核于用户空间mmap同一块内存实现的。而如果你想我一样从2.5内核就关注epoll的话，一定不会忘记手工 mmap这一步的。</p>
+
+<p>内核微调
+这一点其实不算epoll的优点了，而是整个linux平台的优点。也许你可以怀疑linux平台，但是你无法回避linux平台赋予你微调内核的能力。比如，内核TCP/IP协议栈使用内存池管理sk_buff结构，那么可以在运行时期动态调整这个内存pool(skb_head_pool)的大小&#8212; 通过echo XXXX>/proc/sys/net/core/hot_list_length完成。再比如listen函数的第2个参数(TCP完成3次握手的数据包队列长度)，也可以根据你平台内存大小动态调整。更甚至在一个数据包面数目巨大但同时每个数据包本身大小却很小的特殊系统上尝试最新的NAPI网卡驱动架构。</p>
+
+<p>以上这些epoll内容，参考epoll_互动百科</p>
+
+<p>在我128M的vps上，我查看了一下，file-max的数量已经达到11945
+应该说确实比apache的方式要好，而且资源占用也少。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/22/wow-1-70-Express-Upgrade/">国服3.13 德鲁伊带小号快速升级（1-70全程带）</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-22T00:00:00+08:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>魔兽世界已经快开85了，而国内还坚持在70级。没有玩的乐趣了，就研究研究带小号速度升级吧。</p>
+
+<p><strong>带小号的职业选择</strong></p>
+
+<p>一般带小号的职业，需要可以AOE，有强力的dps，最好自己还可以扛打。所以就是法师、术士、骑士、德鲁伊这几个职业里选择。FS是AOE的王者，原来一直也是带小号的首选。</p>
+
+<p>目前来看也不错。但是破碎现在的效率不如以前了，STSM法师带着对操作要求太高，容易累。SS可以AOE，但是没有FS的控制技能，怪多了，扛不住。QS对于小副本，AOE来说很强力，尤其是学生和STSM，效率很高。但是对于ZUL这样的本，因为QS的短腿，不推荐。</p>
+
+<p><strong>德鲁伊</strong>如果装备合适，目前我认为才是带小号的最佳人选。</p>
+
+<p>从1-70，全部有适合的副本和技巧让小德来带小号升级。下面说说我的经验因为德鲁伊是T里面dps最高的，FS AOE靠dps，但是没有我们能抗，还要喝水。QS AOE靠反弹，没有我们能打。而且小德的移动速度快，就意味着拉同样路线的怪，我们时间少，效率高。所以对于血色、ZUL这些副本，小德效率最高。STSM不适合小德，不是不能刷，是麻烦，我们不会解疾病。所以我带小号的路线是</p>
+
+<ul>
+<li><p>1-10级，小德辅助小号独立升级。</p></li>
+<li><p>10-20带影牙，</p></li>
+<li><p>20-35血色，</p></li>
+<li><p>35-45祖尔法拉克，</p></li>
+<li><p>45-65黑石塔上，</p></li>
+<li><p>65-70监狱。</p></li>
+</ul>
+
+
+<p><strong>1-10级 快速升级经验</strong></p>
+
+<p>1-10级其实有个很好的办法升级，只是大家很少注意到。首先是70级的小德，不要和小号组队，然后洗平衡天赋最好，治疗天赋也凑合。穿上最高的法伤装备，然后给小号上荆棘术。小号带着这个10分钟的荆棘术buff，去打怪，基本弹怪1次-3次伤害，怪就死了。完全可以自己AOE了，什么技能也不用，就跑过去普通攻击一下怪，然后继续开一下个怪，怪打你1-3下，自己就死了。这样1-10级，比去任何地方都快。</p>
+
+<p><strong>注意</strong> 必须自己先打怪1下，如果是怪先打你被经技术弹死了，就没有经验了。</p>
+
+<p><strong>10-20级 快速升级经验</strong></p>
+
+<p>10-20级，就要去影牙副本了。大号先进入副本，因为小号级别低的时候，一进入就引怪。小号就放在副本门口就可以，大号进入副本aoe。注意最后的boss一定要拉出来杀，不然小号分不到经验。影牙副本是一个塔的建筑结构，所以小号放在副本，大号在小地图观察，只要可以看到小号的位置，就可以杀一次怪，我一般是分3次杀。第一次拉广场上的，第2次拉到狼boss那里，就是杀了boss出先4个蓝胖子的地方。第3次拉到最后boss门前面。</p>
+
+<p><strong>20-35级 快速升级经验</strong></p>
+
+<p>20-35级是快速升级的开始，小德因为移动速度和dps的优势，可以在这里3门同时刷。刷2门，肯定爆本。先刷教堂，然后出本刷军械库，最后刷次图书馆。图书馆经验不多，就是为了不爆本，凑点时间。小号愿意，也可以放弃图书馆，让他们捡些布呀什么的。这里建议小德穿最强的DPS装备，如果网络好，不怕掉线，可以拿 烈焰之怒 武器。（俗名：掉线之怒）。武器FM推荐 作战专家</p>
+
+<p><strong>35-45 快速升级经验</strong></p>
+
+<p>35-45 选择祖尔法拉克最好，小德可以一波流全部拉完。一次的经验在2.8w-3.5w。这里需要一些装备和技巧。首先最好有4件军装，这样移动速度提高15%。我尝试过，4件军装，比你骑60%速度的马还快。网上有zul的一波流视频，是个骑马拉全副本的，我觉得不现实，至少我经常拉几波，就给打下马了。所以我推荐直接穿4件军装，旅行形态拉。再有一点就是要带上部落徽记，因为有个蜥蜴怪，可以给你一个晕的状态，让你没有任何躲闪而且不能攻击。这样基本一次就快死了。所以一定要及时用徽章解这个状态。只要保持攻击，就可以满血。我一般带英雄卡片和部落徽记。</p>
+
+<p><strong>45-65 快速升级经验</strong></p>
+
+<p>45-65 这里只有小德带最效率，就是去黑上升级。卡召唤师。一般卡2个召唤师，速度相当与STSM。一般卡7个召唤师的小德，带45级的小号，1个小时3级半。这里一定要舍得吃药和加buff。具体如何卡黑上，我以后会写文章介绍。目前我可以卡5-7个，成功率85%吧</p>
+
+<p><strong>65-70 快速升级经验</strong></p>
+
+<p>65-70就找术士拉小号去监狱，然后小德带监狱，65-70大约200分钟吧。要求小德穿DPS装备和少量回血装备。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/xerobank-browser/">一款匿名浏览器&#8211;XeroBank Browser</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>XeroBank Browser 用来上网，可以很好的隐藏你的ip地址。利用Tor(The Onion Router)可以自动通过多层代理跳转，来隐藏你的IP因为是通过代理的，所以速度肯定要慢一些。但可以访问一些国内封锁的IP地址</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-xyz/">有想恶补三角函数的冲动！</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近在咕哝魔兽世界的坐标系统，发现这个游戏的坐标系统如下图所示</p>
+
+<p><img src="http://farm9.staticflickr.com/8228/8510673160_84e4f8b348.jpg" alt="wow坐标系统" /></p>
+
+<p>游戏的平面坐标为X,Y,用2π代表360度的方向。Z为高度，我们可以不用考虑。现在如果我们知道A点坐标X=2,Y=2 ，B点坐标X=4,Y=3那要想从A点出发到B点，我们的方向应该是多少呢？(目前我就知道Y轴正方向的话，角度为0 。X轴正方向 为π/4=90度)该怎么写这个三角函数得到这个角的的数值呢？</p>
 </div>
   
   
@@ -1295,17 +997,20 @@ That should be all you need to get this working.</p>
 <h1>Categories</h1>
 <ul id="categories">
   <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
-<li class='category'><a href='/blog/categories/game/'>Game (11)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (14)</a></li>
 <li class='category'><a href='/blog/categories/host/'>Host (2)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (20)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (1)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (26)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (1)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (5)</a></li>
 <li class='category'><a href='/blog/categories/virtualization/'>Virtualization (8)</a></li>
 <li class='category'><a href='/blog/categories/website/'>Website (1)</a></li>
-<li class='category'><a href='/blog/categories/windows/'>Windows (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (5)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
 
 </ul>
@@ -1327,11 +1032,11 @@ That should be all you need to get this working.</p>
       </li>
     
       <li class="post">
-        <a href="/blog/2009/12/21/xerobank-browser/">一款匿名浏览器&#8211;XeroBank Browser</a>
+        <a href="/blog/2010/01/24/postfix-extmail-attachment-bug/">postfix+extmail的附件大小显示和限制问题解决办法</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2009/12/21/wow-xyz/">有想恶补三角函数的冲动！</a>
+        <a href="/blog/2010/01/19/extman/">extman后台登陆问题解决方法</a>
       </li>
     
   </ul>

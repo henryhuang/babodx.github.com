@@ -9,9 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="昨天单位到了2台SUN x4450. 硬件配置相当强力. CPU 4颗6核的 Intel(R) Xeon(R) CPU           X7460 @ 2.66GHz 系统可以识别出24颗处理器 1
-2
-[root@localhost ~]# cat /proc/cpuinfo |grep &hellip;">
+  <meta name="description" content="为了解决中文乱码，我的Mysql都设置了使用utf8编码 这样一来，使用SQLyog Enterprise查看表里面内容，就都不能正常显示了。可能SQLyog需要设置？反正我没有搞出来。 不过后来我换用了Navicat 7以后，感觉很好。所有中文内容都可以正确显示 比mysql &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -72,7 +70,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-xen-memory-problem/">CentOS 5.3 安装虚拟化后的内存识别问题.</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/12/21/navicat/">一个在windows下很好用的MySQL工具Navicat</a></h1>
     
     
       <p class="meta">
@@ -95,31 +93,19 @@
   </header>
 
 
-  <div class="entry-content"><p>昨天单位到了2台SUN x4450.</p>
+  <div class="entry-content"><p>为了解决中文乱码，我的Mysql都设置了使用utf8编码</p>
 
-<p><strong>硬件配置相当强力.</strong></p>
+<p>这样一来，使用SQLyog Enterprise查看表里面内容，就都不能正常显示了。可能SQLyog需要设置？反正我没有搞出来。</p>
 
-<p>CPU 4颗6核的 Intel(R) Xeon(R) CPU           X7460 @ 2.66GHz</p>
+<p>不过后来我换用了Navicat 7以后，感觉很好。所有中文内容都可以正确显示</p>
 
-<p>系统可以识别出24颗处理器</p>
+<p>比mysql front也要强很多。以后我就用这个了
+<img src="http://www.navicat.com/images/stories/product/mysql/product/win/win_big.jpg" alt="navicat" /></p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# cat /proc/cpuinfo |grep processor|wc -l
-</span><span class='line'>24</span></code></pre></td></tr></table></div></figure>
+<p>而且支持Linux,windows,mac三个平台。下面是介绍</p>
 
-
-<p>内存64G</p>
-
-<p>在内存问题上,我郁闷了一阵子.我用dmesg、free、top查看，都是32G</p>
-
-<p>开始以为CentOS 5.3的64位内核就能支持到32G呢。又尝试在启动参数里加mem=64G</p>
-
-<p>又上论坛询问、查看官方文档，都说CentOS 5.3 64bit应该没有内存限制的。</p>
-
-<p>后来我发现了，原来问题出在安装的虚拟化上面</p>
-
-<p>用xm top可以正确识别内存。而且安装的系统，只是当作xm 里面的一个dom0来运行的。</p>
+<p><span>PremiumSoft Navicat™ is a powerful MySQL database administration and development tool that is not only sophisticated enough for professional developers, but also easy to learn for new users. With an user-friendly GUI, Navicat™ lets you quickly and easily create, organize, access and share information in a secure and convenient way. </span>
+<span>PremiumSoft Navicat supports multiple MySQL server connections which can be connected locally or remotely. Your remote MySQL server can be running on Linux, Unix, Mac OS X or Windows platform.<br></span></p>
 </div>
   
   
@@ -132,7 +118,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-vpn-howto/">CentOS 5.3架设VPN和619错误排除</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/12/21/mysql-log-sql/">Mysql设置my.cnf来记录下全部sql请求</a></h1>
     
     
       <p class="meta">
@@ -155,95 +141,24 @@
   </header>
 
 
-  <div class="entry-content"><p>我买这个VPS的主机，一个目的是用来做Blog空间，另外一个就是用来跑vpn。</p>
+  <div class="entry-content"><p>要想记录下提交到mysql数据库的全部sql语句，可以通过修改my.cnf来实现</p>
 
-<p>先按照<a href="http://rashost.com/blog/centos5-pptpd-vpn">http://rashost.com/blog/centos5-pptpd-vpn</a>这里的文章安装vpn服务。</p>
+<p>修改/etc/my.cnf文件</p>
 
-<p><strong>内核支持</strong></p>
-
-<p>pptpd VPN需要内核支持mppe，我们的VPS自带的内核已经把mppe编译进去了，没有把mppe另外当作内核的模块。</p>
-
-<p><strong>软件安装</strong></p>
-
-<p>要安装pptpd VPN，ppp和iptables这两个软件是必须安装的，安装命令：<code>yum install -y ppp iptables</code></p>
-
-<p>然后到<a href="http://www.poptop.org/">http://www.poptop.org/</a>下载pptpd的rpm包并安装，下载的时候要注意下面几点：</p>
-
-<ul>
-<li>好像只有1.3.3版本有rpm包，其他版本只有源代码</li>
-<li>没有el5或者centos5的rpm包，用rh4的rpm包可以安装在centos 5上</li>
-<li>64位的系统要下载64位的rpm包，32位的系统要下载32位的rpm包，别搞错了</li>
-</ul>
-
-
-<p>64位系统安装命令：<code>rpm -ivh pptpd-1.3.3-1.rhel4.x86_64.rpm</code>
-32位系统安装命令：<code>&lt;pre&gt;rpm -ivh pptpd-1.3.3-1.rhel4.i386.rpm</code></p>
-
-<p>编辑配置文件 /etc/ppp/options.pptpd</p>
-
-<p>内容如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>name pptpd refuse-pap refuse-chap refuse-mschap require-mschap-v2 require-mppe-128 proxyarp lock nobsdcomp novj novjccomp nologfd ms-dns 208.67.222.222 ms-dns 208.67.220.220 </span></code></pre></td></tr></table></div></figure>
-
-
-<p>编辑配置文件 /etc/pptpd.conf 内容如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>option /etc/ppp/options.pptpd logwtmp localip 192.168.92.1 remoteip 192.168.92.11-15</span></code></pre></td></tr></table></div></figure>
-
-
-<p>编辑配置文件 /etc/ppp/chap-secrets,配置用户名为johndoe，密码为password，内容如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>johndoe pptpd password *</span></code></pre></td></tr></table></div></figure>
-
-
-<p>修改配置文件/etc/sysctl.conf中的相应内容如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>net.ipv4.ip_forward = 1</span></code></pre></td></tr></table></div></figure>
-
-
-<p>配置iptables:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>iptables -t nat -A POSTROUTING -o eth0 -s 192.168.92.0/24 -j MASQUERADE /etc/init.d/iptables save /etc/init.d/iptables restart</span></code></pre></td></tr></table></div></figure>
-
-
-<p>设置iptables和pptpd开机自动启动：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>chkconfig pptpd on chkconfig iptables on</span></code></pre></td></tr></table></div></figure>
-
-
-<p>然后运行reboot重新启动即可</p>
-
-<h2>错误排除</h2>
-
-<p>完成以上配置，通过Windows拨号到VPN，一定提示619错误。</p>
-
-<p>引发619错误的原因有很多，比如密码不正确等，都报这个错误。</p>
-
-<p>我们可以通过/var/log/messages查看下日志，找到问题原因</p>
+<p>找到[mysqld]段
+加入</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Dec 20 06:45:12 204-74-212-217 pptpd[18317]: CTRL: Client 221.223.48.186 control connection started
-</span><span class='line'>Dec 20 06:45:12 204-74-212-217 pptpd[18317]: CTRL: Starting call (launching pppd, opening GRE)
-</span><span class='line'>Dec 20 06:45:12 204-74-212-217 pppd[18318]: Plugin /usr/lib/pptpd/pptpd-logwtmp.so is for pppd version 2.4.3, this is 2.4.4
-</span><span class='line'>Dec 20 06:45:12 204-74-212-217 pptpd[18317]: GRE: read(fd=6,buffer=804e5a0,len=8196) from PTY failed: status = -1 error = Input/output error, usually caused by unexpected termination of pppd, check option syntax and pppd logs
-</span><span class='line'>Dec 20 06:45:12 204-74-212-217 pptpd[18317]: CTRL: PTY read or GRE write failed (pty,gre)=(6,7)
-</span><span class='line'>Dec 20 06:45:12 204-74-212-217 pptpd[18317]: CTRL: Client 221.223.48.186 control connection finished</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>log=queryLog
+</span><span class='line'>log-slow-queries=showquerylog</span></code></pre></td></tr></table></div></figure>
 
 
-<p>后来有找了一些文档查看，和一条一条屏蔽配置语法
-发现是logwtmp这个配置选项出现问题。最后编辑/etc/pptpd.conf文件
-注释掉logwtmp选项，重启pptpd服务，就可以正常登陆了。</p>
+<p>然后就可以到/var/lib/mysql/目录下找到queryLog和showquerylog日志文件了</p>
+
+<p>里面记录这每个提交到数据库执行的sql语句。</p>
+
+<p>我的系统CentOS 4.4 rpm方式安装的mysql 5.0.57,如果其它系统或者其它安装方式，可能文件路径会有些不同。</p>
 </div>
   
   
@@ -256,7 +171,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-install-xen/">CentOS 5.3下成功安装了Xen虚拟化服务。</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/12/21/mysql-import/">如何向万网的Mysql数据库导入数据</a></h1>
     
     
       <p class="meta">
@@ -279,13 +194,97 @@
   </header>
 
 
-  <div class="entry-content"><p>今天参照下面文档成功安装了虚拟化服务。</p>
+  <div class="entry-content"><p>昨天单位由一个网站，要放到万网的虚拟主机去。
+网站是jsp写的，程序好导。直接ftp过去就可以了。</p>
 
-<p><a href="http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2">http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2</a></p>
+<p>可是mysql的数据库怎么导呢？</p>
 
-<p>并且在虚拟化服务里，安装了一台vm01的虚拟Centos。</p>
+<p>我先用</p>
 
-<p>不过时间比较长，通过网络安装，用了4个小时。</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysqldump database_name&gt;database_name.sql</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后把这个database_name.sql下载下来。</p>
+
+<p>再给虚拟主机空间上传一个phpmyadmin来做数据库管理用。这样就可以使用phpmyadmin导入数据了。</p>
+
+<p>如果网站数据小，这样就ok了。可是我的database_name.sql有60M</p>
+
+<p>万网空间上的phpmyadmin只能最大支持2M</p>
+
+<p>于是只能另外想办法。我先导入表格结构吧。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysqldump –d database_name&gt;database_name.sql</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在phpmyadmin里，选择好数据库后，用导入功能，将database_name.sql导入</p>
+
+<p><img src="http://farm9.staticflickr.com/8096/8510015688_bc8709cc96.jpg" alt="phpmyadmin图片" /></p>
+
+<p>现在有了表结构了，但是每个表都没有数据。我们再继续导入数据。</p>
+
+<p>我的表里面，除了一个news表格特别大，大约51M，其他都在2M一下。所以我每个表格生成一个txt文件，然后导入到万网的数据库。</p>
+
+<p>本地进入mysql>提示符后，用以下命令将数据的表格数据导出。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>select * from admin into outfile “/tmp/admin.txt” fields terminated by “|” lines terminated by “@”</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面命令将本地数据库的admin表，导出到/tmp/目录下的admin.txt文件。</p>
+
+<p>我们有几个表格，就用这个命令导出几个txt文件。</p>
+
+<p>然后将txt文件用gzip压缩，因为phpmyadmin支持gzip压缩格式的。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /tmp/
+</span><span class='line'>gzip admin.txt</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后将压缩的admin.txt.gz下载到本地，用浏览器上传给phpmyadmin导入</p>
+
+<p>![](</p>
+
+<p><strong>解决news表格过大问题</strong></p>
+
+<p>我的news表格有51Ｍ，就算gzip压缩后，还有7M左右，还是不能用phpmyadmin导入。我们可以将news表格的数据切分为多个txt文件，然后保证每个文件gzip后，在2M以内就可以。这个切分就要根据具体表格来判断了。</p>
+
+<p>我先查询了news表格一共有多少条记录</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>select count(*) from news;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>返回1477条，表格是51M。压缩后的表格是7M。</p>
+
+<p>7M/2M=3.5</p>
+
+<p>1477/3.5=422条。</p>
+
+<p>根据上面的计算，只要按照422条一个文件来分割就可以了。为了保险，因为每条记录的大小并不是一样的平均分配，我按照每个文件200条记录来切分。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>select * from news where newId&gt;0 limit 200 into outfile “/tmp/news0.txt” fields terminated by “|” lines terminated by “@”;
+</span><span class='line'>
+</span><span class='line'>然后用
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>select max(newId) from news where newId>0 limit 200;
+&#8220;`</p>
+
+<p>查看下200条记录后，是到了那条记录，下次分割就从那条开始
+这样分割出来的8个文件，一次压缩后，上传到phpmyadmin导入。就完成了全部表格的导入工作。</p>
+
+<p><strong>总结</strong></p>
+
+<p>其实如果数据本身不复杂，直接用navicat也可以远程连接导入的。但是navicat不支持定义 lines terminated。我的news表格里面存在的都是html代码，经常出现换行符，所以只能选择用phpmyadmin了。</p>
 </div>
   
   
@@ -298,7 +297,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-5-3-64bit-install-on-hp-380-g5/">CentOS 5.3 64bit安装在HP 380G5服务器</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/12/21/mage-recover/">我的高督法师的装备恢复了</a></h1>
     
     
       <p class="meta">
@@ -321,33 +320,242 @@
   </header>
 
 
-  <div class="entry-content"><p>今天安装了一台CentOS 5.3 64bit服务器。</p>
+  <div class="entry-content"><p>今天恢复了高督法师的装备，虽然损失了3500G，但是装备还是给恢复回来了现在装备没有FM了，只有440法伤。。。。以前523知足了。希望大家都用密保卡，省的丢号</p>
+</div>
+  
+  
 
-<p>服务器硬件HP 380G5，4U高</p>
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/mage-be-stolen/">我的高督被盗了&#8230;&#8230;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>07年3月29日,我的高督法式被盗了,同一个账号下还有60的萨满.因为是朋友玩的时候被盗的，我到是没有什么感觉。反正也冲到高督了，该玩的也玩了。ZG鳄鱼,MLD公主也刷了。现在也是该离开的时候了</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/mage/">我冲高督的心得</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>我在2006年6月就开始冲高督了,然是玩的号是梦之盗帅. 亡灵盗贼(哈哈)</p>
+
+<p>开始也是一个人到处混,涨得很慢.一周也就10w荣誉,后来通过傻鸟介绍,认识了一个固定队伍.</p>
+
+<p>固定队伍就是不一样,都是有人带队而且有LM的固定队伍可以一起刷荣誉.在遇到不认识的队伍的时候,才会打. 这里要说一下,有很多人认为刷子不好,可是在我们这里,如果你不刷,真打的荣誉也就够你升到10级勇士的.刷也是很辛苦的,首先加入固定队伍的人,作队长才可以晚上挂机,但是队长每周至少有72小时在线带队.如果不做队长,就要负责拿旗子.拿一天旗子,晚上可以挂一下.基本队里没有不干活的.</p>
+
+<p>我加入后不久就做了队长&#8230;.其实队长很累&#8230;因为同时刷的有2-3个队伍,你要负责记住对不同队伍的输赢.只有这样,才能稳定的刷下去.
+基本这样带队,晚上可以挂着,一周可以有70-100w荣誉.因为每个星期只有2-3人可以到14级高阶督军,所以基本都是让已经到13级督军的朋友拿1-3名,然后按照目前的军衔来分配小队里其他人的排名.这样就为了大家都能用最短时间毕业.</p>
+
+<p>就这样我跟这个队伍混到了11级,认识了很多朋友,轻舞,心之全泪,天地有雪,正义与邪恶等&#8230;.
+11级的时候已经8月初了,因为一直游戏,感觉对不起老婆(陪老婆时间太少).我最终选择了离开.</p>
+
+<p>一直到1.12跨服战场开放,我才回来.
+这次回来还是打算冲高督,但是跨服后60级战场基本都是真打了,我没有了固定队伍,就一个人很难冲上去.而50-59的这个阶段还是在刷.于是我选择了放弃梦之盗帅这个角色,用我的50法师,梦之亡魂刷
+跨服战场的开放,让一个人排队刷战场成为可能.</p>
+
+<p>开始的时候,我用BFA插件配合我自己用VC写的一个小程序刷战场,基本是每个星期哪里双倍荣誉,我就刷哪里.就一个人排队.这样效率很高,</p>
 
 <ul>
-<li>CPU 4核处理器 2颗</li>
-<li>内存 4G 硬盘 147G*3</li>
+<li>第1周,拿了36W荣誉(没有24小时刷),从侦察兵一下升了4级.而且ALX毕业了</li>
+<li>第2周也差不多,升到了6级.因为ALX毕业了,一旦荣誉到30W,我就去挂大战场.在这个星期我大战场也毕业了</li>
+<li>第3周,荣誉到30W我就去挂战歌,这个星期我升到了7级(开始可以买勇士装备了)</li>
+<li>第4周.我顺利的升级到了8级</li>
+<li>第5周,倒霉的星期.9C开始封BFA,并开通了举报系统.我被停封了3小时.不过还是升到了9级.但我开始不太敢挂了</li>
+<li>第6周,BFA是不敢用了.我开始开发自己的插件了.</li>
 </ul>
 
 
-<p>安装很顺利，采用server模式，去掉了不用的软件，加入虚拟化。</p>
+<p>原来配合BFA的小程序,用VC写的,模拟的都是键盘,这样可以把界面隐藏到后台,这要发送按键消息,就能正常刷战场.
+现在BFA不能用了,为了不让其他人举报,我从写了那个小程序,通过对屏幕上颜色的判断来获取人物状态和是否进入战场,来采取不同的行为.我可以在3个主城的战场军官那里挂.这样可以很大程度的避免被玩家举报.就这样,我顺利的到了10级(终于勇士了)</p>
 
-<p>安装后启动，占用内存在230M左右，感觉比CentOS 4.7高了很多呀。。。我在一台HP 140的1U服务器安装的CentOS 4.7 启动后，只占用29M内存。</p>
+<ul>
+<li>第7周,我再次被玩家举报,因为我荣誉高,其他玩家总会想办法让我停下来.不过正好我在屏幕前看着,回答了GM的问话,逃过了这次.这个星期顺利到11级(买下了全部的中将坐骑)</li>
+<li>第8周,因为要准备冲14级高督,目前这样挂着,荣誉肯定不够,而且还怕被玩家举报,而我每天要上班,不可能一直人都看着.我又开始想办法了.我开始学习LUA语言,以寻求解决的办法.要是没有这段时间的努力,我不可能后面冲到高督.我居然写了一个可以自动回答GM问题的插件,而且在不知道如何回答的时候,就随面应付一句,然后下线(这样就安全多了.哈哈).所有玩家和我的对话还有GM的问题也多被记录下来.我每天下班,只要看一眼就可以了.这个星期因为一直写回答问题的插件,荣誉少了点,最终11级96%</li>
+<li>第9周,新的问题来了,家里的网络开始不稳定了,总是掉线.而我对这个问题没有任何办法&#8230;.最后这个星期我之排名第7升级到了12级53%</li>
+<li>第10周,我再次改写了我的程序,让程序判断是否掉线了,一旦掉线,就发出提示声音.这样就可以在最短时间发现掉线了.这个星期顺利到了13级</li>
+<li>第11周.因为插件已经开始正常工作了,而且完美的回答了几次问题.让我可以放心的24小时挂了.这个星期我冲了135w荣誉</li>
+<li>第12周,稳定的挂了一个排名第一,同时战歌毕业了</li>
+<li>第13周,排名第2,13级94%</li>
+<li>第14周,排名第一,终于14级毕业了</li>
+</ul>
 
-<p>内存占用问题，还需要看看具体是什么原因。</p>
 
-<p>测试下性能，我比较喜欢用unixbench测试。</p>
+<p>这次刷高督,一直停留在59级.直到高督毕业,才升的60级.一共用了14周时间.哈哈
+期间学习了VC和LUA语言,感觉收获比较大.不过就算我这样一直用程序刷,感觉还是比较累的.要是真打,我肯定不能到14级.</p>
 
-<p><a href="http://www.hermit.org/Linux/Benchmarking/">http://www.hermit.org/Linux/Benchmarking/</a></p>
+<p><img src="http://farm9.staticflickr.com/8227/8510231110_d95612e0fd_z.jpg" alt="高督法师" />
+现在工作比较忙,很少玩了.所以写下这篇文章留作纪念</p>
+</div>
+  
+  
 
-<p>我这次下载的5.0版本，因为5.1以后支持2D,3D我没有装X11，运行不了。</p>
 
-<p>结果5.0也是运行了一半就出问题了。奇怪呀。</p>
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/install-xen-shell/">安装和使用xen-shell</a></h1>
+    
+    
+      <p class="meta">
+        
 
-<p>我的一台CentOS 4.4 装在一个双核 Intel(R) Xeon(TM) CPU 2.66GHz，1G内存的机器上。用4.1.0-wht测试，得分只有145.不过是跑着java、tomcat、apache、mysql和vmserver的时候测试的。内存使用400M左右的时候。</p>
 
-<p>我看到网上很多128M的VPS居然也可以得到160多分，真是奇怪呀。而我这台双4核处理器xeon e7320,4G内存，装CentOS的机器，也只有下面的数据</p>
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>转自：<a href="http://www.xen-tools.org/software/xen-shell/install.html">http://www.xen-tools.org/software/xen-shell/install.html</a></p>
+
+<p>Installing &amp; using the Xen-Shell</p>
+
+<p>This shell makes several assumptions in the way that it operates:</p>
+
+<ul>
+<li>That you have a Xen 3.x host running.</li>
+<li>Then Xen host has several guests running.</li>
+<li>That you don&#8217;t wish to give your users shell access on the host.</li>
+</ul>
+
+
+<p>If these assumptions are not valid for your environment then you might find that you have problems.</p>
+
+<p><strong>Installation</strong></p>
+
+<p>Download either <a href="http://www.xen-tools.org/releases.html">a release</a>, or a current version of <a href="http://www.xen-tools.org/cvs.html">the CVS repository</a> and install it by executing:</p>
+
+<p><code>make install</code></p>
+
+<p><strong>Configuring Users</strong></p>
+
+<p>Each user is expected to login directly to the xen-shell, and not have any other access to the host system. To do this change their login shell by running:</p>
+
+<p><code>chsh -s /usr/local/bin/xen-login-shell username</code></p>
+
+<p>This will ensure when they connect to the system they will login to the shell, and run it within GNU Screen.</p>
+
+<p><strong>Note:</strong>CVS and Debian binary packages use /usr/bin instead of /usr/local/.
+Once you&#8217;ve changed the shell for the user you must update your Xen configuration files so that they include the username(s) of the users who can control them.
+To allow the user &#8220;bob&#8221; and the user &#8220;steve&#8221; to control the Xen guest &#8220;builder.my.flat&#8221; you would add the following to /etc/xen/builder.my.flat.cfg:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># All instances must have a name name = 'builder.my.flat'     
+</span><span class='line'># These users may control this instance. xen_shell = 'bob, steve' </span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Bandwidth Accounting</strong></p>
+
+<p>The shell allows the user to view the bandwidth they have transferred over a given period, using the bandwidth command.
+For this to work the vnstat tool must be installed and configured upon dom0. It is assumed that each Xen guest will have their network interface named the same as the guest name.
+For example a Xen guest called &#8216;skx&#8217; will have a network interface &#8216;skx&#8217; upon dom0. If you&#8217;re using the standard Xen configuration setup you can achieve this by changing your skx.cfg file to read:</p>
+
+<p><code>vif = [ 'vifname=skx,ip=1.2.3.4' ]</code></p>
+
+<p><strong>Note:</strong> if you have more than one IP address allocated to a guest you will have to create a more complicated setup.</p>
+
+<p><strong>Security</strong></p>
+
+<p>Since the xen administrator command xm requires root privileges to run you will need to configure sudo to allow the users who are running your shell to execute that command, without being prompted for a password, as root.
+Add something similar to the following to your /etc/sudoers file:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>User_Alias   XENUSERS = steve,bob,fred,foo 
+</span><span class='line'>Cmnd_Alias   XEN      = /usr/sbin/xm 
+</span><span class='line'>Cmnd_Alias   XENIMG   = /usr/bin/xen-create-image 
+</span><span class='line'>XENUSERS     ALL      = NOPASSWD: XEN,XENIMG </span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Note:</strong>you only need to grant the ability to run xen-create-image if you wish to enable reimaging support in the shell.</p>
+
+<p><strong>DNS Updates</strong></p>
+
+<p>When the shell starts it will look for the file ips.txt in the home directory of the user who connects. If that file doesn&#8217;t exist then the rdns command will be disabled.</p>
+
+<p>If you wish to allow users to control their reverse DNS create that file and give it contents such as these:</p>
+
+<p><code>192.168.1.1 foo.my.domain 192.168.1.2 bar.my.domain</code></p>
+
+<p>This file will be updated by the user when they invoke the rdns command. It is up to you to read the files and create the corresponding zonefiles / DNS updates. The shell will only manipulate the file - not push DNS updates itself.</p>
+
+<p><strong>Reimaging Support</strong></p>
+
+<p>If a user connects to the shell and has the executable file image.sh in their home directory the reimage command will be enabled.
+When the user invokes the command the image.sh script is executed after prompting for confirmation, and performing a last-chance count-down.
+It is up to you to create and configure this script to do the right thing. A sample file for user bob could look like this:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -355,122 +563,17 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@moodle unixbench-4.1.0-wht-2]# ./Run
-</span><span class='line'>make all
-</span><span class='line'>make[1]: Entering directory `/root/unixbench-4.1.0-wht-2'
-</span><span class='line'>Checking distribution of files
-</span><span class='line'>./pgms exists
-</span><span class='line'>./src exists
-</span><span class='line'>./testdir exists
-</span><span class='line'>./tmp exists
-</span><span class='line'>./results exists
-</span><span class='line'>make[1]: Leaving directory `/root/unixbench-4.1.0-wht-2'
-</span><span class='line'>   #    # #    # # #    #          #####   ###### #    #   ####   #    #&lt;br&gt;
-</span><span class='line'>   #    # ##   # #   # #           #    # #       ##   # #    # #    #&lt;br&gt;
-</span><span class='line'>   #    # # # # #    ##            #####   #####   # # # #       ######&lt;br&gt;
-</span><span class='line'>   #    # # # # #    ##            #    # #       # # # #       #    #&lt;br&gt;
-</span><span class='line'>   #    # #   ## #   # #           #    # #       #   ## #    # #    #&lt;br&gt;
-</span><span class='line'>    ####   #    # # #    #          #####   ###### #    #   ####   #    #
-</span><span class='line'>                 4        1           Based on the Byte Magazine Unix Benchmark
-</span><span class='line'>                44       11
-</span><span class='line'>   v   v       4 4        1
-</span><span class='line'>    v v       44444       1           v4.1 revisions mostly by David C. Niemi,
-</span><span class='line'>     v           4   o   111 - WHT.2 Reston, VA, USA niemi@tux.org
-</span><span class='line'>WHT Variant by Andy A. Lee andylee@dslextreme.com
-</span><span class='line'>See: http://www.webhostingtalk.com/showthread.php?s=&threadid=308055
-</span><span class='line'>
-</span><span class='line'>Dhrystone 2 using register variables 1 2
-</span><span class='line'>Double-Precision Whetstone 1 2
-</span><span class='line'>Execl Throughput 1
-</span><span class='line'>Filesystem Throughput 1024 bufsize 2000 maxblocks 1
-</span><span class='line'>Filesystem Throughput 256 bufsize 500 maxblocks 1
-</span><span class='line'>Filesystem Throughput 4096 bufsize 8000 maxblocks 1
-</span><span class='line'>Pipe Throughput 1 2
-</span><span class='line'>Pipe-based Context Switching 1 2
-</span><span class='line'>Process Creation 1
-</span><span class='line'>System Call Overhead 1 2
-</span><span class='line'>Shell Scripts (8 concurrent) 1
-</span><span class='line'>==============================================================
-</span><span class='line'>BYTE UNIX Benchmarks (Version 4.1-wht.2)
-</span><span class='line'>System -- Linux moodle.ict 2.6.18-128.el5xen #1 SMP Wed Jan 21 11:12:42 EST 2009 x86_64 x86_64 x86_64 GNU/Linux
-</span><span class='line'>                     271677672   3293760 254360848   2% /
-</span><span class='line'>Start Benchmark Run: Tue Jun 30 06:43:06 CST 2009
-</span><span class='line'>06:43:06 up 7:53, 1 user, load average: 0.19, 0.76, 0.81
-</span><span class='line'>End Benchmark Run: Tue Jun 30 06:53:17 CST 2009
-</span><span class='line'>06:53:17 up 8:03, 1 user, load average: 15.43, 6.42, 3.16
-</span><span class='line'>
-</span><span class='line'>                     INDEX VALUES
-</span><span class='line'>TEST                                        BASELINE     RESULT      INDEX
-</span><span class='line'>Dhrystone 2 using register variables        376783.7 19031818.6      505.1
-</span><span class='line'>Double-Precision Whetstone                      83.1     1448.6      174.3
-</span><span class='line'>Execl Throughput                               188.3     1593.9       84.6
-</span><span class='line'>File Copy 1024 bufsize 2000 maxblocks         2672.0   118911.0      445.0
-</span><span class='line'>File Copy 256 bufsize 500 maxblocks           1077.0    42442.0      394.1
-</span><span class='line'>File Read 4096 bufsize 8000 maxblocks        15382.0   946428.0      615.3
-</span><span class='line'>Pipe-based Context Switching                 15448.6   253316.5      164.0
-</span><span class='line'>Pipe Throughput                             111814.6 1223105.0      109.4
-</span><span class='line'>Process Creation                               569.3     3279.0       57.6
-</span><span class='line'>Shell Scripts (8 concurrent)                    44.8      508.7      113.5
-</span><span class='line'>System Call Overhead                        114433.5   907496.2       79.3
-</span><span class='line'>                                                                 =========
-</span><span class='line'>     FINAL SCORE                                                     182.5</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/sh /usr/bin/xen-create-image --hostname=bob \  
+</span><span class='line'>--ip=192.168.1.1  \  
+</span><span class='line'>--ip=192.168.1.2 \  
+</span><span class='line'>--size=9.5G \  
+</span><span class='line'>--swap=512M  --mem=256M \  
+</span><span class='line'>--force </span></code></pre></td></tr></table></div></figure>
 
 
-<p>总分 182.5 真不知都那些VPS测试出 400分的，是什么情况。
-难道是可以针对unixbench优化？</p>
+<p>This will require a correctly configured instance of <a href="http://www.xen-tools.org/software/xen-tools/">xen-tools</a> and the sudoer file to contain the ability for the user to run xen-create-image.</p>
+
+<p>Any remaining questions? <a href="http://www.xen-tools.org/contact/">contact the author</a></p>
 </div>
   
   
@@ -483,7 +586,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/19/startup-xinlogs/">我的网站开通了，www.xinlogs.com.</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/12/21/howto-mount-xen-img/">怎么mount一个xen的img映像。转载</a></h1>
     
     
       <p class="meta">
@@ -499,169 +602,34 @@
   
 
 
-<time datetime="2009-12-19T00:00:00+08:00" pubdate data-updated="true">Dec 19<span>th</span>, 2009</time>
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>以前一直在断断续续的写Blog，开始放在百度的空间。网址http://hi.baidu.com/babodx</p>
+  <div class="entry-content"><ul>
+<li>First you need to find out the partitions and the startsector of partitions:</li>
+</ul>
 
-<p>后来在09年7月，觉得<a href="http://hi.baidu.com/babodx">http://hi.baidu.com/babodx</a>空间的功能太少了，就搬家到了<a href="http://babodx.spaces.live.com">ttp://babodx.spaces.live.com</a>并且注册了xinlogs.com域名。后来就一直关注VPS空间，觉得这个很好，相当于自己有了一台虚拟的服务器，完全可以自己在上面配置各种服务。</p>
-
-<p>于是在2009年12月18日，我终于决定购买了rashost.com的1款128M内存的VPS，位置在美国的洛杉矶机房。</p>
-
-<p>价格还算便宜1个月68元。rashost的有点就是不限制流量，而且CPU采用intel至强的。速度也不错</p>
-
-<p>我选择了CentOS 5.3系统</p>
-
-<p><strong>CPU信息</strong></p>
-
-<p>model name      : Intel(R) Xeon(R) CPU           X3220  @ 2.40GHz</p>
-
-<p><strong>内存信息</strong></p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>             total       used       free     shared    buffers     cached
-</span><span class='line'>Mem:           128        119          8          0          9         67
-</span><span class='line'>-/+ buffers/cache:         42         86
-</span><span class='line'>Swap:          255          0        255</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@xen rruban]# file rheltest.img rheltest.img: x86 boot sector, GRand Unified Bootloader (0.94); 
+</span><span class='line'>partition 
+</span><span class='line'>1: ID=0x83, active, starthead 1, startsector 63, 208782 sectors; partition 
+</span><span class='line'>2: ID=0x8e, starthead 0, startsector 208845, 3871665 sectors, code offset 0x48</span></code></pre></td></tr></table></div></figure>
 
 
-<p>我的网站采用Nginx+PHP+MySQL+Bo-Blog架设，参考了<a href="www.s135.com">http://www.s135.com/</a>上的优化方法。</p>
-
-<p>后面剩下的工作就是如何将以前blog的文章搬家够来了。。。估计够折腾一阵子的。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/19/Centos-Virtualization/">CentOS虚拟化服务的配置</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-19T00:00:00+08:00" pubdate data-updated="true">Dec 19<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>单位到了一台sun的x4450服务器，打算开学前部署好虚拟化服务，给每位带学生实训的老师一台虚拟的windows 2003 Server. 大约需要20台虚拟服务器</p>
-
-<h2>服务器介绍</h2>
-
-<p><img src="http://farm9.staticflickr.com/8390/8509308054_d3488a134d_z.jpg" alt="Sun Fire X4450 Server" /></p>
+<p>There are 3 partitions inside the image file. The startsector of each partition is also listed. Boot partition will have start sector 63.</p>
 
 <ul>
-<li>硬件配置：</li>
-<li>CPU: 4颗 Intel(R) Xeon(R) CPU           X7460  @ 2.66GHz   (每颗6核心，供24核心)</li>
-<li>内存: 64G</li>
-<li>硬盘: 8块 Vendor: HITACHI   Model: H101414SCSUN146G  Rev: SA25</li>
+<li>Now you need to get the sector size:</li>
 </ul>
 
-
-<h2>虚拟方案</h2>
-
-<p>用CentOS 5.3 64bit 作为DOM0，来管理整个虚拟化服务。然后采用hvm方式虚拟20台Windows server 2003。</p>
-
-<h2>虚拟服务器配置：</h2>
-
-<ul>
-<li>CPU：1颗</li>
-<li>内存：1G</li>
-<li>硬盘：30G</li>
-</ul>
-
-
-<p>整体结构如下</p>
-
-<p><img src="http://farm9.staticflickr.com/8243/8508488101_df918b53e0.jpg" alt="虚拟化整体结构" /></p>
-
-<p>在SunFire X4450的硬件上，安装Xen虚拟化服务。所有硬件由Xen内核管理，我们的CentOS 5.3 64bit操作系统跑在Xen内核上面，负责管理以后创建的DOM1到DOMN的多个虚拟服务器。</p>
-
-<h2>虚拟化服务的安装</h2>
-
-<p>这个就不具体写了，可以参考我前面的blog或者http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2</p>
-
-<p>如果不安装图形界面，在用virt-install安装windows操作系统的时候，需要VNC服务。这样可以远程通过VNC客户端连接来安装，因为ssh的方式没有图形界面。
-如果安装了图形界面的CentOS，就很容易了。直接用图形界面的虚拟机管理程序安装即可。</p>
-
-<h2>GUESTOS的配置</h2>
-
-<p>由于每台虚拟服务器安装后，并没有开启远程服务，所以我们还是需要通过VNC连接登入虚拟服务器。在配置好IP和远程服务后，就可以使用远程桌面登陆了。
-在每台虚拟服务器的配置文件里，加入如下语句</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vnc = 2
-</span><span class='line'>vncunused = 2
-</span><span class='line'>vnclisten = "10.10.15.151"
-</span><span class='line'>vncpasswd = "password" </span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>注意：</strong> password为登陆vnc的密码，根据实际情况设置。vnclisten设置的是主机CentOS的IP</p>
-
-<p><strong>突破8台虚拟服务器的限制</strong></p>
-
-<p>默认安装后，CentOS的max_loop最大值是8，这样我们默认只能启动8个虚拟服务器（不过半虚拟的linux好像不受这个影响）
-我们需要修改这个参数</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>rmmod loop 
-</span><span class='line'>echo "options loop max_loop=64"&gt;/etc/modprobe.d/loop 
-</span><span class='line'>modprobe loop </span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样就可以了。</p>
-
-<h2>配置网络</h2>
-
-<p>我的服务器是有4块网卡 eth0、eth1、eth2、eth3</p>
-
-<p>我打算eth0 采用10.10.15.151 ip地址，其他网卡不设置IP地址并且将/etc/sysconfig/network-scripts/下对应的脚本文件修改如下</p>
-
-<p><code>ONBOOT=no</code></p>
-
-<p>这样可以让系统启动后，就eth0可以用来访问。其他网卡都没有对应ip地址</p>
-
-<p>其他网卡的作用是留给虚拟服务器用的。我们通过修改xen的配置文件，让eth0到eth1绑定到xenbr0到xenbr3上面。然后20台服务器，10台通过xenbr1访问网络，10台通过xenbr2访问
-在rc.local文件里，添加</p>
-
-<p><code>/etc/xen/scripts/new-bridge start</code></p>
-
-<p>new-bridge是我们自己写的脚本文件，为了创建xenbr0到xenbr3。xen系统默认就创建一个xenbr0</p>
-
-<p>new-bridge文件内容如下</p>
-
-<p><code>vi /etc/xen/scripts/new-bridge</code></p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -669,419 +637,30 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/sh
-</span><span class='line'># Exit if anything goes wrong.
-</span><span class='line'>set -e 
-</span><span class='line'># First arg is the operation.
-</span><span class='line'>OP=$1
-</span><span class='line'>shift 
-</span><span class='line'>script=/etc/xen/scripts/network-bridge.xen 
-</span><span class='line'>case ${OP} in
-</span><span class='line'>start)
-</span><span class='line'>          $script start vifnum=0 bridge=xenbr0 netdev=eth0
-</span><span class='line'>          $script start vifnum=1 bridge=xenbr1 netdev=eth1
-</span><span class='line'>          $script start vifnum=2 bridge=xenbr2 netdev=eth2
-</span><span class='line'>          $script start vifnum=3 bridge=xenbr3 netdev=eth3
-</span><span class='line'>#         $script start vifnum=2 bridge=xenbri netdev=dummy0
-</span><span class='line'>          ;; 
-</span><span class='line'>stop)
-</span><span class='line'>          $script stop vifnum=0 bridge=xenbr0 netdev=eth0
-</span><span class='line'>          $script stop vifnum=1 bridge=xenbr1 netdev=eth1
-</span><span class='line'>          $script stop vifnum=2 bridge=xenbr2 netdev=eth2
-</span><span class='line'>          $script stop vifnum=3 bridge=xenbr3 netdev=eth3
-</span><span class='line'>#         $script stop vifnum=2 bridge=xenbri netdev=dummy0
-</span><span class='line'>          ;; 
-</span><span class='line'>status)
-</span><span class='line'>          $script status vifnum=0 bridge=xenbr0 netdev=eth0
-</span><span class='line'>          $script status vifnum=1 bridge=xenbr1 netdev=eth1
-</span><span class='line'>          $script status vifnum=2 bridge=xenbr2 netdev=eth2
-</span><span class='line'>          $script status vifnum=3 bridge=xenbr3 netdev=eth3
-</span><span class='line'>#         $script status vifnum=2 bridge=xenbri netdev=dummy0
-</span><span class='line'>         ;; 
-</span><span class='line'>*)
-</span><span class='line'>          echo 'Unknown command: ' ${OP}
-</span><span class='line'>          echo 'Valid commands are: start, stop, status'
-</span><span class='line'>          exit 1
-</span><span class='line'>esac</span></code></pre></td></tr></table></div></figure>
-
-
-<p>安装xen-shell，让用户自己管理自己的虚拟服务器</p>
-
-<p>具体安装步骤就不写了，参考我前面的文章吧</p>
-
-<h2>安装和使用xen-shell</h2>
-
-<p>或者</p>
-
-<p>http://www.xen-tools.org/software/xen-shell/install.html</p>
-
-<p><strong>注意</strong>
-安装这个，需要screen这个软件，可以通过yum install screen安装</p>
-
-<p>再有就是需要/etc/xen/下面的虚拟机配置文件有对应的权限</p>
-
-<p>安装后，用root用户，直接输入xen-shell看看能不能进入，如果报错，根据提示修改。</p>
-
-<p>全部安装完成后，让我们看看20台虚拟服务器跑起来的效果</p>
-
-<p><img src="http://farm9.staticflickr.com/8531/8509667010_2b76c157b2_z.jpg" alt="xen效果图" />
-<img src="http://farm9.staticflickr.com/8088/8508563965_7d284d04c4.jpg" alt="xen效果图" />
-再来看看网络的使用情况</p>
-
-<p><img src="http://farm9.staticflickr.com/8111/8509671352_bd087337dd.jpg" alt="网络使用情况" /></p>
-
-<p>通过上面的brctl show可以清楚的看到，虚拟服务器的网卡，都放到了xenbr1和xenbr2下面了。</p>
-
-<p>再来看看vnc登陆的界面，注意VNC登陆后，不能直接用键盘的Ctrl+Alt+Del登陆，我们可以通过右键点窗口来选择Send Ctrl+Alt+Del来实现发送这三个按键消息。</p>
-
-<p><img src="http://farm9.staticflickr.com/8513/8508569279_fab2c10e80_z.jpg" alt="windows图片" /></p>
-
-<p>配置好虚拟服务器的IP和远程桌面后，我们就可以采用远程桌面连接了。</p>
-
-<p>用户自己管理自己的服务器</p>
-
-<p>其实有了远程桌面，用户就可以通过这个登陆服务器，重启和修改配置了。但是如果关机以后，就没有办法开机了。</p>
-
-<p>我们安装xen-shell就能实现用户自己通过用户名和密码登陆命令行格式的界面来启动服务器。</p>
-
-<p>首先我们要给我们每台虚拟服务器建立一个CentOS系统上的用户，让后按照Xen-shell的要求配置，这个不具体介绍了，参考</p>
-
-<p>安装和使用xen-shell</p>
-
-<p>或者</p>
-
-<p>http://www.xen-tools.org/software/xen-shell/install.html</p>
-
-<p>后用户就可以通过putty登陆到自己的虚拟服务器管理命令行了。</p>
-
-<p>xen-shell可以让用户自己启动、重启、关闭虚拟服务器，还可以查看虚拟服务器的状态、运行时间等。
-如果在用户对应目录下编写好image.sh文件，还可以让用户自己rebuild操作系统。
-有了这个，基本管理员告诉用户他的xen-shell用户，虚拟服务器的ip就ok了。其他的用户自己都可以管理了。</p>
-
-<h2>其他问题</h2>
-
-<p>如何让guestos随主系统自动启动，这个可以参考xen文档。</p>
-
-<p>如何克隆guestos系统，这个可以参考virt-clone</p>
-
-<p>如何安装多个linxu guest系统，这个可以参考获取XEN guestOS的images文件</p>
-
-<p>整个安装断断续续弄了大约2周，目前总算ok了。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/08/02/tearcopy/">Windows下的拷贝利器teracopy</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-08-02T00:00:00+08:00" pubdate data-updated="true">Aug 2<span>nd</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>周四晚上的时候，300G的硬盘在Ghost的时候，分区表损坏，导致数据全丢失了。</p>
-
-<p>这两天在不停的拷贝数据，导文件。</p>
-
-<p>发现windows自带的资源管理器拷贝文件的速度和稳定性都不是很好。</p>
-
-<p>于是找到了一款很不错的小软件tearcopy</p>
-
-<p><strong>网站</strong>
-<a href="http://www.codesector.com/teracopy.php">http://www.codesector.com/teracopy.php</a></p>
-
-<p>文件很小，大约1.5M</p>
-
-<p>拷贝速度很快，我从usb设备拷贝，速度大约23M每秒。&lt;</p>
-
-<p>建议拷贝多个文件或者大文件，都安装这个小软件。</p>
-
-<p>下面是具体说明，我就不翻译，大家自己看看吧。很牛，还支持win7</p>
-
-<p>TeraCopy is a compact program designed to copy and move files at the maximum possible speed, providing the user a lot of features: <ul>
-<li>
-<strong>Copy files faster.</strong> TeraCopy uses dynamically adjusted buffers to reduce seek times. Asynchronous copy speeds up file transfer between two physical hard drives. </li>
-<li>
-<strong>Pause and resume file transfers.</strong> Pause copy process at any time to free up system resources and continue with a single click. </li>
-<li>
-<strong>Error recovery.</strong> In case of copy error, TeraCopy will try several times and in the worse case just skips the file, not terminating the entire transfer. </li>
-<li>
-<strong>Interactive file list.</strong> TeraCopy shows failed file transfers and lets you fix the problem and recopy only problem files. </li>
-<li>
-<strong>Shell integration.</strong> TeraCopy can completely replace Explorer copy and move functions, allowing you work with files as usual. </li>
-<li>
-<strong>Full Unicode support.</strong> </li>
-<li>
-<strong>Windows 7 x64 support.</strong> </li>
-</ul>
-</div></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/07/17/blog-migrate-to-spaces-live/">从百度空间转移到spaces Live</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-07-17T00:00:00+08:00" pubdate data-updated="true">Jul 17<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>本来打算购买一个在美国的VPS，来自己架设个blog程序用的，但是老婆说我太糟蹋钱了，不让玩。</p>
-
-<p>只好选择live spaces的25G免费空间了。为了这次转移，我写了一个小程序帮忙。</p>
-
-<p>现在已经把原来<a href="http://hi.baidu.com/babodx">http://hi.baidu.com/babodx</a>的博客内容全部搬到了<a href="http://babodx.spaces.live.com">http://babodx.spaces.live.com/</a></p>
-
-<p>而且还申请了一个域名玩，可以直接通过<a href="www.xinlogs.com">http://www.xinlogs.com/</a>访问</p>
-
-<p>这次域名是在<a href="www.namecheap.com">http://www.namecheap.com/</a>直接用美元买的，据说这样比较保险。</p>
-
-<p>国内的域名服务商信誉很差。</p>
-
-<p><strong>转移步骤</strong></p>
-
-<p>我的想法是先用一个程序把百度空间上，我的博客全部保存到本地。然后在用个程序把保存下来的内容发送到spaces live上，就完成了转移。</p>
-
-<p>一、将百度空间的博客保存到本地</p>
-
-<p>首先用程序抓取百度空间的博客内容这个程序并不完全是我自己写的，我参考了很多人的文章和程序。参考如下</p>
-
-<p><a href="http://www.agileprogrammer.com/dotnetguy/articles/BlogImporterInRuby.aspx">Blog Importer in Ruby</a></p>
-
-<p><a href="http://crafterm.net/blog/articles/2006/09/22/blog-content-migration-from-movabletype-to-typo-using-xml-rpc">Blog content migration from MovableType to Typo using XML-RPC</a></p>
-
-<p><a href="http://cxc200026.blog.163.com/blog/static/342686720092895235567/">lsblog改进版本</a></p>
-
-<p>根据前人的经验，我写了一个程序，根据用户名抓取百度空间的博客，然后保存为用户名.xml文件文件格式如下</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;baidu_space total="70" id="babodx" pagecnt="7"&gt;
-</span><span class='line'>
-</span><span class='line'> &lt;page blogcnt="10" index="0"&gt;
-</span><span class='line'>
-</span><span class='line'>   &lt;item href="http://hi.baidu.com/babodx/blog/item/fb1ebcb14ea2075d08230218.html"&gt;
-</span><span class='line'>
-</span><span class='line'>     &lt;date&gt;2009-07-12 00:23&lt;/date&gt;
-</span><span class='line'>
-</span><span class='line'>     &lt;title&gt;ubuntu server 9.04 终端乱码问题&lt;/title&gt;
-</span><span class='line'>
-</span><span class='line'>     &lt;category&gt;Linux&lt;/category&gt;
-</span><span class='line'>
-</span><span class='line'>     &lt;body&gt;&lt;p&gt;安装了ubuntu server 9.04，安装的时候选择了中文环境。&lt;/p&gt; &lt;p&gt;因为server是没有桌面的，发现终端里面显示提示信息，出错信息都变成乱码了。&lt;/p&gt; &lt;p&gt;解决办法&lt;/p&gt; &lt;p&gt;修改/etc/default/locale文件&lt;/p&gt; &lt;p&gt;将zh_CN修改为en_US&lt;/p&gt;&lt;/body&gt;
-</span><span class='line'>
-</span><span class='line'>    &lt;/item&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>用ｉｔｅｍ标签来包含每个博客，用date,title,category,body分别代表发表时间、标题、分类、内容。</p>
-
-<p>RUBY代码主要参考了lsblog的改进版。</p>
-
-<p><a href="http://cid-4986f8f322cc617b.skydrive.live.com/self.aspx/.Public/saveblog.rb">savelog.rb</a></p>
-
-<p>只要提供用户名，就可以将全部博客保存为ｘｍｌ文件</p>
-
-<p>二、将本地保存的xml文件，上传到spaces live空间</p>
-
-<p>这里遇到很多麻烦，以至最终这部分没有能用程序实现。</p>
-
-<p>我的想法是用ruby调用metaweblog api接口来发送blog到spaces live空间</p>
-
-<p>可以参考</p>
-
-<p><a href="http://msdn.microsoft.com/en-us/library/bb259702.aspx">Windows Live Spaces MetaWeblog API</a></p>
-
-<p>后来发送简单的文本已经可以实现了。但是问题出在对ｂｏｄｙ的处理，从百度空间抓过来的ｂｏｄｙ是ｈｔｍｌ代码，里面包含了文章和图片的引用。</p>
-
-<p>如果直接用ＭｅｔａＷｅｂｌｏｇ　ＡＰＩ发送，这些ｈｔｍｌ就直接显示在ｂｌｏｇ上面了，而不是应该有的格式。</p>
-
-<p>我查看了一些文档，也没有找到解决办法，因而只要放弃了。</p>
-
-<p>后来是手动通过live writer把本地的blog.xml发送到live spaces空间的。那个累呀。。。。</p>
-
-<p><strong>待解决问题</strong></p>
-
-<p>一是如何让程序自动发送html格式的blog内容到live spaces空间。</p>
-
-<p>二是如何处理博客里面的图片，原来图片都是放在百度空间的，如果在live spaces引用，会出现错误。</p>
-
-<p>ruby可以直接从百度抓图片，问题还是如何上传到live spaces</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/12/14/vista-wireless-problem/">Vista 不能自动发现无线网络的问题解决方法</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-12-14T00:00:00+08:00" pubdate data-updated="true">Dec 14<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>vista 查询无线网路需要设置成和无线路由器匹配的无线标准。否则会不能自己发现无线设备。</p>
-
-<p>具体办法如下，从intel.com找来的在 Windows Vista* 上设置互联网安全无线连接参考
-<a href="http://support.intel.com/support/cn/wireless/wlan/sb/CS-025389.htm">http://support.intel.com/support/cn/wireless/wlan/sb/CS-025389.htm</a></p>
-
-<p>在 Windows Vista* 上配置无线网卡设置</p>
-
-<p>Windows Vista* 提供多种访问高级网卡设置的方法。</p>
-
-<p>开始 » 控制面板 » 系统与维护 » 系统 » 设备管理器 » 展开右窗格中的网络适配器 » 高亮显示并右键单击无线网卡 » 属性 »“高级”选项卡</p>
-
-<p>右键单击桌面上的“我的电脑”图标 » 单击“管理”» 高亮显示“设备管理器”» 展开右窗格中的网络适配器”» 高亮显示并右键单击无线网卡 » 属性 »“高级”选项卡</p>
-
-<p>开始 » 控制面板 » 网络与互联网 » 网络与共享中心 » 管理无线网络 » 适配器属性 » 配置 »“高级”选项卡</p>
-
-<p>开始 » 网络 » 网络与共享中心 » 管理无线网络 » 适配器属性 » 配置 »“高级”选项卡</p>
-
-<p>右键单击“系统托盘”图标（屏幕右下角的 2 个计算机显示器图像）» 网络与共享中心 » 管理无线网络 » 适配器属性 » 配置 »“高级”选项卡</p>
-
-<p>802.11n 信道宽度：缺省值是自动（20 或 40 MHz，根据网卡连接的是无线接入点（AP）还是路由器而定）。 用户也可以将其更改为“仅 20 MHz”。 注： 仅英特尔® 无线 WiFi 链接 4965AGN 提供此功能。</p>
-
-<p>802.11n 模式： 启用缺省值。 如果选择“禁用”将仅使用数据传输速率很低的 802.11b/g。 如果用户知道周围没有 802.11n 接入点或路由器，则可以禁用此模式。 注： 仅英特尔® 无线 WiFi 链接 4965AGN 提供此功能。</p>
-
-<p>Ad Hoc 信道 802.11 b/g： 缺省信道是 11。可以在使用这些频率的国家配置信道 1-11。 在其它地区可配置 1-13 或 1-14。请根据适配器 SKU 进行选择。</p>
-
-<p>Ad Hoc 缺省无线模式： 缺省值是 802.11b/g。也可选择 802.11a。 Ad Hoc 网络（对等网络）是用户在不使用接入点或路由器的情况下为直接相互连接各个网络而创建的临时无线网络。</p>
-
-<p>Ad Hoc 电源管理：缺省值是“禁用”。 仅使用电池电源时，用户还可以选择“最大节能”。 如果用户位于“嘈杂的”射频环境中，要求适配器始终保持在唤醒状态，则可使用“噪音环境”。 只有连接电源插座时才能使用这种设置。</p>
-
-<p>Ad Hoc QoS 模式： 缺省值是禁用 WMM；在接入点或路由器提供支持并且计算机应用程序可实现该功能时用户才能启用它。 WMM<em>（Wi-Fi 多媒体）是根据服务质量标准 IEEE</em> 802.11e* 创建的一种方法，它按优先顺序排列各种传输类型以提高总体质量： 声音、视频、音频和数据。</p>
-
-<p>混合模式保护： 缺省值是 CTS-to-self Enabled。 备用值是 CTS/RTS Enabled。 用于在 802.11b/802.11g 混合环境中避免发生数据冲突。 CTS-to-Self 可用于在客户机相距距离较近并可相互临听的环境中提高传输量。 RTS/CTS 在客户机不能进行相互临听的区域里使用。</p>
-
-<p>漫游积极程度： 缺省值是“中等”： 不漫游和漫游之间的平衡设置。 您也可以选择“最低”、“中下”、“中上”和“最高”。 此设置允许您定义无线客户机漫游的积极程度，以提高连接接入点或路由器的能力。 最低： 您的无线客户机不会漫游到其它接入点或路由器。 只有当链接质量严重下降时，才会漫游到其它接入点。</p>
-
-<p>提高传输量：缺省值是“禁用”。 启用该值时可通过启用包突发功能提高传输量。 在相对安静的家庭或小型办公室设置中，可能最不需要启用这种功能。</p>
-
-<p>传输功率： 缺省值是“最高”。 降低传输功率后会降低无线电覆盖范围。 您也可以选择“最低”、“中下”、“中等”和“中上”。</p>
-
-<p>无线模式： 对于英特尔无线 WiFi 链接 4965AGN，缺省值是 802.11a/b/g。 是使用缺省值还是其它值取决于系统配备的适配器。 选择接入无线网络所使用的波段。 无线模式（调制类型）决定了网卡范围内可发现的接入点或路由器。</p>
-
-<p>操作系统：</p>
-
-<p>Windows Vista Starter，32 位版本、Windows Vista Home Basic，32 位版本、Windows Vista Home Premium，32 位版本、Windows Vista Business，32 位版本、Windows Vista Enterprise，32 位版本、Windows Vista Ultimate，32 位版本、Windows Vista Home Basic，64 位版本、Windows Vista Home Premium，64 位版本、Windows Vista Business，64 位版本、Windows Vista Enterprise，64 位版本、Windows Vista Ultimate，64 位版本</p>
-
-<p>适用于：</p>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@xen]fdisk -lu rheltest.img
+</span><span class='line'>Disk rheltest.img: 0 MB, 0 bytes 255 heads, 63 sectors/track, 0 cylinders, total 0 sectors 
+</span><span class='line'>Units = sectors of 1 * 512 = 512 bytes 
+</span><span class='line'>Device Boot Start End Blocks Id System 
+</span><span class='line'>rheltest.img1 * 63 208844 104391 83 Linux 
+</span><span class='line'>rheltest.img2 208845 4080509 1935832+ 8e Linux LVM </span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above shows the sector byte size is 512 byte.</p>
 
 <ul>
-<li>英特尔® PRO/无线 3945ABG 网卡</li>
-<li>英特尔® PRO/无线 2100 网卡</li>
-<li>英特尔® PRO/无线 2200BG 网卡  英特尔® PRO/无线 2915ABG 网卡</li>
-<li>英特尔® 无线 WiFi 链接 4965AGN</li>
+<li>To calculating the offset: offset = start_sector x sector_byte_size.</li>
 </ul>
+
+
+<p>The startsector is 63 for the first partition, therefore the first partition offset is: 63x512=32256</p>
+
+<ul>
+<li>Finally, to mount the xen image, use:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mount -o loop,offset=32256 test.img /foldername</span></code></pre></td></tr></table></div></figure>
 
 </div>
   
@@ -1095,7 +674,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2007/04/27/vista-slow/">Vista 太慢了，决定放弃使用她的念头了</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/12/21/howto-create-foreign-key-on-mysql/">如何建立两个表间的外键</a></h1>
     
     
       <p class="meta">
@@ -1111,14 +690,288 @@
   
 
 
-<time datetime="2007-04-27T00:00:00+08:00" pubdate data-updated="true">Apr 27<span>th</span>, 2007</time>
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>居然1G内存酷睿双核处理器使用起来还是会很慢不知道是我没有优化，或者配置的不对？还是本来就不快？总之放弃了，还是用winxp了，以后成熟些再说</p>
+  <div class="entry-content"><p>建立Mysql两个表间的外键,需要满足三个条件</p>
+
+<ol>
+<li>两个表必须是InnoDB表类型</li>
+<li>使用在外键关系的域必须为索引型(Index)</li>
+<li>使用在外键关系的域必须与数据类型相似</li>
+</ol>
+
+
+<p>下面举例说明</p>
+
+<p>我们创建一个班级表和一个学生表,并建立一个外键</p>
+
+<p>创建班级表</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE class (id INT NOT NULL AUTO_INCREMENT, classname VARCHAR(50) NOT NULL, PRIMARY KEY(id)) ENGINE=INNODB;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>插入班级数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO class VALUES (1,"一班"),(2,"二班"),(3,"三班");</span></code></pre></td></tr></table></div></figure>
+
+
+<p>创建学生表</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE students (id INT(4) NOT NULL, name VARCHAR(50) NOT NULL, FK_class INT(4) NOT NULL, INDEX (FK_class), FOREIGN KEY (FK_class) REFERENCES class (id), PRIMARY KEY(id)) ENGINE=INNODB;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>验证外键约束性,我们向students表插入一个学生数据,并让FK_class的值为一个在class表里面不存在的值.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; INSERT INTO students VALUES (1,"zhang",5);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>马上就会看到Mysql报错</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR 1452 : Cannot add or update a child row: a foreign key constraint fails (`test/students`, CONSTRAINT `students_ibfk_1` FOREIGN KEY (`FK_class`) REFERENCES `class` (`id`))</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上证明外键可以正常工作了</p>
+
+<p>在Mysql下测试了以下,不建立index,并且不指定innodb格式.
+版本</p>
+
+<p>+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-+
+| version()            |
++&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-+
+| 5.0.24a-community-nt |
++&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-+</p>
+
+<p>建立class表</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE class (id INT NOT NULL AUTO_INCREMENT, classname VARCHAR(50) NOT NULL, PRIMARY KEY(id));</span></code></pre></td></tr></table></div></figure>
+
+
+<p>建立students表</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE students (id INT(4) NOT NULL, name VARCHAR(50) NOT NULL, FK_class INT(4) NOT NULL, FOREIGN KEY (FK_class) REFERENCES class (id), PRIMARY KEY(id));</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过Navicat查看,上面语句建立的两个表,也会默认用INNODB存储,而且也在students表建立了index和外键.一切正常.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/get-xen-guestos-image/">获取XEN guestOS的images文件</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>我们可以从<a href="http://stacklet.com/">http://stacklet.com/</a>其实就是原来<a href="http://jailtime.org/">http://jailtime.org/</a>站点找我们需要的xen image文件</p>
+
+<p>在2009年的时候，jailtime.org发布了一个新闻</p>
+
+<h6>May 4th, 2009</h6>
+
+<p>The jailtime project has been relaunched with a new name and site: <a href="http://stacklet.com/">Stacklet</a>
+As part of the relaunch all of the distributions currently on jailtime have been upgraded to their latest versions. Also, all of the code for creating the images is now publically available – see <a href="http://stacklet.com/">http://stacklet.com/</a> for further details&#8230;.
+Jailtime will remain online but downloads will probably be turned off eventually as the transition to stacklet proceeds.</p>
+
+<p>所以现在就访问<a href="http://stacklet.com/">http://stacklet.com/</a>就可以了。</p>
+
+<p>包括如下系统</p>
+
+<p><li>
+<a href="http://stacklet.com/downloads/images/list/CentOS">CentOS</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/centos/5.3">5.3</a> </li>
+<li><a href="http://stacklet.com/downloads/images/centos/5.3.64bit">5.3 (64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Debian">Debian</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/debian/5.0">5.0 (Lenny)</a> </li>
+<li><a href="http://stacklet.com/downloads/images/debian/5.0.64bit">5.0 (Lenny, 64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Fedora">Fedora</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/fedora/10">10</a> </li>
+<li><a href="http://stacklet.com/downloads/images/fedora/10.64bit">10 (64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Gentoo">Gentoo</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/gentoo/2008-0">2008.0</a> </li>
+<li><a href="http://stacklet.com/downloads/images/gentoo/2008-0.64bit">2008.0 (64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Mandriva">Mandriva</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/mandriva/2009.0">2009.0</a> </li>
+<li><a href="http://stacklet.com/downloads/images/mandriva/2009.0.64bit">2009.0 (64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Slackware">Slackware</a> <ul>
+<li><a href="http://stacklet.com/node/13">12.2</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Ubuntu">Ubuntu</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/ubuntu/9.04">9.04 (Jaunty)</a> </li>
+<li><a href="http://stacklet.com/downloads/images/ubuntu/9.04.64bit">9.04 (Jaunty, 64-bit)</a></li>
+</ul>
+</li>
+</ul></li>
+<li></p>
+
+<p><strong>下面是一个站点提供的img文件的简单说明</strong>
+<strong>All files on this site are provided without guarantee or warranty. Use at your own risk.</strong>
+Each download is a bzipped tarball containing an image and cfg files:</p>
+
+<ul>
+<li>a xen guest filesystem
+</li>
+<li>sample xen configuration files to be used with <strong>xm create</strong>
+</li>
+</ul>
+
+
+<p>The naming convention of the download tarball is:
+<strong><distribution>.<distro-version>.<created-date>.img.tar.bz2</strong>.
+For example centos.5-3.x86.20090423.img.tar.bz2 contains</p>
+
+<ul>
+<li>centos.5-3.x86.img
+</li>
+<li>centos.5-3.x86.xen3.cfg
+</li>
+<li>centos.5-3.x86.xen3.pygrub.cfg（这个文件比较重要，如果用的是CentOS 5.3的虚拟化，就需要这个文件才可以启动guestOS。因为CentOS 5.3没有提供Xen-U的内核。）
+</li>
+</ul>
+
+
+<p>All of the packages installed in the image will be the latest versions available as of the created date, which is in yyyy-mm-dd format.</p>
+
+<h3>Prerequisites</h3>
+
+
+<ol>
+<li>Working installation of Xen version 3
+</li>
+<li>The xen daemon (xend) must be running
+</li>
+<li>Enough filesystem space to accomodate the uncompressed tarball (generally 1GB)
+</li>
+<li>Enough unallocated RAM to run the xen guest (generally 128MB)
+</li>
+</ol>
+
+
+<h3>Default Configuration and Networking</h3>
+
+
+<p>Each filesystem is configured to use dhcp. The *.xen.cfg also is also configured for dhcp. It is recommended that you first test the filesystem using dhcp if possible before attempting other networking parameters. Each download page has additional notes on networking that is appropriate for a particular distribution.
+The root login is root/password. It is highly recommened that you change the root password immediately.</p>
+
+<h3>Installation</h3>
+
+
+<p>You will need to uncompress the tarball to a local directory and edit the *.xen.cfg file to point to the uncompressed image and swap file.
+If all is well you will see the guest’s boot messages scrolling by.
+<strong>一些HOWTO文档</strong></p>
+
+<h3><strong>HOWTO: Filesystems</strong></h3>
+
+
+<p>In the following howto’s, <image file> should be replaced with a reference to a specific .img file.</p>
+
+<h4><strong>How do I mount an image without booting it?</strong></h4>
+
+
+<ul>
+<li>mkdir -p /mnt/loop
+</li>
+<li>mount -o loop <image file> /mnt/loop/
+</li>
+</ul>
+
+
+<h4><strong>How do I resize an image file?</strong></h4>
+
+
+<p>First, make sure that the image file is not already mounted and is not already running as a xen guest. The following commands increase an image file to 2.5GB. Backup the image before attempting this.</p>
+
+<ul>
+<li>dd if=/dev/zero of=<image file> bs=1M conv=notrunc count=1 seek=2500 
+</li>
+<li>losetup /dev/loop0 <image file>
+</li>
+<li>e2fsck -f /dev/loop0
+</li>
+<li>resize2fs /dev/loop0
+</li>
+<li>e2fsck -f /dev/loop0
+</li>
+<li>losetup -d /dev/loop0
+</li>
+</ul>
+
+
+<p>You may then boot or mount the image to confirm the increased size. The e2fsck checks in this howto are not strictly necessary.</p>
+
+<h4><strong>How do I move the contents of an img file to a regular partition?</strong></h4>
+
+
+<p>Mount the img file using the above howto. Assuming the destination partition is mounted at /mnt/dest, execute the following:</p>
+
+<ul>
+<li>cp -a /mnt/loop/* /mnt/dest/
+</li>
+</ul>
+
+
+<p>You will then be able to boot the filesystem using the partition instead of the image file, which should provide better performance. You will need to update the *.xen.cfg file to reference the partition instead of the img file (the <strong>disk</strong> parameter will need to change, see the <a href="http://www.cl.cam.ac.uk/Research/SRG/netos/xen/readmes/user/user.html">Xen Manual</a>). Also, remember to unmount partitions or img files before booting a xen guest from them!</p>
+
+<p></li></p>
 </div>
   
   
@@ -1142,17 +995,20 @@
 <h1>Categories</h1>
 <ul id="categories">
   <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
-<li class='category'><a href='/blog/categories/game/'>Game (11)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (14)</a></li>
 <li class='category'><a href='/blog/categories/host/'>Host (2)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (20)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (1)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (26)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (1)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (5)</a></li>
 <li class='category'><a href='/blog/categories/virtualization/'>Virtualization (8)</a></li>
 <li class='category'><a href='/blog/categories/website/'>Website (1)</a></li>
-<li class='category'><a href='/blog/categories/windows/'>Windows (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (5)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
 
 </ul>
@@ -1174,11 +1030,11 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2009/12/21/xerobank-browser/">一款匿名浏览器&#8211;XeroBank Browser</a>
+        <a href="/blog/2010/01/24/postfix-extmail-attachment-bug/">postfix+extmail的附件大小显示和限制问题解决办法</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2009/12/21/wow-xyz/">有想恶补三角函数的冲动！</a>
+        <a href="/blog/2010/01/19/extman/">extman后台登陆问题解决方法</a>
       </li>
     
   </ul>

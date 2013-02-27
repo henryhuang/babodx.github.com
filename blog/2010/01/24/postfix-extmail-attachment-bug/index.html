@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>postfix+extmail的附件大小显示和限制问题解决办法 - 鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="最近在给一个公司部署了postfix+extmail的邮件系统后，遇到了附件大小限制问题。 extmail默认设置是5M，但是由于extmail的统计大小方法问题，一般附件限制比设置的小了1/3。也就是你设置了5M，也就能到3M多。 这里先说下大小限制的配置。 一、 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/2010/01/24/postfix-extmail-attachment-bug/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Postfix+extmail的附件大小显示和限制问题解决办法</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-24T00:00:00+08:00" pubdate data-updated="true">Jan 24<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>最近在给一个公司部署了postfix+extmail的邮件系统后，遇到了附件大小限制问题。</p>
+
+<p>extmail默认设置是5M，但是由于extmail的统计大小方法问题，一般附件限制比设置的小了1/3。也就是你设置了5M，也就能到3M多。</p>
+
+<p>这里先说下大小限制的配置。</p>
+
+<p>一、修改extmail的webmail.cf文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SYS_MESSAGE_SIZE_LIMIT = 5242880 注意：以位为单位为5M字节。 
+</span><span class='line'>
+</span><span class='line'>SYS_MESSAGE_SIZE_LIMIT = xxx</span></code></pre></td></tr></table></div></figure>
+
+
+<p>二、修改/etc/postfix/main.cf文件，</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>message_size_limit = xxx</span></code></pre></td></tr></table></div></figure>
+
+
+<p>三、重启postfix即可，<code>service postfix restrart</code> 和重启apache，<code>service httpd restart</code></p>
+
+<p><strong>如何解决附件限制大小和系统文件大小相差1/3呢？</strong></p>
+
+<p>首先是修改/var/www/extsuite/extmail/libs/Ext/App目录下的Compose.pm文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sub is_oversize {   
+</span><span class='line'>    my $self = shift;   
+</span><span class='line'>    my $sys = $self-&gt;{sysconfig};   
+</span><span class='line'>    my $maxsize = $sys-&gt;{SYS_MESSAGE_SIZE_LIMIT};   
+</span><span class='line'>    my $tsize = shift;   
+</span><span class='line'>  
+</span><span class='line'>    return 0 unless defined $maxsize and $maxsize &gt; 0;   
+</span><span class='line'>    return 0 unless defined $tsize and $tsize &gt; 0;   
+</span><span class='line'>  
+</span><span class='line'>    if ($tsize &gt;= $maxsize) {   
+</span><span class='line'>        return $maxsize;   
+</span><span class='line'>    }   
+</span><span class='line'>    0;   
+</span><span class='line'>}   </span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意到上面的if ($tsize >= $maxsize)了吧，修改为if ($tsize >= 1.29*$maxsize)</p>
+
+<p>这样修改后，基本extmail的附件限制大小就和系统显示的文件大小一样。</p>
+
+<p>目前还有一个文件，就是我们上传一个1M的内容，显示出来的附件大小大约是1.3M，这个问题需要修改一个human函数解决。</p>
+
+<p>在/var/www/extsuite/extmail/libs/Ext目录下，打开Utils.pm文件</p>
+
+<p>找到如下函数</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sub human_size {   
+</span><span class='line'>    my $s = $_[0];   
+</span><span class='line'>    if($s&lt;1024) {   
+</span><span class='line'>        return sprintf("%0.2f", $s/1024)."K";   
+</span><span class='line'>    }elsif($s&lt;1024*1024) {   
+</span><span class='line'>        return sprintf("%0.1f", $s/1024)."K";   
+</span><span class='line'>    }else {   
+</span><span class='line'>        return sprintf("%0.1f", $s/(1024*1024))."M";   
+</span><span class='line'>    }   
+</span><span class='line'>}   </span></code></pre></td></tr></table></div></figure>
+
+
+<p>将函数修改如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sub human_size {   
+</span><span class='line'>    my $s = $_[0];   
+</span><span class='line'>    if($s&lt;1024) {   
+</span><span class='line'>        return sprintf("%0.2f", $s/1024/1.36)."K";   
+</span><span class='line'>    }elsif($s&lt;1024*1024) {   
+</span><span class='line'>        return sprintf("%0.1f", $s/1024/1.36)."K";   
+</span><span class='line'>    }else {   
+</span><span class='line'>        return sprintf("%0.1f", $s/(1024*1024*1.36))."M";   
+</span><span class='line'>    }   
+</span><span class='line'>}   </span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就解决了extmail的附件大小显示和限制问题。</p>
+
+<p>目前还有一个遗留问题，就是在folder.htm模板界面里显示的邮件大小还是比系统文件大1/3。这个不知道怎么修改了。找到了对应函数，但是它直接显示的多少M或者多少K，用除1.36会出现问题。。。。这个期待高手解决了。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-24T00:00:00+08:00" pubdate data-updated="true">Jan 24<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>Linux</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2010/01/24/postfix-extmail-attachment-bug/" data-via="" data-counturl="http://babodx.github.com/blog/2010/01/24/postfix-extmail-attachment-bug/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/01/19/extman/" title="Previous Post: extman后台登陆问题解决方法">&laquo; extman后台登陆问题解决方法</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/02/13/kai-shi-shi-yong-octopress/" title="Next Post: 开始使用octopress">开始使用octopress &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (14)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (2)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (1)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (26)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (1)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (5)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (8)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (1)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (5)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/01/24/postfix-extmail-attachment-bug/">postfix+extmail的附件大小显示和限制问题解决办法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/01/19/extman/">extman后台登陆问题解决方法</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
