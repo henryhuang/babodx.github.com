@@ -4,7 +4,7 @@
   <title><![CDATA[鑫的方向]]></title>
   <link href="http://babodx.github.com/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-27T11:23:29+08:00</updated>
+  <updated>2013-02-27T22:11:05+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -130,6 +130,577 @@ git config user.email "youremail"
 <p>我们只需要用我们熟悉的编辑器打开这个.markdown文件来写我们的文章就可以了。而文章的写作采用markdown语言。这个语言也是我最近才接触的，感觉非常容易上手，可以说完全是为了写作而诞生的。可以让我们愉快的写作，而不是考虑用什么字体，用什么格式，怎么对齐等问题。</p>
 
 <p>有了这个很好的开始，后面就是慢慢学习octopress的技巧和markdown的各种语法了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[CentOS 5.4 基于HP Proliant DL380 G5服务器配置Modular Smart Array 1000存储]]></title>
+    <link href="http://babodx.github.com/blog/2010/03/12/HP-MSA1000-DL380G5-Centos5/"/>
+    <updated>2010-03-12T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/03/12/HP-MSA1000-DL380G5-Centos5</id>
+    <content type="html"><![CDATA[<p>原来单位的存储一直是分两个800G的区，挂在到Windows下。Windows的系统总要担心病毒，所以打算迁移到CentOS Linux下。</p>
+
+<p>参考了<a href="http://blog.s135.com/post/415/">http://blog.s135.com/post/415/</a>这篇文章，但是他的文章里是单控制器，并且没有用到光纤。所以配置上有些不同</p>
+
+<p><strong>硬件配置</strong></p>
+
+<ul>
+<li>一台HP MSA 1000存储设备（包含两个Modular Smart Array 1000控制器）</li>
+<li>一台HP Storage SAN 4/8光纤交换机</li>
+<li>一台HP Proliant DL380 G5 2U服务器</li>
+<li>七块SCSI 300G硬盘</li>
+<li>一块HP StorageWorks FC1142SR 4GB PCI-E 光纤卡</li>
+</ul>
+
+
+<p><img src="http://farm9.staticflickr.com/8085/8512593854_1e49c77451.jpg" alt="硬件图片MSA1000" /></p>
+
+<p>从两个Modular Smart Array 1000的控制器后面连接光纤到光纤交换机。然后将光纤卡安装到服务器上，用光纤连接光纤卡到光纤交换机。</p>
+
+<p><img src="http://farm9.staticflickr.com/8233/8511486023_2fd88da704.jpg" alt="hba" />
+<img src="http://farm9.staticflickr.com/8532/8511486191_d0cc8c932f.jpg" alt="hba2" /></p>
+
+<p><strong>软件配置</strong></p>
+
+<p>先对各种硬件的fireware进行下更新。</p>
+
+<p>从惠普网站下载update fireware光盘，下载的文件为firmware-8.60-0.zip，大小463M左右，然后解压刻成光盘</p>
+
+<p>下载地址<a href="ftp://ftp.hp.com/pub/softlib2/software1/cd/p1040529012/v53483/firmware-8.60-0.zip">ftp://ftp.hp.com/pub/softlib2/software1/cd/p1040529012/v53483/firmware-8.60-0.zip</a></p>
+
+<p>用光盘启动服务器，然后安装提示做就可以。它会更新网卡、服务器等设备的fireware。都是自动检测并更新的，很简单</p>
+
+<p>确保各种fireware都更新后，下面需要用到smartstart光盘来对存储进行配置了</p>
+
+<p>从惠普网站下载smartstart光盘，下载的文件smartstart-8.30-0-x86.zip，大小576M左右，也是解压刻录光盘</p>
+
+<p>下载地址<a href="ftp://ftp.hp.com/pub/softlib2/software1/cd/p1040463476/v49882/smartstart-8.30-0-x86.zip">ftp://ftp.hp.com/pub/softlib2/software1/cd/p1040463476/v49882/smartstart-8.30-0-x86.zip</a></p>
+
+<p>然后用光盘启动服务器，按照提示进入后，选择第2项配置存储卡，第一项是用来安装操作系统的，我发现没有Linux的操作系统。。。都是Windows系列。</p>
+
+<p>可以发现服务器自己的raid卡 HP Smart Array E200和MSA 1000存储。</p>
+
+<p>我是先将服务器的3块硬盘组成一个Raid 5，然后再配置MSA 1000的存储，也是将7块盘组成Raid 5。我看了下资料，说raid 6比raid5要损失8%-15%的性能，但是可以保证同时坏2块盘不丢失数据。不过我觉得raid5够用了。</p>
+
+<p>因为是双控制器，我这里的fireware是4.48所以采用的是active/standby模式。如果打算用active/active模式，需要更新fireware到7.0版本</p>
+
+<p>用smartstart光盘做好raid后，就可以给服务器安装系统了。</p>
+
+<p><strong>安装CentOS 5.4 64bit</strong></p>
+
+<p>安装CentOS 5.4 64bit版本前，先将连接到服务器的光纤拔掉，要不系统总是提示/dev/sda不可读取，这里的sda就是我们存储。
+一切安装正常安装就可以。</p>
+
+<p>正常安装后，连接好光纤，再启动服务器。</p>
+
+<p>这个时候因为没有安装驱动，服务器在启动过程中会报很多end_request: error</p>
+
+<p>而且我还发现如果不安装驱动，我们可以通过fdisk -l查找到存储设备，但是每次重启或者存储关机再开，存储的设备名都会变，有时候是/dev/sda有时候是/dev/sdb。所以很难在/etc/fstab里写入mount的配置。</p>
+
+<p>安装HBA卡驱动</p>
+
+<p>到HP网站下载驱动
+<a href="http://h20000.www2.hp.com/bizsupport/TechSupport/SoftwareIndex.jsp?lang=en&amp;cc=us&amp;prodNameId=1809832&amp;prodTypeId=12169&amp;prodSeriesId=1809835&amp;swLang=8&amp;taskId=135&amp;swEnvOID=4004">http://h20000.www2.hp.com/bizsupport/TechSupport/SoftwareIndex.jsp?lang=en&amp;cc=us&amp;prodNameId=1809832&amp;prodTypeId=12169&amp;prodSeriesId=1809835&amp;swLang=8&amp;taskId=135&amp;swEnvOID=4004</a></p>
+
+<p>也可以直接下载
+<a href="ftp://ftp.hp.com/pub/softlib/software10/COL19426/co-74973-1/hp_qla2x00-2009-03-17.tar.gz">ftp://ftp.hp.com/pub/softlib/software10/COL19426/co-74973-1/hp_qla2x00-2009-03-17.tar.gz</a></p>
+
+<p><a href="ftp://ftp.hp.com/pub/softlib/software11/COL28061/co-69719-3/hp-fc-enablement-2009-12-16.tar.gz">ftp://ftp.hp.com/pub/softlib/software11/COL28061/co-69719-3/hp-fc-enablement-2009-12-16.tar.gz</a></p>
+
+<p>上面两个文件，一个是qla2x00的驱动，后面一个是Linux fibre channel enablement kits for QLogic HBAs and mezzanine cards</p>
+
+<p>下载后解压安装</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Installation instructions
+</span><span class='line'> 
+</span><span class='line'>Download the appropriate driver kit for your distribution. The driver kit file will be in the format hp_qla2x00-yyyy-mm-dd.tar.gz.
+</span><span class='line'>Copy the driver kit to the target system.
+</span><span class='line'>Uncompress and untar the driver kit using the following command:
+</span><span class='line'># tar zxvf hp_qla2x00-yyyy-mm-dd.tar.gz
+</span><span class='line'>Change directory to the hp_qla2x00-yyyy-mm-dd directory.
+</span><span class='line'>Execute the INSTALL command.
+</span><span class='line'>The INSTALL command syntax will vary depending on your conﬁguration. If a previous driver kit is installed, you can invoke the INSTALL command without any arguments as the script will use the currently loaded conﬁguration:
+</span><span class='line'># ./INSTALL
+</span><span class='line'>To force the installation to failover mode, use the -f ﬂag:
+</span><span class='line'># ./INSTALL -f
+</span><span class='line'>To force the installation to single-path mode, use the -s ﬂag:
+</span><span class='line'># ./INSTALL -s
+</span><span class='line'>Use the -h option of the INSTALL script for a list of all supported arguments. The INSTALL script will install the appropriate driver RPM for your conﬁguration, as well as the appropriate ﬁbreutils RPM. Once the INSTALL script is ﬁnished, you will either have to reload the QLogic driver modules (qla2xxx, qla2300, qla2400, qla2xxx_conf) or reboot your server.
+</span><span class='line'>The commands to reload the driver are:
+</span><span class='line'># /opt/hp/src/hp_qla2x00src/unload.sh
+</span><span class='line'># modprobe qla2xxx_conf
+</span><span class='line'># modprobe qla2xxx
+</span><span class='line'># modprobe qla2300
+</span><span class='line'># modprobe qla2400
+</span><span class='line'>The command to reboot the server is:
+</span><span class='line'># reboot
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>CAUTION: If your boot device is a SAN attached device you will have to reboot your server.
+</span><span class='line'>
+</span><span class='line'>To verify which RPM versions are installed, use the rpm command with the -q option.
+</span><span class='line'>For example:
+</span><span class='line'># rpm -q hp_qla2x00src
+</span><span class='line'># rpm –q fibreutils</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后在继续安装HP Fibre Channel Enablement Kit</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Installing the HP Fibre Channel Enablement Kit
+</span><span class='line'> 
+</span><span class='line'>To install the HP Fibre Channel Enablement Kit, do the following:
+</span><span class='line'>Download the hp-fc-enablement-yyyy-mm-dd.tar.gz file for your operating system and copy it to the target server
+</span><span class='line'>Untar the enablement kit by executing the command to create the directory, hp-fc-enablement-yyyy-mm-dd.
+</span><span class='line'># tar zxvf hp-fc-enablement-yyyy-mm-dd.tar.gz
+</span><span class='line'>Browse to the directory hp-fc-enablement-yyyy-mm-dd.
+</span><span class='line'>Do one of the following to execute the install.sh script.
+</span><span class='line'>If you are not using Device Mapper multipathing execute the following command:
+</span><span class='line'># ./install.sh -s
+</span><span class='line'>If you are using Device Mapper multipathing execute the following command:
+</span><span class='line'># ./install.sh -m
+</span><span class='line'>The hp-fc-enablement and fibreutils RPMs should be installed once this install completes. To verify the installation, enter the following commands:
+</span><span class='line'># rpm -q hp-fc-enablement
+</span><span class='line'># rpm -q fibreutils
+</span><span class='line'>
+</span><span class='line'>NOTE: For use with the driver that comes with the kernel you will need fibreutils 3.x or greater.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>全部完成后，我们需要查看下/etc/modprobe.conf
+如果有下面图中标记的一些信息加入，说明上面的驱动安装正确。</p>
+
+<p><img src="http://farm9.staticflickr.com/8378/8512177477_69fd3f3534_z.jpg" alt="msa1000配置图片" /></p>
+
+<p>确实正确后，我们重启下服务器。</p>
+
+<p>当再次进入系统后，我们的存储应该被识别为/dev/sda设备</p>
+
+<p>用fdisk -l /dev/sda查看下，如果没有问题了，就可以使用fdisk /dev/sda进行分区</p>
+
+<p>我是把全部1.6T分成一个区/dev/sda1</p>
+
+<p>然后e2lable /dev/sda1 /data给卷标</p>
+
+<p>在/etc/fstab文件里加入/dev/sda1的挂着位置</p>
+
+<p>这样以后每次启动系统，就自动将存储挂着到系统的/data目录中了。如下图</p>
+
+<p><img src="http://farm9.staticflickr.com/8112/8512182419_1370b691bf.jpg" alt="存储mount成功" /></p>
+
+<p><strong>总结</strong></p>
+
+<p>本来参考<a href="www.s135.com">http://www.s135.com</a>博主的文章配置的，后来发现因为用了光纤卡，不安装驱动会有问题。还有就是双控制器的active/active和active/standby模式需要通过刷新不同的fireware实现。总得来说这个存储配置起来不难，安装官方文档和网络上一些文档就可以。写这篇文档就是为了记录下自己的配置过程，省的以后再配置还要到处找文档查资料。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HP台式机器，ghost系统后，提示windows could not start]]></title>
+    <link href="http://babodx.github.com/blog/2010/03/12/HP-Computer-Ghost-Problem/"/>
+    <updated>2010-03-12T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/03/12/HP-Computer-Ghost-Problem</id>
+    <content type="html"><![CDATA[<p>今天单位一台HP dx7518的台式机器，ghost了一个winxp系统。但是只要一开机，就提示</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>windows could not start because of a computer disk hardware configuration problem    
+</span><span class='line'>could not read from the selected boot disk check boot path and disk harware   
+</span><span class='line'>please check the windows documentation about hardware disk configuation and your hardware refer once manuals for additional information   </span></code></pre></td></tr></table></div></figure>
+
+
+<p>开始我以为是硬盘的设置问题，后来发现硬盘已经设置为IDE模式了。</p>
+
+<p>后来网上查找，发现是和BIOS里的WDRT Support选项有关系。。。</p>
+
+<p><strong>解决办法</strong></p>
+
+<p>开机进入bios设置，选择Power management Setup 再选择WDRT Support 将后面值修改为disable</p>
+
+<p>WDRT SUPPORT：watchdog resource table 一种加密狗。通过这种加密保护来拒绝安装非随机配备的操作系统。同样，全系的HP 家用、商用台式机、笔记本，进行GHOST安装后报错，也可以用此方法解决。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[win7下使用联通无线上网卡HUAWEI E1750]]></title>
+    <link href="http://babodx.github.com/blog/2010/02/12/HUAWEI-E1750-on-Win7/"/>
+    <updated>2010-02-12T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/02/12/HUAWEI-E1750-on-Win7</id>
+    <content type="html"><![CDATA[<p>老婆单位年底搞活动，抽奖中了一个联通的无线上网卡。型号HUAWEI E1750</p>
+
+<p>本来打算给我笔记本用的，我系统是Windows 7。结果发现用不了，安装上以后，无线上网软件提示找不到设备。。。。。。</p>
+
+<p><strong>解决办法</strong></p>
+
+<p>让Windows 7自动找驱动，肯定是没戏了。用光盘自带软件的驱动也不灵。后来到HUAWEI网站查找最近驱动，最终下面网站找到了相关更新</p>
+
+<p><code>http://www.huaweidevice.com/cn/downloadCenter.do?method=doListSoftwareid=1&amp;fla y=findsoftwareName=E1750</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>E1750 E1750-WINMACB300D00SP04C112( U TPS11[1].301.08.24.112_MAC11.3 01.06.07.112)(China Unicom) China Unicom  2009-12-23 </span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上是Win7下可以使用的驱动更新。大约28M</p>
+
+<p>安装步骤是先安装Mobile_Card_Driver_3.09.exe驱动，然后正确识别设备后，运行UTPS11.301.08.24.112_MAC11.301.06.07.112.B433.exe更新设备的固件。最后再安装无线上网软件。</p>
+
+<p>可是我安装文档的方法，在Win7下并没有成功，运行UTPS11.301.08.24.112_MAC11.301.06.07.112.B433.exe更新的时候，总是提示没有找到设备或者正在有软件占用设备或者没有管理员权限。。。。。</p>
+
+<p>后来找了一台WinXP系统的机器，按照文档步骤一次成功。</p>
+
+<p>然后再将更新过的E1750插到Win7上面，就可以自动识别设备了。识别成功后如下图。</p>
+
+<p><img src="http://farm9.staticflickr.com/8251/8512574602_ee146a4011.jpg" alt="e1750驱动截图" /></p>
+
+<p>这样继续安装无线上网软件就可以正确识别并上网了。下面是正确识别后的截图</p>
+
+<p><img src="http://farm9.staticflickr.com/8105/8511465149_d5c86d6172.jpg" alt="e1750成功驱动" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[我的新手机HTC hero g3]]></title>
+    <link href="http://babodx.github.com/blog/2010/02/02/my-htc-hero-mobile/"/>
+    <updated>2010-02-02T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/02/02/my-htc-hero-mobile</id>
+    <content type="html"><![CDATA[<p>关注HTC hero G3很久了，大约从10月份开始吧。当时就和老婆说生日打算换个手机，后来生日当天去中关村看了看，但是没有购买，报价3000。关键是不知道怎么选购。回来后网上做功课，查询论坛和淘宝。最后决定在淘宝的一家北京实体店购买。在木樨园桥附近。2010年1月25日周一购买的。</p>
+
+<p>购买的最终手机价格是2860元，又选购了8G TF卡，一块MOMAX电池+座充+车充+手机套。3370元。</p>
+
+<p>购买后，由卖家给刷安逸1.2的ROM并给8G卡预装一些软件。</p>
+
+<p>整体感觉比我原来用的windows手机eten x800速度快了不少。android系统也很漂亮。</p>
+
+<p>我的联系人是先用Win7的windows mobile设备管理将原来windows手机的联系人导出到outlook，最后导出到excel并生成cvs文件。</p>
+
+<p>然后导入到Gmail邮件的通讯录。这样通过hero G3的同步gmail联系人，就可以导入到新手机了。</p>
+
+<p>感觉和gmail配合的相当好。短信也可以备份到gmail保存。</p>
+
+<p><strong>刷机</strong></p>
+
+<p>手机买来就开始装软件，尝试导航，使用感觉不错。不过在论坛学习，发现很多系统都比我这个新，就产生了刷机的想法。</p>
+
+<p>开始先尝试刷radio。radio是负责手机通讯的模块，可以理解为电话用的驱动吧。</p>
+
+<p>我原来的版本比较低，自己先尝试刷了63.18.55.06JU_6.35.09.26最新版本。</p>
+
+<p><strong>刷radio办法</strong></p>
+
+<p>机器买来的时候，又商家默认刷了啊兴的2.5 recovery。我就用了一个1G的卡，格式化为FAT32文件系统。将下载的radio更新文件拷贝到卡的根目录，并改名为update.zip</p>
+
+<p>关闭手机，同时按Home+Power键进入recovery界面(就是小房子+开机键)。</p>
+
+<p>等出现recovery界面，选择第2项，将sd卡上的update.zip刷入手机。</p>
+
+<p>注意刷完后，一定要重启一次手机。</p>
+
+<p>刷这个很简单，一会就完成了。感觉不错。呵呵</p>
+
+<p>关于Rom的选择，我再论坛上找了很久，也发帖求助了很多高手。大家普遍认为安卓1.2就是稳定，但是速度很慢。</p>
+
+<p>大家推荐我的主要是Flzyup的Rom和modaco的Rom</p>
+
+<p>我怕Modaco的Rom中文支持不友好，就决定从Flzyup制作的Rom选择了。目前来说G3的Rom有基于android 1.5的，也有基于2.0</p>
+
+<p>但是普遍认为2.0 Rom目前不成熟，毕竟官方没有出来呢。所以我就只选择基于android 1.5的Rom了。</p>
+
+<p>F大（flzyup的亲切称呼）的Rom基于1.5系统的主要如下</p>
+
+<ul>
+<li><p><a href="http://www.innovative-space.com/2010/01/14/flzyup-custom-rom-v1-5-final/">FLZYUP Custom ROM v1.5 final(惊喜一)</a></p></li>
+<li><p><a href="http://www.innovative-space.com/2010/01/10/flzyup-custom-rom-v1-4-paid-apps-new-icons/">FLZYUP Custom ROM v1.4 (Paid APPs+New ICONs)</a></p></li>
+<li><p><a href="http://www.innovative-space.com/2009/12/23/flzyup_custom_rom_v1-3_final-large-me/">FLZYUP_Custom_ROM_v1.3_final大内存版本</a></p></li>
+<li><p><a href="http://www.innovative-space.com/2009/12/07/flzyup-custom-rom-v1-3-release/">FLZYUP Custom ROM v1.3 final all fixed [特效包已发布]</a></p></li>
+</ul>
+
+
+<p>1.4版本是基于1.3的基础上优化完善的，1.5是基于全新内核制作的。</p>
+
+<p>因为我看论坛上很多人反映F大1.5版本耗电，本来G3也就坚持2天，如果刚买手机经常玩，1天就够呛了。。。所以没敢使用这个费电的新版本。我保守的选择了1.4版本。</p>
+
+<p><strong>准备刷机</strong></p>
+
+<p>论坛坚持了2天，大家一直讨论刷那个版本好，可以参考<a href="http://www.androidin.net/bbs/thread-51055-1-1.html">http://www.androidin.net/bbs/thread-51055-1-1.html</a></p>
+
+<p>最终决定刷F大的1.4版本。看到F大1.4是自动支持app2sd技术的，但是前提是你的卡必须有ext分区。我的8G卡目前就1个Fat32分区，于是考虑先分区。</p>
+
+<p>但是Win7没有找到合适的分区软件，后来发现xda论坛发布的<strong>RA-hero-v1.5.2</strong> recovery可以支持在手机的recovery模式给卡分区。我就先刷了这个recovery</p>
+
+<p><strong>刷recovery</strong></p>
+
+<p>主要参考<a href="http://forum.xda-developers.com/showthread.php?t=561124">http://forum.xda-developers.com/showthread.php?t=561124</a></p>
+
+<p>There are several ways to install a custom recovery, choose the one that suits you most (I probably forgot a few).</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>via adb 
+</span><span class='line'>-&gt; Requires a custom recovery (with test-keys) like Cyanogen's v1.4 or my previous recovery
+</span><span class='line'>
+</span><span class='line'>Copy recovery-RA-hero-v1.5.2.img to the root of your sdcard
+</span><span class='line'>Boot into your current custom recovery (boot while holding HOME)
+</span><span class='line'>Connect your Hero via usb to your pc/mac/...
+</span><span class='line'>adb shell
+</span><span class='line'>$su (not required if you have root already)
+</span><span class='line'>#mount -a
+</span><span class='line'>#flash_image recovery /sdcard/recovery-RA-hero-v1.5.2.img
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我采用的上面这个方法安装的。</p>
+
+<p>不过首先要在机器上安装adb工具和手机驱动</p>
+
+<p>驱动采用网上下载的AndroidDriverFiles驱动程序.rar</p>
+
+<p>adb本来是包含在android sdk工具里面的，但是sdk太大了，好几百兆。。。。我就在网上找了一个adb_win.zip的分离包。572k，就2个文件。</p>
+
+<p>先将adb_win.zip解压缩，得到adb.exe和AdbWinApi.dll文件。将2个文件复制到Windows目录下的System32目录。</p>
+
+<p>这样在windows的命令行窗口输入adb命令，可以看到如下输出</p>
+
+<p>Android Debug Bridge version 1.0.20下面还有很多使用说明，就不用管了。</p>
+
+<p>现在准备好adb了，再把AndroidDriverFiles驱动程序.rar解压到一个目录，准备连接手机的时候使用。</p>
+
+<p>以上都准备好后，关闭手机，按Home+Power键进入recovery模式，将USB线连上电脑。如果提示安装驱动，就手动到AndroidDriverFiles驱动程序解压后的目录找。</p>
+
+<p>驱动识别完成后，就打开windows的命令行窗口（Win+R，输入cmd回车）</p>
+
+<p>输入adb shell</p>
+
+<p>然后su回车</p>
+
+<p>mount -a回车</p>
+
+<p>上面的su和mount -a 都可能返回错误，不用管它。</p>
+
+<p>最后输入flash_image recovery /sdcard/recovery-RA-hero-v1.5.2.img 回车。</p>
+
+<p>这样就把新的recovery刷入了。</p>
+
+<p>重启进入recovery模式，如图</p>
+
+<p><img src="http://farm9.staticflickr.com/8096/8512558972_02deaf66fe.jpg" alt="recovery截图" /></p>
+
+<p>然后在Wipe里面执行如下3项</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Wipe
+</span><span class='line'>
+</span><span class='line'>Wipe data/factory reset :: Wipe /data and /cache
+</span><span class='line'>Wipe Dalvik-cache :: Wipe Dalvik-cache both on /data and ext
+</span><span class='line'>Wipe SD:ext partition : Wipe the ext partition on your sdcard</span></code></pre></td></tr></table></div></figure>
+
+
+<p>再给sd卡分区。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Partition sdcard
+</span><span class='line'>
+</span><span class='line'>Partition SD :: Interactive SD partitioning</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就给sd卡分好去了，我的8G卡，默认是32M的swap分区 512M的ext分区。最后是一个大的Fat32分区。
+这样就可以关机了。</p>
+
+<p><strong>刷FLZYUP_Custom_ROM_v1.4-signed.zip系统</strong></p>
+
+<p>上面的准备工作全完成了，再来刷系统。</p>
+
+<p>将分好区的sd卡，放到电脑读卡器上，从电脑将FLZYUP_Custom_ROM_v1.4-signed.zip拷贝到根目录。因为win7只能识别出FAT32分区，所以肯定是拷贝到FAT32分区上。</p>
+
+<p>然后返回手机开机进入recovery模式，选择</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Flash zip from sdcard :: Flash a zip update file from your sdcard</span></code></pre></td></tr></table></div></figure>
+
+
+<p>按照提示往下刷就可以了。刷好后提示如下</p>
+
+<p><img src="http://farm9.staticflickr.com/8511/8511451731_17da3c1a26.jpg" alt="rom_update截图" /></p>
+
+<p>然后重启手机就可以了。</p>
+
+<p><strong>注意</strong></p>
+
+<p>刷完后，第一次重启很慢很慢，这个正常。我当时以为手机刷坏了，总停在HTC那屏上。。。还到论坛发帖求助呢。。</p>
+
+<p>后来发现第一次重启后，看到绿色小人和听到声音大约1分20秒，然后就是那个HTC三个字母的屏幕，大约等了10分钟。。。就会进入下面屏幕</p>
+
+<p><img src="http://farm9.staticflickr.com/8369/8511453551_4a0cd686ef.jpg" alt="android 1.4" /></p>
+
+<p>按照提示设置好手机，就可以享受新系统了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[诺基亚E63刷机]]></title>
+    <link href="http://babodx.github.com/blog/2010/01/28/E63-nokia-fireware-update/"/>
+    <updated>2010-01-28T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/01/28/E63-nokia-fireware-update</id>
+    <content type="html"><![CDATA[<p>前几天老婆的E63手机总是死机，一直在跟我抱怨。。。本来想给她买个iphone，结果老婆说不喜欢，还是喜欢她红色的E63.</p>
+
+<p>我想想手机买了1年多了，也没有更新过，不如刷个新系统看看吧。于是就开始搜索资料、准备软件。</p>
+
+<p>具体刷机步骤参考
+<a href="http://nokia.zol.com.cn/188/297_1876549.html">http://nokia.zol.com.cn/188/297_1876549.html</a></p>
+
+<p><strong>诺基亚刷机方法</strong></p>
+
+<p>主要是官方刷新，还是用第三方软件刷新</p>
+
+<p>官方的在线刷新就是用官方公布的软件直接更新手机的系统。但是官方更新只限于行货手机，因为官方是根据你手机的CODE号码来为你更新手机系统的，如果你手机的CODE是外国的，那刷新后，就没有中文系统了。所以这个不适合大多数水货手机</p>
+
+<p>我查看了一下，老婆手机的CODE是0569944: 马来西亚的。用官方的估计不行，于是就开始考虑第三方软件。</p>
+
+<p>发现比较著名的就是凤凰刷机工具了。</p>
+
+<p>其实简单的说“凤凰刷机”就是刷机软件的一种，而非官方的刷机软件而已，由于其在性能上有官方刷机软件很多不能完成的任务，因而收到的机友的广泛追捧。</p>
+
+<p><strong>准备工作</strong></p>
+
+<p>首先是下载凤凰刷机软件</p>
+
+<p>参考这里<a href="http://nokia.zol.com.cn/1/18_299.html">http://nokia.zol.com.cn/1/18_299.html</a></p>
+
+<p>我下载的就是<a href="http://nokia.zol.com.cn/1/18_299.html">凤凰刷机2009.34.7.40015最新XX版09.10.30发布</a></p>
+
+<p>下载好凤凰刷机软件后，就是备份手机存储卡上的内容和联系人了。我是直接用读卡器把存储卡拷贝到电脑，然后用诺基亚PC套件导出的联系人。</p>
+
+<p>这些都弄好了，就可以进入刷机步骤了。</p>
+
+<p><strong>刷机步骤</strong></p>
+
+<p>安装好凤凰刷机软件，并打开</p>
+
+<p>选择Tools->Image file download</p>
+
+<p><img src="http://farm9.staticflickr.com/8103/8512516328_851a5902d7.jpg" alt="选择下载img" /></p>
+
+<p>然后在Product code内输入你想刷的系统的code码，我这里输入的0569941，新加坡的版本</p>
+
+<p>输入完成后，点download等待下载，大小在60-80M。</p>
+
+<p>下载完成后，点cancel就可以了。</p>
+
+<p>系统下载好了，我们就该向手机内刷了。用USB的数据线连接手机。在手机上选择PC套件模式。</p>
+
+<p>然后选择凤凰2009的菜单file&#8212;manage connection，跳出菜单NO CONECTION，再点“NEW”按键。</p>
+
+<p><img src="http://farm9.staticflickr.com/8508/8511405473_51583b1644_z.jpg" alt="new按钮" /> </p>
+
+<p>按NEW键之后会出现下图：</p>
+
+<p><img src="http://farm9.staticflickr.com/8100/8511406351_68da4dfd26_z.jpg" alt="new截图" /></p>
+
+<p>选择USB后，按下一步，直到完成。这样连接里会才会出现USB和NO CONNECTIONS两个选择，一个是USB连接，一个是没有连接，如果是USB连接，表示手机正常。选择USB，点击“APPLY”按钮,然后点击Cancel，连接完成</p>
+
+<p><img src="http://farm9.staticflickr.com/8226/8512518914_dfa06ce9ed_z.jpg" alt="usb1截图" />
+<img src="http://farm9.staticflickr.com/8506/8512513418_7c9ca6b164_z.jpg" alt="usb2截图" /></p>
+
+<p>菜单File ,open Product，系统会自动调出诺基亚各个型号的RM菜单，你选择自己的机型即可，比如诺基亚E63为RM-437，找到后点OK。</p>
+
+<p><img src="http://farm9.staticflickr.com/8368/8512513018_73ca2419cd_z.jpg" alt="ok截图" /></p>
+
+<p><img src="http://farm9.staticflickr.com/8386/8512512776_a4c75f2239_z.jpg" alt="ok截图2" /></p>
+
+<p>选择RM-437的画面，在出现的提示框里找RM-437，选中，然后点OK，选择normal.</p>
+
+<p>凤凰2009软件菜单Flashing&#8212;&#8211;Fireware Update,出现下面画面</p>
+
+<p><img src="http://farm9.staticflickr.com/8240/8511400983_580969c8e8_z.jpg" alt="update截图" /></p>
+
+<p>这里有一个非常关键的地方需要注意,就是上图选择RM-437之后,要注意看Product CODE:显示的CODE是多少,如果是欧版的CODE(比如0582481),那就需要你选择以下亚太的CODE的系统,选择你刚才下载的比如<font color="#000000" size="2">0569941</font>的系统. 点击下图右边的小方块(小方块上有省略号的那个)</p>
+
+<p>想刷400.21.013的朋友，如果下载了400的固件，但是在这里没有找到400的话，可以来这里看下</p>
+
+<p>凤凰菜单栏进入：TOOLS-Options-product locetion（下图）</p>
+
+<p><img src="http://farm9.staticflickr.com/8107/8512512350_980a17dfbe_z.jpg" alt="locetion图" /></p>
+
+<p>红色线标注的栏目原来是空白的，这里需要设置下路径，点右边的“add”添加路径如图所示，然后点“apply”确认后退出。</p>
+
+<p>哈哈，看下图出现了400.21.013了</p>
+
+<p><img src="http://farm9.staticflickr.com/8368/8511400657_7362511b0f_z.jpg" alt="截图" /></p>
+
+<p>点击&#8221;Refurbish&#8221;开始刷机，在进入这个程序之后，无论计算机屏幕右下角出现什么提示，均不要搭理它，直到提示成功。</p>
+
+<p><img src="http://farm9.staticflickr.com/8371/8511400551_ca21a4f98f_z.jpg" alt="截图" /> </p>
+
+<p>到这里就算完成了。哈哈</p>
+
+<p>以上内容基本都是从下面两篇帖子上转过来的。如果有什么不明白，可以直接去看原帖。我只是记录下，省的以后刷机还要找资料。</p>
+
+<ul>
+<li>[原创][教程]诺基亚E63用凤凰2009成功刷机</li>
+<li>0300 凤凰2009成功刷 E63最新固件 400.21.013
+ </li>
+</ul>
+
 ]]></content>
   </entry>
   
@@ -1056,167 +1627,6 @@ Will create a new application. Start it with:
 <p>&lt;下面给出下载地址，感兴趣的朋友可以下载观看http://download.playframework.org/presentations/screencast.mp4</p>
 
 <p><img src="http://www.playframework.org/images/screen.png" alt="视频截图" /></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[playframework--play！java on rails框架]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/26/playframework/"/>
-    <updated>2009-12-26T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/26/playframework</id>
-    <content type="html"><![CDATA[<p>今天看程序员，发现了play！framework这个java web框架。</p>
-
-<p>以前也接触过SSH框架，struts+spring+hibernate。。。看着每一个部分那厚厚的参考书。。我就害怕。</p>
-
-<p>后来就看了一阵子ruby on rails。彻底喜欢上了那种简洁的风格，约定优先配置也很棒。</p>
-
-<p>直到发现play框架，才知道原来java也可以这样简洁。play框架扔掉了J2EE的各种规范。。。完全像rails一样简洁了</p>
-
-<p><strong>Play！的主要特性： </strong>
-* 简单的开发周期。该框架可自动编译和重新装载已改变的源文件。
-* 智能绑定HTTP参数到Java方法参数。
-* 基于Apache Mina的快速HTTP服务器<a href="http://mina.apache.org">http://mina.apache.org/</a>
-* 一个基于Groovy的强大的模板引擎，可实现多层继承，定制用户标签等功能。
-* 优秀的错误报告功能：发生异常时，该框架会直接显示出错误的源代码，甚至是模板代码。</p>
-
-<p>目前playframework网站的资料也比较全。从安装入门到开发实例应有尽有。我打算有时间慢慢翻译过来，发布在我的博客上。也是对自己学习的一种激励。</p>
-
-<p><strong>官方网站</strong></p>
-
-<p><a href="http://www.playframework.org/">http://www.playframework.org/</a></p>
-
-<p>各种实例</p>
-
-<h2>Yet Another Blog Engine</h2>
-
-
-<p>The final application from the <a href="http://www.playframework.org/documentation/1.0/guide1">play guide</a> tutorial.<img src="http://www.playframework.org/documentation/1.0/images/yabe" border="0" width="1050" height="612"><h2>Forum</h2>A simple forum application using JPA.<img src="http://www.playframework.org/documentation/1.0/images/forum" border="0" width="996" height="649"><h2>Jobboard</h2>A full faetured job board application that uses the CRUD module to automatically generate the administration area. <img src="http://www.playframework.org/documentation/1.0/images/jobboard" border="0" width="996" height="649"><h2>Chat</h2>An HTTP based chat application. We use the asynchronous request model to be able to handle a lot of simultaneous connected users without resources waste.<img src="http://www.playframework.org/documentation/1.0/images/chat" border="0" width="996" height="649"><h2>Stock watcher</h2>Based on the default GWT tutorial, it shows how to use GWT within a play application.<img src="http://www.playframework.org/documentation/1.0/images/stocks" border="0" width="996" height="649"><h2>My lists</h2>A clone of the the well known 37Signals TadaList application built using the Google App Engine support. It uses Siena as persistence engine.<img src="http://www.playframework.org/documentation/1.0/images/lists" border="0" width="996" height="649"></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[nginx采用epoll的事件模型，为何效率高。]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/24/nginx-epool-events/"/>
-    <updated>2009-12-24T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/24/nginx-epool-events</id>
-    <content type="html"><![CDATA[<p>以前就知道在linux下nginx采用epoll事件模型，处理效率高。但是一直不知道具体为什么，今天查看了下文档，了解了原因。</p>
-
-<p>首先nginx支持一下这些事件模型（才考nginx的wiki）</p>
-
-<p>Nginx支持如下处理连接的方法（I/O复用方法），这些方法可以通过use指令指定。</p>
-
-<ul>
-<li>select - 标准方法。 如果当前平台没有更有效的方法，它是编译时默认的方法。你可以使用配置参数 &#8211;with-select_module 和 &#8211;without-select_module 来启用或禁用这个模块。</li>
-<li>poll - 标准方法。 如果当前平台没有更有效的方法，它是编译时默认的方法。你可以使用配置参数 &#8211;with-poll_module 和 &#8211;without-poll_module 来启用或禁用这个模块。</li>
-<li>kqueue - 高效的方法，使用于 FreeBSD 4.1+, OpenBSD 2.9+, NetBSD 2.0 和 MacOS X. 使用双处理器的MacOS X系统使用kqueue可能会造成内核崩溃。</li>
-<li>epoll - 高效的方法，使用于Linux内核2.6版本及以后的系统。在某些发行版本中，如SuSE 8.2, 有让2.4版本的内核支持epoll的补丁。</li>
-<li>rtsig - 可执行的实时信号，使用于Linux内核版本2.2.19以后的系统。默认情况下整个系统中不能出现大于1024个POSIX实时(排队)信号。这种情况对于高负载的服务器来说是低效的；所以有必要通过调节内核参数 /proc/sys/kernel/rtsig-max 来增加队列的大小。可是从Linux内核版本2.6.6-mm2开始， 这个参数就不再使用了，并且对于每个进程有一个独立的信号队列，这个队列的大小可以用 RLIMIT_SIGPENDING 参数调节。当这个队列过于拥塞，nginx就放弃它并且开始使用 poll 方法来处理连接直到恢复正常。</li>
-<li>/dev/poll - 高效的方法，使用于 Solaris 7 11/99+, HP/UX 11.22+ (eventport), IRIX 6.5.15+ 和 Tru64 UNIX 5.1A+.</li>
-<li>eventport - 高效的方法，使用于 Solaris 10. 为了防止出现内核崩溃的问题， 有必要安装 这个 安全补丁。</li>
-</ul>
-
-
-<p>在linux下面，只有epoll是高效的方法。</p>
-
-<p>下面再来看看epoll到底是如何高效的</p>
-
-<p>Epoll是Linux内核为处理大批量句柄而作了改进的poll。要使用epoll只需要这三个系统调用：epoll_create(2)， epoll_ctl(2)， epoll_wait(2)。它是在2.5.44内核中被引进的(epoll(4) is a new API introduced in Linux kernel 2.5.44)，在2.6内核中得到广泛应用。</p>
-
-<p>epoll的优点</p>
-
-<p>支持一个进程打开大数目的socket描述符(FD)
-select 最不能忍受的是一个进程所打开的FD是有一定限制的，由FD_SETSIZE设置，默认值是2048。对于那些需要支持的上万连接数目的IM服务器来说显然太少了。这时候你一是可以选择修改这个宏然后重新编译内核，不过资料也同时指出这样会带来网络效率的下降，二是可以选择多进程的解决方案(传统的Apache方案)，不过虽然linux上面创建进程的代价比较小，但仍旧是不可忽视的，加上进程间数据同步远比不上线程间同步的高效，所以也不是一种完美的方案。不过 epoll则没有这个限制，它所支持的FD上限是最大可以打开文件的数目，这个数字一般远大于2048,举个例子,在1GB内存的机器上大约是10万左右，具体数目可以cat /proc/sys/fs/file-max察看,一般来说这个数目和系统内存关系很大。</p>
-
-<p>IO效率不随FD数目增加而线性下降
-传统的select/poll另一个致命弱点就是当你拥有一个很大的socket集合，不过由于网络延时，任一时间只有部分的socket是&#8221;活跃&#8221;的，但是select/poll每次调用都会线性扫描全部的集合，导致效率呈现线性下降。但是epoll不存在这个问题，它只会对&#8221;活跃&#8221;的socket进行操作&#8212;这是因为在内核实现中epoll是根据每个fd上面的callback函数实现的。那么，只有&#8221;活跃&#8221;的socket才会主动的去调用 callback函数，其他idle状态socket则不会，在这点上，epoll实现了一个&#8221;伪&#8221;AIO，因为这时候推动力在os内核。在一些 benchmark中，如果所有的socket基本上都是活跃的&#8212;比如一个高速LAN环境，epoll并不比select/poll有什么效率，相反，如果过多使用epoll_ctl,效率相比还有稍微的下降。但是一旦使用idle connections模拟WAN环境,epoll的效率就远在select/poll之上了。</p>
-
-<p>使用mmap加速内核与用户空间的消息传递。
-这点实际上涉及到epoll的具体实现了。无论是select,poll还是epoll都需要内核把FD消息通知给用户空间，如何避免不必要的内存拷贝就很重要，在这点上，epoll是通过内核于用户空间mmap同一块内存实现的。而如果你想我一样从2.5内核就关注epoll的话，一定不会忘记手工 mmap这一步的。</p>
-
-<p>内核微调
-这一点其实不算epoll的优点了，而是整个linux平台的优点。也许你可以怀疑linux平台，但是你无法回避linux平台赋予你微调内核的能力。比如，内核TCP/IP协议栈使用内存池管理sk_buff结构，那么可以在运行时期动态调整这个内存pool(skb_head_pool)的大小&#8212; 通过echo XXXX>/proc/sys/net/core/hot_list_length完成。再比如listen函数的第2个参数(TCP完成3次握手的数据包队列长度)，也可以根据你平台内存大小动态调整。更甚至在一个数据包面数目巨大但同时每个数据包本身大小却很小的特殊系统上尝试最新的NAPI网卡驱动架构。</p>
-
-<p>以上这些epoll内容，参考epoll_互动百科</p>
-
-<p>在我128M的vps上，我查看了一下，file-max的数量已经达到11945
-应该说确实比apache的方式要好，而且资源占用也少。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[国服3.13 德鲁伊带小号快速升级（1-70全程带）]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/22/wow-1-70-Express-Upgrade/"/>
-    <updated>2009-12-22T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/22/wow-1-70-Express-Upgrade</id>
-    <content type="html"><![CDATA[<p>魔兽世界已经快开85了，而国内还坚持在70级。没有玩的乐趣了，就研究研究带小号速度升级吧。</p>
-
-<p><strong>带小号的职业选择</strong></p>
-
-<p>一般带小号的职业，需要可以AOE，有强力的dps，最好自己还可以扛打。所以就是法师、术士、骑士、德鲁伊这几个职业里选择。FS是AOE的王者，原来一直也是带小号的首选。</p>
-
-<p>目前来看也不错。但是破碎现在的效率不如以前了，STSM法师带着对操作要求太高，容易累。SS可以AOE，但是没有FS的控制技能，怪多了，扛不住。QS对于小副本，AOE来说很强力，尤其是学生和STSM，效率很高。但是对于ZUL这样的本，因为QS的短腿，不推荐。</p>
-
-<p><strong>德鲁伊</strong>如果装备合适，目前我认为才是带小号的最佳人选。</p>
-
-<p>从1-70，全部有适合的副本和技巧让小德来带小号升级。下面说说我的经验因为德鲁伊是T里面dps最高的，FS AOE靠dps，但是没有我们能抗，还要喝水。QS AOE靠反弹，没有我们能打。而且小德的移动速度快，就意味着拉同样路线的怪，我们时间少，效率高。所以对于血色、ZUL这些副本，小德效率最高。STSM不适合小德，不是不能刷，是麻烦，我们不会解疾病。所以我带小号的路线是</p>
-
-<ul>
-<li><p>1-10级，小德辅助小号独立升级。</p></li>
-<li><p>10-20带影牙，</p></li>
-<li><p>20-35血色，</p></li>
-<li><p>35-45祖尔法拉克，</p></li>
-<li><p>45-65黑石塔上，</p></li>
-<li><p>65-70监狱。</p></li>
-</ul>
-
-
-<p><strong>1-10级 快速升级经验</strong></p>
-
-<p>1-10级其实有个很好的办法升级，只是大家很少注意到。首先是70级的小德，不要和小号组队，然后洗平衡天赋最好，治疗天赋也凑合。穿上最高的法伤装备，然后给小号上荆棘术。小号带着这个10分钟的荆棘术buff，去打怪，基本弹怪1次-3次伤害，怪就死了。完全可以自己AOE了，什么技能也不用，就跑过去普通攻击一下怪，然后继续开一下个怪，怪打你1-3下，自己就死了。这样1-10级，比去任何地方都快。</p>
-
-<p><strong>注意</strong> 必须自己先打怪1下，如果是怪先打你被经技术弹死了，就没有经验了。</p>
-
-<p><strong>10-20级 快速升级经验</strong></p>
-
-<p>10-20级，就要去影牙副本了。大号先进入副本，因为小号级别低的时候，一进入就引怪。小号就放在副本门口就可以，大号进入副本aoe。注意最后的boss一定要拉出来杀，不然小号分不到经验。影牙副本是一个塔的建筑结构，所以小号放在副本，大号在小地图观察，只要可以看到小号的位置，就可以杀一次怪，我一般是分3次杀。第一次拉广场上的，第2次拉到狼boss那里，就是杀了boss出先4个蓝胖子的地方。第3次拉到最后boss门前面。</p>
-
-<p><strong>20-35级 快速升级经验</strong></p>
-
-<p>20-35级是快速升级的开始，小德因为移动速度和dps的优势，可以在这里3门同时刷。刷2门，肯定爆本。先刷教堂，然后出本刷军械库，最后刷次图书馆。图书馆经验不多，就是为了不爆本，凑点时间。小号愿意，也可以放弃图书馆，让他们捡些布呀什么的。这里建议小德穿最强的DPS装备，如果网络好，不怕掉线，可以拿 烈焰之怒 武器。（俗名：掉线之怒）。武器FM推荐 作战专家</p>
-
-<p><strong>35-45 快速升级经验</strong></p>
-
-<p>35-45 选择祖尔法拉克最好，小德可以一波流全部拉完。一次的经验在2.8w-3.5w。这里需要一些装备和技巧。首先最好有4件军装，这样移动速度提高15%。我尝试过，4件军装，比你骑60%速度的马还快。网上有zul的一波流视频，是个骑马拉全副本的，我觉得不现实，至少我经常拉几波，就给打下马了。所以我推荐直接穿4件军装，旅行形态拉。再有一点就是要带上部落徽记，因为有个蜥蜴怪，可以给你一个晕的状态，让你没有任何躲闪而且不能攻击。这样基本一次就快死了。所以一定要及时用徽章解这个状态。只要保持攻击，就可以满血。我一般带英雄卡片和部落徽记。</p>
-
-<p><strong>45-65 快速升级经验</strong></p>
-
-<p>45-65 这里只有小德带最效率，就是去黑上升级。卡召唤师。一般卡2个召唤师，速度相当与STSM。一般卡7个召唤师的小德，带45级的小号，1个小时3级半。这里一定要舍得吃药和加buff。具体如何卡黑上，我以后会写文章介绍。目前我可以卡5-7个，成功率85%吧</p>
-
-<p><strong>65-70 快速升级经验</strong></p>
-
-<p>65-70就找术士拉小号去监狱，然后小德带监狱，65-70大约200分钟吧。要求小德穿DPS装备和少量回血装备。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[一款匿名浏览器--XeroBank Browser]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/xerobank-browser/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/xerobank-browser</id>
-    <content type="html"><![CDATA[<p>XeroBank Browser 用来上网，可以很好的隐藏你的ip地址。利用Tor(The Onion Router)可以自动通过多层代理跳转，来隐藏你的IP因为是通过代理的，所以速度肯定要慢一些。但可以访问一些国内封锁的IP地址</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[有想恶补三角函数的冲动！]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/wow-xyz/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/wow-xyz</id>
-    <content type="html"><![CDATA[<p>最近在咕哝魔兽世界的坐标系统，发现这个游戏的坐标系统如下图所示</p>
-
-<p><img src="http://farm9.staticflickr.com/8228/8510673160_84e4f8b348.jpg" alt="wow坐标系统" /></p>
-
-<p>游戏的平面坐标为X,Y,用2π代表360度的方向。Z为高度，我们可以不用考虑。现在如果我们知道A点坐标X=2,Y=2 ，B点坐标X=4,Y=3那要想从A点出发到B点，我们的方向应该是多少呢？(目前我就知道Y轴正方向的话，角度为0 。X轴正方向 为π/4=90度)该怎么写这个三角函数得到这个角的的数值呢？</p>
 ]]></content>
   </entry>
   

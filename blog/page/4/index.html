@@ -9,7 +9,8 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="我的主系统是Winxp在vmware 6.5.2 build-156735下安装的ubuntu server 9.04 因为安装vmware tools后，可以使用vmware 提供的share folders让winxp的主系统可以将某个目录映射到虚拟的ubuntu系统里。 &hellip;">
+  <meta name="description" content="参考了 http://www.synce.org/moin/SynceWithUbuntu
+http://hi.baidu.com/john_zhy/blog/item/50e39f317240141febc4af5a.html 我的本本 IBM R61 系统 ubuntu 8.10从 8. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +65,593 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/winphone-SynceWithUbuntu/">Ubuntu 8.10下同步wm6.1手机</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>参考了</p>
+
+<ul>
+<li><a href="http://www.synce.org/moin/SynceWithUbuntu">http://www.synce.org/moin/SynceWithUbuntu</a></li>
+<li>http://hi.baidu.com/john_zhy/blog/item/50e39f317240141febc4af5a.html</li>
+</ul>
+
+
+<p>我的本本 IBM R61</p>
+
+<p>系统 ubuntu 8.10从 8.04升级上来的。</p>
+
+<p>手机 eten X800 wm6.1英文系统</p>
+
+<p>原来一直不能在ubuntu下面同步手机资料，昨天参考了上面两个帖子，最后成功了。</p>
+
+<p>1、首先添加源</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo gedit   /etc/apt/sources.list</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在末尾添加</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>deb &lt;a href="http://ppa.launchpad.net/synce/ubuntu" target="_blank"&gt;http://ppa.launchpad.net/synce/ubuntu&lt;/a&gt; hardy main
+</span><span class='line'>
+</span><span class='line'>deb-src &lt;a href="http://ppa.launchpad.net/synce/ubuntu" target="_blank"&gt;http://ppa.launchpad.net/synce/ubuntu&lt;/a&gt; hardy main</span></code></pre></td></tr></table></div></figure>
+
+
+<p>保存，关闭</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get update</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我没有更新源，但是也成功。可能是8.10的缘故</p>
+
+<p>2、更新usb驱动（仅内核在2.6.24-19之前的，如果比这个新请跳过本步骤）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo rmmod rndis_host cdc_ether usbnet
+</span><span class='line'>sudo rm /lib/modules/`uname -r`/kernel/drivers/net/usb/{rndis_host,cdc_ether,usbnet}.ko
+</span><span class='line'>sudo apt-get install usb-rndis-source cdbs
+</span><span class='line'>sudo module-assistant auto-install usb-rndis
+</span><span class='line'>sudo apt-get install synce-hal librra0-tools librapi2-tools</span></code></pre></td></tr></table></div></figure>
+
+
+<p>因为我的内核是2.6.27-7的，所以跳过了这步。但是我安装了后面的软件包</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install synce-hal librra0-tools librapi2-tools</span></code></pre></td></tr></table></div></figure>
+
+
+<p>3、安装<strong>SynCE-GNOME</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install python-setuptools</span></code></pre></td></tr></table></div></figure>
+
+
+<p> 下载<a href="http://downloads.sourceforge.net/synce/synce-gnome-0.11.tar.gz">synce-gnome-0.11.tar.gz</a></p>
+
+<p> 解压，在终端进入其目录，运行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>python setup.py build
+</span><span class='line'>sudo python setup.py install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装<strong>notification-daemon</strong>（如果没有安装过的话，用新得立软件包管理器搜索一下就可以了）</p>
+
+<p>这个步骤完全做了一次，notification-daemon系统已经安装过了</p>
+
+<p>4、连接好手机，运行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/sbin/ifconfig -a | grep 80:00:60:0f:e8:00   | cut -d " " -f 1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>记下他输出的东西</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo gedit   /etc/network/interfaces</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在末尾添加<code>iface &lt;rndis0&gt; inet dhcp</code></p>
+
+<p>ps:&#8221;&lt;>&#8221;里面的是我在上面那步里输出的，你应该更换成你自己的，不带“&lt;>“ 保存并关闭，然后运行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo /etc/init.d/networking restart</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这次也是按照作的，我的网卡是多出来一个eth1(这个根据自己系统决定)。所以我在interfaces文件后面加入了</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>iface eth1 inet dhcp</span></code></pre></td></tr></table></div></figure>
+
+
+<p>5、安装OpenSync</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install multisync-tools opensync-plugin-evolution opensync-plugin-synce</span></code></pre></td></tr></table></div></figure>
+
+
+<p>6、现在该安装的都安装好了，就可以开始同步了<code>synce-sync-engine</code>如果出现如下错误</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>File "/usr/bin/sync-engine", line 84, in &lt;module&gt;
+</span><span class='line'>
+</span><span class='line'> configObj = Config.Config(progopts)
+</span><span class='line'>
+</span><span class='line'>   File "/usr/lib/python2.5/site-packages/SyncEngine/config.py", line 292, in __init__
+</span><span class='line'>
+</span><span class='line'> oldconf = os.path.join(self.path,"config.xml")
+</span><span class='line'>
+</span><span class='line'>AttributeError: Config instance has no attribute 'path'
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>请下载<a href="http://synce.svn.sf.net/svnroot/synce/releases/0.11.1/sync-engine/config/config.xml">config.xml</a>，保存为~/.synce/config.xml（提示：&#8221;~&#8221;为自己的家目录)</p>
+
+<p>创建同步项目<strong>synce-create-partnership &#8220;Linux desktop&#8221; &#8220;Contacts,Calendar&#8221;</strong></p>
+
+<p>ps：还有别的，可自行选择Contacts， Calendar， Tasks， Files 等</p>
+
+<p>创建OpenSync group</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>msynctool --addgroup synce-sync
+</span><span class='line'>
+</span><span class='line'>msynctool --addmember synce-sync synce-opensync-plugin
+</span><span class='line'>
+</span><span class='line'>msynctool --addmember synce-sync evo2-sync</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后同步synce-sync-engine</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>msynctool --sync synce-sync</span></code></pre></td></tr></table></div></figure>
+
+
+<p>他会同步到evolution里面</p>
+
+<p>我上面的照着做，全部成功了。</p>
+
+<p><strong>我的一些问题</strong></p>
+
+<p>据说安装了synce-gnomevfs后，可以在Nautilus里面看手机里的内容，但是我没有成功
+目前只能通过synce-pls、synce-pcp等命令，来操作手机里面文件。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-dynamic-resize-lvm/">试用ubuntu 8.04和LVM动态增加分区</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>我在虚拟机VMware里面安装了ubuntu 8.04.</p>
+
+<p>安装的时候，只是选择了openssh这个服务。安装后感觉系统很干净</p>
+
+<p><strong>磁盘占用</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/dev/mapper/ubuntu-root                      5.6G 321M 5.3G   6% /</span></code></pre></td></tr></table></div></figure>
+
+
+<p>系统就用了不到400M</p>
+
+<p><strong>内存</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>                   total       used       free     shared    buffers     cached
+</span><span class='line'>Mem:           249         39        209          0          3         16</span></code></pre></td></tr></table></div></figure>
+
+
+<p>减掉buffers和cached的内容，还有我ssh远程连接的占用。实际系统启动后内存也就需要17M</p>
+
+<p><strong>LVM</strong></p>
+
+<p>安装系统的时候，我就选择了整个磁盘启用LVM，采用ubuntu默认分区的方式。</p>
+
+<p>ubuntu默认分了2个区/sda1和/sda5。sda1用来做/boot，sda5用来做LVM。文件系统都是默认的ext3。</p>
+
+<p>然后在LVM里面默认建立了2个LV( Logical volume)，一个/dev/ubuntu/root用来做/ ，一个/dev/ubuntu/swap_1用来做swap交换分区。我又手动修改了文件系统，采用reiserfs。</p>
+
+<p><strong>动态添加/分区大小</strong></p>
+
+<p>我先添加了一个硬盘，系统识别为sdb</p>
+
+<p>对这个盘<strong>创建分区</strong>（LVM可以不用分区的，但是需要动态添加到/分区，所以需要有文件系统，不能添加后格式化/分区吧）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo fdisk /dev/sdb
+</span><span class='line'>n --&gt;创建分区
+</span><span class='line'>t --&gt;修改分区类型为8e
+</span><span class='line'>w --&gt;保存结果</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在系统可以识别/dev/sdb1这个设备了。</p>
+
+<p><strong>创建PV(Physical volume)</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo pvcreate /dev/sdb1</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>创建VG(Volume group)</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vgextend ubuntu /dev/sdb1</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>扩展LV(Logical volume)</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo lvextend -L +2G /dev/ubuntu/root&lt;br&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就给/dev/ubuntu/root这个设备大小增加了2G。可以通过sudo lvdisply查看
+但是这个时候df -h还是没有变化的，需要调整文件系统。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo resize_reiserfs -s +2G /dev/ubuntu/root&lt;br&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就完成了全部动态扩展分区。而且是服务器一直在线状态，不用关机。</p>
+
+<p>调整Swap</p>
+
+<p>还是和上面一样的情景，只要VG里面还有剩余空间就可以用来扩展swap用。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo swapoff -a</span></code></pre></td></tr></table></div></figure>
+
+
+<p>关闭正在用的swap分区</p>
+
+<p>然后</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo lvextend -L +200M /dev/ubuntu/swap_1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>给/dev/ubuntu/swap_1扩展了200M容量</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo mkswap /dev/ubuntu/swap_1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>建立swap的文件系统</p>
+
+<p>最后</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo swapon -a</span></code></pre></td></tr></table></div></figure>
+
+
+<p>启用新的swap系统。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-console-unread-chinese/">Ubuntu Server 9.04 终端乱码问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>安装了ubuntu server 9.04，安装的时候选择了中文环境。</p>
+
+<p>因为server是没有桌面的，发现终端里面显示提示信息，出错信息都变成乱码了。</p>
+
+<p><strong>解决办法</strong>
+修改/etc/default/locale文件</p>
+
+<p>将zh_CN修改为en_US</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-904-show-chinese-filename/">Ubuntu Server 9.04显示中文文件</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前面提到了用VMware的share folder功能，可以将主机系统的一个目录，自动共享到ubuntu /mnt/hgfs目录下。</p>
+
+<p>但是winxp的中文目录，到了ubuntu server下面就显示乱码了。</p>
+
+<p><strong>解决办法</strong></p>
+
+<p>安装相关软件包</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install language-pack-zh</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>配置中文环境</strong></p>
+
+<p>修改/etc/environment</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vim /etc/environment</span></code></pre></td></tr></table></div></figure>
+
+
+<p>将LANG和LANGUAGE内容修改为下面的</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>LANG=zh_CN.UTF8&lt;br&gt;
+</span><span class='line'>LANGUAGE="zh_CN:zh:en_US:en </span></code></pre></td></tr></table></div></figure>
+
+
+<p>修改/etc/default/locale</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vim /etc/default/locale</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+修改内容如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>LANG="zh_CN.UTF-8"&lt;br&gt;
+</span><span class='line'>LANGUAGE="zh_CN:zh" </span></code></pre></td></tr></table></div></figure>
+
+
+<p>保存后，重启系统。</p>
+
+<p>现在用putty登陆，还是发现看中文乱码。我们还要继续设置putty才可以。</p>
+
+<p><strong>设置putty使用utf-8</strong></p>
+
+<p>putty的Windows->Translation->Received data assumed to be in which character set:选择UTF-8</p>
+
+<p><img src="http://farm9.staticflickr.com/8236/8512011412_e138d2c072.jpg" alt="putty使用utf8设置" /></p>
+
+<p>这样设置后，就可以正确在putty里显示中文了。</p>
+
+<p><img src="http://farm9.staticflickr.com/8514/8510902673_84be6e3e30.jpg" alt="putty显示中文文件名" /></p>
+
+<p>以上这些就可以正常在putty里显示中文了。但是如果你用键盘鼠标从本地登陆ubuntu server，会发现，ubuntu server还是乱码。</p>
+
+<p>这个问题我查了一些文档，还是没有解决。有的说是console下的字体问题。但是/usr/share/consolefonts里的字体好像没有支持中文的。</p>
+
+<p>还有说console fonts最多支持256这个字符。。。</p>
+
+<p>反正最终这个问题没有解决掉。现在在linux自己的控制台里，显示还是乱码</p>
+
+<p>建议大家如果不是特别需要，其实服务器没有必要采用中文编码的。可以正常显示中文就好了。</p>
+
+<p>建议默认还是用en_US:UTF-8的好。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-904-install-xen/">Ubuntu 9.04安装xen</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>主要参考下面两旁文章，先贴过来，以后再整理。</p>
+
+<p><a href="http://oceanobservatories.org/spaces/display/CIDev/Xen+on+Ubuntu+9.04+(Jaunty">http://oceanobservatories.org/spaces/display/CIDev/Xen+on+Ubuntu+9.04+(Jaunty)</a>)</p>
+
+<p><a href="http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html">http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html</a></p>
+
+<p><strong>安装xen</strong></p>
+
+<p>Xen on Ubuntu 9.04 (Jaunty)</p>
+
+<p>Added by <a href="http://oceanobservatories.org/spaces/display/~thim">Thomas Im</a> , last edited by <a href="http://oceanobservatories.org/spaces/display/~thim">Thomas Im</a> on Jun 11, 2009  (<a href="http://oceanobservatories.org/spaces/pages/diffpages.action?pageId=18353165&originalId=18353171">view change</a>)
+Labels: 
+(None)
+Following applies to Ubuntu 9.04 Jaunty 64-bit installation.  Notes taken from rebuild of &#8216;amoeba&#8217; development system.
+Installation</p>
+
+<pre>sudo apt-get install ubuntu-xen-server # Jaunty Xen package does not include the dom0 Xen kernel so these must be installed separately  wget http://security.debian.org/debian-security/pool/updates/main/l/linux-2.6/linux-modules-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb wget http://security.debian.org/debian-security/pool/updates/main/l/linux-2.6/linux-image-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb  sudo dpkg -i linux-modules-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb linux-image-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb  sudo apt-get install python2.5 shutdown -r now   sudo vim /etc/network/interfaces .. auto eth0 iface eth0 inet static   address xxx.xxx.xxx.xxx   gateway xxx.xxx.xxx.xxx   netmask 255.255.255.0   sudo vim /etc/resolv.conf ... domain ucsd.edu search ucsd.edu  nameserver xxx.xxx.xxx.xxx nameserver xxx.xxx.xxx.xxx   sudo /etc/init.d/networking restart  </pre>
+
+
+<p>Create Jaunty DomU (Guest)
+[http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html]
+<img src="http://oceanobservatories.org/spaces/images/icons/emoticons/information.gif" border="0" width="16" height="16" align="absMiddle"><br><strong><strong>References:</strong></strong>
+<a href="https://help.ubuntu.com/community/Xen">https://help.ubuntu.com/community/Xen</a><br><a href="http://www.infohit.net/blog/adate/053109/archive/1.html">http://www.infohit.net/blog/adate/053109/archive/1.html</a><br><a href="http://www.chrisk.de/blog/2008/12/how-to-run-xen-in-ubuntu-intrepid-without-compiling-a-kernel-by-yourself/">http://www.chrisk.de/blog/2008/12/how-to-run-xen-in-ubuntu-intrepid-without-compiling-a-kernel-by-yourself/</a></p>
+
+<h3></h3>
+
+
+<p><strong>安装guest系统</strong>
+These are instructions for creating an Ubuntu Jaunty DomU on Debian Lenny Dom0 using Xen 3.2.1 that comes with Lenny.  I&#8217;m installing into an LVM rather than using a file image.  See <a href="http://www.howtoforge.com/xen-live-migration-of-an-lvm-based-virtual-machine-with-iscsi-on-debian-lenny">this HowtoForge article for background of my particular setup</a>.  This tutorial assumes you&#8217;re working from a similar setup with an iscsi target and LVM-based VMs.
+The reason I&#8217;m posting this is because I had such a hard time finding some combination of tools that worked correctly to do this.  I tried a few options but had little success:</p>
+
+<ul>
+<li>debootstrap - Didn&#8217;t seem to work with Jaunty at all.  It would just crash </li>
+<li>vm-install - Doesn&#8217;t support LVM-based VMs by default, but there is a procedure for converting the qcow image to an LVM</li>
+</ul>
+
+
+<p>What I found is that I could find no way of creating the LVM-based VM in Lenny.  I actually had to create a sid instance first and then install my open-iscsi and xen-utils into the sid VM, then use SID to populate the VM.  <br><u><strong>Perform the following actions in your SID vm or workstation</strong></u><br>
+Note:  You&#8217;ll need your /etc/xen-tools/xen-tools.conf setup like the instructions in the HowtoForge article (things like gateway, netmask, broadcast, passwd, fs type, install-method, etc).<br>
+Whenever I would try to build the vm with the default partitions, it would always fail.  For some reason the resulting vm would have an fstab that shows something like sda1 and sda2 instead of xvda1 and xvda2.  I had to create my own partition scheme before anything would work right.  Here&#8217;s mine: $ <strong>sudo cat /etc/xen-tools/partitions.d/with-data</strong><br>
+[root]<br>
+size=4G<br>
+type=ext3<br>
+mountpoint=/<br>
+options=sync,errors=remount-ro<br>
+[swap]<br>
+size=512M<br>
+type=swap<br>
+[data]<br>
+size=4G<br>
+type=ext3<br>
+mountpoint=/data<br>
+options=nodev
+You will need to create a symlink for jaunty so that the option is recognized at the command-line. 
+<strong>$ cd /usr/lib/xen-tools</strong>
+<strong>$ sudo ln -s edgy.d jaunty.d  </strong>
+Now, finally, you can create the image.  This step may take some time
+<strong>$ xen-create-image &#8211;hostname=myserver &#8211;dhcp &#8211;lvm=vg_xen &#8211;dist=jaunty &#8211;mirror=http://archive.ubuntu.com/ubuntu &#8211;size=4Gb &#8211;memory=512Mb &#8211;swap=512MB &#8211;arch=i386 &#8211;partitions=with-data</strong>
+Since you&#8217;re building the LVM on a different machine than it will eventually run on, you&#8217;ll need to  copy the resulting xen config to the correct server:
+<strong>$ scp /etc/xen/myserver.cfg root@realhost:/etc/xen/</strong>
+That should be all you need to get this working.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -691,382 +1279,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-request/">Rails下request.raw_post的一些问题</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>我在学习Agile Web Development with Rails在第18章 Observers的例子中</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;%=text_field_tag :search%&gt;
-</span><span class='line'>&lt;%=observe_field( :search,
-</span><span class='line'>                  :frequency =&gt; 0.5,
-</span><span class='line'>                  :update =&gt; :results,
-</span><span class='line'>                  :url =&gt; {:action =&gt; :search})%&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>将text_field_tag里面的内容，每间隔0.5就提交给search这个action,然后将结果显示在<div id="results"></div>层</p>
-
-<p>在search方法里面可以通过request.raw_post获取提交的数据</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def search
-</span><span class='line'>     render:text=&gt;request.raw_post   
-</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
-
-
-<p>问题是上面这样返回的内容，总是在提交的内容后多一个=号</p>
-
-<p>比如在文本框输入div层显示的就是a=</p>
-
-<p>后来只能通过把最后2位抹去，来达到正常效果render:text=>request.raw_post.to(request.raw_post.length-2)</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-graphical-verification-code/">Rails实现图片验证码</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>写在了babo.javaeye.com了</p>
-
-<p><a href="http://babo.javaeye.com/blog/72298">http://babo.javaeye.com/blog/72298</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-fckeditor/">Rails配合fckeditor实现文本编辑工具条</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>主要参考了</p>
-
-<p><a href="http://blog.caronsoftware.com/articles/2006/08/07/fckeditor-plugin-for-rails">http://blog.caronsoftware.com/articles/2006/08/07/fckeditor-plugin-for-rails</a></p>
-
-<p><a href="http://www.blogjava.net/rocky/archive/2006/11/04/rails-fckeditor-integration.html">http://www.blogjava.net/rocky/archive/2006/11/04/rails-fckeditor-integration.html</a></p>
-
-<p><strong>安装</strong></p>
-
-<p>下载<a href="http://rubyforge.org/projects/fckeditorp/">http://rubyforge.org/projects/fckeditorp/</a>项目的 FCKEditor Plugin for Rails，将下载的文件加压缩后，保存到fckeditor文件夹中</p>
-
-<p>将fckeditor文件夹拷贝到自己项目的vendor/plugins目录下</p>
-
-<p>运行rack fckeditor:install</p>
-
-<p>然后在需要用到这个插件的页面，输入<code>&lt;%= javascript_include_tag "fckeditor/fckeditor" %&gt;</code>或者将这句话添加到app/view/layouts/下的对应文件中</p>
-
-<p><strong>使用</strong></p>
-
-<p>需要使用这个工具条的地方，输入</p>
-
-<p><code>&lt;%=fckeditor_textarea("post", "body", :toolbarSet =&gt; 'Simple', :width =&gt; '100%', :height =&gt; '500px' )%&gt;</code></p>
-
-<p>注意fckeditor_textarea的一个参数post必须是action传过来的一个实体类，如果action没有传过来，就会提示出错</p>
-
-<p>比如我这里用到了post,我的action如下</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def new&lt;br&gt;
-</span><span class='line'>      @post = Post.new&lt;br&gt;
-</span><span class='line'>    end</span></code></pre></td></tr></table></div></figure>
-
-
-<p>第二个参数，body对应表单里的字段</p>
-
-<p>第三个参数toolbarSet=>&#8221;Simple&#8221;为工具条风格，这个风格可以在public/javascripts/fckcustom.js文件里面定义（修改后，要关闭浏览器再开才起作用）</p>
-
-<p>第四、五个参数，代表文本区域的大小</p>
-
-<p><strong>图片上传</strong></p>
-
-<p>默认安装后，图片上传不能用，需要修改vendor/plugins/fckeditor/app/controllers/fckeditor_controller.rb文件的upload_file action如下</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def upload_file
-</span><span class='line'>      @new_file = params[:NewFile]
-</span><span class='line'>      @url = upload_directory_path
-</span><span class='line'>      begin
-</span><span class='line'>        ftype = @new_file.content_type.strip
-</span><span class='line'>        if ! MIME_TYPES.include?(ftype)
-</span><span class='line'>          @errorNumber = 202
-</span><span class='line'>          puts "#{ftype} is invalid MIME type"
-</span><span class='line'>          raise "#{ftype} is invalid MIME type"
-</span><span class='line'>        else
-</span><span class='line'>          path = current_directory_path + "/" + @new_file.original_filename
-</span><span class='line'>          File.open(path,"wb",0664) do |fp|
-</span><span class='line'>            FileUtils.copy_stream(@new_file, fp)
-</span><span class='line'>          end
-</span><span class='line'>          @errorNumber = 0
-</span><span class='line'>        end
-</span><span class='line'>      rescue =&gt; e
-</span><span class='line'>        @errorNumber = 110 if @errorNumber.nil?
-</span><span class='line'>      end
-</span><span class='line'>    
-</span><span class='line'>      # Fix provided by Nicola Piccinini -- &lt;a href="http://superfluo.org/"&gt;http://superfluo.org&lt;/a&gt;
-</span><span class='line'>      render :text =&gt; %Q'&lt;script&gt;window.parent.OnUploadCompleted(&lt;a href="mailto:#%7B@errorNumber%7D,%20%22#%7BUPLOADED+%22/%22+params%5B:Type%5D+%22/%22+@new_file.original_filename%7D%20%22);&lt;/script&gt;%20"&gt;#{@errorNumber},\"#{UPLOADED+"/"+params[:Type]+"/"+@new_file.original_filename}\");&lt;/script&gt;'&lt;/a&gt;
-</span><span class='line'>    
-</span><span class='line'>    end</span></code></pre></td></tr></table></div></figure>
-
-
-<p>关于工具条具体某个工具怎么显示，提供那些功能，可以在public/javascripts/fckeditor/fckconfig.js文件里面定义</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/quick-stats-server-visits/">如何快速统计服务器访问量</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近看了javaeye上面<strong>robbin</strong>的一篇文章，学习到了很多知识。</p>
-
-<p><a href="http://robbin.javaeye.com/blog/97287">http://robbin.javaeye.com/blog/97287</a> 如何快速统计RoR网站的访问量</p>
-
-<p>我的服务器是Apache+tomcat的配置，上面跑了几个网站。都是基于apache 虚拟主机配置的。</p>
-
-<p>apache配置如下</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Include conf/vhost_*.conf</span></code></pre></td></tr></table></div></figure>
-
-
-<p>然后每个虚拟主机对应一个配置文件</p>
-
-<p>例如下面的(一些信息用???代替了，都是域名和姓名等个人信息)</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;VirtualHost *:80&gt;
-</span><span class='line'>    ServerAdmin ???&lt;a href="mailto:???@???.cn"&gt;@???.cn&lt;/a&gt;
-</span><span class='line'>    DocumentRoot /home/???/www
-</span><span class='line'>    ServerName &lt;a href="http://www./???.org"&gt;www.???.org&lt;/a&gt;
-</span><span class='line'>    DirectoryIndex index.jsp index.htm
-</span><span class='line'>    ErrorLog logs/abc-error_log
-</span><span class='line'>    CustomLog "| /usr/sbin/rotatelogs /var/log/httpd/abc-access_%Y%m%d.log 86400" common
-</span><span class='line'>    &lt;Location "/*.jsp"&gt;
-</span><span class='line'>         JkUriSet worker ajp13:localhost:8009
-</span><span class='line'>    &lt;/Location&gt;
-</span><span class='line'>&lt;/VirtualHost&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样配置后，就会在/var/log/httpd下面按照虚拟主机名字和日期，每天生成一个访问日志文件</p>
-
-<p><strong>统计每日动态请求处理总数</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|wc -l</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>统计URL的访问频度</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $7}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>统计时间访问频度</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $4}'|awk -F : '{print $2}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>以上这些是基于CentOS+apache+tomcat实现的</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@ict ~]# cat /var/log/httpd/esdinchina-access_20081117.log |grep "200 "|awk '{print $4}'|awk -F : '{print $2}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/opensource-im/">一个很好的开源企业内部IM解决方案</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天发现了<a href="http://www.igniterealtime.org/">http://www.igniterealtime.org</a>这个项目首页</p>
-
-<p>这个项目可以在企业内部架设一台服务器，来完成内部IM功能。客户端可以想QQ或者MSN一样登陆。并且通过服务器上设置GATEWAY功能，还能与MSN等主流软件通讯。</p>
-
-<p>具体功能还没有测试，不过打算有时间的时候架设下进行试用。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -1084,10 +1296,12 @@
 <ul id="categories">
   <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
 <li class='category'><a href='/blog/categories/game/'>Game (14)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (4)</a></li>
 <li class='category'><a href='/blog/categories/host/'>Host (2)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (1)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (26)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (2)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
@@ -1096,7 +1310,7 @@
 <li class='category'><a href='/blog/categories/software/'>Software (5)</a></li>
 <li class='category'><a href='/blog/categories/virtualization/'>Virtualization (8)</a></li>
 <li class='category'><a href='/blog/categories/website/'>Website (1)</a></li>
-<li class='category'><a href='/blog/categories/windows/'>Windows (5)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (7)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
 
 </ul>
@@ -1118,11 +1332,11 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2010/01/24/postfix-extmail-attachment-bug/">postfix+extmail的附件大小显示和限制问题解决办法</a>
+        <a href="/blog/2010/03/12/HP-MSA1000-DL380G5-Centos5/">CentOS 5.4 基于HP Proliant DL380 G5服务器配置Modular Smart Array 1000存储</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2010/01/19/extman/">extman后台登陆问题解决方法</a>
+        <a href="/blog/2010/03/12/HP-Computer-Ghost-Problem/">HP台式机器，ghost系统后，提示windows could not start</a>
       </li>
     
   </ul>

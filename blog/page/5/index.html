@@ -9,7 +9,14 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="为了解决中文乱码，我的Mysql都设置了使用utf8编码 这样一来，使用SQLyog Enterprise查看表里面内容，就都不能正常显示了。可能SQLyog需要设置？反正我没有搞出来。 不过后来我换用了Navicat 7以后，感觉很好。所有中文内容都可以正确显示 比mysql &hellip;">
+  <meta name="description" content="我在学习Agile Web Development with Rails在第18章 Observers的例子中 1
+2
+3
+4
+5
+&lt;%=text_field_tag :search%&gt;
+&lt;%=observe_field( :search,
+                  : &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +71,382 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-request/">Rails下request.raw_post的一些问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>我在学习Agile Web Development with Rails在第18章 Observers的例子中</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;%=text_field_tag :search%&gt;
+</span><span class='line'>&lt;%=observe_field( :search,
+</span><span class='line'>                  :frequency =&gt; 0.5,
+</span><span class='line'>                  :update =&gt; :results,
+</span><span class='line'>                  :url =&gt; {:action =&gt; :search})%&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>将text_field_tag里面的内容，每间隔0.5就提交给search这个action,然后将结果显示在<div id="results"></div>层</p>
+
+<p>在search方法里面可以通过request.raw_post获取提交的数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def search
+</span><span class='line'>     render:text=&gt;request.raw_post   
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>问题是上面这样返回的内容，总是在提交的内容后多一个=号</p>
+
+<p>比如在文本框输入div层显示的就是a=</p>
+
+<p>后来只能通过把最后2位抹去，来达到正常效果render:text=>request.raw_post.to(request.raw_post.length-2)</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-graphical-verification-code/">Rails实现图片验证码</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>写在了babo.javaeye.com了</p>
+
+<p><a href="http://babo.javaeye.com/blog/72298">http://babo.javaeye.com/blog/72298</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-fckeditor/">Rails配合fckeditor实现文本编辑工具条</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>主要参考了</p>
+
+<p><a href="http://blog.caronsoftware.com/articles/2006/08/07/fckeditor-plugin-for-rails">http://blog.caronsoftware.com/articles/2006/08/07/fckeditor-plugin-for-rails</a></p>
+
+<p><a href="http://www.blogjava.net/rocky/archive/2006/11/04/rails-fckeditor-integration.html">http://www.blogjava.net/rocky/archive/2006/11/04/rails-fckeditor-integration.html</a></p>
+
+<p><strong>安装</strong></p>
+
+<p>下载<a href="http://rubyforge.org/projects/fckeditorp/">http://rubyforge.org/projects/fckeditorp/</a>项目的 FCKEditor Plugin for Rails，将下载的文件加压缩后，保存到fckeditor文件夹中</p>
+
+<p>将fckeditor文件夹拷贝到自己项目的vendor/plugins目录下</p>
+
+<p>运行rack fckeditor:install</p>
+
+<p>然后在需要用到这个插件的页面，输入<code>&lt;%= javascript_include_tag "fckeditor/fckeditor" %&gt;</code>或者将这句话添加到app/view/layouts/下的对应文件中</p>
+
+<p><strong>使用</strong></p>
+
+<p>需要使用这个工具条的地方，输入</p>
+
+<p><code>&lt;%=fckeditor_textarea("post", "body", :toolbarSet =&gt; 'Simple', :width =&gt; '100%', :height =&gt; '500px' )%&gt;</code></p>
+
+<p>注意fckeditor_textarea的一个参数post必须是action传过来的一个实体类，如果action没有传过来，就会提示出错</p>
+
+<p>比如我这里用到了post,我的action如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def new&lt;br&gt;
+</span><span class='line'>      @post = Post.new&lt;br&gt;
+</span><span class='line'>    end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>第二个参数，body对应表单里的字段</p>
+
+<p>第三个参数toolbarSet=>&#8221;Simple&#8221;为工具条风格，这个风格可以在public/javascripts/fckcustom.js文件里面定义（修改后，要关闭浏览器再开才起作用）</p>
+
+<p>第四、五个参数，代表文本区域的大小</p>
+
+<p><strong>图片上传</strong></p>
+
+<p>默认安装后，图片上传不能用，需要修改vendor/plugins/fckeditor/app/controllers/fckeditor_controller.rb文件的upload_file action如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def upload_file
+</span><span class='line'>      @new_file = params[:NewFile]
+</span><span class='line'>      @url = upload_directory_path
+</span><span class='line'>      begin
+</span><span class='line'>        ftype = @new_file.content_type.strip
+</span><span class='line'>        if ! MIME_TYPES.include?(ftype)
+</span><span class='line'>          @errorNumber = 202
+</span><span class='line'>          puts "#{ftype} is invalid MIME type"
+</span><span class='line'>          raise "#{ftype} is invalid MIME type"
+</span><span class='line'>        else
+</span><span class='line'>          path = current_directory_path + "/" + @new_file.original_filename
+</span><span class='line'>          File.open(path,"wb",0664) do |fp|
+</span><span class='line'>            FileUtils.copy_stream(@new_file, fp)
+</span><span class='line'>          end
+</span><span class='line'>          @errorNumber = 0
+</span><span class='line'>        end
+</span><span class='line'>      rescue =&gt; e
+</span><span class='line'>        @errorNumber = 110 if @errorNumber.nil?
+</span><span class='line'>      end
+</span><span class='line'>    
+</span><span class='line'>      # Fix provided by Nicola Piccinini -- &lt;a href="http://superfluo.org/"&gt;http://superfluo.org&lt;/a&gt;
+</span><span class='line'>      render :text =&gt; %Q'&lt;script&gt;window.parent.OnUploadCompleted(&lt;a href="mailto:#%7B@errorNumber%7D,%20%22#%7BUPLOADED+%22/%22+params%5B:Type%5D+%22/%22+@new_file.original_filename%7D%20%22);&lt;/script&gt;%20"&gt;#{@errorNumber},\"#{UPLOADED+"/"+params[:Type]+"/"+@new_file.original_filename}\");&lt;/script&gt;'&lt;/a&gt;
+</span><span class='line'>    
+</span><span class='line'>    end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>关于工具条具体某个工具怎么显示，提供那些功能，可以在public/javascripts/fckeditor/fckconfig.js文件里面定义</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/quick-stats-server-visits/">如何快速统计服务器访问量</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近看了javaeye上面<strong>robbin</strong>的一篇文章，学习到了很多知识。</p>
+
+<p><a href="http://robbin.javaeye.com/blog/97287">http://robbin.javaeye.com/blog/97287</a> 如何快速统计RoR网站的访问量</p>
+
+<p>我的服务器是Apache+tomcat的配置，上面跑了几个网站。都是基于apache 虚拟主机配置的。</p>
+
+<p>apache配置如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Include conf/vhost_*.conf</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后每个虚拟主机对应一个配置文件</p>
+
+<p>例如下面的(一些信息用???代替了，都是域名和姓名等个人信息)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;VirtualHost *:80&gt;
+</span><span class='line'>    ServerAdmin ???&lt;a href="mailto:???@???.cn"&gt;@???.cn&lt;/a&gt;
+</span><span class='line'>    DocumentRoot /home/???/www
+</span><span class='line'>    ServerName &lt;a href="http://www./???.org"&gt;www.???.org&lt;/a&gt;
+</span><span class='line'>    DirectoryIndex index.jsp index.htm
+</span><span class='line'>    ErrorLog logs/abc-error_log
+</span><span class='line'>    CustomLog "| /usr/sbin/rotatelogs /var/log/httpd/abc-access_%Y%m%d.log 86400" common
+</span><span class='line'>    &lt;Location "/*.jsp"&gt;
+</span><span class='line'>         JkUriSet worker ajp13:localhost:8009
+</span><span class='line'>    &lt;/Location&gt;
+</span><span class='line'>&lt;/VirtualHost&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样配置后，就会在/var/log/httpd下面按照虚拟主机名字和日期，每天生成一个访问日志文件</p>
+
+<p><strong>统计每日动态请求处理总数</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|wc -l</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>统计URL的访问频度</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $7}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>统计时间访问频度</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $4}'|awk -F : '{print $2}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>以上这些是基于CentOS+apache+tomcat实现的</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@ict ~]# cat /var/log/httpd/esdinchina-access_20081117.log |grep "200 "|awk '{print $4}'|awk -F : '{print $2}'|sort|uniq -c</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/opensource-im/">一个很好的开源企业内部IM解决方案</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天发现了<a href="http://www.igniterealtime.org/">http://www.igniterealtime.org</a>这个项目首页</p>
+
+<p>这个项目可以在企业内部架设一台服务器，来完成内部IM功能。客户端可以想QQ或者MSN一样登陆。并且通过服务器上设置GATEWAY功能，还能与MSN等主流软件通讯。</p>
+
+<p>具体功能还没有测试，不过打算有时间的时候架设下进行试用。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -364,621 +747,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/mage/">我冲高督的心得</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>我在2006年6月就开始冲高督了,然是玩的号是梦之盗帅. 亡灵盗贼(哈哈)</p>
-
-<p>开始也是一个人到处混,涨得很慢.一周也就10w荣誉,后来通过傻鸟介绍,认识了一个固定队伍.</p>
-
-<p>固定队伍就是不一样,都是有人带队而且有LM的固定队伍可以一起刷荣誉.在遇到不认识的队伍的时候,才会打. 这里要说一下,有很多人认为刷子不好,可是在我们这里,如果你不刷,真打的荣誉也就够你升到10级勇士的.刷也是很辛苦的,首先加入固定队伍的人,作队长才可以晚上挂机,但是队长每周至少有72小时在线带队.如果不做队长,就要负责拿旗子.拿一天旗子,晚上可以挂一下.基本队里没有不干活的.</p>
-
-<p>我加入后不久就做了队长&#8230;.其实队长很累&#8230;因为同时刷的有2-3个队伍,你要负责记住对不同队伍的输赢.只有这样,才能稳定的刷下去.
-基本这样带队,晚上可以挂着,一周可以有70-100w荣誉.因为每个星期只有2-3人可以到14级高阶督军,所以基本都是让已经到13级督军的朋友拿1-3名,然后按照目前的军衔来分配小队里其他人的排名.这样就为了大家都能用最短时间毕业.</p>
-
-<p>就这样我跟这个队伍混到了11级,认识了很多朋友,轻舞,心之全泪,天地有雪,正义与邪恶等&#8230;.
-11级的时候已经8月初了,因为一直游戏,感觉对不起老婆(陪老婆时间太少).我最终选择了离开.</p>
-
-<p>一直到1.12跨服战场开放,我才回来.
-这次回来还是打算冲高督,但是跨服后60级战场基本都是真打了,我没有了固定队伍,就一个人很难冲上去.而50-59的这个阶段还是在刷.于是我选择了放弃梦之盗帅这个角色,用我的50法师,梦之亡魂刷
-跨服战场的开放,让一个人排队刷战场成为可能.</p>
-
-<p>开始的时候,我用BFA插件配合我自己用VC写的一个小程序刷战场,基本是每个星期哪里双倍荣誉,我就刷哪里.就一个人排队.这样效率很高,</p>
-
-<ul>
-<li>第1周,拿了36W荣誉(没有24小时刷),从侦察兵一下升了4级.而且ALX毕业了</li>
-<li>第2周也差不多,升到了6级.因为ALX毕业了,一旦荣誉到30W,我就去挂大战场.在这个星期我大战场也毕业了</li>
-<li>第3周,荣誉到30W我就去挂战歌,这个星期我升到了7级(开始可以买勇士装备了)</li>
-<li>第4周.我顺利的升级到了8级</li>
-<li>第5周,倒霉的星期.9C开始封BFA,并开通了举报系统.我被停封了3小时.不过还是升到了9级.但我开始不太敢挂了</li>
-<li>第6周,BFA是不敢用了.我开始开发自己的插件了.</li>
-</ul>
-
-
-<p>原来配合BFA的小程序,用VC写的,模拟的都是键盘,这样可以把界面隐藏到后台,这要发送按键消息,就能正常刷战场.
-现在BFA不能用了,为了不让其他人举报,我从写了那个小程序,通过对屏幕上颜色的判断来获取人物状态和是否进入战场,来采取不同的行为.我可以在3个主城的战场军官那里挂.这样可以很大程度的避免被玩家举报.就这样,我顺利的到了10级(终于勇士了)</p>
-
-<ul>
-<li>第7周,我再次被玩家举报,因为我荣誉高,其他玩家总会想办法让我停下来.不过正好我在屏幕前看着,回答了GM的问话,逃过了这次.这个星期顺利到11级(买下了全部的中将坐骑)</li>
-<li>第8周,因为要准备冲14级高督,目前这样挂着,荣誉肯定不够,而且还怕被玩家举报,而我每天要上班,不可能一直人都看着.我又开始想办法了.我开始学习LUA语言,以寻求解决的办法.要是没有这段时间的努力,我不可能后面冲到高督.我居然写了一个可以自动回答GM问题的插件,而且在不知道如何回答的时候,就随面应付一句,然后下线(这样就安全多了.哈哈).所有玩家和我的对话还有GM的问题也多被记录下来.我每天下班,只要看一眼就可以了.这个星期因为一直写回答问题的插件,荣誉少了点,最终11级96%</li>
-<li>第9周,新的问题来了,家里的网络开始不稳定了,总是掉线.而我对这个问题没有任何办法&#8230;.最后这个星期我之排名第7升级到了12级53%</li>
-<li>第10周,我再次改写了我的程序,让程序判断是否掉线了,一旦掉线,就发出提示声音.这样就可以在最短时间发现掉线了.这个星期顺利到了13级</li>
-<li>第11周.因为插件已经开始正常工作了,而且完美的回答了几次问题.让我可以放心的24小时挂了.这个星期我冲了135w荣誉</li>
-<li>第12周,稳定的挂了一个排名第一,同时战歌毕业了</li>
-<li>第13周,排名第2,13级94%</li>
-<li>第14周,排名第一,终于14级毕业了</li>
-</ul>
-
-
-<p>这次刷高督,一直停留在59级.直到高督毕业,才升的60级.一共用了14周时间.哈哈
-期间学习了VC和LUA语言,感觉收获比较大.不过就算我这样一直用程序刷,感觉还是比较累的.要是真打,我肯定不能到14级.</p>
-
-<p><img src="http://farm9.staticflickr.com/8227/8510231110_d95612e0fd_z.jpg" alt="高督法师" />
-现在工作比较忙,很少玩了.所以写下这篇文章留作纪念</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/install-xen-shell/">安装和使用xen-shell</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>转自：<a href="http://www.xen-tools.org/software/xen-shell/install.html">http://www.xen-tools.org/software/xen-shell/install.html</a></p>
-
-<p>Installing &amp; using the Xen-Shell</p>
-
-<p>This shell makes several assumptions in the way that it operates:</p>
-
-<ul>
-<li>That you have a Xen 3.x host running.</li>
-<li>Then Xen host has several guests running.</li>
-<li>That you don&#8217;t wish to give your users shell access on the host.</li>
-</ul>
-
-
-<p>If these assumptions are not valid for your environment then you might find that you have problems.</p>
-
-<p><strong>Installation</strong></p>
-
-<p>Download either <a href="http://www.xen-tools.org/releases.html">a release</a>, or a current version of <a href="http://www.xen-tools.org/cvs.html">the CVS repository</a> and install it by executing:</p>
-
-<p><code>make install</code></p>
-
-<p><strong>Configuring Users</strong></p>
-
-<p>Each user is expected to login directly to the xen-shell, and not have any other access to the host system. To do this change their login shell by running:</p>
-
-<p><code>chsh -s /usr/local/bin/xen-login-shell username</code></p>
-
-<p>This will ensure when they connect to the system they will login to the shell, and run it within GNU Screen.</p>
-
-<p><strong>Note:</strong>CVS and Debian binary packages use /usr/bin instead of /usr/local/.
-Once you&#8217;ve changed the shell for the user you must update your Xen configuration files so that they include the username(s) of the users who can control them.
-To allow the user &#8220;bob&#8221; and the user &#8220;steve&#8221; to control the Xen guest &#8220;builder.my.flat&#8221; you would add the following to /etc/xen/builder.my.flat.cfg:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># All instances must have a name name = 'builder.my.flat'     
-</span><span class='line'># These users may control this instance. xen_shell = 'bob, steve' </span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Bandwidth Accounting</strong></p>
-
-<p>The shell allows the user to view the bandwidth they have transferred over a given period, using the bandwidth command.
-For this to work the vnstat tool must be installed and configured upon dom0. It is assumed that each Xen guest will have their network interface named the same as the guest name.
-For example a Xen guest called &#8216;skx&#8217; will have a network interface &#8216;skx&#8217; upon dom0. If you&#8217;re using the standard Xen configuration setup you can achieve this by changing your skx.cfg file to read:</p>
-
-<p><code>vif = [ 'vifname=skx,ip=1.2.3.4' ]</code></p>
-
-<p><strong>Note:</strong> if you have more than one IP address allocated to a guest you will have to create a more complicated setup.</p>
-
-<p><strong>Security</strong></p>
-
-<p>Since the xen administrator command xm requires root privileges to run you will need to configure sudo to allow the users who are running your shell to execute that command, without being prompted for a password, as root.
-Add something similar to the following to your /etc/sudoers file:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>User_Alias   XENUSERS = steve,bob,fred,foo 
-</span><span class='line'>Cmnd_Alias   XEN      = /usr/sbin/xm 
-</span><span class='line'>Cmnd_Alias   XENIMG   = /usr/bin/xen-create-image 
-</span><span class='line'>XENUSERS     ALL      = NOPASSWD: XEN,XENIMG </span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Note:</strong>you only need to grant the ability to run xen-create-image if you wish to enable reimaging support in the shell.</p>
-
-<p><strong>DNS Updates</strong></p>
-
-<p>When the shell starts it will look for the file ips.txt in the home directory of the user who connects. If that file doesn&#8217;t exist then the rdns command will be disabled.</p>
-
-<p>If you wish to allow users to control their reverse DNS create that file and give it contents such as these:</p>
-
-<p><code>192.168.1.1 foo.my.domain 192.168.1.2 bar.my.domain</code></p>
-
-<p>This file will be updated by the user when they invoke the rdns command. It is up to you to read the files and create the corresponding zonefiles / DNS updates. The shell will only manipulate the file - not push DNS updates itself.</p>
-
-<p><strong>Reimaging Support</strong></p>
-
-<p>If a user connects to the shell and has the executable file image.sh in their home directory the reimage command will be enabled.
-When the user invokes the command the image.sh script is executed after prompting for confirmation, and performing a last-chance count-down.
-It is up to you to create and configure this script to do the right thing. A sample file for user bob could look like this:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/sh /usr/bin/xen-create-image --hostname=bob \  
-</span><span class='line'>--ip=192.168.1.1  \  
-</span><span class='line'>--ip=192.168.1.2 \  
-</span><span class='line'>--size=9.5G \  
-</span><span class='line'>--swap=512M  --mem=256M \  
-</span><span class='line'>--force </span></code></pre></td></tr></table></div></figure>
-
-
-<p>This will require a correctly configured instance of <a href="http://www.xen-tools.org/software/xen-tools/">xen-tools</a> and the sudoer file to contain the ability for the user to run xen-create-image.</p>
-
-<p>Any remaining questions? <a href="http://www.xen-tools.org/contact/">contact the author</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/howto-mount-xen-img/">怎么mount一个xen的img映像。转载</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><ul>
-<li>First you need to find out the partitions and the startsector of partitions:</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@xen rruban]# file rheltest.img rheltest.img: x86 boot sector, GRand Unified Bootloader (0.94); 
-</span><span class='line'>partition 
-</span><span class='line'>1: ID=0x83, active, starthead 1, startsector 63, 208782 sectors; partition 
-</span><span class='line'>2: ID=0x8e, starthead 0, startsector 208845, 3871665 sectors, code offset 0x48</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There are 3 partitions inside the image file. The startsector of each partition is also listed. Boot partition will have start sector 63.</p>
-
-<ul>
-<li>Now you need to get the sector size:</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@xen]fdisk -lu rheltest.img
-</span><span class='line'>Disk rheltest.img: 0 MB, 0 bytes 255 heads, 63 sectors/track, 0 cylinders, total 0 sectors 
-</span><span class='line'>Units = sectors of 1 * 512 = 512 bytes 
-</span><span class='line'>Device Boot Start End Blocks Id System 
-</span><span class='line'>rheltest.img1 * 63 208844 104391 83 Linux 
-</span><span class='line'>rheltest.img2 208845 4080509 1935832+ 8e Linux LVM </span></code></pre></td></tr></table></div></figure>
-
-
-<p>The above shows the sector byte size is 512 byte.</p>
-
-<ul>
-<li>To calculating the offset: offset = start_sector x sector_byte_size.</li>
-</ul>
-
-
-<p>The startsector is 63 for the first partition, therefore the first partition offset is: 63x512=32256</p>
-
-<ul>
-<li>Finally, to mount the xen image, use:</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mount -o loop,offset=32256 test.img /foldername</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/howto-create-foreign-key-on-mysql/">如何建立两个表间的外键</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>建立Mysql两个表间的外键,需要满足三个条件</p>
-
-<ol>
-<li>两个表必须是InnoDB表类型</li>
-<li>使用在外键关系的域必须为索引型(Index)</li>
-<li>使用在外键关系的域必须与数据类型相似</li>
-</ol>
-
-
-<p>下面举例说明</p>
-
-<p>我们创建一个班级表和一个学生表,并建立一个外键</p>
-
-<p>创建班级表</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE class (id INT NOT NULL AUTO_INCREMENT, classname VARCHAR(50) NOT NULL, PRIMARY KEY(id)) ENGINE=INNODB;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>插入班级数据</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO class VALUES (1,"一班"),(2,"二班"),(3,"三班");</span></code></pre></td></tr></table></div></figure>
-
-
-<p>创建学生表</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE students (id INT(4) NOT NULL, name VARCHAR(50) NOT NULL, FK_class INT(4) NOT NULL, INDEX (FK_class), FOREIGN KEY (FK_class) REFERENCES class (id), PRIMARY KEY(id)) ENGINE=INNODB;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>验证外键约束性,我们向students表插入一个学生数据,并让FK_class的值为一个在class表里面不存在的值.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; INSERT INTO students VALUES (1,"zhang",5);</span></code></pre></td></tr></table></div></figure>
-
-
-<p>马上就会看到Mysql报错</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR 1452 : Cannot add or update a child row: a foreign key constraint fails (`test/students`, CONSTRAINT `students_ibfk_1` FOREIGN KEY (`FK_class`) REFERENCES `class` (`id`))</span></code></pre></td></tr></table></div></figure>
-
-
-<p>以上证明外键可以正常工作了</p>
-
-<p>在Mysql下测试了以下,不建立index,并且不指定innodb格式.
-版本</p>
-
-<p>+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-+
-| version()            |
-+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-+
-| 5.0.24a-community-nt |
-+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-+</p>
-
-<p>建立class表</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE class (id INT NOT NULL AUTO_INCREMENT, classname VARCHAR(50) NOT NULL, PRIMARY KEY(id));</span></code></pre></td></tr></table></div></figure>
-
-
-<p>建立students表</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE students (id INT(4) NOT NULL, name VARCHAR(50) NOT NULL, FK_class INT(4) NOT NULL, FOREIGN KEY (FK_class) REFERENCES class (id), PRIMARY KEY(id));</span></code></pre></td></tr></table></div></figure>
-
-
-<p>通过Navicat查看,上面语句建立的两个表,也会默认用INNODB存储,而且也在students表建立了index和外键.一切正常.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/get-xen-guestos-image/">获取XEN guestOS的images文件</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>我们可以从<a href="http://stacklet.com/">http://stacklet.com/</a>其实就是原来<a href="http://jailtime.org/">http://jailtime.org/</a>站点找我们需要的xen image文件</p>
-
-<p>在2009年的时候，jailtime.org发布了一个新闻</p>
-
-<h6>May 4th, 2009</h6>
-
-<p>The jailtime project has been relaunched with a new name and site: <a href="http://stacklet.com/">Stacklet</a>
-As part of the relaunch all of the distributions currently on jailtime have been upgraded to their latest versions. Also, all of the code for creating the images is now publically available – see <a href="http://stacklet.com/">http://stacklet.com/</a> for further details&#8230;.
-Jailtime will remain online but downloads will probably be turned off eventually as the transition to stacklet proceeds.</p>
-
-<p>所以现在就访问<a href="http://stacklet.com/">http://stacklet.com/</a>就可以了。</p>
-
-<p>包括如下系统</p>
-
-<p><li>
-<a href="http://stacklet.com/downloads/images/list/CentOS">CentOS</a> <ul>
-<li>
-<a href="http://stacklet.com/downloads/images/centos/5.3">5.3</a> </li>
-<li><a href="http://stacklet.com/downloads/images/centos/5.3.64bit">5.3 (64-bit)</a></li>
-</ul>
-</li>
-<li>
-<a href="http://stacklet.com/downloads/images/list/Debian">Debian</a> <ul>
-<li>
-<a href="http://stacklet.com/downloads/images/debian/5.0">5.0 (Lenny)</a> </li>
-<li><a href="http://stacklet.com/downloads/images/debian/5.0.64bit">5.0 (Lenny, 64-bit)</a></li>
-</ul>
-</li>
-<li>
-<a href="http://stacklet.com/downloads/images/list/Fedora">Fedora</a> <ul>
-<li>
-<a href="http://stacklet.com/downloads/images/fedora/10">10</a> </li>
-<li><a href="http://stacklet.com/downloads/images/fedora/10.64bit">10 (64-bit)</a></li>
-</ul>
-</li>
-<li>
-<a href="http://stacklet.com/downloads/images/list/Gentoo">Gentoo</a> <ul>
-<li>
-<a href="http://stacklet.com/downloads/images/gentoo/2008-0">2008.0</a> </li>
-<li><a href="http://stacklet.com/downloads/images/gentoo/2008-0.64bit">2008.0 (64-bit)</a></li>
-</ul>
-</li>
-<li>
-<a href="http://stacklet.com/downloads/images/list/Mandriva">Mandriva</a> <ul>
-<li>
-<a href="http://stacklet.com/downloads/images/mandriva/2009.0">2009.0</a> </li>
-<li><a href="http://stacklet.com/downloads/images/mandriva/2009.0.64bit">2009.0 (64-bit)</a></li>
-</ul>
-</li>
-<li>
-<a href="http://stacklet.com/downloads/images/list/Slackware">Slackware</a> <ul>
-<li><a href="http://stacklet.com/node/13">12.2</a></li>
-</ul>
-</li>
-<li>
-<a href="http://stacklet.com/downloads/images/list/Ubuntu">Ubuntu</a> <ul>
-<li>
-<a href="http://stacklet.com/downloads/images/ubuntu/9.04">9.04 (Jaunty)</a> </li>
-<li><a href="http://stacklet.com/downloads/images/ubuntu/9.04.64bit">9.04 (Jaunty, 64-bit)</a></li>
-</ul>
-</li>
-</ul></li>
-<li></p>
-
-<p><strong>下面是一个站点提供的img文件的简单说明</strong>
-<strong>All files on this site are provided without guarantee or warranty. Use at your own risk.</strong>
-Each download is a bzipped tarball containing an image and cfg files:</p>
-
-<ul>
-<li>a xen guest filesystem
-</li>
-<li>sample xen configuration files to be used with <strong>xm create</strong>
-</li>
-</ul>
-
-
-<p>The naming convention of the download tarball is:
-<strong><distribution>.<distro-version>.<created-date>.img.tar.bz2</strong>.
-For example centos.5-3.x86.20090423.img.tar.bz2 contains</p>
-
-<ul>
-<li>centos.5-3.x86.img
-</li>
-<li>centos.5-3.x86.xen3.cfg
-</li>
-<li>centos.5-3.x86.xen3.pygrub.cfg（这个文件比较重要，如果用的是CentOS 5.3的虚拟化，就需要这个文件才可以启动guestOS。因为CentOS 5.3没有提供Xen-U的内核。）
-</li>
-</ul>
-
-
-<p>All of the packages installed in the image will be the latest versions available as of the created date, which is in yyyy-mm-dd format.</p>
-
-<h3>Prerequisites</h3>
-
-
-<ol>
-<li>Working installation of Xen version 3
-</li>
-<li>The xen daemon (xend) must be running
-</li>
-<li>Enough filesystem space to accomodate the uncompressed tarball (generally 1GB)
-</li>
-<li>Enough unallocated RAM to run the xen guest (generally 128MB)
-</li>
-</ol>
-
-
-<h3>Default Configuration and Networking</h3>
-
-
-<p>Each filesystem is configured to use dhcp. The *.xen.cfg also is also configured for dhcp. It is recommended that you first test the filesystem using dhcp if possible before attempting other networking parameters. Each download page has additional notes on networking that is appropriate for a particular distribution.
-The root login is root/password. It is highly recommened that you change the root password immediately.</p>
-
-<h3>Installation</h3>
-
-
-<p>You will need to uncompress the tarball to a local directory and edit the *.xen.cfg file to point to the uncompressed image and swap file.
-If all is well you will see the guest’s boot messages scrolling by.
-<strong>一些HOWTO文档</strong></p>
-
-<h3><strong>HOWTO: Filesystems</strong></h3>
-
-
-<p>In the following howto’s, <image file> should be replaced with a reference to a specific .img file.</p>
-
-<h4><strong>How do I mount an image without booting it?</strong></h4>
-
-
-<ul>
-<li>mkdir -p /mnt/loop
-</li>
-<li>mount -o loop <image file> /mnt/loop/
-</li>
-</ul>
-
-
-<h4><strong>How do I resize an image file?</strong></h4>
-
-
-<p>First, make sure that the image file is not already mounted and is not already running as a xen guest. The following commands increase an image file to 2.5GB. Backup the image before attempting this.</p>
-
-<ul>
-<li>dd if=/dev/zero of=<image file> bs=1M conv=notrunc count=1 seek=2500 
-</li>
-<li>losetup /dev/loop0 <image file>
-</li>
-<li>e2fsck -f /dev/loop0
-</li>
-<li>resize2fs /dev/loop0
-</li>
-<li>e2fsck -f /dev/loop0
-</li>
-<li>losetup -d /dev/loop0
-</li>
-</ul>
-
-
-<p>You may then boot or mount the image to confirm the increased size. The e2fsck checks in this howto are not strictly necessary.</p>
-
-<h4><strong>How do I move the contents of an img file to a regular partition?</strong></h4>
-
-
-<p>Mount the img file using the above howto. Assuming the destination partition is mounted at /mnt/dest, execute the following:</p>
-
-<ul>
-<li>cp -a /mnt/loop/* /mnt/dest/
-</li>
-</ul>
-
-
-<p>You will then be able to boot the filesystem using the partition instead of the image file, which should provide better performance. You will need to update the *.xen.cfg file to reference the partition instead of the img file (the <strong>disk</strong> parameter will need to change, see the <a href="http://www.cl.cam.ac.uk/Research/SRG/netos/xen/readmes/user/user.html">Xen Manual</a>). Also, remember to unmount partitions or img files before booting a xen guest from them!</p>
-
-<p></li></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -996,10 +764,12 @@ If all is well you will see the guest’s boot messages scrolling by.
 <ul id="categories">
   <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
 <li class='category'><a href='/blog/categories/game/'>Game (14)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (4)</a></li>
 <li class='category'><a href='/blog/categories/host/'>Host (2)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (1)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (26)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (2)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
@@ -1008,7 +778,7 @@ If all is well you will see the guest’s boot messages scrolling by.
 <li class='category'><a href='/blog/categories/software/'>Software (5)</a></li>
 <li class='category'><a href='/blog/categories/virtualization/'>Virtualization (8)</a></li>
 <li class='category'><a href='/blog/categories/website/'>Website (1)</a></li>
-<li class='category'><a href='/blog/categories/windows/'>Windows (5)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (7)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
 
 </ul>
@@ -1030,11 +800,11 @@ If all is well you will see the guest’s boot messages scrolling by.
       </li>
     
       <li class="post">
-        <a href="/blog/2010/01/24/postfix-extmail-attachment-bug/">postfix+extmail的附件大小显示和限制问题解决办法</a>
+        <a href="/blog/2010/03/12/HP-MSA1000-DL380G5-Centos5/">CentOS 5.4 基于HP Proliant DL380 G5服务器配置Modular Smart Array 1000存储</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2010/01/19/extman/">extman后台登陆问题解决方法</a>
+        <a href="/blog/2010/03/12/HP-Computer-Ghost-Problem/">HP台式机器，ghost系统后，提示windows could not start</a>
       </li>
     
   </ul>

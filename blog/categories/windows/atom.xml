@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Windows | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/windows/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-27T11:23:29+08:00</updated>
+  <updated>2013-02-27T22:11:05+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,67 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[HP台式机器，ghost系统后，提示windows could not start]]></title>
+    <link href="http://babodx.github.com/blog/2010/03/12/HP-Computer-Ghost-Problem/"/>
+    <updated>2010-03-12T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/03/12/HP-Computer-Ghost-Problem</id>
+    <content type="html"><![CDATA[<p>今天单位一台HP dx7518的台式机器，ghost了一个winxp系统。但是只要一开机，就提示</p>
+
+<p><code>
+windows could not start because of a computer disk hardware configuration problem    
+could not read from the selected boot disk check boot path and disk harware   
+please check the windows documentation about hardware disk configuation and your hardware refer once manuals for additional information   
+</code></p>
+
+<p>开始我以为是硬盘的设置问题，后来发现硬盘已经设置为IDE模式了。</p>
+
+<p>后来网上查找，发现是和BIOS里的WDRT Support选项有关系。。。</p>
+
+<p><strong>解决办法</strong></p>
+
+<p>开机进入bios设置，选择Power management Setup 再选择WDRT Support 将后面值修改为disable</p>
+
+<p>WDRT SUPPORT：watchdog resource table 一种加密狗。通过这种加密保护来拒绝安装非随机配备的操作系统。同样，全系的HP 家用、商用台式机、笔记本，进行GHOST安装后报错，也可以用此方法解决。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[win7下使用联通无线上网卡HUAWEI E1750]]></title>
+    <link href="http://babodx.github.com/blog/2010/02/12/HUAWEI-E1750-on-Win7/"/>
+    <updated>2010-02-12T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/02/12/HUAWEI-E1750-on-Win7</id>
+    <content type="html"><![CDATA[<p>老婆单位年底搞活动，抽奖中了一个联通的无线上网卡。型号HUAWEI E1750</p>
+
+<p>本来打算给我笔记本用的，我系统是Windows 7。结果发现用不了，安装上以后，无线上网软件提示找不到设备。。。。。。</p>
+
+<p><strong>解决办法</strong></p>
+
+<p>让Windows 7自动找驱动，肯定是没戏了。用光盘自带软件的驱动也不灵。后来到HUAWEI网站查找最近驱动，最终下面网站找到了相关更新</p>
+
+<p><code>http://www.huaweidevice.com/cn/downloadCenter.do?method=doListSoftwareid=1&amp;fla y=findsoftwareName=E1750</code></p>
+
+<p><code>
+E1750 E1750-WINMACB300D00SP04C112( U TPS11[1].301.08.24.112_MAC11.3 01.06.07.112)(China Unicom) China Unicom  2009-12-23
+</code>
+以上是Win7下可以使用的驱动更新。大约28M</p>
+
+<p>安装步骤是先安装Mobile_Card_Driver_3.09.exe驱动，然后正确识别设备后，运行UTPS11.301.08.24.112_MAC11.301.06.07.112.B433.exe更新设备的固件。最后再安装无线上网软件。</p>
+
+<p>可是我安装文档的方法，在Win7下并没有成功，运行UTPS11.301.08.24.112_MAC11.301.06.07.112.B433.exe更新的时候，总是提示没有找到设备或者正在有软件占用设备或者没有管理员权限。。。。。</p>
+
+<p>后来找了一台WinXP系统的机器，按照文档步骤一次成功。</p>
+
+<p>然后再将更新过的E1750插到Win7上面，就可以自动识别设备了。识别成功后如下图。</p>
+
+<p><img src="http://farm9.staticflickr.com/8251/8512574602_ee146a4011.jpg" alt="e1750驱动截图" /></p>
+
+<p>这样继续安装无线上网软件就可以正确识别并上网了。下面是正确识别后的截图</p>
+
+<p><img src="http://farm9.staticflickr.com/8105/8511465149_d5c86d6172.jpg" alt="e1750成功驱动" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[win7下启动telnet--转载]]></title>
@@ -144,46 +205,6 @@
 <li>英特尔® 无线 WiFi 链接 4965AGN</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Vista 太慢了，决定放弃使用她的念头了]]></title>
-    <link href="http://babodx.github.com/blog/2007/04/27/vista-slow/"/>
-    <updated>2007-04-27T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2007/04/27/vista-slow</id>
-    <content type="html"><![CDATA[<p>居然1G内存酷睿双核处理器使用起来还是会很慢不知道是我没有优化，或者配置的不对？还是本来就不快？总之放弃了，还是用winxp了，以后成熟些再说</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[解决explorer cpu占用率高的一些办法]]></title>
-    <link href="http://babodx.github.com/blog/2007/04/19/resolve-explorer-cpu-occupancy-reate/"/>
-    <updated>2007-04-19T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2007/04/19/resolve-explorer-cpu-occupancy-reate</id>
-    <content type="html"><![CDATA[<p>1 将zipfldr.dll注销掉</p>
-
-<p>```
-regsvr32 c:\windows\system32\zipfldr.dll /u</p>
-
-<p>```</p>
-
-<p>2 关闭avi预览</p>
-
-<p><code>
-regsvr32 shmedia.dll /u
-</code></p>
-
-<p>经过上面两步，应该可以减少explorer的cup占用率了。</p>
-
-<p>以后如果需要用上面的功能，再按照下面步骤打开</p>
-
-<p><strong>恢复上面功能</strong></p>
-
-<p><code>
-regsvr32 c:\windows\system32\zipfldr.dll
-regsvr32 shmedia.dll
-</code></p>
 ]]></content>
   </entry>
   
