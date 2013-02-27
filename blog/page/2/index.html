@@ -316,6 +316,100 @@ update-manager -d 然后就进入了漫长的等待，单位网络那个垃圾�
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-use-sqlite3/">Rails下使用sqlite3</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>参考<a href="http://wiki.rubyonrails.org/rails/pages/HowtoUseSQLite">http://wiki.rubyonrails.org/rails/pages/HowtoUseSQLite</a></p>
+
+<p><strong>安装SQLite</strong></p>
+
+<p>SQLite 是一个轻量级的sql风格数据库.可以执行大部分sql92标准SQLite全部安装只有244kb,包括命令行客户端和DLL文件SQLite不用安装服务进程，就像Access数据库一样使用方便安装只需要2个文件</p>
+
+<ul>
+<li>SQLite DLL</span></li>
+<li>SQLite command-line client for creating tables</li>
+</ul>
+
+
+<p>添加sqlite3.exe 和sqlite3.dll 到系统的path下，我放在了c:\windows\system32下了</p>
+
+<p><strong>安装sqlite3-ruby.gem</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install sqlite3-rubyAttempting local installation of 'sqlite3'
+</span><span class='line'>Local gem file not found: sqlite3*.gem
+</span><span class='line'>Attempting remote installation of 'sqlite3'
+</span><span class='line'>Select which gem to install for your platform (i386-mswin32)
+</span><span class='line'>1. sqlite3-ruby 1.1.0 (mswin32)
+</span><span class='line'>2. sqlite3-ruby 1.1.0 (ruby)
+</span><span class='line'>3. sqlite3-ruby 1.0.1 (ruby)
+</span><span class='line'>...
+</span><span class='line'>&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>选择 1 安装sqlite3-ruby 1.1.0(mswin32) 现在好像2才是sqlite3-ruby 1.1.0(mswin32),总之选择(mswin32)就对了</p>
+
+<p><strong>安装图像管理工具</strong>（也可以不用，直接用命令行也很方便）<a href="http://sqlitebrowser.sourceforge.net/">http://sqlitebrowser.sourceforge.net/</a></p>
+
+<p><strong>创建数据库</strong></p>
+
+<p>进入项目所在目录，比如我的项目是testsqld:\work\testsql>sqlite db\test.db上面命令就在db目录下，创建了一个test.db数据库</p>
+
+<p><strong>配置database.yml文件，访问test.db数据库</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>development:
+</span><span class='line'>   adapter: sqlite3
+</span><span class='line'>   database: db/test.db   #username: root
+</span><span class='line'>   #password: 
+</span><span class='line'>   #host: localhost</span></code></pre></td></tr></table></div></figure>
+
+
+<p>后面如何操作，就和使用mysql数据库一样了。建立数据表可以用db:migrate来完成</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2009/12/21/rails-upload-unread/">Rails下上传文件并且解决乱码问题</a></h1>
     
     
@@ -545,6 +639,174 @@ update-manager -d 然后就进入了漫长的等待，单位网络那个垃圾�
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-graphical-verification-code/">Rails实现图片验证码</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>写在了babo.javaeye.com了</p>
+
+<p><a href="http://babo.javaeye.com/blog/72298">http://babo.javaeye.com/blog/72298</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-fckeditor/">Rails配合fckeditor实现文本编辑工具条</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>主要参考了</p>
+
+<p><a href="http://blog.caronsoftware.com/articles/2006/08/07/fckeditor-plugin-for-rails">http://blog.caronsoftware.com/articles/2006/08/07/fckeditor-plugin-for-rails</a></p>
+
+<p><a href="http://www.blogjava.net/rocky/archive/2006/11/04/rails-fckeditor-integration.html">http://www.blogjava.net/rocky/archive/2006/11/04/rails-fckeditor-integration.html</a></p>
+
+<p><strong>安装</strong></p>
+
+<p>下载<a href="http://rubyforge.org/projects/fckeditorp/">http://rubyforge.org/projects/fckeditorp/</a>项目的 FCKEditor Plugin for Rails，将下载的文件加压缩后，保存到fckeditor文件夹中</p>
+
+<p>将fckeditor文件夹拷贝到自己项目的vendor/plugins目录下</p>
+
+<p>运行rack fckeditor:install</p>
+
+<p>然后在需要用到这个插件的页面，输入<code>&lt;%= javascript_include_tag "fckeditor/fckeditor" %&gt;</code>或者将这句话添加到app/view/layouts/下的对应文件中</p>
+
+<p><strong>使用</strong></p>
+
+<p>需要使用这个工具条的地方，输入</p>
+
+<p><code>&lt;%=fckeditor_textarea("post", "body", :toolbarSet =&gt; 'Simple', :width =&gt; '100%', :height =&gt; '500px' )%&gt;</code></p>
+
+<p>注意fckeditor_textarea的一个参数post必须是action传过来的一个实体类，如果action没有传过来，就会提示出错</p>
+
+<p>比如我这里用到了post,我的action如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def new&lt;br&gt;
+</span><span class='line'>      @post = Post.new&lt;br&gt;
+</span><span class='line'>    end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>第二个参数，body对应表单里的字段</p>
+
+<p>第三个参数toolbarSet=>&#8221;Simple&#8221;为工具条风格，这个风格可以在public/javascripts/fckcustom.js文件里面定义（修改后，要关闭浏览器再开才起作用）</p>
+
+<p>第四、五个参数，代表文本区域的大小</p>
+
+<p><strong>图片上传</strong></p>
+
+<p>默认安装后，图片上传不能用，需要修改vendor/plugins/fckeditor/app/controllers/fckeditor_controller.rb文件的upload_file action如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def upload_file
+</span><span class='line'>      @new_file = params[:NewFile]
+</span><span class='line'>      @url = upload_directory_path
+</span><span class='line'>      begin
+</span><span class='line'>        ftype = @new_file.content_type.strip
+</span><span class='line'>        if ! MIME_TYPES.include?(ftype)
+</span><span class='line'>          @errorNumber = 202
+</span><span class='line'>          puts "#{ftype} is invalid MIME type"
+</span><span class='line'>          raise "#{ftype} is invalid MIME type"
+</span><span class='line'>        else
+</span><span class='line'>          path = current_directory_path + "/" + @new_file.original_filename
+</span><span class='line'>          File.open(path,"wb",0664) do |fp|
+</span><span class='line'>            FileUtils.copy_stream(@new_file, fp)
+</span><span class='line'>          end
+</span><span class='line'>          @errorNumber = 0
+</span><span class='line'>        end
+</span><span class='line'>      rescue =&gt; e
+</span><span class='line'>        @errorNumber = 110 if @errorNumber.nil?
+</span><span class='line'>      end
+</span><span class='line'>    
+</span><span class='line'>      # Fix provided by Nicola Piccinini -- &lt;a href="http://superfluo.org/"&gt;http://superfluo.org&lt;/a&gt;
+</span><span class='line'>      render :text =&gt; %Q'&lt;script&gt;window.parent.OnUploadCompleted(&lt;a href="mailto:#%7B@errorNumber%7D,%20%22#%7BUPLOADED+%22/%22+params%5B:Type%5D+%22/%22+@new_file.original_filename%7D%20%22);&lt;/script&gt;%20"&gt;#{@errorNumber},\"#{UPLOADED+"/"+params[:Type]+"/"+@new_file.original_filename}\");&lt;/script&gt;'&lt;/a&gt;
+</span><span class='line'>    
+</span><span class='line'>    end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>关于工具条具体某个工具怎么显示，提供那些功能，可以在public/javascripts/fckeditor/fckconfig.js文件里面定义</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2009/12/21/quick-stats-server-visits/">如何快速统计服务器访问量</a></h1>
     
     
@@ -730,221 +992,6 @@ update-manager -d 然后就进入了漫长的等待，单位网络那个垃圾�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/mysql-log-sql/">Mysql设置my.cnf来记录下全部sql请求</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>要想记录下提交到mysql数据库的全部sql语句，可以通过修改my.cnf来实现</p>
-
-<p>修改/etc/my.cnf文件</p>
-
-<p>找到[mysqld]段
-加入</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>log=queryLog
-</span><span class='line'>log-slow-queries=showquerylog</span></code></pre></td></tr></table></div></figure>
-
-
-<p>然后就可以到/var/lib/mysql/目录下找到queryLog和showquerylog日志文件了</p>
-
-<p>里面记录这每个提交到数据库执行的sql语句。</p>
-
-<p>我的系统CentOS 4.4 rpm方式安装的mysql 5.0.57,如果其它系统或者其它安装方式，可能文件路径会有些不同。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/mysql-import/">如何向万网的Mysql数据库导入数据</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>昨天单位由一个网站，要放到万网的虚拟主机去。
-网站是jsp写的，程序好导。直接ftp过去就可以了。</p>
-
-<p>可是mysql的数据库怎么导呢？</p>
-
-<p>我先用</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mysqldump database_name&gt;database_name.sql</span></code></pre></td></tr></table></div></figure>
-
-
-<p>然后把这个database_name.sql下载下来。</p>
-
-<p>再给虚拟主机空间上传一个phpmyadmin来做数据库管理用。这样就可以使用phpmyadmin导入数据了。</p>
-
-<p>如果网站数据小，这样就ok了。可是我的database_name.sql有60M</p>
-
-<p>万网空间上的phpmyadmin只能最大支持2M</p>
-
-<p>于是只能另外想办法。我先导入表格结构吧。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mysqldump –d database_name&gt;database_name.sql</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在phpmyadmin里，选择好数据库后，用导入功能，将database_name.sql导入</p>
-
-<p><img src="http://farm9.staticflickr.com/8096/8510015688_bc8709cc96.jpg" alt="phpmyadmin图片" /></p>
-
-<p>现在有了表结构了，但是每个表都没有数据。我们再继续导入数据。</p>
-
-<p>我的表里面，除了一个news表格特别大，大约51M，其他都在2M一下。所以我每个表格生成一个txt文件，然后导入到万网的数据库。</p>
-
-<p>本地进入mysql>提示符后，用以下命令将数据的表格数据导出。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>select * from admin into outfile “/tmp/admin.txt” fields terminated by “|” lines terminated by “@”</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上面命令将本地数据库的admin表，导出到/tmp/目录下的admin.txt文件。</p>
-
-<p>我们有几个表格，就用这个命令导出几个txt文件。</p>
-
-<p>然后将txt文件用gzip压缩，因为phpmyadmin支持gzip压缩格式的。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cd /tmp/
-</span><span class='line'>gzip admin.txt</span></code></pre></td></tr></table></div></figure>
-
-
-<p>最后将压缩的admin.txt.gz下载到本地，用浏览器上传给phpmyadmin导入</p>
-
-<p>![](</p>
-
-<p><strong>解决news表格过大问题</strong></p>
-
-<p>我的news表格有51Ｍ，就算gzip压缩后，还有7M左右，还是不能用phpmyadmin导入。我们可以将news表格的数据切分为多个txt文件，然后保证每个文件gzip后，在2M以内就可以。这个切分就要根据具体表格来判断了。</p>
-
-<p>我先查询了news表格一共有多少条记录</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>select count(*) from news;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>返回1477条，表格是51M。压缩后的表格是7M。</p>
-
-<p>7M/2M=3.5</p>
-
-<p>1477/3.5=422条。</p>
-
-<p>根据上面的计算，只要按照422条一个文件来分割就可以了。为了保险，因为每条记录的大小并不是一样的平均分配，我按照每个文件200条记录来切分。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>select * from news where newId&gt;0 limit 200 into outfile “/tmp/news0.txt” fields terminated by “|” lines terminated by “@”;
-</span><span class='line'>
-</span><span class='line'>然后用
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>select max(newId) from news where newId>0 limit 200;
-&#8220;`</p>
-
-<p>查看下200条记录后，是到了那条记录，下次分割就从那条开始
-这样分割出来的8个文件，一次压缩后，上传到phpmyadmin导入。就完成了全部表格的导入工作。</p>
-
-<p><strong>总结</strong></p>
-
-<p>其实如果数据本身不复杂，直接用navicat也可以远程连接导入的。但是navicat不支持定义 lines terminated。我的news表格里面存在的都是html代码，经常出现换行符，所以只能选择用phpmyadmin了。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/mage-be-stolen/">我的高督被盗了&#8230;&#8230;</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>07年3月29日,我的高督法式被盗了,同一个账号下还有60的萨满.因为是朋友玩的时候被盗的，我到是没有什么感觉。反正也冲到高督了，该玩的也玩了。ZG鳄鱼,MLD公主也刷了。现在也是该离开的时候了</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -963,13 +1010,13 @@ update-manager -d 然后就进入了漫长的等待，单位网络那个垃圾�
   <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
 <li class='category'><a href='/blog/categories/game/'>Game (10)</a></li>
 <li class='category'><a href='/blog/categories/host/'>Host (1)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (12)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (13)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
-<li class='category'><a href='/blog/categories/rails/'>Rails (2)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (1)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (3)</a></li>
-<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (6)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (7)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
 
 </ul>

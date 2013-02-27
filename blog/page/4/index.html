@@ -9,8 +9,8 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="今天安装了一台CentOS 5.3 64bit服务器。 服务器硬件HP 380G5，4U高 CPU 4核处理器 2颗
-内存 4G 硬盘 147G*3 安装很顺利，采用server模式，去掉了不用的软件，加入虚拟化。 安装后启动，占用内存在230M左右，感觉比CentOS 4.7高了很多呀。。。 &hellip;">
+  <meta name="description" content="虽然号被盗了,但是老天却把幸运给了我.让我刷出了 [无尽黑暗之刃] 有了这个匕首,可以一次刷ZG 9堆鳄鱼了,简直是FS AOE的极品武器
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,234 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/dagger/">刷MLD公主,得到了无尽黑暗之忍</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>虽然号被盗了,但是老天却把幸运给了我.让我刷出了</p>
+
+<p>[无尽黑暗之刃]</p>
+
+<p>有了这个匕首,可以一次刷ZG 9堆鳄鱼了,简直是FS AOE的极品武器</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/cheat-engine/">一个内存所搜的好用具&#8211;Cheat Engine</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这个工具可以用来查找内存里面的数据。是目前最好的修改游戏软件了，支持查找基地址。不过要想查找出基地址，还是需要一定的汇编能力的。反正我用这个，还没有查找出WOW 2.1.2的基地址。不过国外有个人，用这个工具找到了WOW <strong>1.12.1</strong>的了</p>
+
+<p>可以在google查到这篇文章<a href="http://www.edgeofnowhere.cc/viewtopic.php?t=332444&amp;start=0&amp;postdays=0&amp;postorder=asc&amp;highlight=">Defeating DMA: Offsets and Pointers for WoW</a></p>
+
+<p>本来打算用这个工具找出基地址，然后重新写挂战场的外挂呢。。。。革命尚未成功，仍需努力呀暴风前夕这个版本里，我开始玩小D了，目前已经60，正在冲荣誉。。。用的还是以前我写的挂机程序，稍微修改了下，比较稳定。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-xen-pygrub/">CentOS里的Xen配置pygrub</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>如果用virt-install生成一台虚拟服务器
+在查看配置的时候，会发现已经没有了kernel=这个配置来制定启动内核。而是用了</p>
+
+<p><code>bootloader = '/usr/bin/pygrub'</code></p>
+
+<p>关于这个，可以参考
+<a href="http://wiki.xensource.com/xenwiki/PyGrub">http://wiki.xensource.com/xenwiki/PyGrub</a></p>
+
+<p>CentOS 5.3的虚拟化，好像没有了XenU的内核，而是改用了这种新的方式。</p>
+
+<p>反正我用kernel启动失败了。后来用这个方式已经可以正常使用虚拟服务器了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-xen-memory-problem/">CentOS 5.3 安装虚拟化后的内存识别问题.</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>昨天单位到了2台SUN x4450.</p>
+
+<p><strong>硬件配置相当强力.</strong></p>
+
+<p>CPU 4颗6核的 Intel(R) Xeon(R) CPU           X7460 @ 2.66GHz</p>
+
+<p>系统可以识别出24颗处理器</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# cat /proc/cpuinfo |grep processor|wc -l
+</span><span class='line'>24</span></code></pre></td></tr></table></div></figure>
+
+
+<p>内存64G</p>
+
+<p>在内存问题上,我郁闷了一阵子.我用dmesg、free、top查看，都是32G</p>
+
+<p>开始以为CentOS 5.3的64位内核就能支持到32G呢。又尝试在启动参数里加mem=64G</p>
+
+<p>又上论坛询问、查看官方文档，都说CentOS 5.3 64bit应该没有内存限制的。</p>
+
+<p>后来我发现了，原来问题出在安装的虚拟化上面</p>
+
+<p>用xm top可以正确识别内存。而且安装的系统，只是当作xm 里面的一个dom0来运行的。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-install-xen/">CentOS 5.3下成功安装了Xen虚拟化服务。</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天参照下面文档成功安装了虚拟化服务。</p>
+
+<p><a href="http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2">http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2</a></p>
+
+<p>并且在虚拟化服务里，安装了一台vm01的虚拟Centos。</p>
+
+<p>不过时间比较长，通过网络安装，用了4个小时。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -244,42 +472,6 @@
 
 <p>总分 182.5 真不知都那些VPS测试出 400分的，是什么情况。
 难道是可以针对unixbench优化？</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/29/">我的高督法师的装备恢复了</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天恢复了高督法师的装备，虽然损失了3500G，但是装备还是给恢复回来了现在装备没有FM了，只有440法伤。。。。以前523知足了。希望大家都用密保卡，省的丢号</p>
 </div>
   
   
@@ -627,13 +819,13 @@
   <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
 <li class='category'><a href='/blog/categories/game/'>Game (10)</a></li>
 <li class='category'><a href='/blog/categories/host/'>Host (1)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (12)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (13)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
-<li class='category'><a href='/blog/categories/rails/'>Rails (2)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (1)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (3)</a></li>
-<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (6)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (7)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
 
 </ul>

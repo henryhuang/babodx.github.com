@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-27T00:29:11+08:00</updated>
+  <updated>2013-02-27T08:21:06+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -474,55 +474,105 @@ cat /var/log/httpd/abc-access_20081116.log |grep "200 "|awk '{print $4}'|awk -F 
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[怎么mount一个xen的img映像。转载]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img/"/>
+    <title type="html"><![CDATA[安装和使用xen-shell]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/install-xen-shell/"/>
     <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img</id>
-    <content type="html"><![CDATA[<ul>
-<li>First you need to find out the partitions and the startsector of partitions:</li>
-</ul>
+    <id>http://babodx.github.com/blog/2009/12/21/install-xen-shell</id>
+    <content type="html"><![CDATA[<p>转自：<a href="http://www.xen-tools.org/software/xen-shell/install.html">http://www.xen-tools.org/software/xen-shell/install.html</a></p>
 
+<p>Installing &amp; using the Xen-Shell</p>
 
-<p><code>
-[root@xen rruban]# file rheltest.img rheltest.img: x86 boot sector, GRand Unified Bootloader (0.94);
-partition
-1: ID=0x83, active, starthead 1, startsector 63, 208782 sectors; partition
-2: ID=0x8e, starthead 0, startsector 208845, 3871665 sectors, code offset 0x48
-</code></p>
-
-<p>There are 3 partitions inside the image file. The startsector of each partition is also listed. Boot partition will have start sector 63.</p>
+<p>This shell makes several assumptions in the way that it operates:</p>
 
 <ul>
-<li>Now you need to get the sector size:</li>
+<li>That you have a Xen 3.x host running.</li>
+<li>Then Xen host has several guests running.</li>
+<li>That you don't wish to give your users shell access on the host.</li>
 </ul>
 
+
+<p>If these assumptions are not valid for your environment then you might find that you have problems.</p>
+
+<p><strong>Installation</strong></p>
+
+<p>Download either <a href="http://www.xen-tools.org/releases.html">a release</a>, or a current version of <a href="http://www.xen-tools.org/cvs.html">the CVS repository</a> and install it by executing:</p>
+
+<p><code>make install</code></p>
+
+<p><strong>Configuring Users</strong></p>
+
+<p>Each user is expected to login directly to the xen-shell, and not have any other access to the host system. To do this change their login shell by running:</p>
+
+<p><code>chsh -s /usr/local/bin/xen-login-shell username</code></p>
+
+<p>This will ensure when they connect to the system they will login to the shell, and run it within GNU Screen.</p>
+
+<p><strong>Note:</strong>CVS and Debian binary packages use /usr/bin instead of /usr/local/.
+Once you've changed the shell for the user you must update your Xen configuration files so that they include the username(s) of the users who can control them.
+To allow the user "bob" and the user "steve" to control the Xen guest "builder.my.flat" you would add the following to /etc/xen/builder.my.flat.cfg:</p>
+
+<p>```</p>
+
+<h1>All instances must have a name name = 'builder.my.flat'    </h1>
+
+<h1>These users may control this instance. xen_shell = 'bob, steve'</h1>
+
+<p>```</p>
+
+<p><strong>Bandwidth Accounting</strong></p>
+
+<p>The shell allows the user to view the bandwidth they have transferred over a given period, using the bandwidth command.
+For this to work the vnstat tool must be installed and configured upon dom0. It is assumed that each Xen guest will have their network interface named the same as the guest name.
+For example a Xen guest called 'skx' will have a network interface 'skx' upon dom0. If you're using the standard Xen configuration setup you can achieve this by changing your skx.cfg file to read:</p>
+
+<p><code>vif = [ 'vifname=skx,ip=1.2.3.4' ]</code></p>
+
+<p><strong>Note:</strong> if you have more than one IP address allocated to a guest you will have to create a more complicated setup.</p>
+
+<p><strong>Security</strong></p>
+
+<p>Since the xen administrator command xm requires root privileges to run you will need to configure sudo to allow the users who are running your shell to execute that command, without being prompted for a password, as root.
+Add something similar to the following to your /etc/sudoers file:</p>
 
 <p><code>
-[root@xen]fdisk -lu rheltest.img
-Disk rheltest.img: 0 MB, 0 bytes 255 heads, 63 sectors/track, 0 cylinders, total 0 sectors
-Units = sectors of 1 * 512 = 512 bytes
-Device Boot Start End Blocks Id System
-rheltest.img1 * 63 208844 104391 83 Linux
-rheltest.img2 208845 4080509 1935832+ 8e Linux LVM
+User_Alias   XENUSERS = steve,bob,fred,foo
+Cmnd_Alias   XEN      = /usr/sbin/xm
+Cmnd_Alias   XENIMG   = /usr/bin/xen-create-image
+XENUSERS     ALL      = NOPASSWD: XEN,XENIMG
 </code></p>
 
-<p>The above shows the sector byte size is 512 byte.</p>
+<p><strong>Note:</strong>you only need to grant the ability to run xen-create-image if you wish to enable reimaging support in the shell.</p>
 
-<ul>
-<li>To calculating the offset: offset = start_sector x sector_byte_size.</li>
-</ul>
+<p><strong>DNS Updates</strong></p>
 
+<p>When the shell starts it will look for the file ips.txt in the home directory of the user who connects. If that file doesn't exist then the rdns command will be disabled.</p>
 
-<p>The startsector is 63 for the first partition, therefore the first partition offset is: 63x512=32256</p>
+<p>If you wish to allow users to control their reverse DNS create that file and give it contents such as these:</p>
 
-<ul>
-<li>Finally, to mount the xen image, use:</li>
-</ul>
+<p><code>192.168.1.1 foo.my.domain 192.168.1.2 bar.my.domain</code></p>
 
+<p>This file will be updated by the user when they invoke the rdns command. It is up to you to read the files and create the corresponding zonefiles / DNS updates. The shell will only manipulate the file - not push DNS updates itself.</p>
 
-<p><code>
-mount -o loop,offset=32256 test.img /foldername
-</code></p>
+<p><strong>Reimaging Support</strong></p>
+
+<p>If a user connects to the shell and has the executable file image.sh in their home directory the reimage command will be enabled.
+When the user invokes the command the image.sh script is executed after prompting for confirmation, and performing a last-chance count-down.
+It is up to you to create and configure this script to do the right thing. A sample file for user bob could look like this:</p>
+
+<p>```</p>
+
+<h1>!/bin/sh /usr/bin/xen-create-image --hostname=bob \  </h1>
+
+<p>--ip=192.168.1.1  \  
+--ip=192.168.1.2 \  
+--size=9.5G \  
+--swap=512M  --mem=256M \  
+--force
+```</p>
+
+<p>This will require a correctly configured instance of <a href="http://www.xen-tools.org/software/xen-tools/">xen-tools</a> and the sudoer file to contain the ability for the user to run xen-create-image.</p>
+
+<p>Any remaining questions? <a href="http://www.xen-tools.org/contact/">contact the author</a></p>
 ]]></content>
   </entry>
   
