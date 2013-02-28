@@ -1,5 +1,5 @@
 --- 
-categories: []
+categories: ['Mobile']
 comments: true
 layout: post
 title: "HTC Hero 2.1 体验"

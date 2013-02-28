@@ -1,5 +1,5 @@
 --- 
-categories: []
+categories: ['Website']
 comments: true
 layout: post
 title: 瑞豪开源(RASHOST)VPS10个月使用感受

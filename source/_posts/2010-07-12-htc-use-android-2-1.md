@@ -1,5 +1,5 @@
 --- 
-categories: []
+categories: ['Mobile']
 comments: true
 layout: post
 title: "Hero 使用Android 2.1 ROM 心得。"

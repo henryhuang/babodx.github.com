@@ -1,14 +1,16 @@
 --- 
-categories: []
+categories: ['Linux']
 comments: true
 layout: post
 title: 一款Linux下同步备份文件的好软件DROPBOX
 ---
 原来一直用tar、sync等软件实现备份。需要些脚本还要找一台其他服务器进行同步。现在有了DROPBOX这个网站提供的服务，一切都变容易了。
-<strong>DROPBOX网站：</strong>
-<a href="http://www.dropbox.com/">www.dropbox.com</a>
-<strong>DROP功能：</strong>
+
+**DROPBOX网站：**
+[http://www.dropbox.com/](www.dropbox.com)
+**DROP功能：**
 偷懒直接把官方介绍帖过来了。主要就是免费提供2G的同步空间，可以自动同步文件并保留文件的历史版本
+
 <h1>Dropbox Features</h1>
 <h2 id="sync">File Sync</h2>
 Dropbox allows you to sync your files online and across your computers automatically.
@@ -71,11 +73,11 @@ The free <a href="http://www.xinlogs.com/iphoneapp">Dropbox iPhone app</a> lets 
     <li>View interactive photo galleries.</li>
     <li>Sync downloaded files so they're up-to-date.</li>
 </ul> 
+
 A mobile-optimized version of the website is available for owners of Blackberry phones and other Internet-capable mobile devices.
  
- 
- 
-<strong>Linux下安装</strong>
+**Linux下安装**
+
 如果你的Linux服务器安装了Xserver和桌面，完全可以安装官方的指南来安装。但是因为一般的VPS都内存小得可怜，不会奢侈到安装桌面，所以下面主要介绍在没有安装桌面系统的命令行Linux下安装步骤。
 关于安装方法的内容转帖自<a href="http://lazyhack.net/install-dropbox-in-vps/">http://lazyhack.net/install-dropbox-in-vps/</a>
 <strong>1、登陆进VPS或者是服务器，进入用户目录</strong>

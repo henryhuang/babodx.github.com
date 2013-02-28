@@ -1,5 +1,5 @@
 --- 
-categories: []
+categories: ['Life']
 comments: true
 layout: post
 title: 很久没有写博客了，前几天得阑尾炎了。
