@@ -1,5 +1,5 @@
 --- 
-categories: []
+categories: ['Linux']
 comments: true
 layout: post
 title: linux网络连接数量监控
@@ -10,10 +10,6 @@ title: linux网络连接数量监控
 其实就是用cron每分钟执行我写的这个脚本，而脚本的作用就是获取当前linux的连接数，并记录到日志文件中。
  
 监控linux网络连接数的脚本如下
- 
-
-
-
 
 ``` 
 #!/bin/sh
@@ -27,7 +23,3 @@ log=`netstat -ntu | awk '{print $5}' | cut -d: -f1 |grep [^127.0.0.1] |wc -l`
 echo "$logtime | $log " >> /data/logs/connect_$logfile.log
 ```
 
-
-<div id="related_log" style="font-size:12px">
-<b>相关日志：</b><a href="http://xinlogs.com/centos_VPN_Howto">CentOS 5.3架设VPN和619错误排除</a><a href="http://xinlogs.com/centos-install-ruby-rubygems">centos 源码安装ruby和rubygems</a><a href="http://xinlogs.com/install-ApacheBench-on-CentOS-without-Apache">centos 单独安装apachebench</a><a href="http://xinlogs.com/debian-administration-site">一个关于debian系统管理的站点</a><a href="http://xinlogs.com/post/108">CentOS下的Tomcat停止脚本</a>
-</div>
