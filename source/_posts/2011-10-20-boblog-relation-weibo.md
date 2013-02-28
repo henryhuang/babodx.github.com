@@ -1,5 +1,5 @@
 --- 
-categories: []
+categories: ['PHP']
 comments: true
 layout: post
 title: 关联bo-blog到新浪微博

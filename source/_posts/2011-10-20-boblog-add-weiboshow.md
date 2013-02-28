@@ -1,5 +1,5 @@
 --- 
-categories: []
+categories: ['PHP']
 comments: true
 layout: post
 title: 给bo-blog加上新浪的微博秀

@@ -1,5 +1,5 @@
 --- 
-categories: []
+categories: ['Mobile']
 comments: true
 layout: post
 title: "推荐个htc G3 hero比较不错的ROM"

@@ -1,5 +1,5 @@
 --- 
-categories: []
+categories: ['Linux']
 comments: true
 layout: post
 title: nginx通过301统一入口域名
@@ -84,6 +84,3 @@ X-Powered-By: PHP/5.3.8
  可以看到xinlogs.com域名访问正常，正确返回200 ok。而且下面的页面内容也正确返回了。
 
 
-<div id="related_log" style="font-size:12px">
-<b>相关日志：</b><a href="http://xinlogs.com/nginx-epool-events">nginx采用epoll的事件模型，为何效率高。</a><a href="http://xinlogs.com/howto-open-rewrite-log">伪静态规则调试技巧</a><a href="http://xinlogs.com/Solve-nginx-502-mistakes">nginx通过轮询避免php-fpm引起的502错误</a><a href="http://xinlogs.com/druapl-url-nginx-rewrite">drupal在nginx 0.8.15下的简洁URL配置</a>
-</div>

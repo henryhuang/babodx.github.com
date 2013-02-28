@@ -1,5 +1,5 @@
 --- 
-categories: []
+categories: ['PHP']
 comments: true
 layout: post
 title: 修改EMiDream模板
@@ -93,6 +93,3 @@ function widget_link($title){
 $comment['poster'] = $comment['url'] ? '<a href="'.$comment['url'].'" target="_blank" rel="nofollow">'.$comment['poster'].'</a>' : $comment['poster'];
 ```
 
-<div id="related_log" style="font-size:12px">
-<b>相关日志：</b><a href="http://xinlogs.com/update-115disk-urls">批量更换115网盘链接</a><a href="http://xinlogs.com/emlog-alipay-pulgin">emlog支付插件发布</a><a href="http://xinlogs.com/emlog-optimize-via-minify">emlog访问速度优化之minify整合css与js文件</a><a href="http://xinlogs.com/check-slow-php-script">如何找到执行慢的php程序</a><a href="http://xinlogs.com/mac-xdebug-netbeans-config">mac下配置php调试环境</a>
-</div>

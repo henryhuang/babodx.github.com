@@ -1,5 +1,5 @@
 --- 
-categories: []
+categories: ['Linux','Website']
 comments: true
 layout: post
 title: 一个关于debian系统管理的站点
@@ -27,6 +27,4 @@ User accounts aren't necessary but they do allow you to do several additional th
 <li>Create and post weblog entries. </li>
 <li>Ensure the use of our <a href="http://www.debian-administration.org/about/SSL%20Certificate">SSL certificate</a> by always using https://. </li>
 </ul>From your account page you can customize several aspects of the site - such as which sections are displayed in the sidebar, whether to receive notifications if other people reply to your comments, etc.
-It should be noted that this site is neither an official part of the Debian project, nor endorsed by it. <a href="http://www.debian.org/">The Debian project</a> has its own official website, and the name Debian is a trademark held by <a href="http://www.spi-inc.org/">Software In the Public Interest</a>.<div id="related_log" style="font-size:12px">
-<b>相关日志：</b><a href="http://xinlogs.com/monit-to-monitor-services">monit监控linux服务</a><a href="http://xinlogs.com/post/20">ubuntu下arp攻击防御和反击！</a><a href="http://xinlogs.com/vps-dropbox-install">一款Linux下同步备份文件的好软件DROPBOX</a><a href="http://xinlogs.com/php-eaccelerator-vs-fastcgi-cache">php eaccelerator vs fastcgi_cache性能比较</a><a href="http://xinlogs.com/post/108">CentOS下的Tomcat停止脚本</a>
-</div>
+It should be noted that this site is neither an official part of the Debian project, nor endorsed by it. <a href="http://www.debian.org/">The Debian project</a> has its own official website, and the name Debian is a trademark held by <a href="http://www.spi-inc.org/">Software In the Public Interest</a>.
