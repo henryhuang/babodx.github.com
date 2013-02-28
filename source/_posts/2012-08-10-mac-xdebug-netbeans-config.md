@@ -40,7 +40,7 @@ ruby <(curl -fsSk https://raw.github.com/mxcl/homebrew/go)
 
 打开Xcode，在preferences->downloads里面下载并安装Command Line Tools
 
-![xcode](http://flic.kr/p/dYtYaC)
+![xcode](http://farm9.staticflickr.com/8088/8515461958_4e96f751a7_z.jpg)
 
 一切正确的话，执行brew doctor显示如下
 
@@ -111,21 +111,21 @@ zend_extension="/usr/local/Cellar/php53-xdebug/2.2.1/xdebug.so"
 
 重启xampp的apache，然后访问phpinfo查看是否成功加载xdebug
 
-![xdebug](http://flic.kr/p/dYtZ4h)
+![xdebug](http://farm9.staticflickr.com/8381/8515464954_5cd7f4b8be.jpg)
 
 **配置netbeans可以调用xdebug**
 
 首先将netbeans的偏好设置里的php5解释器设置为xampp的php。不要用系统自带的
 
-![xampp_php](http://flic.kr/p/dYtZB3)
+![xampp_php](http://farm9.staticflickr.com/8518/8515466796_97a1191c23.jpg)
 
 再设置调试的端口
 
-![netbeans设置xdebug端口](http://flic.kr/p/dYoieF)
+![netbeans设置xdebug端口](http://farm9.staticflickr.com/8239/8514355437_689a0d90c0.jpg)
 
 这些都设置好，就可以调试php代码了
 
 最后放一张我调试的截图
 
-![php调试截图](http://flic.kr/p/dYoiT2)
+![php调试截图](http://farm9.staticflickr.com/8246/8514357603_58e49f882b_z.jpg)
 

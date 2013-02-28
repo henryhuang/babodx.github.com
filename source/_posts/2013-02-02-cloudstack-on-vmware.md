@@ -32,17 +32,17 @@ cpu我分配了2个core
 
 注意：Processors设置的时候，已经要勾选下面的Virtualize Intel VT-x/EPT or AMD-V/RVI选项。
 
-![Virtualize选项](http://flic.kr/p/dYu5A7)
+![Virtualize选项](http://farm9.staticflickr.com/8093/8515483562_07be509e48.jpg)
 
 通过上面截图可以看到Device里面没用的设备也全部删掉，只保留必要的设备。
 
 网卡配置为Host-only模式
 
-![网卡模式](http://flic.kr/p/dYonCH)
+![网卡模式](http://farm9.staticflickr.com/8526/8514370229_06ea6ee63d.jpg)
 
 然后我们还要修改下win7下面vmnet1的网卡IP设置，因为一键安装的cloudstack默认使用192.168.16.10这个IP。而这个IP关联到很多配置不能随意修改，所以我们只能修改本机的IP来访问192.168.16这个网段了。
 
-![IP设置](http://flic.kr/p/dYu6Js)
+![IP设置](http://farm9.staticflickr.com/8383/8515487410_b3382b821e.jpg)
 
 这样基本环境就配置好。
 
@@ -50,11 +50,11 @@ cpu我分配了2个core
 
 系统自动重启后，再次进入系统。我们就可以通过win7下的浏览器访问http://192.168.16.10:8080/client这个管理界面了。默认的用户名密码为admin/password
 
-![cloudstack登陆页面](http://flic.kr/p/dYooMk)
+![cloudstack登陆页面](http://farm9.staticflickr.com/8513/8514374093_9c6c9484eb.jpg)
 
 进入后会见到如下界面
 
-![cloudstack初始页面](http://flic.kr/p/dYopgr)
+![cloudstack初始页面](http://farm9.staticflickr.com/8375/8514375723_cc7d64a0f2.jpg)
 
 主机警报里会出现一个关于nfs的警报，常规警报里也会出现一些。我这个截图已经跑了一个实例了，所以默认安装的可能和这个截图不太一样。
 
@@ -62,11 +62,11 @@ cpu我分配了2个core
 
 全局设置就保持默认的就可以了
 
-![全局设置](http://flic.kr/p/dYopBK)
+![全局设置](http://farm9.staticflickr.com/8225/8514376901_202a3ac45d.jpg)
 
 去基础架构界面看下，两台系统VM启动正常就可以了
 
-![架构页面](http://flic.kr/p/dYoq6Z)
+![架构页面](http://farm9.staticflickr.com/8230/8514378539_d899c23a14.jpg)
 
 **注意：如果没有启动实例的时候，虚拟路由器是0.**
 
@@ -74,13 +74,13 @@ cpu我分配了2个core
 
 通过实例界面一步一步创建就可以。不要分配太大的内存，要不会因为资源不足导致创建失败，毕竟我们是在vmware嵌套的虚拟环境下弄的。
 
-![创建虚拟机实例](http://flic.kr/p/dYu9s5)
+![创建虚拟机实例](http://farm9.staticflickr.com/8520/8515496552_f402b92c3b.jpg)
 
 创建后，如果一切正常就会看到新创建的实例已经启动了。如果有错误，可以查看/var/log/cloud/management/management-server.log日志文件。
 
 状态会有Creating->Starting->Running
 
-![实例状态](http://flic.kr/p/dYuapA)
+![实例状态](http://farm9.staticflickr.com/8248/8515499772_6a211fd324.jpg)
 
 cloudstack很强大涉及的知识也很广。如果要在实际生产中使用，还要熟悉很多方面的内容。慢慢学习了。。。。
 
