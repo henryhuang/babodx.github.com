@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Software | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/software/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-27T22:11:05+08:00</updated>
+  <updated>2013-02-28T22:19:12+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,46 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[离线博客工具-菊子曰]]></title>
+    <link href="http://babodx.github.com/blog/2011/10/25/write-blog-offline/"/>
+    <updated>2011-10-25T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2011/10/25/write-blog-offline</id>
+    <content type="html"><![CDATA[<p>因为迁移到了emlog，最近几天一直在鼓弄博客。</p>
+
+<p>今天又尝试用离线工具写博客了。</p>
+
+<p>在网站上搜索了下，发现国人开发的菊子曰不错。所以开始了这次尝试</p>
+
+<p>功能方面日常写文章应该足够了。</p>
+
+<p>就是如果是程序员用，代码高亮效果很一般
+ 
+ 
+还有就是日志摘要功能，并不能符合emlog的日志摘要，基本只能全篇发上来。感觉如果文章不是很长，建议还是采用在线编辑吧。
+再有就是采用了离线发布，将不能自动和新浪微博同步</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HeidiSQL一款开源的MySQL图形管理软件]]></title>
+    <link href="http://babodx.github.com/blog/2010/11/25/HeidiSQL/"/>
+    <updated>2010-11-25T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/11/25/HeidiSQL</id>
+    <content type="html"><![CDATA[<p>以前一直使用Navicat客户端，功能确实强大。不过这个客户端是收费的商业软件。
+最近发现有一款HeidiSQL的开源软件，也可以很好的管理MySQL。使用后，发现很不错。这里推荐下
+官方介绍：</p>
+
+<h2>What's this?</h2>
+
+
+<p><strong>HeidiSQL</strong> is an easy-to-use interface and a "working-horse" for web-developers using the popular <a href="http://www.mysql.com/">MySQL-Database</a>. It allows you to manage and browse your databases and tables from an intuitive Windows® interface.
+放一张官方截图</p>
+
+<p><img src="http://flic.kr/p/dYr8K9" alt="HeidiSQL截图" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[一款匿名浏览器--XeroBank Browser]]></title>
@@ -53,63 +93,6 @@
 
 <p><span>PremiumSoft Navicat™ is a powerful MySQL database administration and development tool that is not only sophisticated enough for professional developers, but also easy to learn for new users. With an user-friendly GUI, Navicat™ lets you quickly and easily create, organize, access and share information in a secure and convenient way. </span>
 <span>PremiumSoft Navicat supports multiple MySQL server connections which can be connected locally or remotely. Your remote MySQL server can be running on Linux, Unix, Mac OS X or Windows platform.<br></span></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[一个内存所搜的好用具--Cheat Engine]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/cheat-engine/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/cheat-engine</id>
-    <content type="html"><![CDATA[<p>这个工具可以用来查找内存里面的数据。是目前最好的修改游戏软件了，支持查找基地址。不过要想查找出基地址，还是需要一定的汇编能力的。反正我用这个，还没有查找出WOW 2.1.2的基地址。不过国外有个人，用这个工具找到了WOW <strong>1.12.1</strong>的了</p>
-
-<p>可以在google查到这篇文章<a href="http://www.edgeofnowhere.cc/viewtopic.php?t=332444&amp;start=0&amp;postdays=0&amp;postorder=asc&amp;highlight=">Defeating DMA: Offsets and Pointers for WoW</a></p>
-
-<p>本来打算用这个工具找出基地址，然后重新写挂战场的外挂呢。。。。革命尚未成功，仍需努力呀暴风前夕这个版本里，我开始玩小D了，目前已经60，正在冲荣誉。。。用的还是以前我写的挂机程序，稍微修改了下，比较稳定。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[windows下的拷贝利器teracopy]]></title>
-    <link href="http://babodx.github.com/blog/2009/08/02/tearcopy/"/>
-    <updated>2009-08-02T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/08/02/tearcopy</id>
-    <content type="html"><![CDATA[<p>周四晚上的时候，300G的硬盘在Ghost的时候，分区表损坏，导致数据全丢失了。</p>
-
-<p>这两天在不停的拷贝数据，导文件。</p>
-
-<p>发现windows自带的资源管理器拷贝文件的速度和稳定性都不是很好。</p>
-
-<p>于是找到了一款很不错的小软件tearcopy</p>
-
-<p><strong>网站</strong>
-<a href="http://www.codesector.com/teracopy.php">http://www.codesector.com/teracopy.php</a></p>
-
-<p>文件很小，大约1.5M</p>
-
-<p>拷贝速度很快，我从usb设备拷贝，速度大约23M每秒。&lt;</p>
-
-<p>建议拷贝多个文件或者大文件，都安装这个小软件。</p>
-
-<p>下面是具体说明，我就不翻译，大家自己看看吧。很牛，还支持win7</p>
-
-<p>TeraCopy is a compact program designed to copy and move files at the maximum possible speed, providing the user a lot of features: <ul>
-<li>
-<strong>Copy files faster.</strong> TeraCopy uses dynamically adjusted buffers to reduce seek times. Asynchronous copy speeds up file transfer between two physical hard drives. </li>
-<li>
-<strong>Pause and resume file transfers.</strong> Pause copy process at any time to free up system resources and continue with a single click. </li>
-<li>
-<strong>Error recovery.</strong> In case of copy error, TeraCopy will try several times and in the worse case just skips the file, not terminating the entire transfer. </li>
-<li>
-<strong>Interactive file list.</strong> TeraCopy shows failed file transfers and lets you fix the problem and recopy only problem files. </li>
-<li>
-<strong>Shell integration.</strong> TeraCopy can completely replace Explorer copy and move functions, allowing you work with files as usual. </li>
-<li>
-<strong>Full Unicode support.</strong> </li>
-<li>
-<strong>Windows 7 x64 support.</strong> </li>
-</ul>
-</div></p>
 ]]></content>
   </entry>
   

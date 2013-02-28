@@ -9,7 +9,16 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="今天看程序员，发现了play！framework这个java web框架。 以前也接触过SSH框架，struts+spring+hibernate。。。看着每一个部分那厚厚的参考书。。我就害怕。 后来就看了一阵子ruby on rails。彻底喜欢上了那种简洁的风格，约定优先配置也很棒。 &hellip;">
+  <meta name="description" content="今天一个客户反映网站某个页面很慢。初步分析是数据库查询造成的延时。
+打开数据库的慢查询日志，监控到如下语句 1
+2
+3
+4
+5
+6
+# Time: 120115  1:09:37
+# User@Host: sq_ttt[sq_ttt] @ localhost []
+# Query_time: 3. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -70,7 +79,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/26/playframework/">Playframework&#8211;play！java on Rails框架</a></h1>
+      <h1 class="entry-title"><a href="/blog/2012/01/15/mysql-error-index-is-slower/">Mysql错误索引比没索引还慢</a></h1>
     
     
       <p class="meta">
@@ -86,40 +95,271 @@
   
 
 
-<time datetime="2009-12-26T00:00:00+08:00" pubdate data-updated="true">Dec 26<span>th</span>, 2009</time>
+<time datetime="2012-01-15T00:00:00+08:00" pubdate data-updated="true">Jan 15<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>今天看程序员，发现了play！framework这个java web框架。</p>
+  <div class="entry-content"><p>今天一个客户反映网站某个页面很慢。初步分析是数据库查询造成的延时。
+打开数据库的慢查询日志，监控到如下语句</p>
 
-<p>以前也接触过SSH框架，struts+spring+hibernate。。。看着每一个部分那厚厚的参考书。。我就害怕。</p>
-
-<p>后来就看了一阵子ruby on rails。彻底喜欢上了那种简洁的风格，约定优先配置也很棒。</p>
-
-<p>直到发现play框架，才知道原来java也可以这样简洁。play框架扔掉了J2EE的各种规范。。。完全像rails一样简洁了</p>
-
-<p><strong>Play！的主要特性： </strong>
-* 简单的开发周期。该框架可自动编译和重新装载已改变的源文件。
-* 智能绑定HTTP参数到Java方法参数。
-* 基于Apache Mina的快速HTTP服务器<a href="http://mina.apache.org">http://mina.apache.org/</a>
-* 一个基于Groovy的强大的模板引擎，可实现多层继承，定制用户标签等功能。
-* 优秀的错误报告功能：发生异常时，该框架会直接显示出错误的源代码，甚至是模板代码。</p>
-
-<p>目前playframework网站的资料也比较全。从安装入门到开发实例应有尽有。我打算有时间慢慢翻译过来，发布在我的博客上。也是对自己学习的一种激励。</p>
-
-<p><strong>官方网站</strong></p>
-
-<p><a href="http://www.playframework.org/">http://www.playframework.org/</a></p>
-
-<p>各种实例</p>
-
-<h2>Yet Another Blog Engine</h2>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Time: 120115  1:09:37
+</span><span class='line'># User@Host: sq_ttt[sq_ttt] @ localhost []
+</span><span class='line'># Query_time: 3.895267  Lock_time: 0.000131 Rows_sent: 1  Rows_examined: 168835
+</span><span class='line'>use sq_ttt;
+</span><span class='line'>SET timestamp=1326560977;
+</span><span class='line'>SELECT A.*,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;</span></code></pre></td></tr></table></div></figure>
 
 
-<p>The final application from the <a href="http://www.playframework.org/documentation/1.0/guide1">play guide</a> tutorial.<img src="http://www.playframework.org/documentation/1.0/images/yabe" border="0" width="1050" height="612"><h2>Forum</h2>A simple forum application using JPA.<img src="http://www.playframework.org/documentation/1.0/images/forum" border="0" width="996" height="649"><h2>Jobboard</h2>A full faetured job board application that uses the CRUD module to automatically generate the administration area. <img src="http://www.playframework.org/documentation/1.0/images/jobboard" border="0" width="996" height="649"><h2>Chat</h2>An HTTP based chat application. We use the asynchronous request model to be able to handle a lot of simultaneous connected users without resources waste.<img src="http://www.playframework.org/documentation/1.0/images/chat" border="0" width="996" height="649"><h2>Stock watcher</h2>Based on the default GWT tutorial, it shows how to use GWT within a play application.<img src="http://www.playframework.org/documentation/1.0/images/stocks" border="0" width="996" height="649"><h2>My lists</h2>A clone of the the well known 37Signals TadaList application built using the Google App Engine support. It uses Siena as persistence engine.<img src="http://www.playframework.org/documentation/1.0/images/lists" border="0" width="996" height="649"></p>
+<p>这个查询用了3.8s时间。
+于是进入数据库开始了这次分析。。。
+ 
+首先看下表结构</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE `p8_article` (
+</span><span class='line'>  `aid` mediumint(7) unsigned NOT NULL AUTO_INCREMENT,
+</span><span class='line'>  `title` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `smalltitle` varchar(100) NOT NULL DEFAULT '',
+</span><span class='line'>  `fid` mediumint(7) unsigned NOT NULL DEFAULT '0',
+</span><span class='line'>  `mid` mediumint(5) NOT NULL DEFAULT '0',
+</span><span class='line'>  `fname` varchar(50) NOT NULL DEFAULT '',
+</span><span class='line'>  `hits` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `pages` smallint(4) NOT NULL DEFAULT '0',
+</span><span class='line'>  `comments` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `posttime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `list` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `uid` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `username` varchar(30) NOT NULL DEFAULT '',
+</span><span class='line'>  `author` varchar(30) NOT NULL DEFAULT '',
+</span><span class='line'>  `copyfrom` varchar(100) NOT NULL DEFAULT '',
+</span><span class='line'>  `copyfromurl` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `titlecolor` varchar(15) NOT NULL DEFAULT '',
+</span><span class='line'>  `fonttype` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `picurl` varchar(150) NOT NULL DEFAULT '0',
+</span><span class='line'>  `ispic` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `yz` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `yzer` varchar(30) NOT NULL DEFAULT '',
+</span><span class='line'>  `yztime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `levels` tinyint(2) NOT NULL DEFAULT '0',
+</span><span class='line'>  `levelstime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `keywords` varchar(100) NOT NULL DEFAULT '',
+</span><span class='line'>  `jumpurl` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `iframeurl` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `style` varchar(15) NOT NULL DEFAULT '',
+</span><span class='line'>  `template` varchar(255) NOT NULL DEFAULT '',
+</span><span class='line'>  `target` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `ip` varchar(15) NOT NULL DEFAULT '',
+</span><span class='line'>  `lastfid` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `money` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `buyuser` text NOT NULL,
+</span><span class='line'>  `passwd` varchar(32) NOT NULL DEFAULT '',
+</span><span class='line'>  `allowdown` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `allowview` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `editer` varchar(30) NOT NULL DEFAULT '',
+</span><span class='line'>  `edittime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `begintime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `endtime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `description` text NOT NULL,
+</span><span class='line'>  `lastview` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `digg_num` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `digg_time` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `forbidcomment` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `ifvote` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `heart` varchar(255) NOT NULL DEFAULT '',
+</span><span class='line'>  `htmlname` varchar(100) NOT NULL DEFAULT '',
+</span><span class='line'>  PRIMARY KEY (`aid`),
+</span><span class='line'>  KEY `list` (`list`,`fid`,`yz`,`ispic`) USING BTREE
+</span><span class='line'>) ENGINE=MyISAM AUTO_INCREMENT=176567 DEFAULT CHARSET=gbk</span></code></pre></td></tr></table></div></figure>
+
+
+<p> 
+然后我们采用explain看看是否使用了索引</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; explain SELECT A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
+</span><span class='line'>+----+-------------+-------+-------+---------------+------+---------+------+------+-------------+
+</span><span class='line'>| id | select_type | table | type  | possible_keys | key  | key_len | ref  | rows | Extra       |
+</span><span class='line'>+----+-------------+-------+-------+---------------+------+---------+------+------+-------------+
+</span><span class='line'>|  1 | SIMPLE      | A     | index | NULL          | list | 9       | NULL |    1 | Using where |
+</span><span class='line'>+----+-------------+-------+-------+---------------+------+---------+------+------+-------------+
+</span><span class='line'>1 row in set (0.00 sec)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以发现使用了list索引，这个查询类型是index</p>
+
+<p>注意：用explain分析的时候，这个type的速度顺序如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>system &gt; const &gt; eq_ref &gt; ref &gt; fulltext &gt; ref_or_null &gt; index_merge &gt; unique_subquery &gt; index_subquery &gt; range &gt; index &gt; ALL</span></code></pre></td></tr></table></div></figure>
+
+
+<p>一般我们优化，最少要到range。</p>
+
+<p>不过今天的问题没有这样简单，因为当我删除索引后，发现即使不用索引也比这个快。</p>
+
+<p>下面是我删掉全部索引的结果</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; SELECT A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
+</span><span class='line'>+------------+------+
+</span><span class='line'>| list       | id   |
+</span><span class='line'>+------------+------+
+</span><span class='line'>| 1323887041 | 1312 |
+</span><span class='line'>+------------+------+
+</span><span class='line'>1 row in set (0.31 sec)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>用explain查看没有索引的状态如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; explain SELECT A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+------+--------+-----------------------------+
+</span><span class='line'>| id | select_type | table | type | possible_keys | key  | key_len | ref  | rows   | Extra                       |
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+------+--------+-----------------------------+
+</span><span class='line'>|  1 | SIMPLE      | A     | ALL  | NULL          | NULL | NULL    | NULL | 175175 | Using where; Using filesort |
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+------+--------+-----------------------------+
+</span><span class='line'>1 row in set (0.00 sec)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们可以看到type是ALL，Extra里面还用了filesort.但即使这样，查询时间才0.31 sec
+可以看到加了索引后，反而慢了。这也是我今天想说的一个问题：<strong>错误的索引可能会更慢！</strong></p>
+
+<p><strong>调整索引</strong></p>
+
+<p>我们删掉list索引后，尝试重新建立这个复合索引。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; create index list on p8_article(yz,fid,ispic,list);
+</span><span class='line'>Query OK, 175175 rows affected (2.80 sec)
+</span><span class='line'>Records: 175175  Duplicates: 0  Warnings: 0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这次索引的区别就在于顺序的改变，将list放在了最后。这个可以参考mysql联合索引的最左前缀。
+这样在看看explain的状态</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; explain SELECT SQL_NO_CACHE A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+-------------------+------+-------------+
+</span><span class='line'>| id | select_type | table | type | possible_keys | key  | key_len | ref               | rows | Extra       |
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+-------------------+------+-------------+
+</span><span class='line'>|  1 | SIMPLE      | A     | ref  | list          | list | 5       | const,const,const |   37 | Using where |
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+-------------------+------+-------------+
+</span><span class='line'>1 row in set (0.00 sec)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>type已经是ref了，Extra也不在使用filesort了。</p>
+
+<p>再实际运行查询，看看时间上的变化</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; SELECT SQL_NO_CACHE A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
+</span><span class='line'>+------------+------+
+</span><span class='line'>| list       | id   |
+</span><span class='line'>+------------+------+
+</span><span class='line'>| 1323887041 | 1312 |
+</span><span class='line'>+------------+------+
+</span><span class='line'>1 row in set (0.00 sec)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>为了怕有query_cache的原因，所以特意加入了SQL_NO_CACHE。</p>
+
+<p>现在显示查询时间为0.00 sec 基本可以忽略不计了。而经过索引的调整，网页的速度也确实得到了改善。
+ 
+<strong>总结：索引错误的使用反而会拖慢查询，甚至比不用还慢。一定要根据最左前缀建立合适的索引，才可以起到加速查询的作用！</strong></p>
 </div>
   
   
@@ -132,7 +372,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/24/nginx-epool-events/">Nginx采用epoll的事件模型，为何效率高。</a></h1>
+      <h1 class="entry-title"><a href="/blog/2011/12/30/php-performance-debugging-tools/">Php性能调试工具</a></h1>
     
     
       <p class="meta">
@@ -148,54 +388,29 @@
   
 
 
-<time datetime="2009-12-24T00:00:00+08:00" pubdate data-updated="true">Dec 24<span>th</span>, 2009</time>
+<time datetime="2011-12-30T00:00:00+08:00" pubdate data-updated="true">Dec 30<span>th</span>, 2011</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>以前就知道在linux下nginx采用epoll事件模型，处理效率高。但是一直不知道具体为什么，今天查看了下文档，了解了原因。</p>
+  <div class="entry-content"><p>最近在帮一些客户优化php性能。</p>
 
-<p>首先nginx支持一下这些事件模型（才考nginx的wiki）</p>
+<p>排除掉服务器环境、memcache这些办法后，剩下的就是找php代码有没有执行过慢的因素了。</p>
 
-<p>Nginx支持如下处理连接的方法（I/O复用方法），这些方法可以通过use指令指定。</p>
+<p>下面列出一些在php性能调试中可以用到的工具。</p>
 
-<ul>
-<li>select - 标准方法。 如果当前平台没有更有效的方法，它是编译时默认的方法。你可以使用配置参数 &#8211;with-select_module 和 &#8211;without-select_module 来启用或禁用这个模块。</li>
-<li>poll - 标准方法。 如果当前平台没有更有效的方法，它是编译时默认的方法。你可以使用配置参数 &#8211;with-poll_module 和 &#8211;without-poll_module 来启用或禁用这个模块。</li>
-<li>kqueue - 高效的方法，使用于 FreeBSD 4.1+, OpenBSD 2.9+, NetBSD 2.0 和 MacOS X. 使用双处理器的MacOS X系统使用kqueue可能会造成内核崩溃。</li>
-<li>epoll - 高效的方法，使用于Linux内核2.6版本及以后的系统。在某些发行版本中，如SuSE 8.2, 有让2.4版本的内核支持epoll的补丁。</li>
-<li>rtsig - 可执行的实时信号，使用于Linux内核版本2.2.19以后的系统。默认情况下整个系统中不能出现大于1024个POSIX实时(排队)信号。这种情况对于高负载的服务器来说是低效的；所以有必要通过调节内核参数 /proc/sys/kernel/rtsig-max 来增加队列的大小。可是从Linux内核版本2.6.6-mm2开始， 这个参数就不再使用了，并且对于每个进程有一个独立的信号队列，这个队列的大小可以用 RLIMIT_SIGPENDING 参数调节。当这个队列过于拥塞，nginx就放弃它并且开始使用 poll 方法来处理连接直到恢复正常。</li>
-<li>/dev/poll - 高效的方法，使用于 Solaris 7 11/99+, HP/UX 11.22+ (eventport), IRIX 6.5.15+ 和 Tru64 UNIX 5.1A+.</li>
-<li>eventport - 高效的方法，使用于 Solaris 10. 为了防止出现内核崩溃的问题， 有必要安装 这个 安全补丁。</li>
-</ul>
+<p>1、xdebug
+     这个工具大家都很熟悉，开始php过程中，用来调试程序用的。</p>
 
+<p>2、webgrind
+     这个工具主要是配合xdebug来使用，用来监测php执行时间的。</p>
 
-<p>在linux下面，只有epoll是高效的方法。</p>
-
-<p>下面再来看看epoll到底是如何高效的</p>
-
-<p>Epoll是Linux内核为处理大批量句柄而作了改进的poll。要使用epoll只需要这三个系统调用：epoll_create(2)， epoll_ctl(2)， epoll_wait(2)。它是在2.5.44内核中被引进的(epoll(4) is a new API introduced in Linux kernel 2.5.44)，在2.6内核中得到广泛应用。</p>
-
-<p>epoll的优点</p>
-
-<p>支持一个进程打开大数目的socket描述符(FD)
-select 最不能忍受的是一个进程所打开的FD是有一定限制的，由FD_SETSIZE设置，默认值是2048。对于那些需要支持的上万连接数目的IM服务器来说显然太少了。这时候你一是可以选择修改这个宏然后重新编译内核，不过资料也同时指出这样会带来网络效率的下降，二是可以选择多进程的解决方案(传统的Apache方案)，不过虽然linux上面创建进程的代价比较小，但仍旧是不可忽视的，加上进程间数据同步远比不上线程间同步的高效，所以也不是一种完美的方案。不过 epoll则没有这个限制，它所支持的FD上限是最大可以打开文件的数目，这个数字一般远大于2048,举个例子,在1GB内存的机器上大约是10万左右，具体数目可以cat /proc/sys/fs/file-max察看,一般来说这个数目和系统内存关系很大。</p>
-
-<p>IO效率不随FD数目增加而线性下降
-传统的select/poll另一个致命弱点就是当你拥有一个很大的socket集合，不过由于网络延时，任一时间只有部分的socket是&#8221;活跃&#8221;的，但是select/poll每次调用都会线性扫描全部的集合，导致效率呈现线性下降。但是epoll不存在这个问题，它只会对&#8221;活跃&#8221;的socket进行操作&#8212;这是因为在内核实现中epoll是根据每个fd上面的callback函数实现的。那么，只有&#8221;活跃&#8221;的socket才会主动的去调用 callback函数，其他idle状态socket则不会，在这点上，epoll实现了一个&#8221;伪&#8221;AIO，因为这时候推动力在os内核。在一些 benchmark中，如果所有的socket基本上都是活跃的&#8212;比如一个高速LAN环境，epoll并不比select/poll有什么效率，相反，如果过多使用epoll_ctl,效率相比还有稍微的下降。但是一旦使用idle connections模拟WAN环境,epoll的效率就远在select/poll之上了。</p>
-
-<p>使用mmap加速内核与用户空间的消息传递。
-这点实际上涉及到epoll的具体实现了。无论是select,poll还是epoll都需要内核把FD消息通知给用户空间，如何避免不必要的内存拷贝就很重要，在这点上，epoll是通过内核于用户空间mmap同一块内存实现的。而如果你想我一样从2.5内核就关注epoll的话，一定不会忘记手工 mmap这一步的。</p>
-
-<p>内核微调
-这一点其实不算epoll的优点了，而是整个linux平台的优点。也许你可以怀疑linux平台，但是你无法回避linux平台赋予你微调内核的能力。比如，内核TCP/IP协议栈使用内存池管理sk_buff结构，那么可以在运行时期动态调整这个内存pool(skb_head_pool)的大小&#8212; 通过echo XXXX>/proc/sys/net/core/hot_list_length完成。再比如listen函数的第2个参数(TCP完成3次握手的数据包队列长度)，也可以根据你平台内存大小动态调整。更甚至在一个数据包面数目巨大但同时每个数据包本身大小却很小的特殊系统上尝试最新的NAPI网卡驱动架构。</p>
-
-<p>以上这些epoll内容，参考epoll_互动百科</p>
-
-<p>在我128M的vps上，我查看了一下，file-max的数量已经达到11945
-应该说确实比apache的方式要好，而且资源占用也少。</p>
+<p>3、XHProf
+     这个工具据说比xdebug轻量，可以考虑用于生产环境下来监测php性能。没有用过，看介绍很棒！facebook用的，肯定差不了。
+ 
+以上只是简单介绍下，用来记录。等以后有机会仔细用来，再发文档说明</p>
 </div>
   
   
@@ -208,7 +423,7 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/22/wow-1-70-Express-Upgrade/">国服3.13 德鲁伊带小号快速升级（1-70全程带）</a></h1>
+      <h1 class="entry-title"><a href="/blog/2011/12/29/find-php-slow-code/">Php-fpm查找php慢速代码</a></h1>
     
     
       <p class="meta">
@@ -224,60 +439,113 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
   
 
 
-<time datetime="2009-12-22T00:00:00+08:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2009</time>
+<time datetime="2011-12-29T00:00:00+08:00" pubdate data-updated="true">Dec 29<span>th</span>, 2011</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>魔兽世界已经快开85了，而国内还坚持在70级。没有玩的乐趣了，就研究研究带小号速度升级吧。</p>
+  <div class="entry-content"><p>前两天帮助一个客户优化ecshop。
+他的ecshop代码是找人修改过的，修改后速度已很很慢，大概打开一页需要9s吧。
+而默认的ecshop在同样服务器上速度就很快。
+开始走了很多弯路，因为只是速度慢，并无错误。就没有想到是代码的原因。
+对比两个ecshop，首先发现首页加载的request数量差距很大，慢的站点105次，快的46次。
+而且慢的站点1.66M大小，而快的只有455k。通过开启gzip和合并css、js等手段优化后，效果并不明显。
+ 
+后来想到可能是因为找人修改过代码，开始怀疑到代码上（也确实没啥办法了）。
+想到php-fpm可以记录下执行过慢的php脚本，于是修改php-fpm配置，加入了记录慢速php请求的代码。</p>
 
-<p><strong>带小号的职业选择</strong></p>
+<p>下面是在php 5.3.8下的php-fpm.conf文件添加的内容</p>
 
-<p>一般带小号的职业，需要可以AOE，有强力的dps，最好自己还可以扛打。所以就是法师、术士、骑士、德鲁伊这几个职业里选择。FS是AOE的王者，原来一直也是带小号的首选。</p>
-
-<p>目前来看也不错。但是破碎现在的效率不如以前了，STSM法师带着对操作要求太高，容易累。SS可以AOE，但是没有FS的控制技能，怪多了，扛不住。QS对于小副本，AOE来说很强力，尤其是学生和STSM，效率很高。但是对于ZUL这样的本，因为QS的短腿，不推荐。</p>
-
-<p><strong>德鲁伊</strong>如果装备合适，目前我认为才是带小号的最佳人选。</p>
-
-<p>从1-70，全部有适合的副本和技巧让小德来带小号升级。下面说说我的经验因为德鲁伊是T里面dps最高的，FS AOE靠dps，但是没有我们能抗，还要喝水。QS AOE靠反弹，没有我们能打。而且小德的移动速度快，就意味着拉同样路线的怪，我们时间少，效率高。所以对于血色、ZUL这些副本，小德效率最高。STSM不适合小德，不是不能刷，是麻烦，我们不会解疾病。所以我带小号的路线是</p>
-
-<ul>
-<li><p>1-10级，小德辅助小号独立升级。</p></li>
-<li><p>10-20带影牙，</p></li>
-<li><p>20-35血色，</p></li>
-<li><p>35-45祖尔法拉克，</p></li>
-<li><p>45-65黑石塔上，</p></li>
-<li><p>65-70监狱。</p></li>
-</ul>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>request_slowlog_timeout=5s
+</span><span class='line'>slowlog=/var/log/fpm_slow.log</span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>1-10级 快速升级经验</strong></p>
+<p>这个配置会将php脚本执行超过5秒的，记录在/var/log/fpm_slow.log文件中。
+ 
+如果你的php还是5.2.x的版本，那么php-fpm还是以补丁的形式执行，请参考下面的配置文件</p>
 
-<p>1-10级其实有个很好的办法升级，只是大家很少注意到。首先是70级的小德，不要和小号组队，然后洗平衡天赋最好，治疗天赋也凑合。穿上最高的法伤装备，然后给小号上荆棘术。小号带着这个10分钟的荆棘术buff，去打怪，基本弹怪1次-3次伤害，怪就死了。完全可以自己AOE了，什么技能也不用，就跑过去普通攻击一下怪，然后继续开一下个怪，怪打你1-3下，自己就死了。这样1-10级，比去任何地方都快。</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>The timeout (in seconds) for serving of single request after which a php backtrace will be dumped to slow.log file
+</span><span class='line'>      '0s' means 'off'
+</span><span class='line'>      &lt;value name="request_slowlog_timeout"&gt;0s&lt;/value&gt;
+</span><span class='line'> 
+</span><span class='line'>      The log file for slow requests
+</span><span class='line'>      &lt;value name="slowlog"&gt;logs/slow.log&lt;/value&gt;</span></code></pre></td></tr></table></div></figure>
 
-<p><strong>注意</strong> 必须自己先打怪1下，如果是怪先打你被经技术弹死了，就没有经验了。</p>
 
-<p><strong>10-20级 快速升级经验</strong></p>
+<p>最终在/var/log/fpm_slow.log文件里，发现很多如下记录</p>
 
-<p>10-20级，就要去影牙副本了。大号先进入副本，因为小号级别低的时候，一进入就引怪。小号就放在副本门口就可以，大号进入副本aoe。注意最后的boss一定要拉出来杀，不然小号分不到经验。影牙副本是一个塔的建筑结构，所以小号放在副本，大号在小地图观察，只要可以看到小号的位置，就可以杀一次怪，我一般是分3次杀。第一次拉广场上的，第2次拉到狼boss那里，就是杀了boss出先4个蓝胖子的地方。第3次拉到最后boss门前面。</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[27-Dec-2011 10:07:27]  [pool www] pid 8524
+</span><span class='line'>
+</span><span class='line'>script_filename = /data/huaximall/flow.php
+</span><span class='line'>
+</span><span class='line'>[0x0a0f41c0] fsockopen() !:649
+</span><span class='line'>
+</span><span class='line'>[0x0a0f4104] _connect_sock() !:937
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3fdc] sock_to_host() !:693
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3f08] get_sock() !:372
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3e5c] get() !:952
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3d4c] getAll() !:291
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3c3c] get_child_tree() !:313
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3b18] get_child_tree() !:251
+</span><span class='line'>
+</span><span class='line'>[0x0a0f2fa8] get_categories_tree() !:44</span></code></pre></td></tr></table></div></figure>
 
-<p><strong>20-35级 快速升级经验</strong></p>
 
-<p>20-35级是快速升级的开始，小德因为移动速度和dps的优势，可以在这里3门同时刷。刷2门，肯定爆本。先刷教堂，然后出本刷军械库，最后刷次图书馆。图书馆经验不多，就是为了不爆本，凑点时间。小号愿意，也可以放弃图书馆，让他们捡些布呀什么的。这里建议小德穿最强的DPS装备，如果网络好，不怕掉线，可以拿 烈焰之怒 武器。（俗名：掉线之怒）。武器FM推荐 作战专家</p>
+<p>这里比较奇怪，人家的这个日志都可以显示出具体是哪个文件的哪行，我这里只有函数和行，而文件名的地方却是“！”号。。。。
+这个问题我还没有解决，不过通过这些日志，我已经可以判断出来是flow.php的执行时间超过了5s。。。导致首页加载过慢。</p>
 
-<p><strong>35-45 快速升级经验</strong></p>
+<p>后面分析flow.php，发现又调用了init.php等相关库和初始化文件。
+最后发现fsockopen() _connect_sock() sock_to_host()这些函数是在尝试连接到memcached的服务器。而这个服务器的IP不对，导致这里延时很大。。。</p>
 
-<p>35-45 选择祖尔法拉克最好，小德可以一波流全部拉完。一次的经验在2.8w-3.5w。这里需要一些装备和技巧。首先最好有4件军装，这样移动速度提高15%。我尝试过，4件军装，比你骑60%速度的马还快。网上有zul的一波流视频，是个骑马拉全副本的，我觉得不现实，至少我经常拉几波，就给打下马了。所以我推荐直接穿4件军装，旅行形态拉。再有一点就是要带上部落徽记，因为有个蜥蜴怪，可以给你一个晕的状态，让你没有任何躲闪而且不能攻击。这样基本一次就快死了。所以一定要及时用徽章解这个状态。只要保持攻击，就可以满血。我一般带英雄卡片和部落徽记。</p>
+<p>还有个技巧就是在php页面里加入计算执行时间的输出，看看到底哪些行的执行时间过长。
+具体时间的计算，可以参考下面代码</p>
 
-<p><strong>45-65 快速升级经验</strong></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$start = microtime(true);
+</span><span class='line'>$end = microtime(true);
+</span><span class='line'>$time=$end-$start;</span></code></pre></td></tr></table></div></figure>
 
-<p>45-65 这里只有小德带最效率，就是去黑上升级。卡召唤师。一般卡2个召唤师，速度相当与STSM。一般卡7个召唤师的小德，带45级的小号，1个小时3级半。这里一定要舍得吃药和加buff。具体如何卡黑上，我以后会写文章介绍。目前我可以卡5-7个，成功率85%吧</p>
 
-<p><strong>65-70 快速升级经验</strong></p>
 
-<p>65-70就找术士拉小号去监狱，然后小德带监狱，65-70大约200分钟吧。要求小德穿DPS装备和少量回血装备。</p>
 </div>
   
   
@@ -290,7 +558,7 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/xerobank-browser/">一款匿名浏览器&#8211;XeroBank Browser</a></h1>
+      <h1 class="entry-title"><a href="/blog/2011/12/25/ssh-login-protection-by-denyhosts/">通过denyhosts保护ssh登陆</a></h1>
     
     
       <p class="meta">
@@ -306,14 +574,212 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2011-12-25T00:00:00+08:00" pubdate data-updated="true">Dec 25<span>th</span>, 2011</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>XeroBank Browser 用来上网，可以很好的隐藏你的ip地址。利用Tor(The Onion Router)可以自动通过多层代理跳转，来隐藏你的IP因为是通过代理的，所以速度肯定要慢一些。但可以访问一些国内封锁的IP地址</p>
+  <div class="entry-content"><p>今天查看服务器的/var/log/secure日志，发现很多类似下面的信息</p>
+
+<p><code>PAM 6 more authentication failures; logname= uid=0 euid=0 tty=ssh ruser= rhost=121.176.35.192  user=root</code></p>
+
+<p>说明经常有人通过ssh尝试登陆，并不断尝试猜测root的密码。</p>
+
+<p>这样总让人尝试我的密码也不是个事儿呀&#8230;.于是通过denyhosts软件，开启了保护。</p>
+
+<p>通过denyhosts我们可以设置登陆失败几次，就禁止这个IP再次登陆。并可以设置多少分钟后，放开保护。</p>
+
+<p><strong>denyhosts介绍</strong></p>
+
+<p>DenyHosts是Python语言写的一个程序，用DenyHosts可以阻止试图猜测SSH登录口令，它会分析/var/log/secure等日志文件，当发现同一IP在进行多次SSH密码尝试时就会记录IP到/etc/hosts.deny文件，从而达到自动屏蔽该IP的目的。</p>
+
+<p>安装需求</p>
+
+<p>首要要求有python环境，并版本在2.3以上</p>
+
+<p>CentOS 默认安装了2.4.3版本，我们可以通过下面命令查看</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# python -V
+</span><span class='line'>
+</span><span class='line'>Python 2.4.3</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>注意大小写。</strong></p>
+
+<p>其次是sshd需要支持tcp_wrappers。这个一般都支持。可以用下面命令判断</p>
+
+<p><code>ldd /usr/sbin/sshd |grep wrap</code></p>
+
+<p>如果显示：libwrap.so.0 => /lib/libwrap.so.0 (0x00db7000)表示支持</p>
+
+<p><strong>安装</strong></p>
+
+<p>当前最新的版本是2.6</p>
+
+<p><a href="wget%20http://downloads.sourceforge.net/project/denyhosts/denyhosts/2.6/DenyHosts-2.6.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fdenyhosts%2Ffiles%2F&amp;ts=1324820171&amp;use_mirror=cdnetworks-kr-1">下载</a></p>
+
+<p><strong>解压安装</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar zxvf DenyHosts-2.6.tar.gz 
+</span><span class='line'>
+</span><span class='line'>cd DenyHosts-2.6
+</span><span class='line'>
+</span><span class='line'>python setup.py install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>默认将程序安装在/usr/share/denyhosts</p>
+
+<p>库文件在/usr/lib/python2.4/site-packages/DenyHosts/</p>
+
+<p>denyhosts.py安装到/usr/bin</p>
+
+<p><strong>设置启动脚本</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /usr/share/denyhosts/
+</span><span class='line'>
+</span><span class='line'>cp daemon-control-dist daemon-control
+</span><span class='line'>
+</span><span class='line'>chown root daemon-control
+</span><span class='line'>
+</span><span class='line'>chmod 700 daemon-control
+</span><span class='line'>
+</span><span class='line'>grep -v "^#" denyhosts.cfg-dist &gt; denyhosts.cfg</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就生成了一个标准的配置文件denyhosts.cfg</p>
+
+<p>我们需要按照自己的想法，配置下这个denyhosts.cfg文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SECURE_LOG = /var/log/secure
+</span><span class='line'>
+</span><span class='line'>#表示系统中secure日志文件位置
+</span><span class='line'>
+</span><span class='line'>HOSTS_DENY = /etc/hosts.deny
+</span><span class='line'>
+</span><span class='line'>#表示hosts.deny配置文件在系统中位置
+</span><span class='line'>
+</span><span class='line'>PURGE_DENY = 30m
+</span><span class='line'>
+</span><span class='line'>#表示多久后解封IP
+</span><span class='line'>
+</span><span class='line'>BLOCK_SERVICE  = sshd
+</span><span class='line'>
+</span><span class='line'>DENY_THRESHOLD_INVALID = 1
+</span><span class='line'>
+</span><span class='line'>#表示无效用户名，登陆失败几次就封IP
+</span><span class='line'>
+</span><span class='line'>DENY_THRESHOLD_VALID = 5
+</span><span class='line'>#表示有效果的普通用户登陆几次就封IP
+</span><span class='line'>
+</span><span class='line'>DENY_THRESHOLD_ROOT = 3
+</span><span class='line'>
+</span><span class='line'>#表示root用户登陆失败几次封IP
+</span><span class='line'>
+</span><span class='line'>DENY_THRESHOLD_RESTRICTED = 1
+</span><span class='line'>
+</span><span class='line'>WORK_DIR = /usr/share/denyhosts/data
+</span><span class='line'>
+</span><span class='line'>SUSPICIOUS_LOGIN_REPORT_ALLOWED_HOSTS=YES
+</span><span class='line'>
+</span><span class='line'>HOSTNAME_LOOKUP=NO
+</span><span class='line'>
+</span><span class='line'>表示是否做域名反解析
+</span><span class='line'>
+</span><span class='line'>LOCK_FILE = /var/lock/subsys/denyhosts</span></code></pre></td></tr></table></div></figure>
+
+
+<p>启动denyhosts</p>
+
+<p><code>/usr/share/denyhosts/daemon-control start</code></p>
+
+<p>配置denyhosts随系统自启动</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /etc/init.d
+</span><span class='line'>
+</span><span class='line'>ln -s /usr/share/denyhosts/daemon-control denyhosts
+</span><span class='line'>
+</span><span class='line'>chkconfig --add denyhosts
+</span><span class='line'>
+</span><span class='line'>chkconfig --level 345 denyhosts on</span></code></pre></td></tr></table></div></figure>
+
+
+<p>查看效果</p>
+
+<p>如果尝试登陆失败次数达到后，IP就会被记录到/etc/hosts.deny文件内，来达到阻止登陆的目的</p>
+
+<p>我们也可以通过查看/var/log/denyhosts日志文件来判断是否有被封的IP</p>
+
+<p>下面是我的机器部署denyhosts一段时间后封的IP</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># DenyHosts: Sun Dec 25 21:40:13 2011 | sshd: 112.164.231.91
+</span><span class='line'>
+</span><span class='line'>sshd: 112.164.231.91</span></code></pre></td></tr></table></div></figure>
+
 </div>
   
   
@@ -326,7 +792,7 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-xyz/">有想恶补三角函数的冲动！</a></h1>
+      <h1 class="entry-title"><a href="/blog/2011/12/22/monitor-network-connections-of-linux/">Linux网络连接数量监控</a></h1>
     
     
       <p class="meta">
@@ -342,18 +808,41 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2011-12-22T00:00:00+08:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2011</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>最近在咕哝魔兽世界的坐标系统，发现这个游戏的坐标系统如下图所示</p>
+  <div class="entry-content"><p>今天早上一个客户的网站停止了响应，不能正常解析php内容。
+重启php-fpm后正常，判断应该是php-fpm进程僵死。所以就先参考网上内容，写了一个监控nginx状态脚本
+后来又想看看这个php-fpm进程挂掉和访问量是否有关系，于是打算记录下服务器每分钟的访问量。
+其实就是用cron每分钟执行我写的这个脚本，而脚本的作用就是获取当前linux的连接数，并记录到日志文件中。
+ 
+监控linux网络连接数的脚本如下</p>
 
-<p><img src="http://farm9.staticflickr.com/8228/8510673160_84e4f8b348.jpg" alt="wow坐标系统" /></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/sh
+</span><span class='line'>#定义日志的时间格式，用来作为日志结尾的时间标记
+</span><span class='line'>logfile=`date +%Y%m%d`
+</span><span class='line'>#定义个时间，用来写入日志用
+</span><span class='line'>logtime=`date`
+</span><span class='line'>#获取当前系统的网路连接数，这里去掉了127.0.0.1的连接，因为我的php-fpm用的127.0.0.1:9000这个连接。
+</span><span class='line'>log=`netstat -ntu | awk '{print $5}' | cut -d: -f1 |grep [^127.0.0.1] |wc -l`
+</span><span class='line'>#写日志内容到日志文件
+</span><span class='line'>echo "$logtime | $log " &gt;&gt; /data/logs/connect_$logfile.log</span></code></pre></td></tr></table></div></figure>
 
-<p>游戏的平面坐标为X,Y,用2π代表360度的方向。Z为高度，我们可以不用考虑。现在如果我们知道A点坐标X=2,Y=2 ，B点坐标X=4,Y=3那要想从A点出发到B点，我们的方向应该是多少呢？(目前我就知道Y轴正方向的话，角度为0 。X轴正方向 为π/4=90度)该怎么写这个三角函数得到这个角的的数值呢？</p>
+
+
 </div>
   
   
@@ -366,7 +855,7 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-robot-battlegroud/">TBC 2.3如何挂战场</a></h1>
+      <h1 class="entry-title"><a href="/blog/2011/12/14/bbsxp6-to-phpwind8/">Bbsxp 6.0数据导入phpwind 8.7方法</a></h1>
     
     
       <p class="meta">
@@ -382,14 +871,76 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2011-12-14T00:00:00+08:00" pubdate data-updated="true">Dec 14<span>th</span>, 2011</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>目前TBC 2.3了，荣誉又开始有用处了，可以购买S1装备。但是如何挂战场呢？毕竟不是每个人都能不上班，每天玩10个小时。。。我目前的办法是使用国外开发的一款练级外挂glider，再配合一个自己些的程序和修改过的一个插件来实现的。glider可以控制人物按照设定的线路跑动和打怪。我用c#些一个程序，来监控着角色，如果死亡了，就停止wowglider，等待复活。如果复活了，就开glider。战斗结束了，就点npc排队。然后用我写的插件回答GM问题。。。。总之还算可以吧。用了大约1-2个晚上也业余时间解决的。c#确实使用起来很简单，至少之前我没有用过c#。但写个简单的网络程序，负责控制其它程序，实现起来很容易。基本都是采用TcpClient类，就可以了<a href="http://www.pvpbot.com/">www.pvpbot.com</a>也是个选择，但是收费比较贵。其实可以考虑用c#写个简单的web服务器，通过dns欺骗，来对pvpbot的bgtool做本地验证。关于pvpbot的验证，确实不怎么好。至少我用了不到1个小时抓包，分析和测试。已经可以本地验证了，不过懒得写个简单web服务器实现验证了。（以前没有写过，还要查资料。。）关于网络验证，glider做的就比较好。我觉得至少要对时间和硬件编号和用户名同时加密发送到服务器。然后再服务器验证后，对那个时间和是否验证通过等信息再加密，大乱顺序后发送回来。这样就算抓包，因为每次发送的时间不同，每次抓到的信息也不同。如果不知道算法，很难实现本地验证。不过c#的代码保护太差，反编译后和看源代码差不多。。。。。。这个很难解决。。</p>
+  <div class="entry-content"><p>今天帮助猪八戒网上的一个客户将原来的bbsxp 6.0的论坛数据迁移到phpwind 8.7下。这里主要记录下思路</p>
+
+<p>phpwind官方论坛有各种的迁移程序，但是继续bbsxp的最早版本是2008. 而我这个客户的是bbsxp 6的access库。</p>
+
+<p>完成这个任务，我顺利升级到猪三戒！呵呵</p>
+
+<p>没有现成的，只能自己分析了。</p>
+
+<p>为了导入方便，我先将需要用到的数据从access的库导入mysql里。</p>
+
+<p>这样bbsxp的表和新安装的phpwind表都在一个库了。</p>
+
+<p><strong>数据分析</strong></p>
+
+<p>这个步骤主要分析用户数据、论坛的板块数据、帖子、回帖等数据的格式。找到两个表的数据关系，为后面导入数据打下基础。</p>
+
+<p><strong>数据迁移</strong></p>
+
+<p>用户数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_members(uid,username,password,email,icon,gender,regdate,signature,site,bday) SELECT ID,UserName,lower(UserPass),UserMail,UserFace,UserSex,UNIX_TIMESTAMP(UserRegTime),UserSign,UserHome,Birthday From bbsxp_users;</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_memberdata(uid,postnum,rvrc,money) SELECT ID,PostTopic,PostRevert,UserMoney From bbsxp_users;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>帖子数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_threads(tid,fid,author,subject,ifcheck,postdate,lastpost,lastposter,hits,replies) SELECT ID,ForumID,UserName,Topic,1,UNIX_TIMESTAMP(PostTime),UNIX_TIMESTAMP(LastTime),LastName,Views,Replies From bbsxp_threads;</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_tmsgs(tid,content) SELECT ThreadID,Content From bbsxp_posts2 where IsTopic=1;</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>update pw_threads set authorid = (SELECT uid from pw_members WHERE username=pw_threads.author);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>回帖数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_posts(pid,tid,author,postdate,subject,ifcheck,content) SELECT ID,ThreadID,UserName,UNIX_TIMESTAMP(PostTime),Subject,1,Content From bbsxp_posts2 where IsTopic=0;</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>update pw_posts set authorid = (SELECT uid from pw_members WHERE username=pw_posts.author);</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>最后注意：</strong></p>
+
+<p>导入数据后，论坛进入板块后没有分页。这个需要进入后台，数据-》全部缓存-》更新各种统计数据。</p>
+
+<p>还有就是需要看下bbsxp做没做分表处理，有可能将bbsxp_posts分表为bbsxp_posts1、bbsxp_posts2等表</p>
 </div>
   
   
@@ -402,7 +953,7 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-plugin-teamqueue/">修改了一个大战场团排插件 TeamQueue 1.35</a></h1>
+      <h1 class="entry-title"><a href="/blog/2011/12/09/check-slow-php-script/">如何找到执行慢的php程序</a></h1>
     
     
       <p class="meta">
@@ -418,16 +969,69 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2011-12-09T00:00:00+08:00" pubdate data-updated="true">Dec 9<span>th</span>, 2011</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>为了让插件排队速度更快.只要和大战场军官对话,就自动进入到&#8221;首先可用&#8221;界面等待队长排队了.</p>
+  <div class="entry-content"><p>最近在帮助一个网站做性能优化。
+从原来的windows平台切换到了linux平台。php环境也已经变为主流的Nginx+php-fpm+eAccelerator+Zend Optimization组合
+打开了MySQL的慢连接，发现基本集中在论坛的表查询上，但是我们如何定位有哪些php程序在执行的时候过慢呢？</p>
 
-<p><a href="http://bbs.game.mop.com/viewthread.php?tid=1544817&amp;extra=page%3D1">插件下载</a></p>
+<p>通过查看php-fpm.conf配置，可以找到如下配置信息</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>The timeout (in seconds) for serving of single request after which a php backtrace will be dumped to slow.log file
+</span><span class='line'>      '0s' means 'off'
+</span><span class='line'>      &lt;value name="request_slowlog_timeout"&gt;0s&lt;/value&gt;
+</span><span class='line'>
+</span><span class='line'>      The log file for slow requests
+</span><span class='line'>      &lt;value name="slowlog"&gt;logs/slow.log&lt;/value&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>request_slowlog_timeout 项是一个设定超过多长时间就会被记录到slow.log日志中。0s为关闭这个选项。</p>
+
+<p>下面的slowlog为设置slow.log文件的位置。</p>
+
+<p>打开这个以后，我们就可以看到哪些php文件用了过多的执行时间，来重点优化。
+而且php-fpm.log也回提示出执行时间超过这个设定的信息。</p>
+
+<p>下面是php-fpm.log的提示</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Dec 09 20:19:25.170259 [WARNING] fpm_request_check_timed_out(), line 146: child 28844, script '/data/htdocs/bbs/forumdisplay.php' (pool default) executing too slow (3.110822 sec), logging</span></code></pre></td></tr></table></div></figure>
+
+
+<p>提示forumdisplay.php文件执行过慢，用了3.110822秒</p>
+
+<p>再来看看slow.log的内容</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Dec 09 20:23:49.534250 pid 28865 (pool default)
+</span><span class='line'>
+</span><span class='line'>script_filename = /data/htdocs/t/bbs/forumdisplay.php
+</span><span class='line'>
+</span><span class='line'>[0xbff462a0] mysql_query() p:66
+</span><span class='line'>
+</span><span class='line'>[0xbff47020] query() p:622</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到和上面的php-fpm.log是对应的的。</p>
+
+<p>有了这个办法，我们就可以随时查看网站中到底是什么程序执行速度慢，来重点优化了！</p>
 </div>
   
   
@@ -440,7 +1044,7 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-on-ubuntu-linux/">ubuntu8.04 玩魔兽世界 2.4.3(8606)</a></h1>
+      <h1 class="entry-title"><a href="/blog/2011/12/01/howto-open-rewrite-log/">伪静态规则调试技巧</a></h1>
     
     
       <p class="meta">
@@ -456,44 +1060,70 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2011-12-01T00:00:00+08:00" pubdate data-updated="true">Dec 1<span>st</span>, 2011</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>最近一直在用ubuntu 8.04当桌面系统。已经很少用windows了。随着采用ubuntu也就一直没有玩魔兽世界了。</p>
+  <div class="entry-content"><p>最近在威客网上接了个任务，帮助调整伪静态规则。WEB服务是apache的，主要就是修改rewrite规则。</p>
 
-<p>今天将Windows下的WOW目录直接拷贝到了ubuntu下面。我的wine是用sudo apt-get install默认安装的，没有特殊设置。</p>
+<p>伪静态规则写起来比较麻烦，关键是正则表达是写完总要测试，而我们不知道这个rewrite该怎么测试。我们需要准确知道服务器是怎么匹配我们的规则的，匹配后又发生了什么。这也就是我今天要写的调试技巧。</p>
 
-<p>将wow目录拷贝到了用户目录的 .wine/drive_c/Program Files目录下。然后直接双击wow.exe运行。</p>
+<p>目前我们采用的WEB Server主要是apache和nginx（Windows下的IIS我不用，只有基于Linux的）。</p>
 
-<p>这个时候会提示如下画面的错误。</p>
+<p>其实所谓技巧就是通过打开rewrite的日志功能，然后每次访问后，我们查看rewrite日志来分析我们的规则是否正确。</p>
 
-<p><img src="http://farm9.staticflickr.com/8519/8512093598_321828a3ef.jpg" alt="wow报错" /></p>
+<p><strong>APACHE开启rewrite办法</strong></p>
 
-<p>这个不要紧，我们在启动的时候加入-opengl 参数就可以解决。</p>
+<p>在httpd.conf文件里加入</p>
 
-<p>下面这个是成功启动的命令和截图</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>RewriteLog "/xampp/apache/logs/RewriteLog.txt" 
+</span><span class='line'>RewriteLogLevel 9</span></code></pre></td></tr></table></div></figure>
 
-<p><code>wine .wine/drive_c/Program\ Files/World\ of\ Warcraft/Wow.exe -opengl -nosound</code></p>
 
-<p><img src="http://farm9.staticflickr.com/8098/8510986535_97c4797180_z.jpg" alt="ubuntu运行wow" /></p>
+<p>我这里没用Linux下的apache，直接在我windows下的xampp环境里测试的</p>
 
-<p>已经成功启动了，感觉还不错。这个是在我IBM R61的笔记本上运行结果。</p>
+<p>访问后的rewrite日志文件如下</p>
 
-<p>下面进入游戏看看速度</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>127.0.0.1 - - [01/Dec/2011:15:38:38 +0800] [localhost/sid#775148][rid#6ba00d8/initial] (3) [perdir C:/xampp/htdocs/] strip per-dir prefix: C:/xampp/htdocs/q-123.html -&gt; q-123.html
+</span><span class='line'>127.0.0.1 - - [01/Dec/2011:15:38:38 +0800] [localhost/sid#775148][rid#6ba00d8/initial] (3) [perdir C:/xampp/htdocs/] applying pattern '^.*$' to uri 'q-123.html'
+</span><span class='line'>127.0.0.1 - - [01/Dec/2011:15:38:38 +0800] [localhost/sid#775148][rid#6ba00d8/initial] (4) [perdir C:/xampp/htdocs/] RewriteCond: input='C:/xampp/htdocs/q-123.html' pattern='!-f' =&gt; matched
+</span><span class='line'>127.0.0.1 - - [01/Dec/2011:15:38:38 +0800] [localhost/sid#775148][rid#6ba00d8/initial] (4) [perdir C:/xampp/htdocs/] RewriteCond: input='C:/xampp/htdocs/q-123.html' pattern='!-d' =&gt; matched
+</span><span class='line'>127.0.0.1 - - [01/Dec/2011:15:38:38 +0800] [localhost/sid#775148][rid#6ba00d8/initial] (2) [perdir C:/xampp/htdocs/] rewrite 'q-123.html' -&gt; 'index.php?q-123.html'
+</span><span class='line'>127.0.0.1 - - [01/Dec/2011:15:38:38 +0800] [localhost/sid#775148][rid#6ba00d8/initial] (3) split uri=index.php?q-123.html -&gt; uri=index.php, args=q-123.html
+</span><span class='line'>127.0.0.1 - - [01/Dec/2011:15:38:38 +0800] [localhost/sid#775148][rid#6ba00d8/initial] (3) [perdir C:/xampp/htdocs/] add per-dir prefix: index.php -&gt; C:/xampp/htdocs/index.php
+</span><span class='line'>127.0.0.1 - - [01/Dec/2011:15:38:38 +0800] [localhost/sid#775148][rid#6ba00d8/initial] (2) [perdir C:/xampp/htdocs/] trying to replace prefix C:/xampp/htdocs/ with /
+</span><span class='line'>127.0.0.1 - - [01/Dec/2011:15:38:38 +0800] [localhost/sid#775148][rid#6ba00d8/initial] (5) strip matching prefix: C:/xampp/htdocs/index.php -&gt; index.php
+</span><span class='line'>127.0.0.1 - - [01/Dec/2011:15:38:38 +0800] [localhost/sid#775148][rid#6ba00d8/initial] (4) add subst prefix: index.php -&gt; /index.php
+</span><span class='line'>127.0.0.1 - - [01/Dec/2011:15:38:38 +0800] [localhost/sid#775148][rid#6ba00d8/initial] (1) [perdir C:/xampp/htdocs/] internal redirect with /index.php [INTERNAL REDIRECT]
+</span><span class='line'>127.0.0.1 - - [01/Dec/2011:15:38:38 +0800] [localhost/sid#775148][rid#6bdc840/initial/redir#1] (3) [perdir C:/xampp/htdocs/] strip per-dir prefix: C:/xampp/htdocs/index.php -&gt; index.php</span></code></pre></td></tr></table></div></figure>
 
-<p><img src="http://farm9.staticflickr.com/8376/8512101836_cf8ce35689_z.jpg" alt="IBM R61 wow速度" /></p>
 
-<p>开始的时候，我的运行速度不行。只有可怜的35帧每秒。</p>
+<p>还是很详细的，用来分析我们的rewrite规则是否生效和是否有错误足够了！</p>
 
-<p>在我关闭了所有特效后，速度到了惊人的100帧每秒。。。这个速度完全可以正常游戏了。</p>
+<p><strong>Nginx开启rewrite日志办法</strong></p>
 
-<p>再看看我桌面右侧的状态cpu 53%占用 内存709.88MB 感觉还可以吧。</p>
+<p>在nginx.conf的配置文件里，加入如下选项内容</p>
 
-<p>虽然已经AFK了，但是ubuntu能玩魔兽世界，还是让我很开心的。</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rewrite_log on;</span></code></pre></td></tr></table></div></figure>
+
 </div>
   
   
@@ -506,7 +1136,7 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-memory-tools/">魔兽世界内存分析，基于wow 2.4.2</a></h1>
+      <h1 class="entry-title"><a href="/blog/2011/11/25/Linux-source-install-multiple-versions-of-MySQL/">Linux源码安装MySQL多版本共存</a></h1>
     
     
       <p class="meta">
@@ -522,18 +1152,327 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2011-11-25T00:00:00+08:00" pubdate data-updated="true">Nov 25<span>th</span>, 2011</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>今天基于wow 2.4.2分析了下魔兽世界的内存，并做了如下软件。</p>
+  <div class="entry-content"><p>原来我的服务器上是MySQL 5.5.16。本来是用的挺稳定。但是当时编译的时候由于手误将DDEFAULT_COLLATION=utf8-general_ci \弄错啦。。。应该是utf8_general_ci。导致很多程序用的时候报错，或者需要修改。
+最近发现MySQL更新到了5.5.18了，就打算迁移到新数据库正好修正原来问题。
+为了不影响访问，就打算在5.5.16运行的情况下，继续安装好5.5.18.等顺利转移到5.5.18后，再关闭原来MySQL5.5.16版本。
+也就有了今天这篇文章。在Linux下从源码安装多版本或者多个MySQL数据库。</p>
 
-<p><img src="http://farm9.staticflickr.com/8227/8509559819_61b2546573.jpg" alt="wow外挂" /></p>
+<p><strong>重点：多版本或者多个MySQL同时运行，主要就是多个MySQL需要运行在不同目录，不同的端口，采用不同的数据库路径。</strong></p>
 
-<p>全部采用C#编写，实现如下功能加速3.5%.&#8211;（这个服务器有限制，超过4%就掉线）。这个加速是修改人物速度出来的，和那些变速齿轮不一样。这样修改后，别人看你的速度也是正常的，就好像你穿了加速的鞋子一样。无阻力爬山&#8211;只要不是90度的山，多陡都能爬上去。超级跳&#8211;可以让跳跃的高度自己设置Z+&#8211;直接传送到任意高度目前就分析出来了这些，其实这些小功能只能自己在副本娱乐下。估计出了副本。。大街上没有人敢用。呵呵主要锻炼下自己对C#实现内存读写，还有就是分析内存的基地址和最终目的地址。</p>
+<p><strong>步骤</strong></p>
+
+<p><strong>1、首先是下载需要安装的MySQL</strong></p>
+
+<p>下载mysql 5.5.16</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.16.tar.gz/from/http://mysql.mirrors.pair.com/</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>下载mysql 5.5.18</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.16.tar.gz/from/http://mysql.mirrors.pair.com/</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>2、安装支持程序</strong></p>
+
+<p>原来版本的MySQL源码安装都是采用./configure和make这些。但是新版本的都是用cmake来弄了。所以如果系统中没有的，需要先安装cmake</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>yum install cmake</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>3、创建MySQL用户和用户组</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/usr/sbin/groupadd mysql
+</span><span class='line'>
+</span><span class='line'>/usr/sbin/useradd -g mysql mysql</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>4、解压、编译、安装MySQL</strong></p>
+
+<p><strong>解压</strong>
+<code>
+tar zxvf mysql-5.5.16.tar.gz
+cd mysql-5.5.16
+</code></p>
+
+<p><strong>编译参数</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cmake . \
+</span><span class='line'>  -DCMAKE_INSTALL_PREFIX=/usr/local/webserver/mysql5516/ \
+</span><span class='line'>  -DMYSQL_DATADIR=/data0/mysql/3306/data \
+</span><span class='line'>  -DMYSQL_UNIX_ADDR=/data0/mysql/3306/mysqld.sock \
+</span><span class='line'>  -DWITH_MYISAM_STORAGE_ENGINE=1 \
+</span><span class='line'>  -DWITH_INNOBASE_STORAGE_ENGINE=1 \
+</span><span class='line'>  -DWITH_BLACKHOLE_STORAGE_ENGINE=0 \
+</span><span class='line'>  -DWITH_ARCHIVE_STORAGE_ENGINE=0 \
+</span><span class='line'>  -DWITHOUT_PARTITION_STORAGE_ENGINE=1 \
+</span><span class='line'>  -DENABLED_LOCAL_INFILE=1 \
+</span><span class='line'>  -DMYSQL_TCP_PORT=3306 \
+</span><span class='line'>  -DEXTRA_CHARSETS=all \
+</span><span class='line'>  -DDEFAULT_CHARSET=utf8 \
+</span><span class='line'>  -DDEFAULT_COLLATION=utf8_general_ci \
+</span><span class='line'>  -DWITH_DEBUG=0 \
+</span><span class='line'>  -DWITH_EMBEDDED_SERVER=1 \
+</span><span class='line'>  -DWITH_SSL=system \
+</span><span class='line'>  -DWITH_READLINE=1</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>注意：编译参数里有几项需要根据自己具体情况设置。我这里将MySQL5.5.16运行于3306端口，并安装在mysql5516目录。</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-DCMAKE_INSTALL_PREFIX=/usr/local/webserver/mysql5516/   设置mysql的安装目录
+</span><span class='line'>
+</span><span class='line'>-DMYSQL_DATADIR=/data0/mysql/3306/data 设置mysql数据库文件的位置
+</span><span class='line'>
+</span><span class='line'>-DMYSQL_UNIX_ADDR=/data0/mysql/3306/mysqld.sock 设置mysql启动后sock文件位置
+</span><span class='line'>
+</span><span class='line'>-DMYSQL_TCP_PORT=3306 设置mysql的监听端口</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上这些设置需要根据不同版本的mysql相应修改。不然多个版本同时监听3306端口，肯定冲突了。</p>
+
+<p><strong>编译</strong></p>
+
+<p><code>make</code></p>
+
+<p><strong>安装</strong></p>
+
+<p><code>make install</code></p>
+
+<p><strong>5、配置目录权限、创建目录、建立初始数据。</strong></p>
+
+<p><strong>配置目录权限</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chmod +w /usr/local/webserver/mysql5516
+</span><span class='line'>
+</span><span class='line'>chown -R mysql:mysql /usr/local/webserver/mysql5516
+</span><span class='line'>
+</span><span class='line'>cd ../</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>创建相关目录</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir -p /data0/mysql/3306/data/
+</span><span class='line'>mkdir -p /data0/mysql/3306/binlog/
+</span><span class='line'>mkdir -p /data0/mysql/3306/relaylog/
+</span><span class='line'>chown -R mysql:mysql /data0/mysql/</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>建立初始数据</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/usr/local/webserver/mysql5516/scripts/mysql_install_db --basedir=/usr/local/webserver/mysql --datadir=/data0/mysql/3306/data --user=mysql</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>6、创建My.cnf配置文件和Mysql启动脚本</strong></p>
+
+<p>创建my.cnf配置文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cp support-files/my-small.cnf /usr/local/webserver/mysql5516/my.cnf</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>注意：原来mysql默认的配置文件放在/etc/my.cnf。现在多个版本同时运行，需要每个版本都将配置文件单独放在自己的安装目录内。</strong></p>
+
+<p><strong>创建MySQL启动脚本</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cp support-files/mysql.server /etc/init.d/mysql5516</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>注意：原来mysql默认采用mysqld脚本，现在每个mysql需要有自己的启动脚本，并通过修改启动脚本来为每个mysql指定采用的配置文件。</strong></p>
+
+<p>修改/etc/init.d/mysql5516，用来指定采用的配置文件位置。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Try to find basedir in /etc/my.cnf 
+</span><span class='line'>1  conf=/etc/my.cnf</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在文件的213和214行内容如上，我们需要修改conf=/etc/my.cnf为我们指定的my.cnf文件位置。</p>
+
+<p>在我们这里是</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>conf=/usr/local/webserver/mysql5516/my.cnf</span></code></pre></td></tr></table></div></figure>
+
+
+<p>修改mysqld5516权限为可执行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chmod +x mysqld5516</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>7、启动mysql并配置为开机运行</strong></p>
+
+<p>启动</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>service mysqld5516 start</span></code></pre></td></tr></table></div></figure>
+
+
+<p>开机运行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chkconfig mysqld5516 on</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上是MySQL 5.5.16的安装。下面5.5.18版本的安装</p>
+
+<p>5.5.18版本的安装基本和MySQL 5.5.16版本一样。我们因为要两个数据库同时运行。所以再给cmake的参数时候，需要安装上面注意的内容设定5.5.18的安装目录为/usr/local/webserver/mysql5518 再调整运行端口为3307
+具体的cmake参数如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cmake . \
+</span><span class='line'>  -DCMAKE_INSTALL_PREFIX=/usr/local/webserver/mysql5518/ \
+</span><span class='line'>  -DMYSQL_DATADIR=/data0/mysql/3307/data \
+</span><span class='line'>  -DMYSQL_UNIX_ADDR=/data0/mysql/3307/mysqld.sock \
+</span><span class='line'>  -DWITH_MYISAM_STORAGE_ENGINE=1 \
+</span><span class='line'>  -DWITH_INNOBASE_STORAGE_ENGINE=1 \
+</span><span class='line'>  -DWITH_BLACKHOLE_STORAGE_ENGINE=0 \
+</span><span class='line'>  -DWITH_ARCHIVE_STORAGE_ENGINE=0 \
+</span><span class='line'>  -DWITHOUT_PARTITION_STORAGE_ENGINE=1 \
+</span><span class='line'>  -DENABLED_LOCAL_INFILE=1 \
+</span><span class='line'>  -DMYSQL_TCP_PORT=3307 \
+</span><span class='line'>  -DEXTRA_CHARSETS=all \
+</span><span class='line'>  -DDEFAULT_CHARSET=utf8 \
+</span><span class='line'>  -DDEFAULT_COLLATION=utf8_general_ci \
+</span><span class='line'>  -DWITH_DEBUG=0 \
+</span><span class='line'>  -DWITH_EMBEDDED_SERVER=1 \
+</span><span class='line'>  -DWITH_SSL=system \
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>还需要为mysql5518配置相应权限和建立3307端口的相关目录。因为上面已经有具体步骤，这里只是罗列下命令，不具体说明</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chmod +w /usr/local/webserver/mysql5518
+</span><span class='line'>
+</span><span class='line'>chown -R mysql:mysql /usr/local/webserver/mysql5518
+</span><span class='line'>
+</span><span class='line'>cd ../
+</span><span class='line'>
+</span><span class='line'>mkdir -p /data0/mysql/3307/data/
+</span><span class='line'>mkdir -p /data0/mysql/3307/binlog/
+</span><span class='line'>mkdir -p /data0/mysql/3307/relaylog/
+</span><span class='line'>chown -R mysql:mysql /data0/mysql/</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后的启动脚本也要修改为调用5518目录下的my.cnf配置。 而且my.cnf的[mysqld]段也要指定运行端口为3307
+下面是我mysql5518目录下的my.cnf中的一些需要修改的项
+注意：下面文件并不是完整的my.cnf，只是将需要修改的列出来了</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[client]
+</span><span class='line'>port    = 3307
+</span><span class='line'>socket  = /data0/mysql/3307/mysql.sock
+</span><span class='line'>
+</span><span class='line'>[mysqld]
+</span><span class='line'>port    = 3307
+</span><span class='line'>socket  = /data0/mysql/3307/mysql.sock
+</span><span class='line'>basedir = /usr/local/webserver/mysql5518
+</span><span class='line'>datadir = /data0/mysql/3307/data
+</span><span class='line'>log-error = /data0/mysql/3307/mysql_error.log
+</span><span class='line'>pid-file = /data0/mysql/3307/mysql.pid
+</span><span class='line'>log-bin = /data0/mysql/3307/binlog/binlog
+</span><span class='line'>relay-log-index = /data0/mysql/3307/relaylog/relaylog
+</span><span class='line'>relay-log-info-file = /data0/mysql/3307/relaylog/relaylog
+</span><span class='line'>relay-log = /data0/mysql/3307/relaylog/relaylog</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样弄完后，我服务器上就可以同时运行mysql5516与mysql5518两个版本的数据库了。</p>
+
+<p>启动、关闭、重启mysql 5.5.16全部采用service mysqld5516脚本来控制。</p>
+
+<p>启动、关闭、重启mysql 5.5.18全部采用service mysqld5518脚本来控制。</p>
+
+<p><strong>总结：同时运行多个版本数据库，可以方便我们升级数据库或者对不同版本进行测试。</strong></p>
 </div>
   
   
@@ -546,7 +1485,7 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-5v5/">5v5打到1600+了，庆祝一下！</a></h1>
+      <h1 class="entry-title"><a href="/blog/2011/11/20/emlog-alipay-pulgin/">Emlog支付插件发布</a></h1>
     
     
       <p class="meta">
@@ -562,16 +1501,27 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2011-11-20T00:00:00+08:00" pubdate data-updated="true">Nov 20<span>th</span>, 2011</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>今天5v5我们上1600了。庆祝下。</p>
+  <div class="entry-content"><p>今天看到支付宝可以采用http://me.alipay.com/用户名的形式创建自己的收款页面。以前要想写支付宝的付款插件，需要先申请一个商家用户，拿到分配你的密钥才可以。现在可以通过创建收款主页来直接收款，对于程序开发方便了很多（不过这个方式只能简单的收款，并不能用于商品的订单，没有回调函数不能知道是否收款成功等内容）。
+而且看到wordpress貌似已经有了这样的插件可以用来发布一个收款按钮，于是我也心血来潮写了一个。主要还是为了学习如何写一个emlog的插件。看着官方的插件开发文档，参考着公告插件的代码来写的这个支付宝收款插件。
+ 
+<strong>主要功能：</strong></p>
 
-<p><img src="http://farm9.staticflickr.com/8527/8509573735_f7c64d2b5c_z.jpg" alt="wow 5v5" /></p>
+<p>1、在博客的侧边栏显示出一个支付宝的收款按钮，基本也就是用来让人家自愿捐款用。如下图：</p>
+
+<p><img src="http://flic.kr/p/dYrZvA" alt="插件截图1" />
+ 
+2、后台可以方便的设置用来收款的支付宝收款主页地址。</p>
+
+<p><img src="http://flic.kr/p/dYmisZ" alt="插件截图2" />
+ 
+ </p>
 </div>
   
   
@@ -594,23 +1544,27 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
     <section>
 <h1>Categories</h1>
 <ul id="categories">
-  <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
-<li class='category'><a href='/blog/categories/game/'>Game (14)</a></li>
-<li class='category'><a href='/blog/categories/hardware/'>Hardware (4)</a></li>
-<li class='category'><a href='/blog/categories/host/'>Host (2)</a></li>
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
-<li class='category'><a href='/blog/categories/life/'>Life (1)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (26)</a></li>
-<li class='category'><a href='/blog/categories/mobile/'>Mobile (2)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
-<li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
-<li class='category'><a href='/blog/categories/ruby/'>Ruby (1)</a></li>
-<li class='category'><a href='/blog/categories/software/'>Software (5)</a></li>
-<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (8)</a></li>
-<li class='category'><a href='/blog/categories/website/'>Website (1)</a></li>
-<li class='category'><a href='/blog/categories/windows/'>Windows (7)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
 
 </ul>
@@ -632,11 +1586,11 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
       </li>
     
       <li class="post">
-        <a href="/blog/2010/03/12/HP-MSA1000-DL380G5-Centos5/">CentOS 5.4 基于HP Proliant DL380 G5服务器配置Modular Smart Array 1000存储</a>
+        <a href="/blog/2013/02/02/cloudstack-on-vmware/">cloudstack on vmware</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2010/03/12/HP-Computer-Ghost-Problem/">HP台式机器，ghost系统后，提示windows could not start</a>
+        <a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a>
       </li>
     
   </ul>

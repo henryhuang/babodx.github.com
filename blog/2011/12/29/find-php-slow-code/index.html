@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>php-fpm查找php慢速代码 - 鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="前两天帮助一个客户优化ecshop。
+他的ecshop代码是找人修改过的，修改后速度已很很慢，大概打开一页需要9s吧。
+而默认的ecshop在同样服务器上速度就很快。
+开始走了很多弯路，因为只是速度慢，并无错误。就没有想到是代码的原因。
+对比两个ecshop， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/2011/12/29/find-php-slow-code/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Php-fpm查找php慢速代码</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-29T00:00:00+08:00" pubdate data-updated="true">Dec 29<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>前两天帮助一个客户优化ecshop。
+他的ecshop代码是找人修改过的，修改后速度已很很慢，大概打开一页需要9s吧。
+而默认的ecshop在同样服务器上速度就很快。
+开始走了很多弯路，因为只是速度慢，并无错误。就没有想到是代码的原因。
+对比两个ecshop，首先发现首页加载的request数量差距很大，慢的站点105次，快的46次。
+而且慢的站点1.66M大小，而快的只有455k。通过开启gzip和合并css、js等手段优化后，效果并不明显。
+ 
+后来想到可能是因为找人修改过代码，开始怀疑到代码上（也确实没啥办法了）。
+想到php-fpm可以记录下执行过慢的php脚本，于是修改php-fpm配置，加入了记录慢速php请求的代码。</p>
+
+<p>下面是在php 5.3.8下的php-fpm.conf文件添加的内容</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>request_slowlog_timeout=5s
+</span><span class='line'>slowlog=/var/log/fpm_slow.log</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个配置会将php脚本执行超过5秒的，记录在/var/log/fpm_slow.log文件中。
+ 
+如果你的php还是5.2.x的版本，那么php-fpm还是以补丁的形式执行，请参考下面的配置文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>The timeout (in seconds) for serving of single request after which a php backtrace will be dumped to slow.log file
+</span><span class='line'>      '0s' means 'off'
+</span><span class='line'>      &lt;value name="request_slowlog_timeout"&gt;0s&lt;/value&gt;
+</span><span class='line'> 
+</span><span class='line'>      The log file for slow requests
+</span><span class='line'>      &lt;value name="slowlog"&gt;logs/slow.log&lt;/value&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最终在/var/log/fpm_slow.log文件里，发现很多如下记录</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[27-Dec-2011 10:07:27]  [pool www] pid 8524
+</span><span class='line'>
+</span><span class='line'>script_filename = /data/huaximall/flow.php
+</span><span class='line'>
+</span><span class='line'>[0x0a0f41c0] fsockopen() !:649
+</span><span class='line'>
+</span><span class='line'>[0x0a0f4104] _connect_sock() !:937
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3fdc] sock_to_host() !:693
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3f08] get_sock() !:372
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3e5c] get() !:952
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3d4c] getAll() !:291
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3c3c] get_child_tree() !:313
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3b18] get_child_tree() !:251
+</span><span class='line'>
+</span><span class='line'>[0x0a0f2fa8] get_categories_tree() !:44</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里比较奇怪，人家的这个日志都可以显示出具体是哪个文件的哪行，我这里只有函数和行，而文件名的地方却是“！”号。。。。
+这个问题我还没有解决，不过通过这些日志，我已经可以判断出来是flow.php的执行时间超过了5s。。。导致首页加载过慢。</p>
+
+<p>后面分析flow.php，发现又调用了init.php等相关库和初始化文件。
+最后发现fsockopen() _connect_sock() sock_to_host()这些函数是在尝试连接到memcached的服务器。而这个服务器的IP不对，导致这里延时很大。。。</p>
+
+<p>还有个技巧就是在php页面里加入计算执行时间的输出，看看到底哪些行的执行时间过长。
+具体时间的计算，可以参考下面代码</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$start = microtime(true);
+</span><span class='line'>$end = microtime(true);
+</span><span class='line'>$time=$end-$start;</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-29T00:00:00+08:00" pubdate data-updated="true">Dec 29<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/php/'>PHP</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2011/12/29/find-php-slow-code/" data-via="" data-counturl="http://babodx.github.com/blog/2011/12/29/find-php-slow-code/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/12/25/ssh-login-protection-by-denyhosts/" title="Previous Post: 通过denyhosts保护ssh登陆">&laquo; 通过denyhosts保护ssh登陆</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/12/30/php-performance-debugging-tools/" title="Next Post: php性能调试工具">php性能调试工具 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/02/cloudstack-on-vmware/">cloudstack on vmware</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

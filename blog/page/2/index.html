@@ -9,7 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="因为我日常需要用到telnet来管理交换机，所以经常用到telnet。 升级到win7后，发现telnet不能用了，提示如下 后来查找资料发现 Windows 7出于安全性考虑屏蔽了Telnet。 如何开启呢？ 在开始菜单-》控制面板-》程序界面中，点“打开或关闭Windows功能”如下图 &hellip;">
+  <meta name="description" content="最近一直在摸索macbook air的使用方法，目前大部分工作都已经可以放弃windows了。 今天又将华为的E1750上网卡在macbook air上正确安装了。 我的3g上网卡如下 这个上网卡是09年的，现在直接插入usb后，macbook air没有任何反应。 安装方法： 1、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -70,7 +70,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2010/01/12/open-telnet-win7/">Win7下启动telnet&#8211;转载</a></h1>
+      <h1 class="entry-title"><a href="/blog/2012/07/23/macbook-air-use-e1750-3g-mobilecard/">2012 Macbook Air 使用华为E1750 3g上网卡</a></h1>
     
     
       <p class="meta">
@@ -86,33 +86,46 @@
   
 
 
-<time datetime="2010-01-12T00:00:00+08:00" pubdate data-updated="true">Jan 12<span>th</span>, 2010</time>
+<time datetime="2012-07-23T00:00:00+08:00" pubdate data-updated="true">Jul 23<span>rd</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>因为我日常需要用到telnet来管理交换机，所以经常用到telnet。</p>
+  <div class="entry-content"><p>最近一直在摸索macbook air的使用方法，目前大部分工作都已经可以放弃windows了。</p>
 
-<p>升级到win7后，发现telnet不能用了，提示如下</p>
+<p>今天又将华为的E1750上网卡在macbook air上正确安装了。</p>
 
-<p><img src="http://farm9.staticflickr.com/8382/8512218888_459238840f.jpg" alt="telnet报错截图" />
-后来查找资料发现</p>
+<p>我的3g上网卡如下</p>
 
-<p>Windows 7出于安全性考虑屏蔽了Telnet。</p>
+<p><img src="http://flic.kr/p/dYtJa9" alt="e1750图" /></p>
 
-<p>如何开启呢？</p>
+<p>这个上网卡是09年的，现在直接插入usb后，macbook air没有任何反应。</p>
 
-<p>在开始菜单-》控制面板-》程序界面中，点“打开或关闭Windows功能”如下图</p>
+<p><strong>安装方法：</strong></p>
 
-<p><img src="http://farm9.staticflickr.com/8378/8512221634_b60d3f0c62.jpg" alt="添加功能" /></p>
+<p>1、首先要在Windows机器上更新固件</p>
 
-<p>然后在弹出的&#8221;Windows功能&#8221;界面中，选择上Telnet客户端，点击确定按钮。如下图</p>
+<p>先在windows机器安装mobile_card_driver驱动。</p>
 
-<p><img src="http://farm9.staticflickr.com/8526/8512222420_fd27aa15fe.jpg" alt="打开telnet客户端" /></p>
+<p>然后再到华为主页下载固件更新程序</p>
 
-<p>通过上面这些设置，就打开了Windows默认屏蔽的Telnet功能了。</p>
+<p>E1750 WINMACB300D00SP05C112(UTPS11.301.08.30.112_MAC11.301.06.13.112)(China Unicom)(05019744)</p>
+
+<p>将上网卡插入windows的usb接口，可以被驱动正确识别以后，运行固件更新程序开始更新固件。</p>
+
+<p>2、macbook下安装</p>
+
+<p>更新好固件以后，我们就可以插入macbook的笔记本。这个时候会识别出来一个mobile card的光驱。</p>
+
+<p>我们从finder进入这个光驱，就会发现“无线上网卡.app“程序</p>
+
+<p>直接安装这个程序就可以了</p>
+
+<p>3、安装好后的程序界面</p>
+
+<p><img src="http://flic.kr/p/dYtJPN" alt="运行界面" /></p>
 </div>
   
   
@@ -125,7 +138,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2010/01/07/quickmacro-on-win7/">Windows 7平台下按键精灵的后台运行</a></h1>
+      <h1 class="entry-title"><a href="/blog/2012/07/22/config-esmtp-via-gmail-sendmail/">配置ecshop通过本地esmtp发信</a></h1>
     
     
       <p class="meta">
@@ -141,72 +154,107 @@
   
 
 
-<time datetime="2010-01-07T00:00:00+08:00" pubdate data-updated="true">Jan 7<span>th</span>, 2010</time>
+<time datetime="2012-07-22T00:00:00+08:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>上次写了一篇野D带黑上，后台挂机按键精灵代码</a>，有人反映win7下按键精灵后台代码不能运行。</p>
+  <div class="entry-content"><h1>问题：</h1>
 
-<p>这里单独说明下。首先的我win7系统是32为的windows7 旗舰版，按键精灵版本是7.20.5292 免费版。在刚一开按键精灵的时候，会提示Init Seg Error。</p>
+<p>最近有个客户的ecshop总是卡在下订单的地方。查询了下日志。发现如下</p>
 
-<p>这个不用管，直接点确定就可以。然后打开按键精灵后，我们点“设置”按钮</p>
-
-<p><img src="http://farm9.staticflickr.com/8510/8512206738_6e55d4f97b.jpg" alt="设置按钮" /></p>
-
-<p>然后在弹出来的设置界面中，将热键模式选择为增强模式，如下图所示。</p>
-
-<p><img src="http://farm9.staticflickr.com/8515/8511095399_75fe398ca4.jpg" alt="增强模式截图" /></p>
-
-<p>点确定后，返回按键精灵主界面。</p>
-
-<p><strong>创建带黑上脚本</strong>点击新建按钮，进入“按键精灵-我的脚本”界面。然后点击这个界面中的“源文件”标签，如下图所示（注意红色三角标记）</p>
-
-<p><img src="http://farm9.staticflickr.com/8097/8512207532_e622ca5a45_z.jpg" alt="导入截图" /></p>
-
-<p>然后将带黑上脚本的代码粘贴进来。并在右侧“描述”里，写上黑上后台。点击保存退出，如下图所示</p>
-
-<p><img src="http://farm9.staticflickr.com/8095/8511096257_a2cfe36526_z.jpg" alt="保存截图" /></p>
-
-<p>到这里按键精灵设置完毕。只要打开刷黑上的小德号窗口，按F10启动脚本就可以了。然后再切换窗口双开，上网都可以。这个脚本会一直往小德号的窗口发送指令的。</p>
-</div>
-  
-  
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>script_filename = /public_html/quick_buy.php
+</span><span class='line'>[0x0a29511c] fgets() /public_html/includes/cls_smtp.php:314
+</span><span class='line'>[0x0a295074] get_data() /public_html/includes/cls_smtp.php:230
+</span><span class='line'>[0x0a294f5c] auth() /public_html/includes/cls_smtp.php:146
+</span><span class='line'>[0x0a294da8] send() ~:299
+</span><span class='line'>[0x0a293e80] send_mail() ~:2161</span></code></pre></td></tr></table></div></figure>
 
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/01/03/druid-ubrs-quickmacro-code/">野D带黑上，后台挂机按键精灵代码</a></h1>
-    
-    
-      <p class="meta">
-        
+<p>发现问题主要是因为在ecshop里的邮件服务器设置了采用其他smtp服务器方式。我估计是到达smtp服务器验证的时间有时候太长，导致这个订单流程失败。</p>
+
+<p>看到ecshop推荐采用本地邮件服务来发信，于是开始考虑采用这个方式。</p>
+
+<p>客户的服务器采用centos的linux服务器，php 5.3.8。</p>
+
+<p>首先说说php的mail函数的条件，需要在php.ini里面指定sendmail_path.</p>
+
+<p>先说下最简单的方式，就是服务器上安装sendmail，然后调用sendmail发送邮件。</p>
+
+<p>如果怕服务器sendmail不正常，最好卸载下再重新安装。</p>
+
+<p>卸载：
+<code>yum remove sendmail</code>
+安装
+<code>yum install sendmail</code></p>
+
+<p>再设置下php.ini里的sendmail_path=/usr/sbin/sendmail -t -i</p>
+
+<p>这样后，就可以通过ecshop里面的本地邮件服务发信了。不过这种方式有个致命缺点，因为一般我们的服务器都不被大的邮件服务商认可，所以这样发过去的邮件基本都是被拦截后者放入垃圾邮件里。</p>
+
+<h1>解决方法：</h1>
+
+<p>还是采用本地邮件服务，不过本地只是一个代理的作用，由本地的代理程序调用gmail的stmp功能发送邮件。</p>
+
+<p>本地安装esmtp程序，用来将我们的邮件通过gmail的帐号发送。这样就可以避免邮件被拦截或者认为是垃圾邮件了。</p>
+
+<p>为了一会测试方便，我们先安装一个linux下的邮件客户程序</p>
+
+<p><code>yum install mailx</code></p>
+
+<p>安装后，我们就有了mail命令。可以通过下面的命令来发信到babodx@qq.com的邮箱</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>echo "测试"|mail -s "ceshi" babodx@qq.com</span></code></pre></td></tr></table></div></figure>
 
 
+<h2>安装esmtp：</h2>
+
+<p>为了安装esmtp，我们必须先安装它依赖的一个库文件libesmtp-1.0.6</p>
+
+<h3>安装libesmtp-1.0.6</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar zxvf libesmtp-1.0.6.tar.gz
+</span><span class='line'>cd libesmtp-1.0.6
+</span><span class='line'>./configure
+</span><span class='line'>make
+</span><span class='line'>make install</span></code></pre></td></tr></table></div></figure>
 
 
+<h3>安装esmtp 1.2</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar jxvf esmtp-1.2.tar.bz2
+</span><span class='line'>cd esmtp-1.2
+</span><span class='line'>./configure --prefix=/usr/local/webserver/esmtp
+</span><span class='line'>make
+</span><span class='line'>make install</span></code></pre></td></tr></table></div></figure>
 
 
+<h3>配置esmtp通过gmail帐号发信</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vi /usr/local/webserver/esmtp/etc/esmtprc</span></code></pre></td></tr></table></div></figure>
 
 
-  
-
-
-<time datetime="2010-01-03T00:00:00+08:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>代码是运行在按键精灵里的。在winxp+按键精灵7和win7+按键精灵7下测试通过</p>
+<p><strong>内容如下</strong></p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -216,256 +264,29 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Plugin hwnd=Window.GetKeyFocusWnd()
-</span><span class='line'>Rem start
-</span><span class='line'>For 30
-</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,70)
-</span><span class='line'>Delay 300
-</span><span class='line'>EndFor
-</span><span class='line'>Delay 1000
-</span><span class='line'>Plugin Bkgnd.KeyDown(hwnd,16)
-</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,87)
-</span><span class='line'>Plugin Bkgnd.KeyUp(hwnd,16)
-</span><span class='line'>Delay 500
-</span><span class='line'>For 30
-</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,70)
-</span><span class='line'>Delay 300
-</span><span class='line'>EndFor
-</span><span class='line'>Delay 1000
-</span><span class='line'>Plugin Bkgnd.KeyDown(hwnd,18)
-</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,68)
-</span><span class='line'>Plugin Bkgnd.KeyUp(hwnd,18)
-</span><span class='line'>Delay 500
-</span><span class='line'>For 30
-</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,70)
-</span><span class='line'>Delay 300
-</span><span class='line'>EndFor
-</span><span class='line'>Delay 1000
-</span><span class='line'>For 8
-</span><span class='line'>Plugin Bkgnd.KeyDown(hwnd,16)
-</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,82)
-</span><span class='line'>Plugin Bkgnd.KeyUp(hwnd,16)
-</span><span class='line'>EndFor
-</span><span class='line'>Delay 500
-</span><span class='line'>Goto start
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>identity yourname@gmail.com       
+</span><span class='line'>        hostname smtp.gmail.com:587
+</span><span class='line'>        username "yourname@gmail.com"
+</span><span class='line'>        password "yourpasswd"
+</span><span class='line'>        starttls enabled
+</span><span class='line'>        default
+</span><span class='line'> 
+</span><span class='line'>mda "/usr/bin/procmail -d %T"</span></code></pre></td></tr></table></div></figure>
 
 
-<p>代码说明：</p>
-
-<p>上面是我自己使用的代码，我的快捷键设置和大家不一样，所以别人使用，请注意修改快捷键。</p>
-
-<p>精灵之火（野性） Shift+R</p>
-
-<p>树皮 Shift+W</p>
-
-<p>狂暴回复 Alt+D</p>
-
-<p>横扫+重殴 宏 F （其实就是个AOE宏，需要不断切换目标，保证重殴可以放出来就可以）</p>
-
-<p>以上就是我带刷的代码，基本保证装备不红，人物不死。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/01/03/2010-snow-first/">2010年北京第一场雪</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-01-03T00:00:00+08:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>2010年1月2日凌晨，北京开始飘落第一场雪。雪花很小。。。只有薄薄一层。。。。到了2日晚上雪花开始变大。。。
-现在3日早上。。。大大的雪花，厚厚一层雪。。。
-下午打算带老婆孩子玩学去了。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/01/01/druapl-url-nginx-rewrite/">Drupal在nginx 0.8.15下的简洁URL配置</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-01-01T00:00:00+08:00" pubdate data-updated="true">Jan 1<span>st</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近在学习drupal，发现这个程序比xoops、joomla都灵活，对应的学习曲线也高。反正安装后，根本不知道真没设置。呵呵</p>
-
-<p>下面先在nginx上配置了rewrite规则，让drupal支持简洁的URL</p>
+<p><strong>mail测试</strong></p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>server
-</span><span class='line'>{
-</span><span class='line'>listen 80;
-</span><span class='line'>server_name drupal.xinlogs.com;
-</span><span class='line'>index index.html index.htm index.php;
-</span><span class='line'>root /data0/htdocs/drupal;
-</span><span class='line'> 
-</span><span class='line'>#limit_conn crawler 20;
-</span><span class='line'>location = / {
-</span><span class='line'>index index.php;
-</span><span class='line'>}
-</span><span class='line'> 
-</span><span class='line'>location / {
-</span><span class='line'>index index.php index.html;
-</span><span class='line'> 
-</span><span class='line'>if (!-f $request_filename) {
-</span><span class='line'>rewrite ^(.*)$ /index.php?q=$1 last;
-</span><span class='line'>break;
-</span><span class='line'>}
-</span><span class='line'> 
-</span><span class='line'>if (!-d $request_filename) {
-</span><span class='line'>rewrite ^(.*)$ /index.php?q=$1 last;
-</span><span class='line'>break;
-</span><span class='line'>}
-</span><span class='line'>}
-</span><span class='line'> 
-</span><span class='line'>location ~ .*.(php|php5)?$
-</span><span class='line'>{
-</span><span class='line'>fastcgi_pass unix:/tmp/php-cgi.sock;
-</span><span class='line'>#fastcgi_pass 127.0.0.1:9000;
-</span><span class='line'>fastcgi_index index.php;
-</span><span class='line'>include fcgi.conf;
-</span><span class='line'>}
-</span><span class='line'> 
-</span><span class='line'>location ~ .*.(gif|jpg|jpeg|png|bmp|swf)$
-</span><span class='line'>{
-</span><span class='line'>expires 30d;
-</span><span class='line'>}
-</span><span class='line'> 
-</span><span class='line'>location ~ .*.(js|css)?$
-</span><span class='line'>{
-</span><span class='line'>expires 1h;
-</span><span class='line'>}
-</span><span class='line'> 
-</span><span class='line'>log_format drupal_access '$remote_addr - $remote_user [$time_local] "$request" '
-</span><span class='line'>'$status $body_bytes_sent "$http_referer" '
-</span><span class='line'>'"$http_user_agent" $http_x_forwarded_for';
-</span><span class='line'>access_log /data1/logs/drupal_access.log drupal_access;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>echo "测试邮件"|mail -s "ceshi" babodx@qq.com</span></code></pre></td></tr></table></div></figure>
 
 
+<p>如果测试通过，我们就再将/usr/sbin/sendmail链接到/usr/local/webserver/esmtp/bin/esmtp。</p>
 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ln -s /usr/local/webserver/esmtp/bin/esmtp /usr/sbin/sendmail</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以后就可以在ecshop里面通过本地邮件服务发信了。并且收件人显示的发件人是你设定的gmail帐号。</p>
 </div>
   
   
@@ -478,7 +299,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/31/bo-blog-insert-googleadsense/">Bo-blog 2.1.1如何加入google广告条</a></h1>
+      <h1 class="entry-title"><a href="/blog/2012/07/13/mac-vnc-rdp-over-ssh/">Mac下用ssh转发端口</a></h1>
     
     
       <p class="meta">
@@ -494,264 +315,45 @@
   
 
 
-<time datetime="2009-12-31T00:00:00+08:00" pubdate data-updated="true">Dec 31<span>st</span>, 2009</time>
+<time datetime="2012-07-13T00:00:00+08:00" pubdate data-updated="true">Jul 13<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>刚开始使用的bo-blog的时候也不知道如何加入google广告条，经过这几天的咕哝，现在已经成功在右边和下面加入。方法记录如下</p>
+  <div class="entry-content"><p>起因是这样的，我在服务器上安装了个虚拟winxp。但是想要在外网远程控制却不行，因为这个虚拟系统没有公网IP。</p>
 
-<p><strong>右侧边栏加入google广告</strong></p>
+<p>我的服务器是有公网IP的，例如：210.1.1.1</p>
 
-<p>进入后台管理->常规管理->模块配置</p>
-
-<p>点击左侧的新建/编辑项目 如图</p>
-
-<p><img src="http://farm9.staticflickr.com/8102/8512175362_3d5fd9e7c9.jpg" alt="编辑项目截图" /></p>
-
-<p>然后在手动添加项目中选择侧边模块，确定。如图</p>
-
-<p><img src="http://farm9.staticflickr.com/8370/8512175480_2bb7b4d188.jpg" alt="侧边截图" /></p>
-
-<p>确认后，进入到新增/编辑项目页面</p>
-
-<p>项目名称&#8211;这个是在后台编辑的时候，给自己分辨模块用的，随意命名。我的叫做googleadsense，注意：只能字母和数字</p>
-
-<p>项目描述&#8211;随意填写</p>
-
-<p>抬头文字&#8211;显示在首页侧边栏上，我的叫做广告栏，根据个人情况写</p>
-
-<p>栏目内容&#8211;这里写入google的广告代码就可以了</p>
-
-<p>这个办法最容易，不用修改模板。如果加入后，首页显示google广告栏，里面内容是白的，不要着急，过段时间就可以显示了。我第一个广告大约在30分钟后，才正确显示出来。</p>
-
-<p>博客底部加入google广告</p>
-
-<p>底部加入广告，也可以用上面类似的办法，通过加入底部模块实现。但是我尝试了，不好对齐，而且有的模板会破坏底部风格。所以我没有用添加底部模块的办法。</p>
-
-<p>我采用直接修改模板的elements.php文件方法。</p>
-
-<p>到bo-blog的template目录下，找到自己使用的模板文件夹，我用的neowin2，所以对应目录就是neowin2</p>
-
-<p>在模板目录下，打开elements.php文件。找到文件里的displayfooter位置，在displayfooter段里面加入google广告代码。入下所示</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">$elements[&#39;displayfooter&#39;]=&lt;&lt;&lt;eot</span>
-</span><span class='line'><span class="x">&lt;div class=&quot;clear&quot;&gt; &lt;/div&gt;</span>
-</span><span class='line'><span class="x">&lt;/div&gt;</span>
-</span><span class='line'><span class="x">&lt;div class=&quot;content-box-b&quot;&gt;</span>
-</span><span class='line'><span class="x">&lt;div class=&quot;content-box-b-r&quot;&gt;</span>
-</span><span class='line'><span class="x">&lt;div class=&quot;content-box-b-l&quot;&gt;&lt;/div&gt;</span>
-</span><span class='line'><span class="x">&lt;/div&gt;</span>
-</span><span class='line'><span class="x">&lt;/div&gt;</span>
-</span><span class='line'><span class="x">/* 下面为google广告代码 */</span>
-</span><span class='line'><span class="x">&lt;center&gt;</span>
-</span><span class='line'><span class="x">&lt;script type=&quot;text/javascript&quot;&gt;&lt;!--</span>
-</span><span class='line'><span class="x">google_ad_client = &quot;pub-2759888315234430&quot;;</span>
-</span><span class='line'><span class="x">/* 728x90, ... 09-12-21 */</span>
-</span><span class='line'><span class="x">google_ad_slot = &quot;9531615827&quot;;</span>
-</span><span class='line'><span class="x">google_ad_width = 728;</span>
-</span><span class='line'><span class="x">google_ad_height = 90;</span>
-</span><span class='line'><span class="x">//--&gt;</span>
-</span><span class='line'><span class="x">&lt;/script&gt;</span>
-</span><span class='line'><span class="x">&lt;script type=&quot;text/javascript&quot;</span>
-</span><span class='line'><span class="x">src=&quot;http://pagead2.googlesyndication.com/pagead/show_ads.js&quot;&gt;</span>
-</span><span class='line'><span class="x">&lt;/script&gt;</span>
-</span><span class='line'><span class="x">&lt;/center&gt;</span>
-</span><span class='line'><span class="x">/*google广告代码结束*/</span>
-</span><span class='line'><span class="x">&lt;div id=&quot;footer&quot;&gt;</span>
-</span><span class='line'><span class="x">&lt;div id=&quot;footer-r&quot;&gt;</span>
-</span><span class='line'><span class="x">&lt;div id=&quot;footer-l&quot;&gt;</span>
-</span><span class='line'><span class="x">&lt;div id=&quot;footer-misc&quot;&gt;</span>
-</span><span class='line'><span class="x">Skin By &lt;a href=&quot;http://www.neowin.net/&quot; target=&quot;_blank&quot;&gt;Neowin&lt;/a&gt;&lt;br /&gt;</span>
-</span><span class='line'><span class="x">Transplanted By &lt;a href=&quot;http://blog.meiu.cn/&quot; target=&quot;_blank&quot;&gt;Lingter&lt;/a&gt;</span>
-</span><span class='line'><span class="x">&lt;/div&gt;</span>
-</span><span class='line'><span class="x">&lt;div id=&quot;footer-copyright&quot;&gt;</span>
-</span><span class='line'><span class="x">{section_foot_components}</span>
-</span><span class='line'><span class="x">&lt;div id=&quot;processtime&quot;&gt;</span>
-</span><span class='line'><span class="x">&lt;/div&gt;</span>
-</span><span class='line'><span class="x">&lt;/div&gt;</span>
-</span><span class='line'><span class="x">&lt;div class=&quot;clear&quot;&gt;&lt;/div&gt;</span>
-</span><span class='line'><span class="x">&lt;/div&gt;</span>
-</span><span class='line'><span class="x">&lt;/div&gt;</span>
-</span><span class='line'><span class="x">&lt;/div&gt;</span>
-</span><span class='line'><span class="x">&lt;/div&gt;</span>
-</span><span class='line'><span class="x">eot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上面的代码就是在博客下面，footer信息的上面，加入一条google广告。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/30/playframework-installation-guide/">playframework&#8211;Installation Guide 安装手册【翻译】</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-30T00:00:00+08:00" pubdate data-updated="true">Dec 30<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1 id="Installationguide">Installation guide 安装手册</h1>
-
-
-<h2 id="aPrerequisitesa">
-<a>Prerequisites</a> 前提条件</h2>
-
-
-<p>To run the play framework, you need <a href="http://java.sun.com">Java 5 or later</a>. If you wish to build play from source, you will need the <a href="http://bazaar-vcs.org/">Bazaar source control client</a> to fetch the source code and <a href="http://ant.apache.org/">Ant</a> to build it.
-要运行Play框架，你需要Java 5以后的的JDK。如果你想从源码构建play框架，你需要用Bazaar源码控制的客户端去获取源代码并用Ant创建它。
-If you are using MacOS, java is just built-in. If you are using linux, make sure to use either the Sun-JDK or OpenJDK (and not gcj which is the default java command on many linux distro). If you are using Windows, just download and install the latest JDK package.
-如果你用MacOS系统，java是内建的。如果你用Linux系统，确定你使用的是Sun-JDK或者OpenJDK（不要是gcj，很多linux发行版默认都用gcj作为默认的java环境）。如果你用Windows系统，只要下载并安装最新发行的JDK包。
-Be sure to have java in the current path (try to type <b>java -version</b> to check). Play will use the default java or the one available at the <b>$JAVA_HOME</b> path if defined.
-确定java在当前路径（可以通过在命令行输入<strong>java -version</strong>检查）。Play框架将调用默认java或者一个在<strong>$JAVA_HOME</strong>环境变量声明的路径里的java。
-The play command line utility uses python. So it should work out of the box on any UNIX system. If you’re running Windows, don’t worry, a python runtime is bundled with the framework.
-play框架的命令行工具是用python写的。所以它应该可以在任意Unix系统上工作，如果你是Windows系统，别担心，一个python的运行环境已经内建在框架里了。</p>
-
-<h2 id="aDownloadthebinarypackagea">
-<a>Download the binary package</a> 下载二进制包</h2>
-
-
-<p>Download the latest <a href="http://download.playframework.org/">play binary package</a> and extract the archive. For convenience, you should add the framework installation directory to your system PATH. If you’re on UNIX, make sure that the <em>play</em> script is runnable (otherwise simply do a <b>chmod +x play</b>). That’s all.
-下载最新的play框架二进制包并解压缩。为了方便，你应该将play框架的安装目录添加到你系统的path环境变量里。如果你用unix，确认play脚本可以运行（否则可以执行<strong>chmod +x play</strong>）<strong>.</strong>
-<strong>Tip 建议</strong><br><br>
-If you need to rebuild the framework for whatever reason, run <strong>ant</strong> from the <strong>$PLAY_HOME/framework</strong> directory.
-如果你需要重建框架，从 <strong>$PLAY_HOME/framework</strong> 目录运行<strong>ant</strong>。</p>
-
-<h2 id="aBuildfromthelatestsourcesa">
-<a>Build from the latest sources</a> 从最新源码建立</h2>
-
-
-<p>To benefit from the latest improvements and bug fixes, you may want to compile play from sources. You’ll need a <a href="http://bazaar-vcs.org/Download">Bazaar client</a> to fetch the sources and <a href="http://ant.apache.org/">Ant</a> to build the framework.
-为了最新的改善和bug修复，你也许想从源代码编译play框架。你将需要一个Bazaar客户端去获取源代码并用Ant建立play框架。
-From the command line:
-通过下面的命令行建立</p>
-
-<pre><code># bzr checkout lp:play
-# cd play/framework
-# ant
-</code></pre>
-
-
-<p>The Play framework is ready to use.
-lp:play currently aliases to http:bazaar.launchpad.net/%7Eplay-developers/play/1.0/</p>
-
-<h2 id="aUsingtheplaycommanda">
-<a>Using the play command</a> 是用play命令</h2>
-
-
-<p>When the framework is correctly installed, open a shell and execute <strong>play</strong>.
-当框架正确安装后，打开一个shell并执行<strong>play</strong></p>
-
-<pre><code>$ play
-</code></pre>
-
-
-<p>You should see the play default message:
-你应该看到play的默认信息
-<img border="0" alt="" src="http://www.playframework.org/documentation/1.0/images/help">
-You can get more help on any specific command using <strong>play help any-command-name-here</strong>. For example, try:
-你可以获得更多帮助在任何具体命令上用 <strong>play help any-command-name-here例如，尝试</strong></p>
-
-<pre><code># play help run
-</code></pre>
-
-
-<h2 id="aCreatinganewapplicationa">
-<a>Creating a new application</a> 创建一个新的应用</h2>
-
-
-<p>Use the <b>new</b> command to create a new application. You must give a non-existent path where the application will be created.
-用<strong>new</strong>命令创建一个新的应用。你必须给一个不存在的名字，才可以创建应用（就是给一个以前没有的项目名字）</p>
-
-<pre><code># play new myApp
-</code></pre>
-
-
-<p><img border="0" alt="" src="http://www.playframework.org/documentation/1.0/images/guide1-1">
-Will create a new application. Start it with:
-创建一个新的应用，用下面命令</p>
-
-<pre><code># play run myApp
-</code></pre>
-
-
-<p>You can then open a browser at <a href="http://localhost:9000">http://localhost:9000</a> and see the default page for the application.
-你可以用浏览器访问 <a href="http://localhost:9000">http://localhost:9000</a>并看到应用的默认页面。
-<img border="0" alt="" src="http://www.playframework.org/documentation/1.0/images/guide1-2">
-<b>Your play environnement is ready</b><br>
+<p>服务器所在内网全部是10.0.1.x 网段，外网IP是通过路由器映射给服务器的，也就是说服务器上查看IP，只有10.0.1.1这个
  
-<b>你的play框架已经准备好了</b>
-<b>关于如何使用play框架，可以参考视频</b>
-<b><a href="http://www.xinlogs.com/playframework-video/">http://www.xinlogs.com/playframework-video/</a></b><div id="related_log" style="font-size:12px">
-<b>相关日志：</b><a href="http://xinlogs.com/playframework">playframework&#8211;play！java on rails框架</a><a href="http://xinlogs.com/playframework-video">playframework&#8211;开发视频</a><a href="http://xinlogs.com/playframework-helloworld">playframework&#8211;helloworld程序编写</a>
-</div></p>
+虚拟机我是用的xen，然后采用nat方式将一个192.168.122.x的ip分配给虚拟winxp使用。这个192.168.122.x段ip只有虚拟服务器和虚拟机可以访问到，就连同一个内网的10.0.1.x段其他机器都不能访问</p>
+
+<p>我要想远程控制winxp，只有两个办法，一个是通过xen提供的vnc来访问。也就是访问10.0.1.1:5901或者外网210.1.1.1:5901</p>
+
+<p>但是vnc的速度确实比winxp的远程桌面慢，有时候刷屏都很卡。但是winxp的ip又不能从外面访问，只能虚拟服务器自己用。
+ 
+后来我就想到了用ssh来做跳转，将192.168.122.1（winxp的ip）下3389端口转发过来，这样不是就可以远程通过3389访问了？
+ 
+因为mac下面的命令行直接支持ssh，确实比windows方面。linux下的常用命令和工具都支持！</p>
+
+<p>我就直接在外网通过下面命令建立了ssh隧道</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ssh -N -L3389:192.168.122.1:3389 root@114.251.211.103</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其中－N表示不用显示提示符，这个选项也可以不要
+－L表示建立一个隧道，格式：[-L [bind_address:]port:host:hostport]</p>
+
+<p>我的这条命令就是将本地的3389端口通过ssh转发到192.168.122.1的3389端口，注意：这里的192.168.122.1必须是远程ssh服务器可以访问的。</p>
+
+<p>这样你访问本地127.0.0.1:3389就相当于直接访问192.168.122.1:3389了</p>
+
+<p>当然，通过调整端口也可以实现vnc的转发</p>
+
+<p>其实通过ssh －D等选项，还可以建立ssh通道，让浏览器翻墙使用。这个网上资料很多，就不多说了。</p>
 </div>
   
   
@@ -764,7 +366,7 @@ Will create a new application. Start it with:
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/30/apache-VirtualHost-Configure/">Apache下多虚拟主机的配置与管理</a></h1>
+      <h1 class="entry-title"><a href="/blog/2012/07/13/config-winxp-remote-desktop/">Winxp的远程桌面设置</a></h1>
     
     
       <p class="meta">
@@ -780,84 +382,198 @@ Will create a new application. Start it with:
   
 
 
-<time datetime="2009-12-30T00:00:00+08:00" pubdate data-updated="true">Dec 30<span>th</span>, 2009</time>
+<time datetime="2012-07-13T00:00:00+08:00" pubdate data-updated="true">Jul 13<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>当一台服务器想给多个域名提供web服务的时候，我们可以使用apache虚拟主机配置。</p>
+  <div class="entry-content"><p>最近换了mac的笔记本，由于一些程序需要跑在winxp上面，比如zmud等。。。</p>
 
-<p>apache的配置文件在centos系统下，默认放在/etc/httpd/conf目录下的httpd.conf文件里。</p>
+<p>于是就在服务器上安装了xen，开了个winxp的虚拟机。本来xen支持vnc远程访问的，但是vnc感觉真心不给里，比windows自带的远程桌面慢了很多。</p>
 
-<p>虚拟主机的配置如下</p>
+<p>于是开始考虑使用远程桌面，可是winxp不是服务器版本，所以远程桌面有一些限制。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#############TEST VirtualHost
-</span><span class='line'>&lt;VirtualHost *:80&gt;
-</span><span class='line'>ServerAdmin babodx@gmail.com
-</span><span class='line'>DocumentRoot "/home/babo"
-</span><span class='line'>ServerName www.xinlogs.com
-</span><span class='line'>DirectoryIndex index.html
-</span><span class='line'>ErrorLog logs/www.xinlogs.com_error_log
-</span><span class='line'>CustomLog logs/www.xinlogs.com-access_log common
-</span><span class='line'> 
-</span><span class='line'>&lt;/VirtualHost&gt;
-</span></code></pre></td></tr></table></div></figure>
+<p>一个是解决多用户登陆问题</p>
 
+<p>下面是网上找到的解决办法，测试好用</p>
 
-<p>如果我们apache给10个或更多的域名提供web服务，这样的话，我们的httpd.conf就会有很多<VirtualHost *:80>这样的配置段落，看起来很长，管理起来也很麻烦。而且一个apache同时给几十个web域名提供虚拟主机，完全没有问题。那该如何写配置文件便于我们管理呢？</p>
+<p>Windows XP不支持多个用户同时登录远程桌面，当其他用户远程登录Windows XP时，主机上当前已登录的用户</p>
 
-<h2>解决办法</h2>
+<p>即会自动退出。不过在Windows XP SP2中提供了允许连接会话并发功能，可通过远程桌面进行多用户的同时登录，</p>
 
-<p>为了管理方便，配置文件的结构清晰。</p>
+<p>但其在默认状态下关闭了该项特性，需要通过修改注册表开启该功能。</p>
 
-<p>我们完全可以将每个虚拟主机的配置文件放在独立文件中，这样apache的主要配置文件httpd.conf看上去很简洁。</p>
-
-<p>只要在最后加入</p>
+<p>打开注册表编辑器，依次展开</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Include conf/vhost_*.conf</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>“HKEY_LOCAL_MACHINE\System \CurrentControlSet\Control\Terminal Server\Licensing Core”</span></code></pre></td></tr></table></div></figure>
+
+
+<p>分支，转到右侧窗口，在其中新建一个类型为DWORD的子键，将该键命名为“EnableConcurrentSessions”，
+并将键值设置为“1”，即可开启多用户登录功能。</p>
+
+<p>还有就是空密码登陆问题，因为winxp就是平时随便用用，每次输入密码太麻烦。但是远程桌面默认空密码不让登陆</p>
+
+<p><strong>解决办法如下</strong></p>
+
+<p>在运行里，输入<code>gpedit.msc</code>调出组策略界面</p>
+
+<p>依次找到“计算机配置”－》“windows设置”－》“安全设置”－》“本地策略”－》“安全选项”
+将其中的“帐户：使用空白密码的本地帐户只运行使用控制台登陆”禁用掉。</p>
+
+<p>通过上面的设置就ok了</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/13/buy-macbook-air/">2012 Macbook Air 使用感受</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-13T00:00:00+08:00" pubdate data-updated="true">Jul 13<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>6月底，我购买了一台2012新款macbook air笔记本。将近一个月的使用，记录下心得。</p>
+
+<p>以前从来没有用过mac os系统，不过对于linux还是很熟悉的。</p>
+
+<p>早就打算买一台玩玩，一个是没钱，一个是总觉得单位配的也够用。后来又打算学习下ios开发，就下决心购买一台了。</p>
+
+<p>正好赶上6月新款发布，北京正规零售店都没有上市呢，于是在macx.cn上面看到大家都在福利社购买，于是我也去了。
+ 
+<strong>购买心得</strong></p>
+
+<p>福利社的价格还算不错，和北京官方公布的教育优化价格相当。而且是香港过来的本，一旦大陆上市还有保修。
+我购买的是macbook air 低配版本，128G硬盘，4G内存 13&#8217;显示 价格：8500</p>
+
+<p>购买的时候需要什么软件还可以帮助安装。我就安装了常用的虚拟机和xcode
+ 
+<strong>使用心得</strong></p>
+
+<p>用来一个月下来，感觉mac os的系统确实不错。不愧是基于unix的。稳定！</p>
+
+<p>首先对于我经常需要服务器运维工作来说，mac os下面的软件完全可以满足</p>
+
+<p>自带的“终端” 可以支持大部分linux下的命令，要连接远程服务器直接ssh就可以，</p>
+
+<p>为了管理方便，我还是安装了secureCRT for mac</p>
+
+<p>输入法用IMKQIM（搜狗的词库）</p>
+
+<p>像office、qq、股票、远程桌面等常用软件都存在mac版本</p>
+
+<p>使用下来，没有任何的不适应。而且手势操作也很大的提高了效率。
+ 
+感受最大的是电池可以使用7小时，而且不用关机。在不用的时候，直接合上笔记本就休眠了。下次打开直接就是桌面感觉和用Ipad似的。
+ 
+因为我需要作一些php开发，在mac下面也可以使用XAMPP for mac版本</p>
+
+<p>编辑器我采用的是sublime text 2
+ 
+一个月下来，主要工作全部可以用mac系统替代了，感觉很好</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/21/linux-ddos-defender/">Linux防御DDOS攻击</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-21T00:00:00+08:00" pubdate data-updated="true">Mar 21<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这两天一个以前客户在万网购买的云主机一直被SYN Flood 攻击。</p>
+
+<p>其实SYN Flood到是只能拖慢系统，没到死机的地步。问题是万网发现了DDOS攻击后，直接给云主机断网24小时。</p>
+
+<p>这个处理太恶心了。不说想办法切断攻击的IP，而是直接断掉客户的网络。。。有点说不过去呀</p>
+
+<p>电话咨询了下，他们是系统自动处理的，发现了直接断网。
+ 
+一般应付DDOS攻击主要是调整SYN相关的内核参数，这个可以从/etc/sysctl.conf入手调整。</p>
+
+<p>再有就是添加iptables规则，来限制syn和连接数量</p>
+
+<p>最后就是通过脚本检查netstat状态，自动将连接数多的ip封掉。</p>
+
+<p>一般linux系统能做到的就这些了，那些可以防ddos的硬防火墙老百姓搞不起。
+ 
+调整syn相关参数和iptables网上资料很多，我就不说了。</p>
+
+<p>整段封IP的话，可以用</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>iptables -I INPUT -s 192.0.0.0/8 -j DROP #来封掉192开头的全部ip</span></code></pre></td></tr></table></div></figure>
 
 
 <p> 
-然后再conf目录里，每个虚拟主机的文件只要以vhost_开头，后面可以用自己的域名加.conf后缀。比如有个test.com的域名要做web。</p>
-
-<p>我们就可以直接在conf目录创建一个vhost_test.com.conf文件，文件里写入虚拟主机配置，比如</p>
+我是通过查看messages日志文件，发现了一些大量连接的IP。然后先手动封掉这些IP。下面是部分日志信息，当然这个是靠配置iptables来实现的日志</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#############TEST VirtualHost
-</span><span class='line'>&lt;VirtualHost *:80&gt;
-</span><span class='line'>ServerAdmin babodx@gmail.com
-</span><span class='line'>DocumentRoot "/home/test.com"
-</span><span class='line'>ServerName test.com
-</span><span class='line'>DirectoryIndex index.html
-</span><span class='line'>ErrorLog logs/test.com_error_log
-</span><span class='line'>CustomLog logs/test.com-access_log common
-</span><span class='line'> 
-</span><span class='line'>&lt;/VirtualHost&gt;</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Mar 20 21:51:21 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ea:c1:08:00 SRC=157.55.16.56 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=16250 DF PROTO=TCP SPT=61923 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+</span><span class='line'>Mar 20 21:51:27 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ea:c1:08:00 SRC=157.55.16.56 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=21741 DF PROTO=TCP SPT=61923 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+</span><span class='line'>Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ed:c1:08:00 SRC=157.55.16.178 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=28201 DF PROTO=TCP SPT=14521 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+</span><span class='line'>Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ed:c1:08:00 SRC=157.55.16.178 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=29875 DF PROTO=TCP SPT=14588 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>通过这种配置结构，我们管理再多的虚拟主机也不用怕。只要修改conf目录下对应虚拟主机的配置文件即可。</p>
+<p>最后在介绍一款linux下防止DDOS的软件：DDoS-Defender-v2.1.0.tar.gz</p>
+
+<p>其实DDOS也是通过分析netstat状态来判断大量连接的IP，然后采取封掉的策略。并可以设置封掉多久后自动解除。</p>
+
+<p>基本经过上面的配置，现在万网没有再因为DDOS问题断网24小时了。</p>
 </div>
   
   
@@ -870,7 +586,7 @@ Will create a new application. Start it with:
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/28/Tomcat-reboot-problems/">解决Linux下Tomcat不能重启和停止问题</a></h1>
+      <h1 class="entry-title"><a href="/blog/2012/02/02/monit-to-monitor-services/">Monit监控linux服务</a></h1>
     
     
       <p class="meta">
@@ -886,26 +602,62 @@ Will create a new application. Start it with:
   
 
 
-<time datetime="2009-12-28T00:00:00+08:00" pubdate data-updated="true">Dec 28<span>th</span>, 2009</time>
+<time datetime="2012-02-02T00:00:00+08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>我的Tomcat 5.5.28安装在CentOS 5.3 64bit系统上</p>
+  <div class="entry-content"><p>最近负责的两台服务器需要监控nginx和memcached服务，防止网站访问异常。</p>
 
-<p>每次重启都停住，只要要等5-10分钟才可以。</p>
+<p>我用monit来解决这个需求。</p>
 
-<p>系统reboot或者shutdown也都卡在关闭tomcat的过程中</p>
+<p>monit是一款linux下的开源软件，可以负责监控系统的服务、进程、文件等内容，并设置一定的条件下执行特定的action。</p>
 
-<p>后来发现直接用/usr/local/tomcat/bin/shutdown.sh一样存在问题，但是如果Tomcat什么项目都不加载，却正常。</p>
+<p>我们可以通过配置，让monit来检查网站的状态和memcached的状态，发现异常的时候，自动重启服务并邮件通知我们。</p>
 
-<p>我怀疑是tomcat加载的lib或者jar文件一多，重启和关闭就会慢的巨慢。。。甚至10分钟以上。</p>
+<p>我配置了30s检查一次，出现问题发送邮件到我的gmail邮箱。我手机马上就能收到邮件提醒，非常效率。</p>
 
-<p>为了解决这个问题，我修改了/etc/init.d/目录下的tomcat文件，让关闭或者重启的时候，直接通过kill命令杀掉tomcat进程。</p>
+<p>安装配置步骤：</p>
 
-<p>下面是我/etc/init.d/tomcat文件</p>
+<p>下载monit</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget http://mmonit.com/monit/dist/monit-5.3.2.tar.gz</span></code></pre></td></tr></table></div></figure>
+
+
+<p>解压并安装</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar zxvf monit-5.3.2.tar.gz
+</span><span class='line'>
+</span><span class='line'>cd monit-5.3.2
+</span><span class='line'>
+</span><span class='line'>./configure --prefix=/usr/local/monit
+</span><span class='line'>
+</span><span class='line'>make
+</span><span class='line'>
+</span><span class='line'>make install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>配置</p>
+
+<p>先将默认的配置文件拷贝到/etc目录下，然后编辑monitrc文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cp monitrc /etc/</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面是我的一些配置：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -973,73 +725,127 @@ Will create a new application. Start it with:
 <span class='line-number'>64</span>
 <span class='line-number'>65</span>
 <span class='line-number'>66</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/bash
-</span><span class='line'>#
-</span><span class='line'># Startup script for the tomcat
-</span><span class='line'>#
-</span><span class='line'># chkconfig: 345 80 15
-</span><span class='line'># description: Tomcat is a Servlet+JSP Engine.
-</span><span class='line'> 
-</span><span class='line'># Source function library.
-</span><span class='line'>. /etc/rc.d/init.d/functions
-</span><span class='line'> 
-</span><span class='line'> 
-</span><span class='line'>export JAVA_HOME=/usr/local/jdk1.6.0_16
-</span><span class='line'>export CLASSPATH=.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
-</span><span class='line'>export PATH=$PATH:$JAVA_HOME/bin
-</span><span class='line'> 
-</span><span class='line'>export CATALINA_BASE=/usr/local/tomcat
-</span><span class='line'>export CATALINA_HOME=/usr/local/tomcat
-</span><span class='line'>export CATALINA_TMPDIR=/usr/local/tomcat/temp
-</span><span class='line'>export JRE_HOME=/usr/local/jdk1.6.0_16
-</span><span class='line'> 
-</span><span class='line'>start(){
-</span><span class='line'>if [ -z $(/sbin/pidof java) ]; then
-</span><span class='line'>echo "Starting tomcat"
-</span><span class='line'>/usr/local/tomcat/bin/startup.sh
-</span><span class='line'>touch /var/lock/subsys/tomcat
-</span><span class='line'>else
-</span><span class='line'>echo "tomcat allready running"
-</span><span class='line'>fi
-</span><span class='line'>}
-</span><span class='line'> 
-</span><span class='line'> 
-</span><span class='line'>stop(){
-</span><span class='line'>if [ ! -z $(/sbin/pidof java) ]; then
-</span><span class='line'>echo "Shutting down tomcat"
-</span><span class='line'>#下面就是关闭的核心代码了，用ps获取tomcat进程id，直接kill掉
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>set daemon  30   #设置30s检查一次
 </span><span class='line'>
-</span><span class='line'>ps aux|grep tomcat|grep startup|awk '{print $2}'|xargs kill -9
-</span><span class='line'>#/usr/local/tomcat/bin/shutdown.sh
-</span><span class='line'>until [ -z $(/sbin/pidof java) ]; do :; done
-</span><span class='line'>rm -f /var/lock/subsys/tomcat
-</span><span class='line'>else
-</span><span class='line'>echo "tomcat not running"
-</span><span class='line'>fi
+</span><span class='line'>set logfile /var/log/monit.log   #设定日志文件
+</span><span class='line'>
+</span><span class='line'>#设定邮件
+</span><span class='line'>
+</span><span class='line'>set mailserver smtp.gmail.com PORT 587 USERNAME "yourname@gmail.com" PASSWORD "yourpassword" USING tlsv1 
+</span><span class='line'>
+</span><span class='line'>#设定邮件格式
+</span><span class='line'>
+</span><span class='line'>set mail-format {
+</span><span class='line'>
+</span><span class='line'>      from: monit@huaximall.com
+</span><span class='line'>
+</span><span class='line'>      subject: monit alert --  $EVENT $SERVICE
+</span><span class='line'>
+</span><span class='line'>      message: $EVENT Service $SERVICE
+</span><span class='line'>
+</span><span class='line'>                 Date:        $DATE
+</span><span class='line'>
+</span><span class='line'>                 Action:      $ACTION
+</span><span class='line'>
+</span><span class='line'>                 Host:        xinlogs.com
+</span><span class='line'>
+</span><span class='line'>                 Description: $DESCRIPTION
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>            Your faithful employee,
+</span><span class='line'>
+</span><span class='line'>            Monit
+</span><span class='line'>
 </span><span class='line'>}
-</span><span class='line'> 
-</span><span class='line'> 
-</span><span class='line'>case "$1" in
-</span><span class='line'>start)
-</span><span class='line'>start
-</span><span class='line'>;;
-</span><span class='line'>stop)
-</span><span class='line'>stop
-</span><span class='line'>;;
-</span><span class='line'>restart)
-</span><span class='line'>stop
-</span><span class='line'>start
-</span><span class='line'>;;
-</span><span class='line'>status)
-</span><span class='line'>/usr/local/tomcat/bin/catalina.sh version
-</span><span class='line'>;;
-</span><span class='line'>*)
-</span><span class='line'>echo "Usage: $0 {start|stop|restart|status}"
-</span><span class='line'>esac
-</span><span class='line'> 
-</span><span class='line'>exit 0
-</span><span class='line'> </span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>
+</span><span class='line'>#设定提醒超时
+</span><span class='line'>
+</span><span class='line'>set alert babodx@gmail.com with reminder on 3 cycles
+</span><span class='line'>
+</span><span class='line'>#设定检查nginx服务
+</span><span class='line'>
+</span><span class='line'>check process nginx with pidfile /usr/local/webserver/nginx-1.0.11/nginx.pid
+</span><span class='line'>
+</span><span class='line'>  start program = "/usr/local/webserver/nginx-1.0.11/sbin/nginx"
+</span><span class='line'>
+</span><span class='line'>  stop program = "/usr/bin/killall nginx"
+</span><span class='line'>
+</span><span class='line'>  if failed host xinlogs.com port 80 protocol http
+</span><span class='line'>
+</span><span class='line'>     and request "/t.html"
+</span><span class='line'>
+</span><span class='line'>     then restart
+</span><span class='line'>
+</span><span class='line'>  if 2 restarts within 3 cycles then timeout
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>#设定检查memcached服务
+</span><span class='line'>
+</span><span class='line'>check process memcached with pidfile /var/run/memcache.pid
+</span><span class='line'>
+</span><span class='line'>      start program = "/usr/local/memcached/bin/memcached -d -m 1024 -u root -p 11211 -c 1024 -P /var/run/memcache.pid"
+</span><span class='line'>
+</span><span class='line'>      stop program = "/bin/kill -9 `cat /var/run/memcache.pid`; rm /var/run/memcached.pid"
+</span><span class='line'>
+</span><span class='line'>      if failed host 127.0.0.1 port 11211 protocol MEMCACHE then restart
+</span><span class='line'>
+</span><span class='line'>      if cpu &gt; 60% for 2 cycles then alert
+</span><span class='line'>
+</span><span class='line'>      if cpu &gt; 98% for 5 cycles then restart
+</span><span class='line'>
+</span><span class='line'>      if 2 restarts within 3 cycles then timeout
+</span><span class='line'>
+</span><span class='line'>      group cache</span></code></pre></td></tr></table></div></figure>
 
+
+<p>下面再贴出来提醒的邮件样子给大家看看</p>
+
+<p>这个是检查到nginx被终止后的提醒邮件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Does not exist Service nginx
+</span><span class='line'>                Date:        Thu, 02 Feb 2012 11:31:50
+</span><span class='line'>                Action:      restart
+</span><span class='line'>                Host:        xinlogs.com
+</span><span class='line'>                Description: process is not running
+</span><span class='line'>
+</span><span class='line'>           Your faithful employee,
+</span><span class='line'>           Monit</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面是自动恢复nginx服务后的提醒邮件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Exists Service nginx
+</span><span class='line'>                Date:        Thu, 02 Feb 2012 11:32:28
+</span><span class='line'>                Action:      alert
+</span><span class='line'>                Host:        xinlogs.com
+</span><span class='line'>                Description: process is running with pid 6894
+</span><span class='line'>
+</span><span class='line'>           Your faithful employee,
+</span><span class='line'>           Monit</span></code></pre></td></tr></table></div></figure>
+
+
+<p>有了这些就可以安心了，万一网站访问异常了。monit会尝试自动恢复的，而且第一时间通知我们。因为我的vps在美国，所以发送到gmail很及时。手机再设置个邮件提醒功能，基本就ok了。</p>
 </div>
   
   
@@ -1052,7 +858,7 @@ Will create a new application. Start it with:
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/27/playframework-video/">Playframework&#8211;开发视频</a></h1>
+      <h1 class="entry-title"><a href="/blog/2012/01/19/php-eaccelerator-vs-fastcgi-cache/">Php Eaccelerator vs Fastcgi_cache性能比较</a></h1>
     
     
       <p class="meta">
@@ -1068,24 +874,882 @@ Will create a new application. Start it with:
   
 
 
-<time datetime="2009-12-27T00:00:00+08:00" pubdate data-updated="true">Dec 27<span>th</span>, 2009</time>
+<time datetime="2012-01-19T00:00:00+08:00" pubdate data-updated="true">Jan 19<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p><a href="www.playframework.org">http://www.playframework.org/</a></p>
+  <div class="entry-content"><p>最近放假一直在家里测试php如何优化性能。
+今天比较了下默认php、eaccelerator和fastcgi_cache的性能。</p>
 
-<p>网站上本来首页有一段大约10分钟的视频。内容是10分钟开发一个web程序，包括数据库的curd操作。</p>
+<p>先介绍下我的测试环境：
+这次是在我VPS上做的测试：cpu 为1颗Intel(R) Core(TM) i7-2600 CPU @ 3.40GHz，内存256M
+系统为centos 5.6 32bit
+php版本 5.3.8
+web服务采用Tengine/1.2.1，其实就是nginx</p>
 
-<p>但是由于视频是放在了<a href="http://vimeo.com/">http://vimeo.com/</a>国内正常情况下访问不到。</p>
+<p>测试文件一个采用phpinfo.php，这个就是phpinfo()函数输出页面。另外一个就是采用我博客首页http://xinlogs.com
+注：我的博客采用emlog 4.1
+下面进入我的测试。。。。</p>
 
-<p>我在浏览首页的时候，发现可以通过<a href="www.playframework.org">http://www.playframework.org/</a>下载mp4的视频观看。</p>
+<p>php先用默认状态，不加载eaccelerator模块。
+测试phpinfo.php,连续访问3000次，采用10个并发请求。</p>
 
-<p>&lt;下面给出下载地址，感兴趣的朋友可以下载观看http://download.playframework.org/presentations/screencast.mp4</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 3000 -c 10 http://xinlogs.com/phpinfo.php
+</span><span class='line'>Server Software:        Tengine/1.2.1
+</span><span class='line'>Server Hostname:        xinlogs.com
+</span><span class='line'>Server Port:            80
+</span><span class='line'>
+</span><span class='line'>Document Path:          /phpinfo.php
+</span><span class='line'>Document Length:        54365 bytes
+</span><span class='line'>
+</span><span class='line'>Concurrency Level:      10
+</span><span class='line'>Time taken for tests:   7.557223 seconds
+</span><span class='line'>Complete requests:      3000
+</span><span class='line'>Failed requests:        0
+</span><span class='line'>Write errors:           0
+</span><span class='line'>Total transferred:      163608000 bytes
+</span><span class='line'>HTML transferred:       163095000 bytes
+</span><span class='line'>Requests per second:    396.97 [#/sec] (mean)
+</span><span class='line'>Time per request:       25.191 [ms] (mean)
+</span><span class='line'>Time per request:       2.519 [ms] (mean, across all concurrent requests)
+</span><span class='line'>Transfer rate:          21141.76 [Kbytes/sec] received
+</span><span class='line'>
+</span><span class='line'>Connection Times (ms)
+</span><span class='line'>              min  mean[+/-sd] median   max
+</span><span class='line'>Connect:        0    0   0.0      0       2
+</span><span class='line'>Processing:     9   24  52.3     25    2432
+</span><span class='line'>Waiting:        9   24  52.2     25    2431
+</span><span class='line'>Total:          9   24  52.3     25    2432
+</span><span class='line'>
+</span><span class='line'>Percentage of the requests served within a certain time (ms)
+</span><span class='line'>  50%     25
+</span><span class='line'>  66%     28
+</span><span class='line'>  75%     29
+</span><span class='line'>  80%     29
+</span><span class='line'>  90%     31
+</span><span class='line'>  95%     32
+</span><span class='line'>  98%     34
+</span><span class='line'>  99%     36
+</span><span class='line'> 100%   2432 (longest request)</span></code></pre></td></tr></table></div></figure>
 
-<p><img src="http://www.playframework.org/images/screen.png" alt="视频截图" /></p>
+
+<p>可以看到每秒大约处理396.97 [#/sec] (mean)。99%响应时间在36ms以内
+我又测试了几次，基本每秒处理在390到450浮动，响应时间在45ms以内吧。</p>
+
+<p>再来看看我博客首页的测试情况</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 3000 -c 10 http://xinlogs.com/
+</span><span class='line'>Server Software:        Tengine/1.2.1
+</span><span class='line'>Server Hostname:        xinlogs.com
+</span><span class='line'>Server Port:            80
+</span><span class='line'>
+</span><span class='line'>Document Path:          /
+</span><span class='line'>Document Length:        21494 bytes
+</span><span class='line'>
+</span><span class='line'>Concurrency Level:      10
+</span><span class='line'>Time taken for tests:   52.787368 seconds
+</span><span class='line'>Complete requests:      3000
+</span><span class='line'>Failed requests:        2970
+</span><span class='line'>   (Connect: 0, Length: 2970, Exceptions: 0)
+</span><span class='line'>Write errors:           0
+</span><span class='line'>Total transferred:      64990449 bytes
+</span><span class='line'>HTML transferred:       64432449 bytes
+</span><span class='line'>Requests per second:    56.83 [#/sec] (mean)
+</span><span class='line'>Time per request:       175.958 [ms] (mean)
+</span><span class='line'>Time per request:       17.596 [ms] (mean, across all concurrent requests)
+</span><span class='line'>Transfer rate:          1202.31 [Kbytes/sec] received
+</span><span class='line'>
+</span><span class='line'>Connection Times (ms)
+</span><span class='line'>              min  mean[+/-sd] median   max
+</span><span class='line'>Connect:        0    0   0.0      0       0
+</span><span class='line'>Processing:     9  175 661.8    127   18091
+</span><span class='line'>Waiting:        9  174 661.9    126   18091
+</span><span class='line'>Total:          9  175 661.8    127   18091
+</span><span class='line'>
+</span><span class='line'>Percentage of the requests served within a certain time (ms)
+</span><span class='line'>  50%    127
+</span><span class='line'>  66%    149
+</span><span class='line'>  75%    166
+</span><span class='line'>  80%    178
+</span><span class='line'>  90%    199
+</span><span class='line'>  95%    210
+</span><span class='line'>  98%    226
+</span><span class='line'>  99%    348
+</span><span class='line'> 100%  18091 (longest request)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到每秒处理56.83 [#/sec] (mean)请求，99%的响应时间在348ms内
+多次测试后，基本保持在每秒处理55-60个请求，响应时间基本在350ms内。</p>
+
+<p>接着我开启php的eaccelerator模块,开启后的phpinfo信息如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>This program makes use of the Zend Scripting Language Engine:
+</span><span class='line'>Zend Engine v2.3.0, Copyright (c) 1998-2011 Zend Technologies
+</span><span class='line'>    with eAccelerator v0.9.6.1, Copyright (c) 2004-2010 eAccelerator, by eAccelerator</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们再次测试phpinfo.php文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 3000 -c 10 http://xinlogs.com/phpinfo.php
+</span><span class='line'>
+</span><span class='line'>Server Software:        Tengine/1.2.1
+</span><span class='line'>Server Hostname:        xinlogs.com
+</span><span class='line'>Server Port:            80
+</span><span class='line'>
+</span><span class='line'>Document Path:          /phpinfo.php
+</span><span class='line'>Document Length:        56845 bytes
+</span><span class='line'>
+</span><span class='line'>Concurrency Level:      10
+</span><span class='line'>Time taken for tests:   7.128081 seconds
+</span><span class='line'>Complete requests:      3000
+</span><span class='line'>Failed requests:        0
+</span><span class='line'>Write errors:           0
+</span><span class='line'>Total transferred:      171333080 bytes
+</span><span class='line'>HTML transferred:       170819225 bytes
+</span><span class='line'>Requests per second:    420.87 [#/sec] (mean)
+</span><span class='line'>Time per request:       23.760 [ms] (mean)
+</span><span class='line'>Time per request:       2.376 [ms] (mean, across all concurrent requests)
+</span><span class='line'>Transfer rate:          23472.94 [Kbytes/sec] received
+</span><span class='line'>
+</span><span class='line'>Connection Times (ms)
+</span><span class='line'>              min  mean[+/-sd] median   max
+</span><span class='line'>Connect:        0    9   7.9      9      40
+</span><span class='line'>Processing:     2   13  13.6     12     620
+</span><span class='line'>Waiting:        0    9  13.2      8     603
+</span><span class='line'>Total:         12   23  13.6     23     623
+</span><span class='line'>
+</span><span class='line'>Percentage of the requests served within a certain time (ms)
+</span><span class='line'>  50%     23
+</span><span class='line'>  66%     29
+</span><span class='line'>  75%     31
+</span><span class='line'>  80%     31
+</span><span class='line'>  90%     32
+</span><span class='line'>  95%     34
+</span><span class='line'>  98%     37
+</span><span class='line'>  99%     39
+</span><span class='line'> 100%    623 (longest request)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>从结果来看，加了eAccelerator后，phpinfo.php的测试结果并不是很快。每秒处理420.87请求，偶尔还会在380左右。并没有明显变化。</p>
+
+<p>再来看看博客首页的测试。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 3000 -c 10 http://xinlogs.com/
+</span><span class='line'>Server Software:        Tengine/1.2.1
+</span><span class='line'>Server Hostname:        xinlogs.com
+</span><span class='line'>Server Port:            80
+</span><span class='line'>
+</span><span class='line'>Document Path:          /
+</span><span class='line'>Document Length:        21488 bytes
+</span><span class='line'>
+</span><span class='line'>Concurrency Level:      10
+</span><span class='line'>Time taken for tests:   23.177888 seconds
+</span><span class='line'>Complete requests:      3000
+</span><span class='line'>Failed requests:        2970
+</span><span class='line'>   (Connect: 0, Length: 2970, Exceptions: 0)
+</span><span class='line'>Write errors:           0
+</span><span class='line'>Total transferred:      64929588 bytes
+</span><span class='line'>HTML transferred:       64371588 bytes
+</span><span class='line'>Requests per second:    129.43 [#/sec] (mean)
+</span><span class='line'>Time per request:       77.260 [ms] (mean)
+</span><span class='line'>Time per request:       7.726 [ms] (mean, across all concurrent requests)
+</span><span class='line'>Transfer rate:          2735.67 [Kbytes/sec] received
+</span><span class='line'>
+</span><span class='line'>Connection Times (ms)
+</span><span class='line'>              min  mean[+/-sd] median   max
+</span><span class='line'>Connect:        0    0   1.0      0      23
+</span><span class='line'>Processing:     4   76 582.2     31   13655
+</span><span class='line'>Waiting:        4   76 582.2     31   13655
+</span><span class='line'>Total:          4   76 582.2     31   13655
+</span><span class='line'>
+</span><span class='line'>Percentage of the requests served within a certain time (ms)
+</span><span class='line'>  50%     31
+</span><span class='line'>  66%     46
+</span><span class='line'>  75%     55
+</span><span class='line'>  80%     58
+</span><span class='line'>  90%     69
+</span><span class='line'>  95%     80
+</span><span class='line'>  98%    100
+</span><span class='line'>  99%    129
+</span><span class='line'> 100%  13655 (longest request)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>从博客首页的测试可以发现，用了eAccelerator的效果还是很明显的。每秒处理请求129.43 [#/sec] (mean)，99%的响应时间在129ms内完成。
+这个结果比不用eaccelerator的情况下，高了1倍多。</p>
+
+<p>个人认为eAccelerator因为减少了php每次编译时间，所以当php程序需要调用很多类，或者调用其他php文件的时候。这个优化就体现出来了。就想我上面的测试，博客首页的加载确实快了，每秒处理的请求也多了。但是想phpinfo.php这样只有一个文件，并且只是简单的输出phpinfo信息的页面，eaccelerator起到的优化就很少了。</p>
+
+<p>下面我们再来测试下fastcgi_cache有多快，这个就是缓存，完全不是优化php执行速度了，而是直接缓存上结果，下次直接调用缓存。</p>
+
+<p>我们先用curl请求2次phpinfo.php 确定已经缓存上，再来测试。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-bash-3.2# curl -I http://xinlogs.com/phpinfo.php
+</span><span class='line'>HTTP/1.1 200 OK
+</span><span class='line'>Server: Tengine/1.2.1
+</span><span class='line'>Date: Thu, 19 Jan 2012 07:09:23 GMT
+</span><span class='line'>Content-Type: text/html
+</span><span class='line'>Connection: keep-alive
+</span><span class='line'>Vary: Accept-Encoding
+</span><span class='line'>X-Powered-By: PHP/5.3.8
+</span><span class='line'>X-Cache: HIT
+</span><span class='line'>
+</span><span class='line'>ab -n 3000 -c 10 http://xinlogs.com/phpinfo.php
+</span><span class='line'>Server Software:        Tengine/1.2.1
+</span><span class='line'>Server Hostname:        xinlogs.com
+</span><span class='line'>Server Port:            80
+</span><span class='line'>
+</span><span class='line'>Document Path:          /phpinfo.php
+</span><span class='line'>Document Length:        58255 bytes
+</span><span class='line'>
+</span><span class='line'>Concurrency Level:      10
+</span><span class='line'>Time taken for tests:   0.656969 seconds
+</span><span class='line'>Complete requests:      3000
+</span><span class='line'>Failed requests:        0
+</span><span class='line'>Write errors:           0
+</span><span class='line'>Total transferred:      175320000 bytes
+</span><span class='line'>HTML transferred:       174765000 bytes
+</span><span class='line'>Requests per second:    4566.43 [#/sec] (mean)
+</span><span class='line'>Time per request:       2.190 [ms] (mean)
+</span><span class='line'>Time per request:       0.219 [ms] (mean, across all concurrent requests)
+</span><span class='line'>Transfer rate:          260605.90 [Kbytes/sec] received
+</span><span class='line'>
+</span><span class='line'>Connection Times (ms)
+</span><span class='line'>              min  mean[+/-sd] median   max
+</span><span class='line'>Connect:        0    0   0.0      0       0
+</span><span class='line'>Processing:     0    1   1.1      1       4
+</span><span class='line'>Waiting:        0    1   0.9      1       4
+</span><span class='line'>Total:          0    1   1.1      1       4
+</span><span class='line'>
+</span><span class='line'>Percentage of the requests served within a certain time (ms)
+</span><span class='line'>  50%      1
+</span><span class='line'>  66%      2
+</span><span class='line'>  75%      2
+</span><span class='line'>  80%      3
+</span><span class='line'>  90%      3
+</span><span class='line'>  95%      3
+</span><span class='line'>  98%      4
+</span><span class='line'>  99%      4
+</span><span class='line'> 100%      4 (longest request)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>看到什么是速度了吧。。。每秒处理请求 4566.43 [#/sec] (mean)，响应时间4ms以内完成。
+这个就是fastcgi_cache的速度了.</p>
+
+<p>也许一个phpinfo.php页面不能说明问题，我们再来看看博客首页的情况</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 3000 -c 10 http://xinlogs.com/
+</span><span class='line'>
+</span><span class='line'>Server Software:        Tengine/1.2.1
+</span><span class='line'>Server Hostname:        xinlogs.com
+</span><span class='line'>Server Port:            80
+</span><span class='line'>
+</span><span class='line'>Document Path:          /
+</span><span class='line'>Document Length:        21485 bytes
+</span><span class='line'>
+</span><span class='line'>Concurrency Level:      10
+</span><span class='line'>Time taken for tests:   0.578070 seconds
+</span><span class='line'>Complete requests:      3000
+</span><span class='line'>Failed requests:        0
+</span><span class='line'>Write errors:           0
+</span><span class='line'>Total transferred:      65055000 bytes
+</span><span class='line'>HTML transferred:       64455000 bytes
+</span><span class='line'>Requests per second:    5189.68 [#/sec] (mean)
+</span><span class='line'>Time per request:       1.927 [ms] (mean)
+</span><span class='line'>Time per request:       0.193 [ms] (mean, across all concurrent requests)
+</span><span class='line'>Transfer rate:          109900.19 [Kbytes/sec] received
+</span><span class='line'>
+</span><span class='line'>Connection Times (ms)
+</span><span class='line'>              min  mean[+/-sd] median   max
+</span><span class='line'>Connect:        0    0   0.0      0       0
+</span><span class='line'>Processing:     0    1   0.8      2       3
+</span><span class='line'>Waiting:        0    1   0.8      2       3
+</span><span class='line'>Total:          0    1   0.8      2       3
+</span><span class='line'>WARNING: The median and mean for the processing time are not within a normal deviation
+</span><span class='line'>        These results are probably not that reliable.
+</span><span class='line'>WARNING: The median and mean for the waiting time are not within a normal deviation
+</span><span class='line'>        These results are probably not that reliable.
+</span><span class='line'>WARNING: The median and mean for the total time are not within a normal deviation
+</span><span class='line'>        These results are probably not that reliable.
+</span><span class='line'>
+</span><span class='line'>Percentage of the requests served within a certain time (ms)
+</span><span class='line'>  50%      2
+</span><span class='line'>  66%      2
+</span><span class='line'>  75%      2
+</span><span class='line'>  80%      2
+</span><span class='line'>  90%      2
+</span><span class='line'>  95%      2
+</span><span class='line'>  98%      2
+</span><span class='line'>  99%      3
+</span><span class='line'> 100%      3 (longest request)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>再看看首页，因为采用了fastcgi_cache，每秒处理请求5189.68 [#/sec] (mean)，响应时间3ms内完成。</p>
+
+<p>性能比较表格(主要提供每秒处理数做比较)</p>
+
+<pre><code>                请求文件长度    php默认     eAccelerator加速模式      fastcgi_cache模式
+</code></pre>
+
+<p>phpinfo.php     58255 bytes     396.97          420.87                          4566.43
+博客首页        21485 bytes      56.83           129.43                           5189.68</p>
+
+<p><strong>总结：</strong></p>
+
+<p>上面的测试虽然不是很严谨，但是通过这些已经可以发现fastcgi_cache的优势了，通过缓存php结果，大幅提升请求处理能力。
+一般程序再通过eaccelerator模式加速后，可以提升2-3倍性能，而fastcgi_cache缓存的性能提升大约在10倍。</p>
+
+<p>不过fastcgi_cache的应用也有它的弊端，就是要通过程序控制好刷新和不缓存内容。不然登陆后的用户都显示一个界面，或者发布的消息迟迟不能显示在首页都是它要解决的问题。</p>
+
+<p>一般用户还是建议采用eaccelerator模块加速，因为这样基本无需修改代码，最容易实现。fastcgi_cache很难在不调整代码的情况下使用，因为他会缓存全部php文件，至少我的博客在启用了fastcgi_cache后，后台不正常。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/19/install-ApacheBench-on-CentOS-without-Apache/">Centos 单独安装apachebench</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-19T00:00:00+08:00" pubdate data-updated="true">Jan 19<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这两天在测试php性能优化方法。</p>
+
+<p>为了做压力测试可观察效果，就选择了ApacheBench来作为压力测试工具。其实就是大家常说的ab。</p>
+
+<p>但是这个工具是安装apache web server的时候自带的，现在我服务器上都是跑nginx。也不想为了用这个工具就再装个apache。所以在用下面方法单独安装ab工具，这里记录下步骤。
+ 
+首先安装ab运行需要的软件包apr-util</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>yum install apr-util</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后安装一个yum的工具包，为了可以单独弄出来ab。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>yum install yum-utils</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面两个安装好以后，我们开始单独安装ab，其实就是下载到apache的rpm包，然后解压后，cp出来ab工具。</p>
+
+<p>下载apache的rpm包就交给yumdownloader完成了，下载前我们建立一个临时目录用来存放。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir httpd
+</span><span class='line'>
+</span><span class='line'>cd httpd
+</span><span class='line'>
+</span><span class='line'>yumdownloader httpd</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下载后，我们对rpm进行解包</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rpm2cpio httpd-2.2.3-43.el5.centos.3.i386.rpm | cpio -idmv</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后将我们用到的ab拷贝到系统的/usr/bin目录下就可以了。最后再删除临时目录就全部ok了。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mv usr/bin/ab /usr/bin/ab
+</span><span class='line'>cd ..
+</span><span class='line'>rm -rf httpd</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/17/squid-cache-php-script/">Squid缓存php页面</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-17T00:00:00+08:00" pubdate data-updated="true">Jan 17<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这两天在看squid反向代理加速web应用方面的内容。</p>
+
+<p>总体来看squid的cache都是缓存一些静态内容，例如图片、css、js等文件。而动态内容是不能缓存的。那有没有办法让squid缓存php文件呢？答案是肯定的。</p>
+
+<p>首先用squid反向代理后，我们访问一个test.html的静态页面。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# curl -I http://xinlogs.com:3128/test.html
+</span><span class='line'>HTTP/1.0 200 OK
+</span><span class='line'>Content-Type: text/html
+</span><span class='line'>Content-Length: 77
+</span><span class='line'>Accept-Ranges: bytes
+</span><span class='line'>Server: Tengine/1.2.1
+</span><span class='line'>Date: Tue, 17 Jan 2012 12:38:36 GMT
+</span><span class='line'>Last-Modified: Tue, 17 Jan 2012 01:29:47 GMT
+</span><span class='line'>X-Cache: HIT from squid.xinlogs.com
+</span><span class='line'>Via: 1.1 squid.xinlogs.com:3128 (squid/2.7.STABLE9)
+</span><span class='line'>Connection: close</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到X-Cache: HIT from squid.xinlogs.com，成功命中缓存。说明是被squid缓存的内容直接给我们了。
+而访问一个动态页面呢？</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# curl -I http://xinlogs.com:3128/test.php
+</span><span class='line'>
+</span><span class='line'>HTTP/1.0 200 OK
+</span><span class='line'>
+</span><span class='line'>Server: Tengine/1.2.1
+</span><span class='line'>
+</span><span class='line'>Date: Tue, 17 Jan 2012 12:40:52 GMT
+</span><span class='line'>
+</span><span class='line'>Content-Type: text/html
+</span><span class='line'>
+</span><span class='line'>Vary: Accept-Encoding
+</span><span class='line'>
+</span><span class='line'>X-Powered-By: PHP/5.3.8
+</span><span class='line'>
+</span><span class='line'>X-Cache: MISS from squid.xinlogs.com
+</span><span class='line'>
+</span><span class='line'>Via: 1.1 squid.xinlogs.com:3128 (squid/2.7.STABLE9)
+</span><span class='line'>
+</span><span class='line'>Connection: close</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过X-Cache: MISS from squid.xinlogs.com，可以看到是未命中，也就是从squid后端的nginx请求到的内容。</p>
+
+<p>查了写资料，发现之所以不缓存动态脚本，主要是php文件没有输出Last-Modified: Tue, 17 Jan 2012 01:29:47 GMT这行头信息。</p>
+
+<p>下面我们构造一个可以输出头信息的php文件test2.php来测试下。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?php
+</span><span class='line'>$now = time();
+</span><span class='line'>$generatedAt = gmdate("D, d M Y H:i:s T",$now);
+</span><span class='line'>//print_r($generatedAt);
+</span><span class='line'>$lastModified = gmdate("D, d M Y 00:00:00 T",$now);
+</span><span class='line'>$expiresAt = gmdate("D, D M Y H:i:s T",strtotime($lastModified)+86400);
+</span><span class='line'>$maxAge=strtotime($expiresAt)-strtotime($generatedAt);
+</span><span class='line'>header('Last-modified: '.$lastModified);
+</span><span class='line'>header('Cache-control: max-age=' . $maxAge);
+</span><span class='line'>echo "Test".time();</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里我们通过header函数来构造了Last-Modified和Cache-control头信息。</p>
+
+<p>再让我们通过curl -I来查看下是否可以缓存这个test2.php文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>[root@localhost ~]# curl -I http://xinlogs.com:3128/test2.php
+</span><span class='line'>
+</span><span class='line'>HTTP/1.0 200 OK
+</span><span class='line'>
+</span><span class='line'>Server: Tengine/1.2.1
+</span><span class='line'>
+</span><span class='line'>Date: Tue, 17 Jan 2012 12:46:08 GMT
+</span><span class='line'>
+</span><span class='line'>Content-Type: text/html
+</span><span class='line'>
+</span><span class='line'>Vary: Accept-Encoding
+</span><span class='line'>
+</span><span class='line'>X-Powered-By: PHP/5.3.8
+</span><span class='line'>
+</span><span class='line'>Last-Modified: Tue, 17 Jan 2012 00:00:00 GMT
+</span><span class='line'>
+</span><span class='line'>Cache-Control: max-age=-1169168
+</span><span class='line'>
+</span><span class='line'>Age: 60
+</span><span class='line'>
+</span><span class='line'>Content-Length: 14
+</span><span class='line'>
+</span><span class='line'>X-Cache: HIT from squid.xinlogs.com
+</span><span class='line'>
+</span><span class='line'>Via: 1.1 squid.xinlogs.com:3128 (squid/2.7.STABLE9)
+</span><span class='line'>
+</span><span class='line'>Connection: close</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过上面信息，可以看到test2.php已经被缓存了。</p>
+
+<p><strong>总结：通过在php脚本里输出header头信息，还是可以让squid缓存上php文件的。</strong></p>
+
+<p><strong>但是目前还有一些问题没有解决：</strong></p>
+
+<p>通过IE浏览器访问可以正常命中，通过chrome或者firefox浏览器每次访问都是如下未命中</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>1326794201.750      1 210.56.223.167 TCP_REFRESH_MISS/200 355 GET http://xinlogs.com:3128/test2.php - FIRST_UP_PARENT/xinlogs text/html</span></code></pre></td></tr></table></div></figure>
+
+
+<p>而且不同访问方式的第一次访问也都是未命中，比如wget -S第一次访问未命中，如果换了curl -I再访问，还是未命中。</p>
+
+<p>尝试在squid.conf文件里加入了reload-into-ims on选项，但是无效。</p>
+
+<p>以上问题估计还需要看看是不是需要配合nginx的设置来解决，因为静态文件是不存在这些问题的。</p>
 </div>
   
   
@@ -1108,23 +1772,27 @@ Will create a new application. Start it with:
     <section>
 <h1>Categories</h1>
 <ul id="categories">
-  <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
-<li class='category'><a href='/blog/categories/game/'>Game (14)</a></li>
-<li class='category'><a href='/blog/categories/hardware/'>Hardware (4)</a></li>
-<li class='category'><a href='/blog/categories/host/'>Host (2)</a></li>
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
-<li class='category'><a href='/blog/categories/life/'>Life (1)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (26)</a></li>
-<li class='category'><a href='/blog/categories/mobile/'>Mobile (2)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
-<li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
-<li class='category'><a href='/blog/categories/ruby/'>Ruby (1)</a></li>
-<li class='category'><a href='/blog/categories/software/'>Software (5)</a></li>
-<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (8)</a></li>
-<li class='category'><a href='/blog/categories/website/'>Website (1)</a></li>
-<li class='category'><a href='/blog/categories/windows/'>Windows (7)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
 
 </ul>
@@ -1146,11 +1814,11 @@ Will create a new application. Start it with:
       </li>
     
       <li class="post">
-        <a href="/blog/2010/03/12/HP-MSA1000-DL380G5-Centos5/">CentOS 5.4 基于HP Proliant DL380 G5服务器配置Modular Smart Array 1000存储</a>
+        <a href="/blog/2013/02/02/cloudstack-on-vmware/">cloudstack on vmware</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2010/03/12/HP-Computer-Ghost-Problem/">HP台式机器，ghost系统后，提示windows could not start</a>
+        <a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a>
       </li>
     
   </ul>

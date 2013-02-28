@@ -1,0 +1,379 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>配置ecshop通过本地esmtp发信 - 鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="问题： 最近有个客户的ecshop总是卡在下订单的地方。查询了下日志。发现如下 1
+2
+3
+4
+5
+6
+script_filename = /public_html/quick_buy.php
+[0x0a29511c] fgets() /public_html/includes/cls_smtp. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/2012/07/22/config-esmtp-via-gmail-sendmail/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">配置ecshop通过本地esmtp发信</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-22T00:00:00+08:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>问题：</h1>
+
+<p>最近有个客户的ecshop总是卡在下订单的地方。查询了下日志。发现如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>script_filename = /public_html/quick_buy.php
+</span><span class='line'>[0x0a29511c] fgets() /public_html/includes/cls_smtp.php:314
+</span><span class='line'>[0x0a295074] get_data() /public_html/includes/cls_smtp.php:230
+</span><span class='line'>[0x0a294f5c] auth() /public_html/includes/cls_smtp.php:146
+</span><span class='line'>[0x0a294da8] send() ~:299
+</span><span class='line'>[0x0a293e80] send_mail() ~:2161</span></code></pre></td></tr></table></div></figure>
+
+
+<p>发现问题主要是因为在ecshop里的邮件服务器设置了采用其他smtp服务器方式。我估计是到达smtp服务器验证的时间有时候太长，导致这个订单流程失败。</p>
+
+<p>看到ecshop推荐采用本地邮件服务来发信，于是开始考虑采用这个方式。</p>
+
+<p>客户的服务器采用centos的linux服务器，php 5.3.8。</p>
+
+<p>首先说说php的mail函数的条件，需要在php.ini里面指定sendmail_path.</p>
+
+<p>先说下最简单的方式，就是服务器上安装sendmail，然后调用sendmail发送邮件。</p>
+
+<p>如果怕服务器sendmail不正常，最好卸载下再重新安装。</p>
+
+<p>卸载：
+<code>yum remove sendmail</code>
+安装
+<code>yum install sendmail</code></p>
+
+<p>再设置下php.ini里的sendmail_path=/usr/sbin/sendmail -t -i</p>
+
+<p>这样后，就可以通过ecshop里面的本地邮件服务发信了。不过这种方式有个致命缺点，因为一般我们的服务器都不被大的邮件服务商认可，所以这样发过去的邮件基本都是被拦截后者放入垃圾邮件里。</p>
+
+<h1>解决方法：</h1>
+
+<p>还是采用本地邮件服务，不过本地只是一个代理的作用，由本地的代理程序调用gmail的stmp功能发送邮件。</p>
+
+<p>本地安装esmtp程序，用来将我们的邮件通过gmail的帐号发送。这样就可以避免邮件被拦截或者认为是垃圾邮件了。</p>
+
+<p>为了一会测试方便，我们先安装一个linux下的邮件客户程序</p>
+
+<p><code>yum install mailx</code></p>
+
+<p>安装后，我们就有了mail命令。可以通过下面的命令来发信到babodx@qq.com的邮箱</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>echo "测试"|mail -s "ceshi" babodx@qq.com</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>安装esmtp：</h2>
+
+<p>为了安装esmtp，我们必须先安装它依赖的一个库文件libesmtp-1.0.6</p>
+
+<h3>安装libesmtp-1.0.6</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar zxvf libesmtp-1.0.6.tar.gz
+</span><span class='line'>cd libesmtp-1.0.6
+</span><span class='line'>./configure
+</span><span class='line'>make
+</span><span class='line'>make install</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装esmtp 1.2</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar jxvf esmtp-1.2.tar.bz2
+</span><span class='line'>cd esmtp-1.2
+</span><span class='line'>./configure --prefix=/usr/local/webserver/esmtp
+</span><span class='line'>make
+</span><span class='line'>make install</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>配置esmtp通过gmail帐号发信</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vi /usr/local/webserver/esmtp/etc/esmtprc</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>内容如下</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>identity yourname@gmail.com       
+</span><span class='line'>        hostname smtp.gmail.com:587
+</span><span class='line'>        username "yourname@gmail.com"
+</span><span class='line'>        password "yourpasswd"
+</span><span class='line'>        starttls enabled
+</span><span class='line'>        default
+</span><span class='line'> 
+</span><span class='line'>mda "/usr/bin/procmail -d %T"</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>mail测试</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>echo "测试邮件"|mail -s "ceshi" babodx@qq.com</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果测试通过，我们就再将/usr/sbin/sendmail链接到/usr/local/webserver/esmtp/bin/esmtp。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ln -s /usr/local/webserver/esmtp/bin/esmtp /usr/sbin/sendmail</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以后就可以在ecshop里面通过本地邮件服务发信了。并且收件人显示的发件人是你设定的gmail帐号。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-22T00:00:00+08:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/php/'>PHP</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2012/07/22/config-esmtp-via-gmail-sendmail/" data-via="" data-counturl="http://babodx.github.com/blog/2012/07/22/config-esmtp-via-gmail-sendmail/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/07/13/mac-vnc-rdp-over-ssh/" title="Previous Post: mac下用ssh转发端口">&laquo; mac下用ssh转发端口</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/07/23/macbook-air-use-e1750-3g-mobilecard/" title="Next Post: 2012 macbook Air 使用华为E1750 3g上网卡">2012 macbook Air 使用华为E1750 3g上网卡 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/02/cloudstack-on-vmware/">cloudstack on vmware</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

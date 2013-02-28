@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PHP | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/php/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-27T22:11:05+08:00</updated>
+  <updated>2013-02-28T22:19:12+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -14,103 +14,758 @@
 
   
   <entry>
-    <title type="html"><![CDATA[bo-blog 2.1.1如何加入google广告条]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/31/bo-blog-insert-googleadsense/"/>
-    <updated>2009-12-31T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/31/bo-blog-insert-googleadsense</id>
-    <content type="html"><![CDATA[<p>刚开始使用的bo-blog的时候也不知道如何加入google广告条，经过这几天的咕哝，现在已经成功在右边和下面加入。方法记录如下</p>
+    <title type="html"><![CDATA[mac下配置php调试环境]]></title>
+    <link href="http://babodx.github.com/blog/2012/08/10/mac-xdebug-netbeans-config/"/>
+    <updated>2012-08-10T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/08/10/mac-xdebug-netbeans-config</id>
+    <content type="html"><![CDATA[<p>已经用了mac有2个月了，基本网络管理和开发工作都在mac下面了。</p>
 
-<p><strong>右侧边栏加入google广告</strong></p>
+<p>下面说下如何配置mac下面的php调试环境</p>
 
-<p>进入后台管理->常规管理->模块配置</p>
+<p><strong>我的环境：</strong></p>
 
-<p>点击左侧的新建/编辑项目 如图</p>
-
-<p><img src="http://farm9.staticflickr.com/8102/8512175362_3d5fd9e7c9.jpg" alt="编辑项目截图" /></p>
-
-<p>然后在手动添加项目中选择侧边模块，确定。如图</p>
-
-<p><img src="http://farm9.staticflickr.com/8370/8512175480_2bb7b4d188.jpg" alt="侧边截图" /></p>
-
-<p>确认后，进入到新增/编辑项目页面</p>
-
-<p>项目名称--这个是在后台编辑的时候，给自己分辨模块用的，随意命名。我的叫做googleadsense，注意：只能字母和数字</p>
-
-<p>项目描述--随意填写</p>
-
-<p>抬头文字--显示在首页侧边栏上，我的叫做广告栏，根据个人情况写</p>
-
-<p>栏目内容--这里写入google的广告代码就可以了</p>
-
-<p>这个办法最容易，不用修改模板。如果加入后，首页显示google广告栏，里面内容是白的，不要着急，过段时间就可以显示了。我第一个广告大约在30分钟后，才正确显示出来。</p>
-
-<p>博客底部加入google广告</p>
-
-<p>底部加入广告，也可以用上面类似的办法，通过加入底部模块实现。但是我尝试了，不好对齐，而且有的模板会破坏底部风格。所以我没有用添加底部模块的办法。</p>
-
-<p>我采用直接修改模板的elements.php文件方法。</p>
-
-<p>到bo-blog的template目录下，找到自己使用的模板文件夹，我用的neowin2，所以对应目录就是neowin2</p>
-
-<p>在模板目录下，打开elements.php文件。找到文件里的displayfooter位置，在displayfooter段里面加入google广告代码。入下所示</p>
-
-<p>``` php</p>
-
-<p>$elements['displayfooter']=&lt;&lt;&lt;eot</p>
-
-<div class="clear"> </div>
+<ul>
+<li>macbook air 2012款</li>
+<li>Mac OS X 10.8 系统</li>
+<li>php环境：XAMPP 1.7.3</li>
+<li>开发工具：一般用sublime text 2，调试或者项目开发用netbeans</li>
+</ul>
 
 
-<p></div></p>
+<p>下面说说如何安装调试环境，主要就是xdebug的安装和配置</p>
 
-<div class="content-box-b">
-<div class="content-box-b-r">
-<div class="content-box-b-l"></div>
-</div>
-</div>
+<p>这里需要提下mac下面的安装包管理工具homebrew</p>
+
+<p>我就是用brew来安装xdebug的。homebrew是一个用ruby开发的，类似macport的工具。可以在线安装软件，就像linux下的apt-get或者yum一样。</p>
+
+<p><strong>安装homebrew</strong></p>
+
+<p>需要系统可以支持ruby，通过ruby -v命令可以查看ruby版本。mac os 自带ruby</p>
+
+<p>直接在终端里输入</p>
+
+<p><code>
+ruby &lt;(curl -fsSk https://raw.github.com/mxcl/homebrew/go)
+</code></p>
+
+<p>上面命令执行完，brew命令就可以执行了。</p>
+
+<p>先运行brew doctor测试下环境是否完整，如果需要，还要添加Command Line Tools。</p>
+
+<p>添加Command Line Tools</p>
+
+<p>打开Xcode，在preferences->downloads里面下载并安装Command Line Tools</p>
+
+<p><img src="http://farm9.staticflickr.com/8088/8515461958_4e96f751a7_z.jpg" alt="xcode" /></p>
+
+<p>一切正确的话，执行brew doctor显示如下</p>
+
+<p>```
+babomatoMacBook-Air:~ babo$ brew doctor</p>
+
+<p>Your system is raring to brew.
+```</p>
+
+<p>安装好brew后，先执行brew update更新下软件包的源，然后再加载两个formula的资源</p>
+
+<p>```
+brew update</p>
+
+<p>brew tap josegonzalez/homebrew-php</p>
+
+<p>brew tap homebrew/dupes
+```</p>
+
+<p>完成后，就可以通过brew search和brew install来查找并安装软件了</p>
+
+<p><code>
+brew install php53-xdebug
+</code></p>
+
+<p>安装好xdebug后，还需要配置php.ini才可以正常使用。</p>
+
+<p>先用brew info查看xdebug相关信息</p>
+
+<p>```
+babomatoMacBook-Air:~ babo$ brew info php53-xdebug
+php53-xdebug: stable 2.2.1, HEAD
+http://xdebug.org
+Depends on: autoconf
+/usr/local/Cellar/php53-xdebug/2.2.1 (4 files, 360K) *
+https://github.com/josegonzalez/homebrew-php/commits/master/Formula/php53-xdebug.rb
+==> Options
+--without-config-file</p>
+
+<pre><code>Do not add ext-xdebug.ini to /usr/local/etc/php/5.3/conf.d
+</code></pre>
+
+<p>==> Caveats
+To finish installing xdebug for PHP 5.3:
+  * /usr/local/etc/php/5.3/conf.d/ext-xdebug.ini was created,</p>
+
+<pre><code>do not forget to remove it upon extension removal.
+</code></pre>
+
+<ul>
+<li>Restart your webserver.</li>
+<li>Write a PHP page that calls "phpinfo();"</li>
+<li>Load it in a browser and look for the info on the xdebug module.</li>
+<li>If you see it, you have been successful!
+```</li>
+</ul>
 
 
-<p>/<em> 下面为google广告代码 </em>/</p>
+<p>通过信息我们知道xdebug版本是 stable 2.2.1</p>
 
-<center>
-<script type="text/javascript"><!--
-google_ad_client = "pub-2759888315234430";
-/* 728x90, ... 09-12-21 */
-google_ad_slot = "9531615827";
-google_ad_width = 728;
-google_ad_height = 90;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
-</center>
+<p>配置文件在/usr/local/etc/php/5.3/conf.d/ext-xdebug.ini</p>
 
+<p>我们xampp的配置文件在/Applications/XAMPP/xamppfiles/etc/php.ini</p>
 
-<p>/<em>google广告代码结束</em>/</p>
+<p>将xdebug的配置加入到/Applications/XAMPP/xamppfiles/etc/php.ini</p>
 
-<div id="footer">
-<div id="footer-r">
-<div id="footer-l">
-<div id="footer-misc">
-Skin By <a href="http://www.neowin.net/" target="_blank">Neowin</a><br />
-Transplanted By <a href="http://blog.meiu.cn/" target="_blank">Lingter</a>
-</div>
-<div id="footer-copyright">
-{section_foot_components}
-<div id="processtime">
-</div>
-</div>
-<div class="clear"></div>
-</div>
-</div>
-</div>
+<p>在文件最下面加入如下信息</p>
 
+<p>```
+[xdebug]
+zend_extension="/usr/local/Cellar/php53-xdebug/2.2.1/xdebug.so"</p>
 
-<p></div>
-eot;
-```
-上面的代码就是在博客下面，footer信息的上面，加入一条google广告。</p>
+<pre><code>    xdebug.remote_enable=1
+    xdebug.remote_host=localhost
+    xdebug.remote_port=9000
+    xdebug.remote_handler=dbgp
+</code></pre>
+
+<p>```</p>
+
+<p>重启xampp的apache，然后访问phpinfo查看是否成功加载xdebug</p>
+
+<p><img src="http://farm9.staticflickr.com/8381/8515464954_5cd7f4b8be.jpg" alt="xdebug" /></p>
+
+<p><strong>配置netbeans可以调用xdebug</strong></p>
+
+<p>首先将netbeans的偏好设置里的php5解释器设置为xampp的php。不要用系统自带的</p>
+
+<p><img src="http://farm9.staticflickr.com/8518/8515466796_97a1191c23.jpg" alt="xampp_php" /></p>
+
+<p>再设置调试的端口</p>
+
+<p><img src="http://farm9.staticflickr.com/8239/8514355437_689a0d90c0.jpg" alt="netbeans设置xdebug端口" /></p>
+
+<p>这些都设置好，就可以调试php代码了</p>
+
+<p>最后放一张我调试的截图</p>
+
+<p><img src="http://farm9.staticflickr.com/8246/8514357603_58e49f882b_z.jpg" alt="php调试截图" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[批量更换115网盘链接]]></title>
+    <link href="http://babodx.github.com/blog/2012/08/08/update-115disk-urls/"/>
+    <updated>2012-08-08T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/08/08/update-115disk-urls</id>
+    <content type="html"><![CDATA[<p>今天115网盘关闭了对外分享链接的功能。我的客户有人是用115网盘作为服务器资源存储用的，网站上下载资源都是采用115网盘地址来发布的。这样直接造成全部资源都无法下载了，我临时写了个php脚本来更新全部的115网盘链接到本地服务器地址。
+ 
+<strong>主要思路：</strong></p>
+
+<p>首先将网盘里的资源全部下载到服务器，然后导出一个网盘地址和文件实际名字的列表</p>
+
+<p>如下所示：</p>
+
+<p><code>
+http://115.com/file/e78cpfjd#Dark_Room.rar
+http://115.com/file/e78cpwkh#Dark_Energy.rar
+</code></p>
+
+<p>可以看到前面是网盘下载的url，＃号后面是实际的文件名。</p>
+
+<p>我将这个列表保存在一个文件里，便于php脚本获取。</p>
+
+<p>然后编写一个php脚本，把文件里每行的url取出来，到数据库里把这个下载链接替换为我们服务器上的地址。主要是采用mysql的replace函数实现
+ 
+脚本如下：</p>
+
+<p>```</p>
+
+<h1>!/usr/bin/php</h1>
+
+<p>&lt;?php
+print("=======fix_url v1=========\n");
+print("=======write by babodx@gmail.com=======\n");</p>
+
+<p>function update_url($url) {</p>
+
+<pre><code>list($url_115,$url_tv1926)=explode("#",$url);
+$url_tv1926="http://xiazai.tv1926.com/".$url_tv1926;
+print("update:");
+print($url_115);
+print("&gt;&gt;");
+$link = mysql_connect('localhost', 'username', 'passwd');
+if (!$link) {
+    die('Could not connect: ' . mysql_error());
+}
+
+mysql_select_db('my_database', $link) or die ('Can\'t use my_database : ' .         mysql_error());
+
+$sql="update p8_article_content_101 set     my_801=replace(my_801,'".$url_115."','".$url_tv1926."')";
+mysql_query("set names gbk");
+$result = mysql_query($sql)
+or die("Invalid query: " . mysql_error());
+
+mysql_close($link);
+print($url_tv1926);
+print("\n");
+</code></pre>
+
+<p>}</p>
+
+<p>if (is_null($argv[1])) {</p>
+
+<pre><code>print("argv1 is null\n");
+exit();
+</code></pre>
+
+<p>}
+$file_name=$argv[1];
+print("get files name...\n");
+$file_names=array();
+$handle = @fopen($file_name, "r");
+if ($handle) {</p>
+
+<pre><code>while (!feof($handle)) {
+    $buffer = fgets($handle);
+    $tmp_file_name=trim($buffer);
+    array_push($file_names,$tmp_file_name);
+
+}
+fclose($handle);
+</code></pre>
+
+<p>}</p>
+
+<p>foreach ($file_names as $file_url) {</p>
+
+<pre><code>update_url($file_url);
+</code></pre>
+
+<p>}
+print("over!");</p>
+
+<p>?>
+```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[配置ecshop通过本地esmtp发信]]></title>
+    <link href="http://babodx.github.com/blog/2012/07/22/config-esmtp-via-gmail-sendmail/"/>
+    <updated>2012-07-22T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/07/22/config-esmtp-via-gmail-sendmail</id>
+    <content type="html"><![CDATA[<h1>问题：</h1>
+
+<p>最近有个客户的ecshop总是卡在下订单的地方。查询了下日志。发现如下</p>
+
+<p><code>
+script_filename = /public_html/quick_buy.php
+[0x0a29511c] fgets() /public_html/includes/cls_smtp.php:314
+[0x0a295074] get_data() /public_html/includes/cls_smtp.php:230
+[0x0a294f5c] auth() /public_html/includes/cls_smtp.php:146
+[0x0a294da8] send() ~:299
+[0x0a293e80] send_mail() ~:2161
+</code></p>
+
+<p>发现问题主要是因为在ecshop里的邮件服务器设置了采用其他smtp服务器方式。我估计是到达smtp服务器验证的时间有时候太长，导致这个订单流程失败。</p>
+
+<p>看到ecshop推荐采用本地邮件服务来发信，于是开始考虑采用这个方式。</p>
+
+<p>客户的服务器采用centos的linux服务器，php 5.3.8。</p>
+
+<p>首先说说php的mail函数的条件，需要在php.ini里面指定sendmail_path.</p>
+
+<p>先说下最简单的方式，就是服务器上安装sendmail，然后调用sendmail发送邮件。</p>
+
+<p>如果怕服务器sendmail不正常，最好卸载下再重新安装。</p>
+
+<p>卸载：
+<code>yum remove sendmail</code>
+安装
+<code>yum install sendmail</code></p>
+
+<p>再设置下php.ini里的sendmail_path=/usr/sbin/sendmail -t -i</p>
+
+<p>这样后，就可以通过ecshop里面的本地邮件服务发信了。不过这种方式有个致命缺点，因为一般我们的服务器都不被大的邮件服务商认可，所以这样发过去的邮件基本都是被拦截后者放入垃圾邮件里。</p>
+
+<h1>解决方法：</h1>
+
+<p>还是采用本地邮件服务，不过本地只是一个代理的作用，由本地的代理程序调用gmail的stmp功能发送邮件。</p>
+
+<p>本地安装esmtp程序，用来将我们的邮件通过gmail的帐号发送。这样就可以避免邮件被拦截或者认为是垃圾邮件了。</p>
+
+<p>为了一会测试方便，我们先安装一个linux下的邮件客户程序</p>
+
+<p><code>yum install mailx</code></p>
+
+<p>安装后，我们就有了mail命令。可以通过下面的命令来发信到babodx@qq.com的邮箱</p>
+
+<p><code>
+echo "测试"|mail -s "ceshi" babodx@qq.com
+</code></p>
+
+<h2>安装esmtp：</h2>
+
+<p>为了安装esmtp，我们必须先安装它依赖的一个库文件libesmtp-1.0.6</p>
+
+<h3>安装libesmtp-1.0.6</h3>
+
+<p>```</p>
+
+<pre><code>tar zxvf libesmtp-1.0.6.tar.gz
+cd libesmtp-1.0.6
+./configure
+make
+make install
+</code></pre>
+
+<p>```</p>
+
+<h3>安装esmtp 1.2</h3>
+
+<p>```</p>
+
+<pre><code>tar jxvf esmtp-1.2.tar.bz2
+cd esmtp-1.2
+./configure --prefix=/usr/local/webserver/esmtp
+make
+make install
+</code></pre>
+
+<p>```</p>
+
+<h3>配置esmtp通过gmail帐号发信</h3>
+
+<p><code>
+vi /usr/local/webserver/esmtp/etc/esmtprc
+</code></p>
+
+<p><strong>内容如下</strong>
+```</p>
+
+<pre><code>identity yourname@gmail.com       
+        hostname smtp.gmail.com:587
+        username "yourname@gmail.com"
+        password "yourpasswd"
+        starttls enabled
+        default
+
+mda "/usr/bin/procmail -d %T"
+</code></pre>
+
+<p>```</p>
+
+<p><strong>mail测试</strong></p>
+
+<p><code>
+echo "测试邮件"|mail -s "ceshi" babodx@qq.com
+</code></p>
+
+<p>如果测试通过，我们就再将/usr/sbin/sendmail链接到/usr/local/webserver/esmtp/bin/esmtp。</p>
+
+<p><code>
+ln -s /usr/local/webserver/esmtp/bin/esmtp /usr/sbin/sendmail
+</code></p>
+
+<p>以后就可以在ecshop里面通过本地邮件服务发信了。并且收件人显示的发件人是你设定的gmail帐号。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[php eaccelerator vs fastcgi_cache性能比较]]></title>
+    <link href="http://babodx.github.com/blog/2012/01/19/php-eaccelerator-vs-fastcgi-cache/"/>
+    <updated>2012-01-19T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/01/19/php-eaccelerator-vs-fastcgi-cache</id>
+    <content type="html"><![CDATA[<p>最近放假一直在家里测试php如何优化性能。
+今天比较了下默认php、eaccelerator和fastcgi_cache的性能。</p>
+
+<p>先介绍下我的测试环境：
+这次是在我VPS上做的测试：cpu 为1颗Intel(R) Core(TM) i7-2600 CPU @ 3.40GHz，内存256M
+系统为centos 5.6 32bit
+php版本 5.3.8
+web服务采用Tengine/1.2.1，其实就是nginx</p>
+
+<p>测试文件一个采用phpinfo.php，这个就是phpinfo()函数输出页面。另外一个就是采用我博客首页http://xinlogs.com
+注：我的博客采用emlog 4.1
+下面进入我的测试。。。。</p>
+
+<p>php先用默认状态，不加载eaccelerator模块。
+测试phpinfo.php,连续访问3000次，采用10个并发请求。</p>
+
+<p>```
+ab -n 3000 -c 10 http://xinlogs.com/phpinfo.php
+Server Software:        Tengine/1.2.1
+Server Hostname:        xinlogs.com
+Server Port:            80</p>
+
+<p>Document Path:          /phpinfo.php
+Document Length:        54365 bytes</p>
+
+<p>Concurrency Level:      10
+Time taken for tests:   7.557223 seconds
+Complete requests:      3000
+Failed requests:        0
+Write errors:           0
+Total transferred:      163608000 bytes
+HTML transferred:       163095000 bytes
+Requests per second:    396.97 [#/sec] (mean)
+Time per request:       25.191 [ms] (mean)
+Time per request:       2.519 [ms] (mean, across all concurrent requests)
+Transfer rate:          21141.76 [Kbytes/sec] received</p>
+
+<p>Connection Times (ms)</p>
+
+<pre><code>          min  mean[+/-sd] median   max
+</code></pre>
+
+<p>Connect:        0    0   0.0      0       2
+Processing:     9   24  52.3     25    2432
+Waiting:        9   24  52.2     25    2431
+Total:          9   24  52.3     25    2432</p>
+
+<p>Percentage of the requests served within a certain time (ms)
+  50%     25
+  66%     28
+  75%     29
+  80%     29
+  90%     31
+  95%     32
+  98%     34
+  99%     36
+ 100%   2432 (longest request)
+```</p>
+
+<p>可以看到每秒大约处理396.97 [#/sec] (mean)。99%响应时间在36ms以内
+我又测试了几次，基本每秒处理在390到450浮动，响应时间在45ms以内吧。</p>
+
+<p>再来看看我博客首页的测试情况</p>
+
+<p>```
+ab -n 3000 -c 10 http://xinlogs.com/
+Server Software:        Tengine/1.2.1
+Server Hostname:        xinlogs.com
+Server Port:            80</p>
+
+<p>Document Path:          /
+Document Length:        21494 bytes</p>
+
+<p>Concurrency Level:      10
+Time taken for tests:   52.787368 seconds
+Complete requests:      3000
+Failed requests:        2970
+   (Connect: 0, Length: 2970, Exceptions: 0)
+Write errors:           0
+Total transferred:      64990449 bytes
+HTML transferred:       64432449 bytes
+Requests per second:    56.83 [#/sec] (mean)
+Time per request:       175.958 [ms] (mean)
+Time per request:       17.596 [ms] (mean, across all concurrent requests)
+Transfer rate:          1202.31 [Kbytes/sec] received</p>
+
+<p>Connection Times (ms)</p>
+
+<pre><code>          min  mean[+/-sd] median   max
+</code></pre>
+
+<p>Connect:        0    0   0.0      0       0
+Processing:     9  175 661.8    127   18091
+Waiting:        9  174 661.9    126   18091
+Total:          9  175 661.8    127   18091</p>
+
+<p>Percentage of the requests served within a certain time (ms)
+  50%    127
+  66%    149
+  75%    166
+  80%    178
+  90%    199
+  95%    210
+  98%    226
+  99%    348
+ 100%  18091 (longest request)
+```</p>
+
+<p>可以看到每秒处理56.83 [#/sec] (mean)请求，99%的响应时间在348ms内
+多次测试后，基本保持在每秒处理55-60个请求，响应时间基本在350ms内。</p>
+
+<p>接着我开启php的eaccelerator模块,开启后的phpinfo信息如下：</p>
+
+<p>```
+This program makes use of the Zend Scripting Language Engine:
+Zend Engine v2.3.0, Copyright (c) 1998-2011 Zend Technologies</p>
+
+<pre><code>with eAccelerator v0.9.6.1, Copyright (c) 2004-2010 eAccelerator, by eAccelerator
+</code></pre>
+
+<p>```</p>
+
+<p>我们再次测试phpinfo.php文件</p>
+
+<p>```
+ab -n 3000 -c 10 http://xinlogs.com/phpinfo.php</p>
+
+<p>Server Software:        Tengine/1.2.1
+Server Hostname:        xinlogs.com
+Server Port:            80</p>
+
+<p>Document Path:          /phpinfo.php
+Document Length:        56845 bytes</p>
+
+<p>Concurrency Level:      10
+Time taken for tests:   7.128081 seconds
+Complete requests:      3000
+Failed requests:        0
+Write errors:           0
+Total transferred:      171333080 bytes
+HTML transferred:       170819225 bytes
+Requests per second:    420.87 [#/sec] (mean)
+Time per request:       23.760 [ms] (mean)
+Time per request:       2.376 [ms] (mean, across all concurrent requests)
+Transfer rate:          23472.94 [Kbytes/sec] received</p>
+
+<p>Connection Times (ms)</p>
+
+<pre><code>          min  mean[+/-sd] median   max
+</code></pre>
+
+<p>Connect:        0    9   7.9      9      40
+Processing:     2   13  13.6     12     620
+Waiting:        0    9  13.2      8     603
+Total:         12   23  13.6     23     623</p>
+
+<p>Percentage of the requests served within a certain time (ms)
+  50%     23
+  66%     29
+  75%     31
+  80%     31
+  90%     32
+  95%     34
+  98%     37
+  99%     39
+ 100%    623 (longest request)
+```</p>
+
+<p>从结果来看，加了eAccelerator后，phpinfo.php的测试结果并不是很快。每秒处理420.87请求，偶尔还会在380左右。并没有明显变化。</p>
+
+<p>再来看看博客首页的测试。</p>
+
+<p>```
+ab -n 3000 -c 10 http://xinlogs.com/
+Server Software:        Tengine/1.2.1
+Server Hostname:        xinlogs.com
+Server Port:            80</p>
+
+<p>Document Path:          /
+Document Length:        21488 bytes</p>
+
+<p>Concurrency Level:      10
+Time taken for tests:   23.177888 seconds
+Complete requests:      3000
+Failed requests:        2970
+   (Connect: 0, Length: 2970, Exceptions: 0)
+Write errors:           0
+Total transferred:      64929588 bytes
+HTML transferred:       64371588 bytes
+Requests per second:    129.43 [#/sec] (mean)
+Time per request:       77.260 [ms] (mean)
+Time per request:       7.726 [ms] (mean, across all concurrent requests)
+Transfer rate:          2735.67 [Kbytes/sec] received</p>
+
+<p>Connection Times (ms)</p>
+
+<pre><code>          min  mean[+/-sd] median   max
+</code></pre>
+
+<p>Connect:        0    0   1.0      0      23
+Processing:     4   76 582.2     31   13655
+Waiting:        4   76 582.2     31   13655
+Total:          4   76 582.2     31   13655</p>
+
+<p>Percentage of the requests served within a certain time (ms)
+  50%     31
+  66%     46
+  75%     55
+  80%     58
+  90%     69
+  95%     80
+  98%    100
+  99%    129
+ 100%  13655 (longest request)
+```</p>
+
+<p>从博客首页的测试可以发现，用了eAccelerator的效果还是很明显的。每秒处理请求129.43 [#/sec] (mean)，99%的响应时间在129ms内完成。
+这个结果比不用eaccelerator的情况下，高了1倍多。</p>
+
+<p>个人认为eAccelerator因为减少了php每次编译时间，所以当php程序需要调用很多类，或者调用其他php文件的时候。这个优化就体现出来了。就想我上面的测试，博客首页的加载确实快了，每秒处理的请求也多了。但是想phpinfo.php这样只有一个文件，并且只是简单的输出phpinfo信息的页面，eaccelerator起到的优化就很少了。</p>
+
+<p>下面我们再来测试下fastcgi_cache有多快，这个就是缓存，完全不是优化php执行速度了，而是直接缓存上结果，下次直接调用缓存。</p>
+
+<p>我们先用curl请求2次phpinfo.php 确定已经缓存上，再来测试。</p>
+
+<p>```
+-bash-3.2# curl -I http://xinlogs.com/phpinfo.php
+HTTP/1.1 200 OK
+Server: Tengine/1.2.1
+Date: Thu, 19 Jan 2012 07:09:23 GMT
+Content-Type: text/html
+Connection: keep-alive
+Vary: Accept-Encoding
+X-Powered-By: PHP/5.3.8
+X-Cache: HIT</p>
+
+<p>ab -n 3000 -c 10 http://xinlogs.com/phpinfo.php
+Server Software:        Tengine/1.2.1
+Server Hostname:        xinlogs.com
+Server Port:            80</p>
+
+<p>Document Path:          /phpinfo.php
+Document Length:        58255 bytes</p>
+
+<p>Concurrency Level:      10
+Time taken for tests:   0.656969 seconds
+Complete requests:      3000
+Failed requests:        0
+Write errors:           0
+Total transferred:      175320000 bytes
+HTML transferred:       174765000 bytes
+Requests per second:    4566.43 [#/sec] (mean)
+Time per request:       2.190 [ms] (mean)
+Time per request:       0.219 [ms] (mean, across all concurrent requests)
+Transfer rate:          260605.90 [Kbytes/sec] received</p>
+
+<p>Connection Times (ms)</p>
+
+<pre><code>          min  mean[+/-sd] median   max
+</code></pre>
+
+<p>Connect:        0    0   0.0      0       0
+Processing:     0    1   1.1      1       4
+Waiting:        0    1   0.9      1       4
+Total:          0    1   1.1      1       4</p>
+
+<p>Percentage of the requests served within a certain time (ms)
+  50%      1
+  66%      2
+  75%      2
+  80%      3
+  90%      3
+  95%      3
+  98%      4
+  99%      4
+ 100%      4 (longest request)
+```</p>
+
+<p>看到什么是速度了吧。。。每秒处理请求 4566.43 [#/sec] (mean)，响应时间4ms以内完成。
+这个就是fastcgi_cache的速度了.</p>
+
+<p>也许一个phpinfo.php页面不能说明问题，我们再来看看博客首页的情况</p>
+
+<p>```
+ab -n 3000 -c 10 http://xinlogs.com/</p>
+
+<p>Server Software:        Tengine/1.2.1
+Server Hostname:        xinlogs.com
+Server Port:            80</p>
+
+<p>Document Path:          /
+Document Length:        21485 bytes</p>
+
+<p>Concurrency Level:      10
+Time taken for tests:   0.578070 seconds
+Complete requests:      3000
+Failed requests:        0
+Write errors:           0
+Total transferred:      65055000 bytes
+HTML transferred:       64455000 bytes
+Requests per second:    5189.68 [#/sec] (mean)
+Time per request:       1.927 [ms] (mean)
+Time per request:       0.193 [ms] (mean, across all concurrent requests)
+Transfer rate:          109900.19 [Kbytes/sec] received</p>
+
+<p>Connection Times (ms)</p>
+
+<pre><code>          min  mean[+/-sd] median   max
+</code></pre>
+
+<p>Connect:        0    0   0.0      0       0
+Processing:     0    1   0.8      2       3
+Waiting:        0    1   0.8      2       3
+Total:          0    1   0.8      2       3
+WARNING: The median and mean for the processing time are not within a normal deviation</p>
+
+<pre><code>    These results are probably not that reliable.
+</code></pre>
+
+<p>WARNING: The median and mean for the waiting time are not within a normal deviation</p>
+
+<pre><code>    These results are probably not that reliable.
+</code></pre>
+
+<p>WARNING: The median and mean for the total time are not within a normal deviation</p>
+
+<pre><code>    These results are probably not that reliable.
+</code></pre>
+
+<p>Percentage of the requests served within a certain time (ms)
+  50%      2
+  66%      2
+  75%      2
+  80%      2
+  90%      2
+  95%      2
+  98%      2
+  99%      3
+ 100%      3 (longest request)
+```</p>
+
+<p>再看看首页，因为采用了fastcgi_cache，每秒处理请求5189.68 [#/sec] (mean)，响应时间3ms内完成。</p>
+
+<p>性能比较表格(主要提供每秒处理数做比较)</p>
+
+<pre><code>                请求文件长度    php默认     eAccelerator加速模式      fastcgi_cache模式
+</code></pre>
+
+<p>phpinfo.php     58255 bytes     396.97          420.87                          4566.43
+博客首页        21485 bytes      56.83           129.43                           5189.68</p>
+
+<p><strong>总结：</strong></p>
+
+<p>上面的测试虽然不是很严谨，但是通过这些已经可以发现fastcgi_cache的优势了，通过缓存php结果，大幅提升请求处理能力。
+一般程序再通过eaccelerator模式加速后，可以提升2-3倍性能，而fastcgi_cache缓存的性能提升大约在10倍。</p>
+
+<p>不过fastcgi_cache的应用也有它的弊端，就是要通过程序控制好刷新和不缓存内容。不然登陆后的用户都显示一个界面，或者发布的消息迟迟不能显示在首页都是它要解决的问题。</p>
+
+<p>一般用户还是建议采用eaccelerator模块加速，因为这样基本无需修改代码，最容易实现。fastcgi_cache很难在不调整代码的情况下使用，因为他会缓存全部php文件，至少我的博客在启用了fastcgi_cache后，后台不正常。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[php性能调试工具]]></title>
+    <link href="http://babodx.github.com/blog/2011/12/30/php-performance-debugging-tools/"/>
+    <updated>2011-12-30T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2011/12/30/php-performance-debugging-tools</id>
+    <content type="html"><![CDATA[<p>最近在帮一些客户优化php性能。</p>
+
+<p>排除掉服务器环境、memcache这些办法后，剩下的就是找php代码有没有执行过慢的因素了。</p>
+
+<p>下面列出一些在php性能调试中可以用到的工具。</p>
+
+<p>1、xdebug
+     这个工具大家都很熟悉，开始php过程中，用来调试程序用的。</p>
+
+<p>2、webgrind
+     这个工具主要是配合xdebug来使用，用来监测php执行时间的。</p>
+
+<p>3、XHProf
+     这个工具据说比xdebug轻量，可以考虑用于生产环境下来监测php性能。没有用过，看介绍很棒！facebook用的，肯定差不了。
+ 
+以上只是简单介绍下，用来记录。等以后有机会仔细用来，再发文档说明</p>
 ]]></content>
   </entry>
   

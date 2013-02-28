@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Hardware | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/hardware/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-27T22:11:05+08:00</updated>
+  <updated>2013-02-28T22:19:12+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -14,348 +14,193 @@
 
   
   <entry>
-    <title type="html"><![CDATA[HP台式机器，ghost系统后，提示windows could not start]]></title>
-    <link href="http://babodx.github.com/blog/2010/03/12/HP-Computer-Ghost-Problem/"/>
-    <updated>2010-03-12T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2010/03/12/HP-Computer-Ghost-Problem</id>
-    <content type="html"><![CDATA[<p>今天单位一台HP dx7518的台式机器，ghost了一个winxp系统。但是只要一开机，就提示</p>
+    <title type="html"><![CDATA[2012 macbook Air 使用华为E1750 3g上网卡]]></title>
+    <link href="http://babodx.github.com/blog/2012/07/23/macbook-air-use-e1750-3g-mobilecard/"/>
+    <updated>2012-07-23T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/07/23/macbook-air-use-e1750-3g-mobilecard</id>
+    <content type="html"><![CDATA[<p>最近一直在摸索macbook air的使用方法，目前大部分工作都已经可以放弃windows了。</p>
+
+<p>今天又将华为的E1750上网卡在macbook air上正确安装了。</p>
+
+<p>我的3g上网卡如下</p>
+
+<p><img src="http://flic.kr/p/dYtJa9" alt="e1750图" /></p>
+
+<p>这个上网卡是09年的，现在直接插入usb后，macbook air没有任何反应。</p>
+
+<p><strong>安装方法：</strong></p>
+
+<p>1、首先要在Windows机器上更新固件</p>
+
+<p>先在windows机器安装mobile_card_driver驱动。</p>
+
+<p>然后再到华为主页下载固件更新程序</p>
+
+<p>E1750 WINMACB300D00SP05C112(UTPS11.301.08.30.112_MAC11.301.06.13.112)(China Unicom)(05019744)</p>
+
+<p>将上网卡插入windows的usb接口，可以被驱动正确识别以后，运行固件更新程序开始更新固件。</p>
+
+<p>2、macbook下安装</p>
+
+<p>更新好固件以后，我们就可以插入macbook的笔记本。这个时候会识别出来一个mobile card的光驱。</p>
+
+<p>我们从finder进入这个光驱，就会发现“无线上网卡.app“程序</p>
+
+<p>直接安装这个程序就可以了</p>
+
+<p>3、安装好后的程序界面</p>
+
+<p><img src="http://flic.kr/p/dYtJPN" alt="运行界面" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[2012 macbook Air 使用感受]]></title>
+    <link href="http://babodx.github.com/blog/2012/07/13/buy-macbook-air/"/>
+    <updated>2012-07-13T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/07/13/buy-macbook-air</id>
+    <content type="html"><![CDATA[<p>6月底，我购买了一台2012新款macbook air笔记本。将近一个月的使用，记录下心得。</p>
+
+<p>以前从来没有用过mac os系统，不过对于linux还是很熟悉的。</p>
+
+<p>早就打算买一台玩玩，一个是没钱，一个是总觉得单位配的也够用。后来又打算学习下ios开发，就下决心购买一台了。</p>
+
+<p>正好赶上6月新款发布，北京正规零售店都没有上市呢，于是在macx.cn上面看到大家都在福利社购买，于是我也去了。
+ 
+<strong>购买心得</strong></p>
+
+<p>福利社的价格还算不错，和北京官方公布的教育优化价格相当。而且是香港过来的本，一旦大陆上市还有保修。
+我购买的是macbook air 低配版本，128G硬盘，4G内存 13'显示 价格：8500</p>
+
+<p>购买的时候需要什么软件还可以帮助安装。我就安装了常用的虚拟机和xcode
+ 
+<strong>使用心得</strong></p>
+
+<p>用来一个月下来，感觉mac os的系统确实不错。不愧是基于unix的。稳定！</p>
+
+<p>首先对于我经常需要服务器运维工作来说，mac os下面的软件完全可以满足</p>
+
+<p>自带的“终端” 可以支持大部分linux下的命令，要连接远程服务器直接ssh就可以，</p>
+
+<p>为了管理方便，我还是安装了secureCRT for mac</p>
+
+<p>输入法用IMKQIM（搜狗的词库）</p>
+
+<p>像office、qq、股票、远程桌面等常用软件都存在mac版本</p>
+
+<p>使用下来，没有任何的不适应。而且手势操作也很大的提高了效率。
+ 
+感受最大的是电池可以使用7小时，而且不用关机。在不用的时候，直接合上笔记本就休眠了。下次打开直接就是桌面感觉和用Ipad似的。
+ 
+因为我需要作一些php开发，在mac下面也可以使用XAMPP for mac版本</p>
+
+<p>编辑器我采用的是sublime text 2
+ 
+一个月下来，主要工作全部可以用mac系统替代了，感觉很好</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[H3C路由器 tracert超时，解决办法。]]></title>
+    <link href="http://babodx.github.com/blog/2011/09/21/h3c-ttl-expires/"/>
+    <updated>2011-09-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2011/09/21/h3c-ttl-expires</id>
+    <content type="html"><![CDATA[<p>单位的H3C路由器和交换机上，tracert总是超时。但是可以正常上网或者ping到目标。
+后来查找资料，找到了解决办法。</p>
+
+<p>解决方法：</p>
+
+<p>    ip ttl-expires enable     ip unreachables enable</p>
+
+<p>（官方说法这两条命令默认开启，可能跟版本有关，有的默认未开启。）</p>
+
+<p>官方对这两条命令解释是：</p>
+
+<p>ip ttl-expires enable命 令用来开启设备的ICMP超时报文的发送功能。undo ip ttl-expires命令用来关闭设备的ICMP超 时报文的发送功能。（缺省情况下，ICMP超时报文发送功能处于开启状 态。）</p>
+
+<p>需要注意的是，关闭ICMP超时报文发送 功能后，设备不会再发送“TTL超时”ICMP差 错报文，但“重组超时”ICMP差错报文仍会正常发送。</p>
+
+<p>ip unreachables enable命 令用来开启设备的ICMP目的不可达报文的发送功能。undo ip unreachables命令用来关闭设备的ICMP目 的不可达报文的发送功能。（缺省情况下，ICMP目的不可达报文发送功 能处于关闭状态。）
+ </p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[周末给老婆买了个HTC legend(G6)玩]]></title>
+    <link href="http://babodx.github.com/blog/2010/07/28/htc-g6/"/>
+    <updated>2010-07-28T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/07/28/htc-g6</id>
+    <content type="html"><![CDATA[<p>我一直使用G3，老婆看功能强大，打算也购买一个玩。
+去了中关村，挑来挑去，最后老婆还是看上了G6.
+感觉G6的金属外壳、后盖的设计都很好，而且有闪光灯。这些都是比较好的设计。
+不过数据线接口变了，不在和G3通用，这个不太喜欢。
+按键也感觉没有G3的好，觉得按键很粗糙，一按就咔咔的响（不是按键发音哦，纯机械声音）。
+没有了通话和挂机键，也感觉不方便。
+不过老婆还是挺喜欢的。
+购买就是注意别买到阿三机器就可以了。（好像目前阿三机器也可以通过降级破解了）</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HTC hero g3 openvpn设置]]></title>
+    <link href="http://babodx.github.com/blog/2010/03/17/HTC-Hero-Openvpn/"/>
+    <updated>2010-03-17T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/03/17/HTC-Hero-Openvpn</id>
+    <content type="html"><![CDATA[<p>现在YouTube和google博客等站点都被屏蔽，为了打破限制，只能用vpn来穿越了。</p>
+
+<p>原来一直用pptpd类型vpn，这种类型速度快，但是要求防火墙或者网关支持。对内外支持不好（反正我在单位和家里歌华宽带都不支持）</p>
+
+<p>后来改用openvpn类型的vpn了，发现虽然openvpn配置麻烦，需要安装客户端。但却是对内网支持良好，穿透能力强。</p>
+
+<p>openvpn可以支持多系统（服务器我肯定用linux，这里多系统主要指客户端）</p>
+
+<p>Windows系统可以采用openvpn gui，这个在我博客以前文章提到了，今天要说的是我的手机，htc hero这次也可以让手机连接openvpn服务器上youtube等站点了。</p>
+
+<p><strong>手机型号及系统</strong></p>
+
+<p>我的手机是HTC hero g3</p>
+
+<p>采用的ROM是Flyzup制作的基于android 1.5修改的。</p>
+
+<p>Rom可以到Flyzup网站下载
+<a href="http://www.innovative-space.com/2010/02/21/flzyup-custom-rom-v1-6-final-release/">http://www.innovative-space.com/2010/02/21/flzyup-custom-rom-v1-6-final-release/</a></p>
+
+<p>其实只要手机用的Rom可以支持openvpn，存在tun.so文件就可以</p>
+
+<p><strong>安装相关软件</strong></p>
+
+<p>首先需要需要安装openvpn，这个软件我们可以到下面地址下载已经编译好的版本。因为是static编译的，所以不需要任何动态库支持直接解压就可以使用。
+<a href="http://github.com/downloads/fries/android-external-openvpn/openvpn-static-2.1.1.bz2">http://github.com/downloads/fries/android-external-openvpn/openvpn-static-2.1.1.bz2</a></p>
+
+<p>将解压后得到的openvpn-static-2.1.1文件改名为openvpn 并拷贝到手机的/system/xbin/目录下</p>
+
+<p>我是采用手机上安装的Better Terminal Emulator Pro来操作的，也可以用adb连接上usb操作。</p>
+
+<p>有了openvpn后，我们还要创建两个软连接才可以让后面的openvpn顺利建立连接</p>
+
+<p>用Better Terminal Emulator Pro进入终端模式，输入如下命令</p>
 
 <p><code>
-windows could not start because of a computer disk hardware configuration problem    
-could not read from the selected boot disk check boot path and disk harware   
-please check the windows documentation about hardware disk configuation and your hardware refer once manuals for additional information   
+mkdir /system/xbin/bb
+ln -s /system/xbin/ifconfig /system/xbin/bb/ifconfig
+ln -s /system/xbin/route /system/xbin/bb/route
 </code></p>
 
-<p>开始我以为是硬盘的设置问题，后来发现硬盘已经设置为IDE模式了。</p>
+<p>上面创建两个命令的软连接，是因为后面安装的TunnelDroid软件，总是调用/system/xbin/bb目录下的命令，如果没有命令，就会出错。</p>
 
-<p>后来网上查找，发现是和BIOS里的WDRT Support选项有关系。。。</p>
+<p>用google的电子市场，查找TunnelDroid软件，安装TunnelDroid软件。</p>
 
-<p><strong>解决办法</strong></p>
+<p><strong>配置TunnelDroid</strong></p>
 
-<p>开机进入bios设置，选择Power management Setup 再选择WDRT Support 将后面值修改为disable</p>
+<p>其实和配置Windows下的客户端一样，也需要一个配置文件和3个密钥文件</p>
 
-<p>WDRT SUPPORT：watchdog resource table 一种加密狗。通过这种加密保护来拒绝安装非随机配备的操作系统。同样，全系的HP 家用、商用台式机、笔记本，进行GHOST安装后报错，也可以用此方法解决。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[win7下使用联通无线上网卡HUAWEI E1750]]></title>
-    <link href="http://babodx.github.com/blog/2010/02/12/HUAWEI-E1750-on-Win7/"/>
-    <updated>2010-02-12T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2010/02/12/HUAWEI-E1750-on-Win7</id>
-    <content type="html"><![CDATA[<p>老婆单位年底搞活动，抽奖中了一个联通的无线上网卡。型号HUAWEI E1750</p>
+<p>我们在sd卡的跟目录创建openvpn目录</p>
 
-<p>本来打算给我笔记本用的，我系统是Windows 7。结果发现用不了，安装上以后，无线上网软件提示找不到设备。。。。。。</p>
+<p>在openvpn目录放入client.ovpn配置文件和ca.crt、client-1.crt和client-1.key密钥文件</p>
 
-<p><strong>解决办法</strong></p>
+<p>这样启动TunnelDroid后，就会出现client.ovpn的选项，直接选择连接就可以。上面的配置文件和密钥，我都是从配置好的Windows机器拷贝过来的。</p>
 
-<p>让Windows 7自动找驱动，肯定是没戏了。用光盘自带软件的驱动也不灵。后来到HUAWEI网站查找最近驱动，最终下面网站找到了相关更新</p>
-
-<p><code>http://www.huaweidevice.com/cn/downloadCenter.do?method=doListSoftwareid=1&amp;fla y=findsoftwareName=E1750</code></p>
-
-<p><code>
-E1750 E1750-WINMACB300D00SP04C112( U TPS11[1].301.08.24.112_MAC11.3 01.06.07.112)(China Unicom) China Unicom  2009-12-23
-</code>
-以上是Win7下可以使用的驱动更新。大约28M</p>
-
-<p>安装步骤是先安装Mobile_Card_Driver_3.09.exe驱动，然后正确识别设备后，运行UTPS11.301.08.24.112_MAC11.301.06.07.112.B433.exe更新设备的固件。最后再安装无线上网软件。</p>
-
-<p>可是我安装文档的方法，在Win7下并没有成功，运行UTPS11.301.08.24.112_MAC11.301.06.07.112.B433.exe更新的时候，总是提示没有找到设备或者正在有软件占用设备或者没有管理员权限。。。。。</p>
-
-<p>后来找了一台WinXP系统的机器，按照文档步骤一次成功。</p>
-
-<p>然后再将更新过的E1750插到Win7上面，就可以自动识别设备了。识别成功后如下图。</p>
-
-<p><img src="http://farm9.staticflickr.com/8251/8512574602_ee146a4011.jpg" alt="e1750驱动截图" /></p>
-
-<p>这样继续安装无线上网软件就可以正确识别并上网了。下面是正确识别后的截图</p>
-
-<p><img src="http://farm9.staticflickr.com/8105/8511465149_d5c86d6172.jpg" alt="e1750成功驱动" /></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[我的新手机HTC hero g3]]></title>
-    <link href="http://babodx.github.com/blog/2010/02/02/my-htc-hero-mobile/"/>
-    <updated>2010-02-02T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2010/02/02/my-htc-hero-mobile</id>
-    <content type="html"><![CDATA[<p>关注HTC hero G3很久了，大约从10月份开始吧。当时就和老婆说生日打算换个手机，后来生日当天去中关村看了看，但是没有购买，报价3000。关键是不知道怎么选购。回来后网上做功课，查询论坛和淘宝。最后决定在淘宝的一家北京实体店购买。在木樨园桥附近。2010年1月25日周一购买的。</p>
-
-<p>购买的最终手机价格是2860元，又选购了8G TF卡，一块MOMAX电池+座充+车充+手机套。3370元。</p>
-
-<p>购买后，由卖家给刷安逸1.2的ROM并给8G卡预装一些软件。</p>
-
-<p>整体感觉比我原来用的windows手机eten x800速度快了不少。android系统也很漂亮。</p>
-
-<p>我的联系人是先用Win7的windows mobile设备管理将原来windows手机的联系人导出到outlook，最后导出到excel并生成cvs文件。</p>
-
-<p>然后导入到Gmail邮件的通讯录。这样通过hero G3的同步gmail联系人，就可以导入到新手机了。</p>
-
-<p>感觉和gmail配合的相当好。短信也可以备份到gmail保存。</p>
-
-<p><strong>刷机</strong></p>
-
-<p>手机买来就开始装软件，尝试导航，使用感觉不错。不过在论坛学习，发现很多系统都比我这个新，就产生了刷机的想法。</p>
-
-<p>开始先尝试刷radio。radio是负责手机通讯的模块，可以理解为电话用的驱动吧。</p>
-
-<p>我原来的版本比较低，自己先尝试刷了63.18.55.06JU_6.35.09.26最新版本。</p>
-
-<p><strong>刷radio办法</strong></p>
-
-<p>机器买来的时候，又商家默认刷了啊兴的2.5 recovery。我就用了一个1G的卡，格式化为FAT32文件系统。将下载的radio更新文件拷贝到卡的根目录，并改名为update.zip</p>
-
-<p>关闭手机，同时按Home+Power键进入recovery界面(就是小房子+开机键)。</p>
-
-<p>等出现recovery界面，选择第2项，将sd卡上的update.zip刷入手机。</p>
-
-<p>注意刷完后，一定要重启一次手机。</p>
-
-<p>刷这个很简单，一会就完成了。感觉不错。呵呵</p>
-
-<p>关于Rom的选择，我再论坛上找了很久，也发帖求助了很多高手。大家普遍认为安卓1.2就是稳定，但是速度很慢。</p>
-
-<p>大家推荐我的主要是Flzyup的Rom和modaco的Rom</p>
-
-<p>我怕Modaco的Rom中文支持不友好，就决定从Flzyup制作的Rom选择了。目前来说G3的Rom有基于android 1.5的，也有基于2.0</p>
-
-<p>但是普遍认为2.0 Rom目前不成熟，毕竟官方没有出来呢。所以我就只选择基于android 1.5的Rom了。</p>
-
-<p>F大（flzyup的亲切称呼）的Rom基于1.5系统的主要如下</p>
-
-<ul>
-<li><p><a href="http://www.innovative-space.com/2010/01/14/flzyup-custom-rom-v1-5-final/">FLZYUP Custom ROM v1.5 final(惊喜一)</a></p></li>
-<li><p><a href="http://www.innovative-space.com/2010/01/10/flzyup-custom-rom-v1-4-paid-apps-new-icons/">FLZYUP Custom ROM v1.4 (Paid APPs+New ICONs)</a></p></li>
-<li><p><a href="http://www.innovative-space.com/2009/12/23/flzyup_custom_rom_v1-3_final-large-me/">FLZYUP_Custom_ROM_v1.3_final大内存版本</a></p></li>
-<li><p><a href="http://www.innovative-space.com/2009/12/07/flzyup-custom-rom-v1-3-release/">FLZYUP Custom ROM v1.3 final all fixed [特效包已发布]</a></p></li>
-</ul>
-
-
-<p>1.4版本是基于1.3的基础上优化完善的，1.5是基于全新内核制作的。</p>
-
-<p>因为我看论坛上很多人反映F大1.5版本耗电，本来G3也就坚持2天，如果刚买手机经常玩，1天就够呛了。。。所以没敢使用这个费电的新版本。我保守的选择了1.4版本。</p>
-
-<p><strong>准备刷机</strong></p>
-
-<p>论坛坚持了2天，大家一直讨论刷那个版本好，可以参考<a href="http://www.androidin.net/bbs/thread-51055-1-1.html">http://www.androidin.net/bbs/thread-51055-1-1.html</a></p>
-
-<p>最终决定刷F大的1.4版本。看到F大1.4是自动支持app2sd技术的，但是前提是你的卡必须有ext分区。我的8G卡目前就1个Fat32分区，于是考虑先分区。</p>
-
-<p>但是Win7没有找到合适的分区软件，后来发现xda论坛发布的<strong>RA-hero-v1.5.2</strong> recovery可以支持在手机的recovery模式给卡分区。我就先刷了这个recovery</p>
-
-<p><strong>刷recovery</strong></p>
-
-<p>主要参考<a href="http://forum.xda-developers.com/showthread.php?t=561124">http://forum.xda-developers.com/showthread.php?t=561124</a></p>
-
-<p>There are several ways to install a custom recovery, choose the one that suits you most (I probably forgot a few).</p>
-
-<p>```
-via adb
--> Requires a custom recovery (with test-keys) like Cyanogen's v1.4 or my previous recovery</p>
-
-<p>Copy recovery-RA-hero-v1.5.2.img to the root of your sdcard
-Boot into your current custom recovery (boot while holding HOME)
-Connect your Hero via usb to your pc/mac/...
-adb shell
-$su (not required if you have root already)</p>
-
-<h1>mount -a</h1>
-
-<h1>flash_image recovery /sdcard/recovery-RA-hero-v1.5.2.img</h1>
-
-<p>```
-我采用的上面这个方法安装的。</p>
-
-<p>不过首先要在机器上安装adb工具和手机驱动</p>
-
-<p>驱动采用网上下载的AndroidDriverFiles驱动程序.rar</p>
-
-<p>adb本来是包含在android sdk工具里面的，但是sdk太大了，好几百兆。。。。我就在网上找了一个adb_win.zip的分离包。572k，就2个文件。</p>
-
-<p>先将adb_win.zip解压缩，得到adb.exe和AdbWinApi.dll文件。将2个文件复制到Windows目录下的System32目录。</p>
-
-<p>这样在windows的命令行窗口输入adb命令，可以看到如下输出</p>
-
-<p>Android Debug Bridge version 1.0.20下面还有很多使用说明，就不用管了。</p>
-
-<p>现在准备好adb了，再把AndroidDriverFiles驱动程序.rar解压到一个目录，准备连接手机的时候使用。</p>
-
-<p>以上都准备好后，关闭手机，按Home+Power键进入recovery模式，将USB线连上电脑。如果提示安装驱动，就手动到AndroidDriverFiles驱动程序解压后的目录找。</p>
-
-<p>驱动识别完成后，就打开windows的命令行窗口（Win+R，输入cmd回车）</p>
-
-<p>输入adb shell</p>
-
-<p>然后su回车</p>
-
-<p>mount -a回车</p>
-
-<p>上面的su和mount -a 都可能返回错误，不用管它。</p>
-
-<p>最后输入flash_image recovery /sdcard/recovery-RA-hero-v1.5.2.img 回车。</p>
-
-<p>这样就把新的recovery刷入了。</p>
-
-<p>重启进入recovery模式，如图</p>
-
-<p><img src="http://farm9.staticflickr.com/8096/8512558972_02deaf66fe.jpg" alt="recovery截图" /></p>
-
-<p>然后在Wipe里面执行如下3项</p>
-
-<p>```
-Wipe</p>
-
-<p>Wipe data/factory reset :: Wipe /data and /cache
-Wipe Dalvik-cache :: Wipe Dalvik-cache both on /data and ext
-Wipe SD:ext partition : Wipe the ext partition on your sdcard
-```</p>
-
-<p>再给sd卡分区。</p>
-
-<p>```
-Partition sdcard</p>
-
-<p>Partition SD :: Interactive SD partitioning
-```</p>
-
-<p>这样就给sd卡分好去了，我的8G卡，默认是32M的swap分区 512M的ext分区。最后是一个大的Fat32分区。
-这样就可以关机了。</p>
-
-<p><strong>刷FLZYUP_Custom_ROM_v1.4-signed.zip系统</strong></p>
-
-<p>上面的准备工作全完成了，再来刷系统。</p>
-
-<p>将分好区的sd卡，放到电脑读卡器上，从电脑将FLZYUP_Custom_ROM_v1.4-signed.zip拷贝到根目录。因为win7只能识别出FAT32分区，所以肯定是拷贝到FAT32分区上。</p>
-
-<p>然后返回手机开机进入recovery模式，选择</p>
-
-<p><code>
-Flash zip from sdcard :: Flash a zip update file from your sdcard
-</code></p>
-
-<p>按照提示往下刷就可以了。刷好后提示如下</p>
-
-<p><img src="http://farm9.staticflickr.com/8511/8511451731_17da3c1a26.jpg" alt="rom_update截图" /></p>
-
-<p>然后重启手机就可以了。</p>
-
-<p><strong>注意</strong></p>
-
-<p>刷完后，第一次重启很慢很慢，这个正常。我当时以为手机刷坏了，总停在HTC那屏上。。。还到论坛发帖求助呢。。</p>
-
-<p>后来发现第一次重启后，看到绿色小人和听到声音大约1分20秒，然后就是那个HTC三个字母的屏幕，大约等了10分钟。。。就会进入下面屏幕</p>
-
-<p><img src="http://farm9.staticflickr.com/8369/8511453551_4a0cd686ef.jpg" alt="android 1.4" /></p>
-
-<p>按照提示设置好手机，就可以享受新系统了。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[诺基亚E63刷机]]></title>
-    <link href="http://babodx.github.com/blog/2010/01/28/E63-nokia-fireware-update/"/>
-    <updated>2010-01-28T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2010/01/28/E63-nokia-fireware-update</id>
-    <content type="html"><![CDATA[<p>前几天老婆的E63手机总是死机，一直在跟我抱怨。。。本来想给她买个iphone，结果老婆说不喜欢，还是喜欢她红色的E63.</p>
-
-<p>我想想手机买了1年多了，也没有更新过，不如刷个新系统看看吧。于是就开始搜索资料、准备软件。</p>
-
-<p>具体刷机步骤参考
-<a href="http://nokia.zol.com.cn/188/297_1876549.html">http://nokia.zol.com.cn/188/297_1876549.html</a></p>
-
-<p><strong>诺基亚刷机方法</strong></p>
-
-<p>主要是官方刷新，还是用第三方软件刷新</p>
-
-<p>官方的在线刷新就是用官方公布的软件直接更新手机的系统。但是官方更新只限于行货手机，因为官方是根据你手机的CODE号码来为你更新手机系统的，如果你手机的CODE是外国的，那刷新后，就没有中文系统了。所以这个不适合大多数水货手机</p>
-
-<p>我查看了一下，老婆手机的CODE是0569944: 马来西亚的。用官方的估计不行，于是就开始考虑第三方软件。</p>
-
-<p>发现比较著名的就是凤凰刷机工具了。</p>
-
-<p>其实简单的说“凤凰刷机”就是刷机软件的一种，而非官方的刷机软件而已，由于其在性能上有官方刷机软件很多不能完成的任务，因而收到的机友的广泛追捧。</p>
-
-<p><strong>准备工作</strong></p>
-
-<p>首先是下载凤凰刷机软件</p>
-
-<p>参考这里<a href="http://nokia.zol.com.cn/1/18_299.html">http://nokia.zol.com.cn/1/18_299.html</a></p>
-
-<p>我下载的就是<a href="http://nokia.zol.com.cn/1/18_299.html">凤凰刷机2009.34.7.40015最新XX版09.10.30发布</a></p>
-
-<p>下载好凤凰刷机软件后，就是备份手机存储卡上的内容和联系人了。我是直接用读卡器把存储卡拷贝到电脑，然后用诺基亚PC套件导出的联系人。</p>
-
-<p>这些都弄好了，就可以进入刷机步骤了。</p>
-
-<p><strong>刷机步骤</strong></p>
-
-<p>安装好凤凰刷机软件，并打开</p>
-
-<p>选择Tools->Image file download</p>
-
-<p><img src="http://farm9.staticflickr.com/8103/8512516328_851a5902d7.jpg" alt="选择下载img" /></p>
-
-<p>然后在Product code内输入你想刷的系统的code码，我这里输入的0569941，新加坡的版本</p>
-
-<p>输入完成后，点download等待下载，大小在60-80M。</p>
-
-<p>下载完成后，点cancel就可以了。</p>
-
-<p>系统下载好了，我们就该向手机内刷了。用USB的数据线连接手机。在手机上选择PC套件模式。</p>
-
-<p>然后选择凤凰2009的菜单file---manage connection，跳出菜单NO CONECTION，再点“NEW”按键。</p>
-
-<p><img src="http://farm9.staticflickr.com/8508/8511405473_51583b1644_z.jpg" alt="new按钮" /> </p>
-
-<p>按NEW键之后会出现下图：</p>
-
-<p><img src="http://farm9.staticflickr.com/8100/8511406351_68da4dfd26_z.jpg" alt="new截图" /></p>
-
-<p>选择USB后，按下一步，直到完成。这样连接里会才会出现USB和NO CONNECTIONS两个选择，一个是USB连接，一个是没有连接，如果是USB连接，表示手机正常。选择USB，点击“APPLY”按钮,然后点击Cancel，连接完成</p>
-
-<p><img src="http://farm9.staticflickr.com/8226/8512518914_dfa06ce9ed_z.jpg" alt="usb1截图" />
-<img src="http://farm9.staticflickr.com/8506/8512513418_7c9ca6b164_z.jpg" alt="usb2截图" /></p>
-
-<p>菜单File ,open Product，系统会自动调出诺基亚各个型号的RM菜单，你选择自己的机型即可，比如诺基亚E63为RM-437，找到后点OK。</p>
-
-<p><img src="http://farm9.staticflickr.com/8368/8512513018_73ca2419cd_z.jpg" alt="ok截图" /></p>
-
-<p><img src="http://farm9.staticflickr.com/8386/8512512776_a4c75f2239_z.jpg" alt="ok截图2" /></p>
-
-<p>选择RM-437的画面，在出现的提示框里找RM-437，选中，然后点OK，选择normal.</p>
-
-<p>凤凰2009软件菜单Flashing-----Fireware Update,出现下面画面</p>
-
-<p><img src="http://farm9.staticflickr.com/8240/8511400983_580969c8e8_z.jpg" alt="update截图" /></p>
-
-<p>这里有一个非常关键的地方需要注意,就是上图选择RM-437之后,要注意看Product CODE:显示的CODE是多少,如果是欧版的CODE(比如0582481),那就需要你选择以下亚太的CODE的系统,选择你刚才下载的比如<font color="#000000" size="2">0569941</font>的系统. 点击下图右边的小方块(小方块上有省略号的那个)</p>
-
-<p>想刷400.21.013的朋友，如果下载了400的固件，但是在这里没有找到400的话，可以来这里看下</p>
-
-<p>凤凰菜单栏进入：TOOLS-Options-product locetion（下图）</p>
-
-<p><img src="http://farm9.staticflickr.com/8107/8512512350_980a17dfbe_z.jpg" alt="locetion图" /></p>
-
-<p>红色线标注的栏目原来是空白的，这里需要设置下路径，点右边的“add”添加路径如图所示，然后点“apply”确认后退出。</p>
-
-<p>哈哈，看下图出现了400.21.013了</p>
-
-<p><img src="http://farm9.staticflickr.com/8368/8511400657_7362511b0f_z.jpg" alt="截图" /></p>
-
-<p>点击"Refurbish"开始刷机，在进入这个程序之后，无论计算机屏幕右下角出现什么提示，均不要搭理它，直到提示成功。</p>
-
-<p><img src="http://farm9.staticflickr.com/8371/8511400551_ca21a4f98f_z.jpg" alt="截图" /> </p>
-
-<p>到这里就算完成了。哈哈</p>
-
-<p>以上内容基本都是从下面两篇帖子上转过来的。如果有什么不明白，可以直接去看原帖。我只是记录下，省的以后刷机还要找资料。</p>
-
-<ul>
-<li>[原创][教程]诺基亚E63用凤凰2009成功刷机</li>
-<li>0300 凤凰2009成功刷 E63最新固件 400.21.013
- </li>
-</ul>
-
+<p>目前我测试的android手机、windowsxp、windows7和Linux全部都可以连接openvpn服务器。</p>
 ]]></content>
   </entry>
   

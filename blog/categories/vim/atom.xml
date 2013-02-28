@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Vim | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/vim/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-02-28T22:19:12+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Gvim配置]]></title>
+    <link href="http://babodx.github.com/blog/2011/10/31/gvim-vimrc-file/"/>
+    <updated>2011-10-31T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2011/10/31/gvim-vimrc-file</id>
+    <content type="html"><![CDATA[<p>vim是在linux下面很有名的编辑工具。而今天说到的这个gvim呢，就是vim工具在windows下的版本。
+因为游戏、网银等种种原因，不是每个人都可以全部切换到linux下的，而linux的很多很棒的开源软件又特别好用。所以就尽量找这些软件的windows版本了。
+ 
+软件主页：<a href="http://www.vim.org/">http://www.vim.org/</a></p>
+
+<p>下载地址：<a href="ftp://ftp.vim.org/pub/vim/pc/gvim73_46.exe">ftp://ftp.vim.org/pub/vim/pc/gvim73_46.exe</a></p>
+
+<p>默认状态下的gvim是和windows软件一样，也有菜单和状态条等的。但是我个喜欢linux下的风格。下面就是我目前使用的样子</p>
+
+<p><img src="http://flic.kr/p/dYkNSP" alt="gvim截图" /></p>
+
+<p>gvim的设置全部是基于目录下的_vimrc配置文件的。</p>
+
+<p>这里具体的配置项内容我就不一一说明了，感兴趣的完全可以查看vim资料。我只是放出我的配置文件（基本也是网上其他高手分享出来的，自己修改下适合自己用就ok了）
+ </p>
+]]></content>
+  </entry>
+  
+</feed>

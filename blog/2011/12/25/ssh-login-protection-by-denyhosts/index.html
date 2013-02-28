@@ -1,0 +1,445 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>通过denyhosts保护ssh登陆 - 鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="今天查看服务器的/var/log/secure日志，发现很多类似下面的信息 PAM 6 more authentication failures; logname= uid=0 euid=0 tty=ssh ruser= rhost=121.176.35.192 user=root &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/2011/12/25/ssh-login-protection-by-denyhosts/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">通过denyhosts保护ssh登陆</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-25T00:00:00+08:00" pubdate data-updated="true">Dec 25<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>今天查看服务器的/var/log/secure日志，发现很多类似下面的信息</p>
+
+<p><code>PAM 6 more authentication failures; logname= uid=0 euid=0 tty=ssh ruser= rhost=121.176.35.192  user=root</code></p>
+
+<p>说明经常有人通过ssh尝试登陆，并不断尝试猜测root的密码。</p>
+
+<p>这样总让人尝试我的密码也不是个事儿呀&#8230;.于是通过denyhosts软件，开启了保护。</p>
+
+<p>通过denyhosts我们可以设置登陆失败几次，就禁止这个IP再次登陆。并可以设置多少分钟后，放开保护。</p>
+
+<p><strong>denyhosts介绍</strong></p>
+
+<p>DenyHosts是Python语言写的一个程序，用DenyHosts可以阻止试图猜测SSH登录口令，它会分析/var/log/secure等日志文件，当发现同一IP在进行多次SSH密码尝试时就会记录IP到/etc/hosts.deny文件，从而达到自动屏蔽该IP的目的。</p>
+
+<p>安装需求</p>
+
+<p>首要要求有python环境，并版本在2.3以上</p>
+
+<p>CentOS 默认安装了2.4.3版本，我们可以通过下面命令查看</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# python -V
+</span><span class='line'>
+</span><span class='line'>Python 2.4.3</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>注意大小写。</strong></p>
+
+<p>其次是sshd需要支持tcp_wrappers。这个一般都支持。可以用下面命令判断</p>
+
+<p><code>ldd /usr/sbin/sshd |grep wrap</code></p>
+
+<p>如果显示：libwrap.so.0 => /lib/libwrap.so.0 (0x00db7000)表示支持</p>
+
+<p><strong>安装</strong></p>
+
+<p>当前最新的版本是2.6</p>
+
+<p><a href="wget%20http://downloads.sourceforge.net/project/denyhosts/denyhosts/2.6/DenyHosts-2.6.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fdenyhosts%2Ffiles%2F&amp;ts=1324820171&amp;use_mirror=cdnetworks-kr-1">下载</a></p>
+
+<p><strong>解压安装</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar zxvf DenyHosts-2.6.tar.gz 
+</span><span class='line'>
+</span><span class='line'>cd DenyHosts-2.6
+</span><span class='line'>
+</span><span class='line'>python setup.py install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>默认将程序安装在/usr/share/denyhosts</p>
+
+<p>库文件在/usr/lib/python2.4/site-packages/DenyHosts/</p>
+
+<p>denyhosts.py安装到/usr/bin</p>
+
+<p><strong>设置启动脚本</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /usr/share/denyhosts/
+</span><span class='line'>
+</span><span class='line'>cp daemon-control-dist daemon-control
+</span><span class='line'>
+</span><span class='line'>chown root daemon-control
+</span><span class='line'>
+</span><span class='line'>chmod 700 daemon-control
+</span><span class='line'>
+</span><span class='line'>grep -v "^#" denyhosts.cfg-dist &gt; denyhosts.cfg</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就生成了一个标准的配置文件denyhosts.cfg</p>
+
+<p>我们需要按照自己的想法，配置下这个denyhosts.cfg文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SECURE_LOG = /var/log/secure
+</span><span class='line'>
+</span><span class='line'>#表示系统中secure日志文件位置
+</span><span class='line'>
+</span><span class='line'>HOSTS_DENY = /etc/hosts.deny
+</span><span class='line'>
+</span><span class='line'>#表示hosts.deny配置文件在系统中位置
+</span><span class='line'>
+</span><span class='line'>PURGE_DENY = 30m
+</span><span class='line'>
+</span><span class='line'>#表示多久后解封IP
+</span><span class='line'>
+</span><span class='line'>BLOCK_SERVICE  = sshd
+</span><span class='line'>
+</span><span class='line'>DENY_THRESHOLD_INVALID = 1
+</span><span class='line'>
+</span><span class='line'>#表示无效用户名，登陆失败几次就封IP
+</span><span class='line'>
+</span><span class='line'>DENY_THRESHOLD_VALID = 5
+</span><span class='line'>#表示有效果的普通用户登陆几次就封IP
+</span><span class='line'>
+</span><span class='line'>DENY_THRESHOLD_ROOT = 3
+</span><span class='line'>
+</span><span class='line'>#表示root用户登陆失败几次封IP
+</span><span class='line'>
+</span><span class='line'>DENY_THRESHOLD_RESTRICTED = 1
+</span><span class='line'>
+</span><span class='line'>WORK_DIR = /usr/share/denyhosts/data
+</span><span class='line'>
+</span><span class='line'>SUSPICIOUS_LOGIN_REPORT_ALLOWED_HOSTS=YES
+</span><span class='line'>
+</span><span class='line'>HOSTNAME_LOOKUP=NO
+</span><span class='line'>
+</span><span class='line'>表示是否做域名反解析
+</span><span class='line'>
+</span><span class='line'>LOCK_FILE = /var/lock/subsys/denyhosts</span></code></pre></td></tr></table></div></figure>
+
+
+<p>启动denyhosts</p>
+
+<p><code>/usr/share/denyhosts/daemon-control start</code></p>
+
+<p>配置denyhosts随系统自启动</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /etc/init.d
+</span><span class='line'>
+</span><span class='line'>ln -s /usr/share/denyhosts/daemon-control denyhosts
+</span><span class='line'>
+</span><span class='line'>chkconfig --add denyhosts
+</span><span class='line'>
+</span><span class='line'>chkconfig --level 345 denyhosts on</span></code></pre></td></tr></table></div></figure>
+
+
+<p>查看效果</p>
+
+<p>如果尝试登陆失败次数达到后，IP就会被记录到/etc/hosts.deny文件内，来达到阻止登陆的目的</p>
+
+<p>我们也可以通过查看/var/log/denyhosts日志文件来判断是否有被封的IP</p>
+
+<p>下面是我的机器部署denyhosts一段时间后封的IP</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># DenyHosts: Sun Dec 25 21:40:13 2011 | sshd: 112.164.231.91
+</span><span class='line'>
+</span><span class='line'>sshd: 112.164.231.91</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-25T00:00:00+08:00" pubdate data-updated="true">Dec 25<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>Linux</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2011/12/25/ssh-login-protection-by-denyhosts/" data-via="" data-counturl="http://babodx.github.com/blog/2011/12/25/ssh-login-protection-by-denyhosts/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/12/22/monitor-network-connections-of-linux/" title="Previous Post: linux网络连接数量监控">&laquo; linux网络连接数量监控</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/12/29/find-php-slow-code/" title="Next Post: php-fpm查找php慢速代码">php-fpm查找php慢速代码 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/02/cloudstack-on-vmware/">cloudstack on vmware</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

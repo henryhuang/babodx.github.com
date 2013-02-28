@@ -1,0 +1,400 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>CENTOS下安装MUDOS跑侠客行 - 鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="最近在放假，我又玩了玩很久以前的网络游戏北美侠客行。一个纯文字的MUD游戏。而且自己在CentOS下也架设了一个，下面就说说我的安装过程，给自己做个记录，怕以后忘记。 要架设一个MUD游戏，需要MUDOS和MUDLIB两部分。这里简单解释一下，其实我也刚接触，有不对的地方还望见谅。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/2010/08/26/Centos-install-mudos/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">CENTOS下安装MUDOS跑侠客行</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-26T00:00:00+08:00" pubdate data-updated="true">Aug 26<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>最近在放假，我又玩了玩很久以前的网络游戏北美侠客行。一个纯文字的MUD游戏。而且自己在CentOS下也架设了一个，下面就说说我的安装过程，给自己做个记录，怕以后忘记。</p>
+
+<p>要架设一个MUD游戏，需要MUDOS和MUDLIB两部分。这里简单解释一下，其实我也刚接触，有不对的地方还望见谅。</p>
+
+<p>MUDOS我理解就是一个跑MUD游戏的平台或者理解为模拟器，只要符合MUDOS要求的MUDLIB都可以通过MUDOS驱动起来。</p>
+
+<p>MUDLIB才是具体游戏的代码，各种MUD游戏其实就是MUDLIB不同，而底层平台基本都是MUDOS。</p>
+
+<p>当然现在除了MUDOS还可以采用FluffOS作为运行平台。</p>
+
+<p>下面贴个我架设的侠客行MUD截图（采用XKX早期代码修改来的，和北美侠客行最接近）
+<img src="http://farm9.staticflickr.com/8087/8514869856_f372e947e4_z.jpg" alt="xkx截图" /></p>
+
+<p><strong>下载MUDOS</strong>
+我采用的是<a href="http://www.pkuxkx.net/download/soft.php?id=20"><b>MudOSv22pre11 For Linux</b></a> 从北大侠客行官方网站下载的。</p>
+
+<p><strong>下载MUDLIB</strong></p>
+
+<p>至于mudlib才是能不能玩的重点，网上可以找到很多版本。我主要下载了如下几种</p>
+
+<p>金庸梦（个人感觉很完整的一套代码，基本是基于98年xkx修改而来）</p>
+
+<p>xkx2001（这个版本是早期一个xkx版本，和北美xkx比较接近）</p>
+
+<p>xkx6dao（和早期xkx最接近的一个版本）</p>
+
+<p>以上三个版本都可以在windows下正常运行，我们要做的就是选择一款移植到linux下。</p>
+
+<p>我是基于xkx6到的mudlib，将xkx2001和金庸梦的部分代码加入过来。这样基本实现了北美侠客行的大部分任务系统，包括斧头帮、镖局、门派任务等</p>
+
+<p><strong>安装mudos</strong></p>
+
+<p>1、将我们下载的<a href="http://www.pkuxkx.net/download/soft.php?id=20"><b>MudOSv22pre11 For Linux</b></a>解压缩，然后进入到解压后的目录。</p>
+
+<p>2、运行 ./build.MudOS</p>
+
+<p>提示如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Preparing to build standard MudOS driver ...
+</span><span class='line'>Trying out some stuff to see what works; ignore errors ...
+</span><span class='line'>gmake: Nothing to be done for `nothing'.
+</span><span class='line'>./build.MudOS: line 170: xlc: command not found
+</span><span class='line'>mkdir: ÎÞ·¨´´½¨Ä¿Â¼¡®tmp¡¯: ÎÄ¼þÒÑ´æÔÚ
+</span><span class='line'>install£ºÎÞÐ§Ñ¡Ïî -- f
+</span><span class='line'>Çë³¢ÊÔÖ´ÐÐ¡®install --help¡¯À´»ñÈ¡¸ü¶àÐÅÏ¢¡£
+</span><span class='line'>rm: ÎÞ·¨É¾³ý¡®tmp/insttest¡¯: Ã»ÓÐÄÇ¸öÎÄ¼þ»òÄ¿Â¼
+</span><span class='line'>mkdir: ÎÞ·¨´´½¨Ä¿Â¼¡®obj¡¯: ÎÄ¼þÒÑ´æÔÚ
+</span><span class='line'>***************** Configuration completed **************
+</span><span class='line'>Installing MudOS on Linux
+</span><span class='line'>Using install -c to install binaries in ../bin.
+</span><span class='line'>Using gcc -E for preprocessing.
+</span><span class='line'>Using gcc -O2 -fomit-frame-pointer -fstrength-reduce to compile.
+</span><span class='line'>Using bison -d -y to make the compiler.
+</span><span class='line'>Edit GNUmakefile if this is not what you want
+</span><span class='line'>Otherwise, type 'gmake' to build MudOS, then 'gmake install'.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面有些是乱码，因为linux的中文不能正常贴过来，主要是提示一些目录存在和一些安装选项无效。可以不用管。
+在安装前，我们用gmake clean 清理一下</p>
+
+<p>3、执行gmake和gmake install进行编译和安装</p>
+
+<p>正常的话，我们就可以在目录下发现driver文件了，这个driver就是为了驱动MUDLIB的。</p>
+
+<p><strong>配置MUDLIB和运行</strong></p>
+
+<p>配置mudlib的过程麻烦一些，一个是driver是否符合mudlib需要，另外一个是mudlib的配置。</p>
+
+<p>先说下mudlib的配置，一般是在mudlib的根目录下存在一个config.h的文件（这个名字可以自己修改为任意名字）</p>
+
+<p>这个配置文件一般需要根据自己的实际路径进行修改</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>name: 侠客行      (指定你的游戏名字)
+</span><span class='line'>port number: 5555  (指定游戏运行的端口)
+</span><span class='line'>mudlib directory: /mud/xkx/ (指向到你mudlib的目录)
+</span><span class='line'>binary directory: /mud/xkx/ (同样指向到你mudlib目录，其实是你配置文件目录)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其他默认就可以</p>
+
+<p>如果配置全部完成，没有问题。</p>
+
+<p>只要将driver文件拷贝到mudlib目录，我这里是/mud/xkx目录。</p>
+
+<p>然后</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /mud/xkx
+</span><span class='line'>./driver config.h &</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面是我的运行提示</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@ict xkx]# using config file: config.h
+</span><span class='line'>Initializing internal tables....
+</span><span class='line'>----------------------------------------------------------------------------
+</span><span class='line'>侠客行 (MudOS v22pre11) starting up on Linux - Thu Aug 26 10:21:29 2010
+</span><span class='line'>
+</span><span class='line'>Connection to address server (localhost 3992) refused.
+</span><span class='line'>]simul_efun loaded successfully.
+</span><span class='line'>Loading preloaded files ...
+</span><span class='line'>Initializations complete.
+</span><span class='line'>Accepting connections on port 5555.
+</span><span class='line'>[root@ict xkx]#</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>常见问题</strong></p>
+
+<p><strong>编码问题：</strong>因为我们的mudlib是从windows平台移植过去的，所以文件都是dos格式，需要进行转换。采用如下命令</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>find . -name *.c|xargs dos2unix
+</span><span class='line'>find . -name *.h|xargs dos2unix
+</span><span class='line'>find . -name *.o|xargs dos2unix</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上命令将所有.c .h .o结尾的文件转换为unix文件格式</p>
+
+<p><strong>driver编译问题：</strong>很多时候我们编译的driver并不能很好的驱动我们的mudlib。这个时候需要自己查看log目录下的debug.log文件找出具体原因。主要是通过修改 options.h  文件进行调整。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-26T00:00:00+08:00" pubdate data-updated="true">Aug 26<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/game/'>Game</a>, <a class='category' href='/blog/categories/linux/'>Linux</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2010/08/26/Centos-install-mudos/" data-via="" data-counturl="http://babodx.github.com/blog/2010/08/26/Centos-install-mudos/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/07/28/htc-g6/" title="Previous Post: 周末给老婆买了个HTC legend(G6)玩">&laquo; 周末给老婆买了个HTC legend(G6)玩</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2010/08/26/lingtu-on-hero-android21/" title="Next Post: Hero G3 android 2.1下好用的导航软件">Hero G3 android 2.1下好用的导航软件 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/02/cloudstack-on-vmware/">cloudstack on vmware</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

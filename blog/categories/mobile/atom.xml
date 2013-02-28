@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Mobile | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/mobile/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-27T22:11:05+08:00</updated>
+  <updated>2013-02-28T22:19:12+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -14,287 +14,117 @@
 
   
   <entry>
-    <title type="html"><![CDATA[我的新手机HTC hero g3]]></title>
-    <link href="http://babodx.github.com/blog/2010/02/02/my-htc-hero-mobile/"/>
-    <updated>2010-02-02T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2010/02/02/my-htc-hero-mobile</id>
-    <content type="html"><![CDATA[<p>关注HTC hero G3很久了，大约从10月份开始吧。当时就和老婆说生日打算换个手机，后来生日当天去中关村看了看，但是没有购买，报价3000。关键是不知道怎么选购。回来后网上做功课，查询论坛和淘宝。最后决定在淘宝的一家北京实体店购买。在木樨园桥附近。2010年1月25日周一购买的。</p>
-
-<p>购买的最终手机价格是2860元，又选购了8G TF卡，一块MOMAX电池+座充+车充+手机套。3370元。</p>
-
-<p>购买后，由卖家给刷安逸1.2的ROM并给8G卡预装一些软件。</p>
-
-<p>整体感觉比我原来用的windows手机eten x800速度快了不少。android系统也很漂亮。</p>
-
-<p>我的联系人是先用Win7的windows mobile设备管理将原来windows手机的联系人导出到outlook，最后导出到excel并生成cvs文件。</p>
-
-<p>然后导入到Gmail邮件的通讯录。这样通过hero G3的同步gmail联系人，就可以导入到新手机了。</p>
-
-<p>感觉和gmail配合的相当好。短信也可以备份到gmail保存。</p>
-
-<p><strong>刷机</strong></p>
-
-<p>手机买来就开始装软件，尝试导航，使用感觉不错。不过在论坛学习，发现很多系统都比我这个新，就产生了刷机的想法。</p>
-
-<p>开始先尝试刷radio。radio是负责手机通讯的模块，可以理解为电话用的驱动吧。</p>
-
-<p>我原来的版本比较低，自己先尝试刷了63.18.55.06JU_6.35.09.26最新版本。</p>
-
-<p><strong>刷radio办法</strong></p>
-
-<p>机器买来的时候，又商家默认刷了啊兴的2.5 recovery。我就用了一个1G的卡，格式化为FAT32文件系统。将下载的radio更新文件拷贝到卡的根目录，并改名为update.zip</p>
-
-<p>关闭手机，同时按Home+Power键进入recovery界面(就是小房子+开机键)。</p>
-
-<p>等出现recovery界面，选择第2项，将sd卡上的update.zip刷入手机。</p>
-
-<p>注意刷完后，一定要重启一次手机。</p>
-
-<p>刷这个很简单，一会就完成了。感觉不错。呵呵</p>
-
-<p>关于Rom的选择，我再论坛上找了很久，也发帖求助了很多高手。大家普遍认为安卓1.2就是稳定，但是速度很慢。</p>
-
-<p>大家推荐我的主要是Flzyup的Rom和modaco的Rom</p>
-
-<p>我怕Modaco的Rom中文支持不友好，就决定从Flzyup制作的Rom选择了。目前来说G3的Rom有基于android 1.5的，也有基于2.0</p>
-
-<p>但是普遍认为2.0 Rom目前不成熟，毕竟官方没有出来呢。所以我就只选择基于android 1.5的Rom了。</p>
-
-<p>F大（flzyup的亲切称呼）的Rom基于1.5系统的主要如下</p>
-
-<ul>
-<li><p><a href="http://www.innovative-space.com/2010/01/14/flzyup-custom-rom-v1-5-final/">FLZYUP Custom ROM v1.5 final(惊喜一)</a></p></li>
-<li><p><a href="http://www.innovative-space.com/2010/01/10/flzyup-custom-rom-v1-4-paid-apps-new-icons/">FLZYUP Custom ROM v1.4 (Paid APPs+New ICONs)</a></p></li>
-<li><p><a href="http://www.innovative-space.com/2009/12/23/flzyup_custom_rom_v1-3_final-large-me/">FLZYUP_Custom_ROM_v1.3_final大内存版本</a></p></li>
-<li><p><a href="http://www.innovative-space.com/2009/12/07/flzyup-custom-rom-v1-3-release/">FLZYUP Custom ROM v1.3 final all fixed [特效包已发布]</a></p></li>
-</ul>
-
-
-<p>1.4版本是基于1.3的基础上优化完善的，1.5是基于全新内核制作的。</p>
-
-<p>因为我看论坛上很多人反映F大1.5版本耗电，本来G3也就坚持2天，如果刚买手机经常玩，1天就够呛了。。。所以没敢使用这个费电的新版本。我保守的选择了1.4版本。</p>
-
-<p><strong>准备刷机</strong></p>
-
-<p>论坛坚持了2天，大家一直讨论刷那个版本好，可以参考<a href="http://www.androidin.net/bbs/thread-51055-1-1.html">http://www.androidin.net/bbs/thread-51055-1-1.html</a></p>
-
-<p>最终决定刷F大的1.4版本。看到F大1.4是自动支持app2sd技术的，但是前提是你的卡必须有ext分区。我的8G卡目前就1个Fat32分区，于是考虑先分区。</p>
-
-<p>但是Win7没有找到合适的分区软件，后来发现xda论坛发布的<strong>RA-hero-v1.5.2</strong> recovery可以支持在手机的recovery模式给卡分区。我就先刷了这个recovery</p>
-
-<p><strong>刷recovery</strong></p>
-
-<p>主要参考<a href="http://forum.xda-developers.com/showthread.php?t=561124">http://forum.xda-developers.com/showthread.php?t=561124</a></p>
-
-<p>There are several ways to install a custom recovery, choose the one that suits you most (I probably forgot a few).</p>
-
-<p>```
-via adb
--> Requires a custom recovery (with test-keys) like Cyanogen's v1.4 or my previous recovery</p>
-
-<p>Copy recovery-RA-hero-v1.5.2.img to the root of your sdcard
-Boot into your current custom recovery (boot while holding HOME)
-Connect your Hero via usb to your pc/mac/...
-adb shell
-$su (not required if you have root already)</p>
-
-<h1>mount -a</h1>
-
-<h1>flash_image recovery /sdcard/recovery-RA-hero-v1.5.2.img</h1>
-
-<p>```
-我采用的上面这个方法安装的。</p>
-
-<p>不过首先要在机器上安装adb工具和手机驱动</p>
-
-<p>驱动采用网上下载的AndroidDriverFiles驱动程序.rar</p>
-
-<p>adb本来是包含在android sdk工具里面的，但是sdk太大了，好几百兆。。。。我就在网上找了一个adb_win.zip的分离包。572k，就2个文件。</p>
-
-<p>先将adb_win.zip解压缩，得到adb.exe和AdbWinApi.dll文件。将2个文件复制到Windows目录下的System32目录。</p>
-
-<p>这样在windows的命令行窗口输入adb命令，可以看到如下输出</p>
-
-<p>Android Debug Bridge version 1.0.20下面还有很多使用说明，就不用管了。</p>
-
-<p>现在准备好adb了，再把AndroidDriverFiles驱动程序.rar解压到一个目录，准备连接手机的时候使用。</p>
-
-<p>以上都准备好后，关闭手机，按Home+Power键进入recovery模式，将USB线连上电脑。如果提示安装驱动，就手动到AndroidDriverFiles驱动程序解压后的目录找。</p>
-
-<p>驱动识别完成后，就打开windows的命令行窗口（Win+R，输入cmd回车）</p>
-
-<p>输入adb shell</p>
-
-<p>然后su回车</p>
-
-<p>mount -a回车</p>
-
-<p>上面的su和mount -a 都可能返回错误，不用管它。</p>
-
-<p>最后输入flash_image recovery /sdcard/recovery-RA-hero-v1.5.2.img 回车。</p>
-
-<p>这样就把新的recovery刷入了。</p>
-
-<p>重启进入recovery模式，如图</p>
-
-<p><img src="http://farm9.staticflickr.com/8096/8512558972_02deaf66fe.jpg" alt="recovery截图" /></p>
-
-<p>然后在Wipe里面执行如下3项</p>
-
-<p>```
-Wipe</p>
-
-<p>Wipe data/factory reset :: Wipe /data and /cache
-Wipe Dalvik-cache :: Wipe Dalvik-cache both on /data and ext
-Wipe SD:ext partition : Wipe the ext partition on your sdcard
-```</p>
-
-<p>再给sd卡分区。</p>
-
-<p>```
-Partition sdcard</p>
-
-<p>Partition SD :: Interactive SD partitioning
-```</p>
-
-<p>这样就给sd卡分好去了，我的8G卡，默认是32M的swap分区 512M的ext分区。最后是一个大的Fat32分区。
-这样就可以关机了。</p>
-
-<p><strong>刷FLZYUP_Custom_ROM_v1.4-signed.zip系统</strong></p>
-
-<p>上面的准备工作全完成了，再来刷系统。</p>
-
-<p>将分好区的sd卡，放到电脑读卡器上，从电脑将FLZYUP_Custom_ROM_v1.4-signed.zip拷贝到根目录。因为win7只能识别出FAT32分区，所以肯定是拷贝到FAT32分区上。</p>
-
-<p>然后返回手机开机进入recovery模式，选择</p>
-
-<p><code>
-Flash zip from sdcard :: Flash a zip update file from your sdcard
-</code></p>
-
-<p>按照提示往下刷就可以了。刷好后提示如下</p>
-
-<p><img src="http://farm9.staticflickr.com/8511/8511451731_17da3c1a26.jpg" alt="rom_update截图" /></p>
-
-<p>然后重启手机就可以了。</p>
-
-<p><strong>注意</strong></p>
-
-<p>刷完后，第一次重启很慢很慢，这个正常。我当时以为手机刷坏了，总停在HTC那屏上。。。还到论坛发帖求助呢。。</p>
-
-<p>后来发现第一次重启后，看到绿色小人和听到声音大约1分20秒，然后就是那个HTC三个字母的屏幕，大约等了10分钟。。。就会进入下面屏幕</p>
-
-<p><img src="http://farm9.staticflickr.com/8369/8511453551_4a0cd686ef.jpg" alt="android 1.4" /></p>
-
-<p>按照提示设置好手机，就可以享受新系统了。</p>
+    <title type="html"><![CDATA[推荐个htc G3 hero比较不错的ROM]]></title>
+    <link href="http://babodx.github.com/blog/2011/10/21/htc-g3-hero-bast-rom/"/>
+    <updated>2011-10-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2011/10/21/htc-g3-hero-bast-rom</id>
+    <content type="html"><![CDATA[<p>以前一直用ligux出的rom。因为htc G3的硬件原因，个人认为用android 2.1rom最好。刷了2.2和2.3都不是很满意。
+原来我一直采用Dauu_SENSE_with_Compacache_BFS_v1.1-signed.zip
+挺稳定的，就是速度一般。有时候内存不够了，会自动重启。
+这次是在hiapk.com上找到的
+<a href="http://bbs.hiapk.com/thread-2539001-1-1.html">新加坡Artlive2.1急速优化版、添加翻页时钟、天气动画；视频为证</a>
+这个ROM是先刷上他的ROM，然后再刷一个<span style="color:#ff0000;font-size:large;">FlyKernel-13-M518-m352.zip</span><br>
+ 
+FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，通过压缩包的文件名制定频率。比如上面的M518-m352就是最大和最小频率。
+关于这个内核补丁，可以看下面的介绍
+<a href="http://www.cnrgb.com/flykernel-13">http://www.cnrgb.com/flykernel-13</a>
+ </p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[诺基亚E63刷机]]></title>
-    <link href="http://babodx.github.com/blog/2010/01/28/E63-nokia-fireware-update/"/>
-    <updated>2010-01-28T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2010/01/28/E63-nokia-fireware-update</id>
-    <content type="html"><![CDATA[<p>前几天老婆的E63手机总是死机，一直在跟我抱怨。。。本来想给她买个iphone，结果老婆说不喜欢，还是喜欢她红色的E63.</p>
+    <title type="html"><![CDATA[Hero G3 android 2.1下好用的导航软件]]></title>
+    <link href="http://babodx.github.com/blog/2010/08/26/lingtu-on-hero-android21/"/>
+    <updated>2010-08-26T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/08/26/lingtu-on-hero-android21</id>
+    <content type="html"><![CDATA[<p>Hero G3在升级到Android 2.1后就没有什么好用的导航软件了。google map需要流量，这个等于导航的时候随时收费，偶尔用用还可以，不适合长期使用。</p>
 
-<p>我想想手机买了1年多了，也没有更新过，不如刷个新系统看看吧。于是就开始搜索资料、准备软件。</p>
+<p>凯立德在anroid 2.1有可用版本，但是操作体验比较差，经常按个按钮，半天没有反映需要反复按。而且我还遇到过不能定位的问题，后来重启了手机才解决。</p>
 
-<p>具体刷机步骤参考
-<a href="http://nokia.zol.com.cn/188/297_1876549.html">http://nokia.zol.com.cn/188/297_1876549.html</a></p>
+<p>不过现在天行者10终于可以运行在android 2.1下面了。我申请了测试号，感觉使用效果不错。以前andorid 1.5的时候，就是用的天行者9。我习惯要去什么地方都先到<a href="http://www.51ditu.com">www.51ditu.com</a>查查，因为都是图灵的资源，所以51ditu上找到了，基本天行者里肯定可以导航。</p>
 
-<p><strong>诺基亚刷机方法</strong></p>
+<p>目前缺点：没有横屏，开车的时候手机一般都横着放，不是很方便。</p>
 
-<p>主要是官方刷新，还是用第三方软件刷新</p>
+<p>触摸反映不灵敏，有的按键也是需要反复按几次才有反映。</p>
 
-<p>官方的在线刷新就是用官方公布的软件直接更新手机的系统。但是官方更新只限于行货手机，因为官方是根据你手机的CODE号码来为你更新手机系统的，如果你手机的CODE是外国的，那刷新后，就没有中文系统了。所以这个不适合大多数水货手机</p>
+<p>下面放几张运行截图（我手机hero g3,系统是自己刷的android 2.1）</p>
 
-<p>我查看了一下，老婆手机的CODE是0569944: 马来西亚的。用官方的估计不行，于是就开始考虑第三方软件。</p>
-
-<p>发现比较著名的就是凤凰刷机工具了。</p>
-
-<p>其实简单的说“凤凰刷机”就是刷机软件的一种，而非官方的刷机软件而已，由于其在性能上有官方刷机软件很多不能完成的任务，因而收到的机友的广泛追捧。</p>
-
-<p><strong>准备工作</strong></p>
-
-<p>首先是下载凤凰刷机软件</p>
-
-<p>参考这里<a href="http://nokia.zol.com.cn/1/18_299.html">http://nokia.zol.com.cn/1/18_299.html</a></p>
-
-<p>我下载的就是<a href="http://nokia.zol.com.cn/1/18_299.html">凤凰刷机2009.34.7.40015最新XX版09.10.30发布</a></p>
-
-<p>下载好凤凰刷机软件后，就是备份手机存储卡上的内容和联系人了。我是直接用读卡器把存储卡拷贝到电脑，然后用诺基亚PC套件导出的联系人。</p>
-
-<p>这些都弄好了，就可以进入刷机步骤了。</p>
-
-<p><strong>刷机步骤</strong></p>
-
-<p>安装好凤凰刷机软件，并打开</p>
-
-<p>选择Tools->Image file download</p>
-
-<p><img src="http://farm9.staticflickr.com/8103/8512516328_851a5902d7.jpg" alt="选择下载img" /></p>
-
-<p>然后在Product code内输入你想刷的系统的code码，我这里输入的0569941，新加坡的版本</p>
-
-<p>输入完成后，点download等待下载，大小在60-80M。</p>
-
-<p>下载完成后，点cancel就可以了。</p>
-
-<p>系统下载好了，我们就该向手机内刷了。用USB的数据线连接手机。在手机上选择PC套件模式。</p>
-
-<p>然后选择凤凰2009的菜单file---manage connection，跳出菜单NO CONECTION，再点“NEW”按键。</p>
-
-<p><img src="http://farm9.staticflickr.com/8508/8511405473_51583b1644_z.jpg" alt="new按钮" /> </p>
-
-<p>按NEW键之后会出现下图：</p>
-
-<p><img src="http://farm9.staticflickr.com/8100/8511406351_68da4dfd26_z.jpg" alt="new截图" /></p>
-
-<p>选择USB后，按下一步，直到完成。这样连接里会才会出现USB和NO CONNECTIONS两个选择，一个是USB连接，一个是没有连接，如果是USB连接，表示手机正常。选择USB，点击“APPLY”按钮,然后点击Cancel，连接完成</p>
-
-<p><img src="http://farm9.staticflickr.com/8226/8512518914_dfa06ce9ed_z.jpg" alt="usb1截图" />
-<img src="http://farm9.staticflickr.com/8506/8512513418_7c9ca6b164_z.jpg" alt="usb2截图" /></p>
-
-<p>菜单File ,open Product，系统会自动调出诺基亚各个型号的RM菜单，你选择自己的机型即可，比如诺基亚E63为RM-437，找到后点OK。</p>
-
-<p><img src="http://farm9.staticflickr.com/8368/8512513018_73ca2419cd_z.jpg" alt="ok截图" /></p>
-
-<p><img src="http://farm9.staticflickr.com/8386/8512512776_a4c75f2239_z.jpg" alt="ok截图2" /></p>
-
-<p>选择RM-437的画面，在出现的提示框里找RM-437，选中，然后点OK，选择normal.</p>
-
-<p>凤凰2009软件菜单Flashing-----Fireware Update,出现下面画面</p>
-
-<p><img src="http://farm9.staticflickr.com/8240/8511400983_580969c8e8_z.jpg" alt="update截图" /></p>
-
-<p>这里有一个非常关键的地方需要注意,就是上图选择RM-437之后,要注意看Product CODE:显示的CODE是多少,如果是欧版的CODE(比如0582481),那就需要你选择以下亚太的CODE的系统,选择你刚才下载的比如<font color="#000000" size="2">0569941</font>的系统. 点击下图右边的小方块(小方块上有省略号的那个)</p>
-
-<p>想刷400.21.013的朋友，如果下载了400的固件，但是在这里没有找到400的话，可以来这里看下</p>
-
-<p>凤凰菜单栏进入：TOOLS-Options-product locetion（下图）</p>
-
-<p><img src="http://farm9.staticflickr.com/8107/8512512350_980a17dfbe_z.jpg" alt="locetion图" /></p>
-
-<p>红色线标注的栏目原来是空白的，这里需要设置下路径，点右边的“add”添加路径如图所示，然后点“apply”确认后退出。</p>
-
-<p>哈哈，看下图出现了400.21.013了</p>
-
-<p><img src="http://farm9.staticflickr.com/8368/8511400657_7362511b0f_z.jpg" alt="截图" /></p>
-
-<p>点击"Refurbish"开始刷机，在进入这个程序之后，无论计算机屏幕右下角出现什么提示，均不要搭理它，直到提示成功。</p>
-
-<p><img src="http://farm9.staticflickr.com/8371/8511400551_ca21a4f98f_z.jpg" alt="截图" /> </p>
-
-<p>到这里就算完成了。哈哈</p>
-
-<p>以上内容基本都是从下面两篇帖子上转过来的。如果有什么不明白，可以直接去看原帖。我只是记录下，省的以后刷机还要找资料。</p>
-
-<ul>
-<li>[原创][教程]诺基亚E63用凤凰2009成功刷机</li>
-<li>0300 凤凰2009成功刷 E63最新固件 400.21.013
- </li>
-</ul>
-
+<p><img src="http://farm9.staticflickr.com/8527/8514884434_9b172e9fb4.jpg" alt="灵图1" />
+<img src="http://flic.kr/p/dYkjan" alt="灵图2" />
+<img src="http://flic.kr/p/dYkjbK" alt="灵图3" />
+<img src="http://flic.kr/p/dYr1yG" alt="灵图4" />
+ </p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[周末给老婆买了个HTC legend(G6)玩]]></title>
+    <link href="http://babodx.github.com/blog/2010/07/28/htc-g6/"/>
+    <updated>2010-07-28T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/07/28/htc-g6</id>
+    <content type="html"><![CDATA[<p>我一直使用G3，老婆看功能强大，打算也购买一个玩。
+去了中关村，挑来挑去，最后老婆还是看上了G6.
+感觉G6的金属外壳、后盖的设计都很好，而且有闪光灯。这些都是比较好的设计。
+不过数据线接口变了，不在和G3通用，这个不太喜欢。
+按键也感觉没有G3的好，觉得按键很粗糙，一按就咔咔的响（不是按键发音哦，纯机械声音）。
+没有了通话和挂机键，也感觉不方便。
+不过老婆还是挺喜欢的。
+购买就是注意别买到阿三机器就可以了。（好像目前阿三机器也可以通过降级破解了）</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hero 使用Android 2.1 ROM 心得。]]></title>
+    <link href="http://babodx.github.com/blog/2010/07/12/htc-use-android-2-1/"/>
+    <updated>2010-07-12T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/07/12/htc-use-android-2-1</id>
+    <content type="html"><![CDATA[<p>上次介绍了下使用Android 2.1的体会，当时因为导航等问题，最终放弃了2.1系统，继续刷回1.5系统用了。
+经过这段时间，android 2.1系统不断完善，导航问题也有了突破。感谢各位高手贡献自己的力量。
+这次我刷的还是F大制作的Rom：<a title="Permanent Link to Daguu Sense v1.0(Official RUU,BFS,Compcache,SSH..)" rel="bookmark" href="http://ligux.com/?p=920">Daguu Sense v1.0(Official RUU,BFS,Compcache,SSH..)</a>
+RADIO采用最新的：63.18.55.06PU_6.35.15.14
+这个Rom确实达到了高效、干净、稳定的目的。
+<strong>导航</strong>
+以前我一直没有采用android 2.1的很大原因就是导航问题。android 2.1原来只能使用高德等导航，效果很不好。KLD需要替换libgps.so使用，而且稳定性不好。我最爱用的天行者根本用不了。
+现在论坛上的牛人终于找到了KLD需要替换libgps.so的具体原因，并且放出了修改版本，可以不用替换libgps.so文件完美运行了。
+我测试结果是直接安装后，搜星定位都很快。路测鸟巢到五棵松全程12Km，也很稳定，一切正常。
+<strong>蓝牙</strong>
+蓝牙在1.5只能用耳机，不能传文件。现在android 2.1下我测试用诺基亚E63给hero传文件，一切正常。
+<strong>Openvpn</strong>
+这个Rom安装后，自带openvpn setting软件，设置好后，连接openvpn一切正常。
+<strong>耗电</strong>
+反正hero基本是1-2天一充电，android 2.1确实比1.5耗电，但基本还是1-2天一充，没有什么变化。
+<strong>小结</strong>
+随着性能、稳定性提升，导航问题解决。目前我已经采用android 2.1系统了，而不是像以前一样刷来玩玩，然后还要刷回1.5日常用。感觉目前hero下的android2.1基本已经满足大多数用户正常使用了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HTC Hero 2.1 体验]]></title>
+    <link href="http://babodx.github.com/blog/2010/06/22/htc-hero-android-2-1/"/>
+    <updated>2010-06-22T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/06/22/htc-hero-android-2-1</id>
+    <content type="html"><![CDATA[<p>最近随着官方放出的hero g3 android 2.1 ROM，开很有很多技术高人也发布了自己的修改、优化版本。
+我也忍不住开始刷新手机了。
+我选择的是<span id="thread_137874"><a href="android-137874-1-1.html">Daguu Espresso v1.2 By FlZyGaMeUp Release </a></span>，原因很简单，我之前用的ROM就是F大发布的<span id="thread_56409"><a href="android-56409-1-1.html" style="font-weight: bold">FLZYUP Custom ROM v1.6 (Hero Android 1.5固件最终版)</a>。所以这次依然选择了他制作的ROM</span>
+<strong><span>刷新要求</span></strong>
+<span>Recovery版本：recovery-RA-hero-v1.6.2<br>
+Radio版本：63.18.55.06OU_6.35.15.01</span>
+<span>以上这些都可以到机锋网找到。</span>
+<span>刷新后，界面确实很漂亮。使用起来也感觉比1.5的ROM多出很多功能。不过速度确实不如以前1.5的ROM了。</span>
+<span>我是晚上刷的，用到第2天中午，觉得还是不如1.5的ROM，又刷回<span id="thread_56409"><a href="http://www.xinlogs.com/editor/fckeditor/editor/android-56409-1-1.html" style="font-weight: bold">FLZYUP Custom ROM v1.6 (Hero Android 1.5固件最终版)</a>这个版本了。</span></span>
+<strong><span><span>主要问题</span></span></strong>
+<span><span>如果就android 2.1的ROM本身来说，已经接近完美了。速度和耗电还不太好，不过有一种说法是只要不是官方的内核，耗电就会高。</span></span>
+<span><span>而F大这次就是没有采用官方内核，而是自己编译的。</span></span>
+<span><span>不过我认为最大的问题是导航软件的兼容性，因为我经常用手机导航。以前1.5的时候，先后使用过KLD、领航者、高德和天行者。</span></span>
+<span><span>KLD的地图和导航都不错，但是明显不是为android开发的，按键很不好用，有时候点半天都没有反应。后来的2010年4月的一个新版本，有所改进。</span></span>
+<span><span>领航者和高德的路线规划和地图都不满意。</span></span>
+<span><span>最后我一直在使用天行者9，这个软件很满意。地图基本和<a href="http://www.51ditu.com">www.51ditu.com</a>网站的一样。外出只要在51ditu.com可以找到地方，就不用担心手机导航不到。反正感觉北京使用，天行者9最好了。</span></span>
+<span><span>而上面这些在android 1.5ROM正常的导航软件，到了android 2.1很少可以正常工作。</span></span>
+<span><span>天行者9是根本不能运行在2.1的ROM</span></span>
+<span><span>KLD需要修改libgps.so文件，然后还有可能信号不稳定，经常断。</span></span>
+<span><span>领航者和高德倒是可以使用，问题这两个软件实现效果和地图都很差。</span></span>
+<span><span>还有个城际通，可以安装，但是出现第一屏提示后，就自动退出了。</span></span>
+<span><span>由于以上原因，我还是刷回了android 1.5 ROM，期待更完美的版本了和更好的导航软件出现了。</span></span></p>
 ]]></content>
   </entry>
   

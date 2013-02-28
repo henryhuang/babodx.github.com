@@ -1,0 +1,376 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Centos Linux 远程终端ssh乱码问题 - 鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="我们经常碰到linux乱码问题。尤其是碰到网页上传个中文文件名的文件，ssh登陆到linux一看全乱码想删除都不行。很郁闷的。如下图所示中文文件名全都是显示问号了（这个乱码由于你的编码设置不同，显示的也不太一样） 还有一个就是vim的乱码 解决办法： 首先需要给linux安装中文支持。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/2011/11/10/centos-linux-sshclient-unreadable-code/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Centos Linux 远程终端ssh乱码问题</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-10T00:00:00+08:00" pubdate data-updated="true">Nov 10<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>我们经常碰到linux乱码问题。尤其是碰到网页上传个中文文件名的文件，ssh登陆到linux一看全乱码想删除都不行。很郁闷的。如下图所示中文文件名全都是显示问号了（这个乱码由于你的编码设置不同，显示的也不太一样）</p>
+
+<p><img src="http://flic.kr/p/dYkYmM" alt="乱码截图" /></p>
+
+<p>还有一个就是vim的乱码</p>
+
+<p><img src="http://flic.kr/p/dYkZ3e" alt="vim乱码" /></p>
+
+<p><strong>解决办法：</strong></p>
+
+<p>首先需要给linux安装中文支持。这里以centos为例，所以采用yum安装</p>
+
+<p><code>yum groupinstall chinese-support</code></p>
+
+<p>然后再设置linux系统的i18n文件，位置在/etc/sysconfig/i18n</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>LANG="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>SUPPORTED="zh_CN.UTF-8:zh_CN.GBK:zh_CN.GB18030:zh_CN:zh:en_US.UTF-8:en_US:en"
+</span><span class='line'>
+</span><span class='line'>SYSFONT="latarcyrheb-sun16"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>接着设置LC_ALL环境变量，在/etc/profile文件里加入</p>
+
+<p><code>export LC_ALL=zh_CN.GB18030</code></p>
+
+<p>全部设置好后，重启系统。再次登陆后，用如下命令查看</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-bash-3.2# locale
+</span><span class='line'>
+</span><span class='line'>LANG=zh_CN.GB18030
+</span><span class='line'>
+</span><span class='line'>LC_CTYPE="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_NUMERIC="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_TIME="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_COLLATE="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_MONETARY="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_MESSAGES="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_PAPER="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_NAME="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_ADDRESS="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_TELEPHONE="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_MEASUREMENT="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_IDENTIFICATION="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_ALL=zh_CN.GB18030</span></code></pre></td></tr></table></div></figure>
+
+
+<p>完成以上操作，应该就可以正常显示中文文件名字了。不过这个只是linux没有问题了，我们的ssh客户端还需要支持才可以。我一般使用Putty来当做ssh客户端，下面就以putty为例子进行设置。
+先设置使用的字体，选择windows->Appearance，弹出的字体界面里选择“新宋体”，字符集选择“CHINESE_GB2312”</p>
+
+<p><img src="http://flic.kr/p/dYm1f8" alt="putty设置" /></p>
+
+<p>再设置编码</p>
+
+<p><img src="http://flic.kr/p/dYm1ZX" alt="设置编码" /></p>
+
+<p>以上设置完成后，就可以正常显示了。效果如下图所示：</p>
+
+<p><img src="http://flic.kr/p/dYrJmG" alt="正常显示的效果" /></p>
+
+<p>在命令行输入中文文件名也可以正常使用了。</p>
+
+<p><img src="http://flic.kr/p/dYrK9s" alt="输入中文效果" /></p>
+
+<p>到目前为止，ssh下操作中文文件名的问题就彻底解决了。可以正常输入中文文件名来操作了。</p>
+
+<p>下面是vim显示乱码问题，vim一般都是因为文件编码和显示编码的问题引起的乱码。</p>
+
+<p>我们打开文件发现乱码后，采用如下命令</p>
+
+<p><code>set encoding=utf-8 termencoding=gbk</code></p>
+
+<p>这样以后，vim也可以正常操作中文了。效果图</p>
+
+<p><img src="http://flic.kr/p/dYrLjU" alt="vim中文操作效果" /></p>
+
+<p><strong>注意:</strong></p>
+
+<p>网上看到一些资料说是将i18n的LANG设置为zh_CN.UTF-8，然后LC_ALL也是设置为zh_CN.UTF-8</p>
+
+<p>但是我试验了下，效果并不好（也将putty调整为了utf-8）.但是文件名显示还是乱码。需要用ls &#8211;show-control-chars来正常显示，输入中文文件名也不正常。</p>
+
+<p>以上只是在putty下使用，也许配合其他ssh客户端效果不太一样。稍后我再添加一些其他客户端效果。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-10T00:00:00+08:00" pubdate data-updated="true">Nov 10<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>Linux</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2011/11/10/centos-linux-sshclient-unreadable-code/" data-via="" data-counturl="http://babodx.github.com/blog/2011/11/10/centos-linux-sshclient-unreadable-code/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/11/06/godaddy-to-dnspod/" title="Previous Post: 解决godaddy注册域名无法解析问题">&laquo; 解决godaddy注册域名无法解析问题</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/11/13/nginx-301-rewrite/" title="Next Post: nginx通过301统一入口域名">nginx通过301统一入口域名 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/02/cloudstack-on-vmware/">cloudstack on vmware</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -9,8 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="参考了 http://www.synce.org/moin/SynceWithUbuntu
-http://hi.baidu.com/john_zhy/blog/item/50e39f317240141febc4af5a.html 我的本本 IBM R61 系统 ubuntu 8.10从 8. &hellip;">
+  <meta name="description" content="我们知道网站的访问速度和很多因素相关，但是今天这里只是优化我们能力范围内的首页文件加载数量与大小。 如果首页文件很大，肯定加载慢。还有一个因素就是首页如果加载很多css和js文件，因为在加载过程中会建立很多次连接从而降低访问首页的速度。 下面是我博客默认情况下的加载css和js文件的数量 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -71,7 +70,7 @@ http://hi.baidu.com/john_zhy/blog/item/50e39f317240141febc4af5a.html 我的本�
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/21/winphone-SynceWithUbuntu/">Ubuntu 8.10下同步wm6.1手机</a></h1>
+      <h1 class="entry-title"><a href="/blog/2011/11/17/emlog-optimize-via-minify/">Emlog访问速度优化之minify整合css与js文件</a></h1>
     
     
       <p class="meta">
@@ -87,771 +86,33 @@ http://hi.baidu.com/john_zhy/blog/item/50e39f317240141febc4af5a.html 我的本�
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2011-11-17T00:00:00+08:00" pubdate data-updated="true">Nov 17<span>th</span>, 2011</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>参考了</p>
+  <div class="entry-content"><p>我们知道网站的访问速度和很多因素相关，但是今天这里只是优化我们能力范围内的首页文件加载数量与大小。</p>
 
-<ul>
-<li><a href="http://www.synce.org/moin/SynceWithUbuntu">http://www.synce.org/moin/SynceWithUbuntu</a></li>
-<li>http://hi.baidu.com/john_zhy/blog/item/50e39f317240141febc4af5a.html</li>
-</ul>
+<p>如果首页文件很大，肯定加载慢。还有一个因素就是首页如果加载很多css和js文件，因为在加载过程中会建立很多次连接从而降低访问首页的速度。</p>
 
+<p>下面是我博客默认情况下的加载css和js文件的数量</p>
 
-<p>我的本本 IBM R61</p>
+<p><img src="http://flic.kr/p/dYrS9W" alt="请求数截图" /></p>
 
-<p>系统 ubuntu 8.10从 8.04升级上来的。</p>
+<p><img src="http://flic.kr/p/dYmaVv" alt="文件数" /></p>
 
-<p>手机 eten X800 wm6.1英文系统</p>
+<p>从图上可以看到加载了4个css文件和5个js文件。大小分别为54.2kb和45.5kb。
+ 
+下面我们的主要工具出场：<b>minify</b></p>
 
-<p>原来一直不能在ubuntu下面同步手机资料，昨天参考了上面两个帖子，最后成功了。</p>
-
-<p>1、首先添加源</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo gedit   /etc/apt/sources.list</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在末尾添加</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>deb &lt;a href="http://ppa.launchpad.net/synce/ubuntu" target="_blank"&gt;http://ppa.launchpad.net/synce/ubuntu&lt;/a&gt; hardy main
-</span><span class='line'>
-</span><span class='line'>deb-src &lt;a href="http://ppa.launchpad.net/synce/ubuntu" target="_blank"&gt;http://ppa.launchpad.net/synce/ubuntu&lt;/a&gt; hardy main</span></code></pre></td></tr></table></div></figure>
-
-
-<p>保存，关闭</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get update</span></code></pre></td></tr></table></div></figure>
-
-
-<p>我没有更新源，但是也成功。可能是8.10的缘故</p>
-
-<p>2、更新usb驱动（仅内核在2.6.24-19之前的，如果比这个新请跳过本步骤）</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo rmmod rndis_host cdc_ether usbnet
-</span><span class='line'>sudo rm /lib/modules/`uname -r`/kernel/drivers/net/usb/{rndis_host,cdc_ether,usbnet}.ko
-</span><span class='line'>sudo apt-get install usb-rndis-source cdbs
-</span><span class='line'>sudo module-assistant auto-install usb-rndis
-</span><span class='line'>sudo apt-get install synce-hal librra0-tools librapi2-tools</span></code></pre></td></tr></table></div></figure>
-
-
-<p>因为我的内核是2.6.27-7的，所以跳过了这步。但是我安装了后面的软件包</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install synce-hal librra0-tools librapi2-tools</span></code></pre></td></tr></table></div></figure>
-
-
-<p>3、安装<strong>SynCE-GNOME</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install python-setuptools</span></code></pre></td></tr></table></div></figure>
-
-
-<p> 下载<a href="http://downloads.sourceforge.net/synce/synce-gnome-0.11.tar.gz">synce-gnome-0.11.tar.gz</a></p>
-
-<p> 解压，在终端进入其目录，运行</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>python setup.py build
-</span><span class='line'>sudo python setup.py install</span></code></pre></td></tr></table></div></figure>
-
-
-<p>安装<strong>notification-daemon</strong>（如果没有安装过的话，用新得立软件包管理器搜索一下就可以了）</p>
-
-<p>这个步骤完全做了一次，notification-daemon系统已经安装过了</p>
-
-<p>4、连接好手机，运行</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>/sbin/ifconfig -a | grep 80:00:60:0f:e8:00   | cut -d " " -f 1</span></code></pre></td></tr></table></div></figure>
-
-
-<p>记下他输出的东西</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo gedit   /etc/network/interfaces</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在末尾添加<code>iface &lt;rndis0&gt; inet dhcp</code></p>
-
-<p>ps:&#8221;&lt;>&#8221;里面的是我在上面那步里输出的，你应该更换成你自己的，不带“&lt;>“ 保存并关闭，然后运行</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo /etc/init.d/networking restart</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这次也是按照作的，我的网卡是多出来一个eth1(这个根据自己系统决定)。所以我在interfaces文件后面加入了</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>iface eth1 inet dhcp</span></code></pre></td></tr></table></div></figure>
-
-
-<p>5、安装OpenSync</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install multisync-tools opensync-plugin-evolution opensync-plugin-synce</span></code></pre></td></tr></table></div></figure>
-
-
-<p>6、现在该安装的都安装好了，就可以开始同步了<code>synce-sync-engine</code>如果出现如下错误</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>File "/usr/bin/sync-engine", line 84, in &lt;module&gt;
-</span><span class='line'>
-</span><span class='line'> configObj = Config.Config(progopts)
-</span><span class='line'>
-</span><span class='line'>   File "/usr/lib/python2.5/site-packages/SyncEngine/config.py", line 292, in __init__
-</span><span class='line'>
-</span><span class='line'> oldconf = os.path.join(self.path,"config.xml")
-</span><span class='line'>
-</span><span class='line'>AttributeError: Config instance has no attribute 'path'
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>请下载<a href="http://synce.svn.sf.net/svnroot/synce/releases/0.11.1/sync-engine/config/config.xml">config.xml</a>，保存为~/.synce/config.xml（提示：&#8221;~&#8221;为自己的家目录)</p>
-
-<p>创建同步项目<strong>synce-create-partnership &#8220;Linux desktop&#8221; &#8220;Contacts,Calendar&#8221;</strong></p>
-
-<p>ps：还有别的，可自行选择Contacts， Calendar， Tasks， Files 等</p>
-
-<p>创建OpenSync group</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>msynctool --addgroup synce-sync
-</span><span class='line'>
-</span><span class='line'>msynctool --addmember synce-sync synce-opensync-plugin
-</span><span class='line'>
-</span><span class='line'>msynctool --addmember synce-sync evo2-sync</span></code></pre></td></tr></table></div></figure>
-
-
-<p>然后同步synce-sync-engine</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>msynctool --sync synce-sync</span></code></pre></td></tr></table></div></figure>
-
-
-<p>他会同步到evolution里面</p>
-
-<p>我上面的照着做，全部成功了。</p>
-
-<p><strong>我的一些问题</strong></p>
-
-<p>据说安装了synce-gnomevfs后，可以在Nautilus里面看手机里的内容，但是我没有成功
-目前只能通过synce-pls、synce-pcp等命令，来操作手机里面文件。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-dynamic-resize-lvm/">试用ubuntu 8.04和LVM动态增加分区</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>我在虚拟机VMware里面安装了ubuntu 8.04.</p>
-
-<p>安装的时候，只是选择了openssh这个服务。安装后感觉系统很干净</p>
-
-<p><strong>磁盘占用</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>/dev/mapper/ubuntu-root                      5.6G 321M 5.3G   6% /</span></code></pre></td></tr></table></div></figure>
-
-
-<p>系统就用了不到400M</p>
-
-<p><strong>内存</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>                   total       used       free     shared    buffers     cached
-</span><span class='line'>Mem:           249         39        209          0          3         16</span></code></pre></td></tr></table></div></figure>
-
-
-<p>减掉buffers和cached的内容，还有我ssh远程连接的占用。实际系统启动后内存也就需要17M</p>
-
-<p><strong>LVM</strong></p>
-
-<p>安装系统的时候，我就选择了整个磁盘启用LVM，采用ubuntu默认分区的方式。</p>
-
-<p>ubuntu默认分了2个区/sda1和/sda5。sda1用来做/boot，sda5用来做LVM。文件系统都是默认的ext3。</p>
-
-<p>然后在LVM里面默认建立了2个LV( Logical volume)，一个/dev/ubuntu/root用来做/ ，一个/dev/ubuntu/swap_1用来做swap交换分区。我又手动修改了文件系统，采用reiserfs。</p>
-
-<p><strong>动态添加/分区大小</strong></p>
-
-<p>我先添加了一个硬盘，系统识别为sdb</p>
-
-<p>对这个盘<strong>创建分区</strong>（LVM可以不用分区的，但是需要动态添加到/分区，所以需要有文件系统，不能添加后格式化/分区吧）</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo fdisk /dev/sdb
-</span><span class='line'>n --&gt;创建分区
-</span><span class='line'>t --&gt;修改分区类型为8e
-</span><span class='line'>w --&gt;保存结果</span></code></pre></td></tr></table></div></figure>
-
-
-<p>现在系统可以识别/dev/sdb1这个设备了。</p>
-
-<p><strong>创建PV(Physical volume)</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo pvcreate /dev/sdb1</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>创建VG(Volume group)</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vgextend ubuntu /dev/sdb1</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>扩展LV(Logical volume)</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo lvextend -L +2G /dev/ubuntu/root&lt;br&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样就给/dev/ubuntu/root这个设备大小增加了2G。可以通过sudo lvdisply查看
-但是这个时候df -h还是没有变化的，需要调整文件系统。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo resize_reiserfs -s +2G /dev/ubuntu/root&lt;br&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样就完成了全部动态扩展分区。而且是服务器一直在线状态，不用关机。</p>
-
-<p>调整Swap</p>
-
-<p>还是和上面一样的情景，只要VG里面还有剩余空间就可以用来扩展swap用。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo swapoff -a</span></code></pre></td></tr></table></div></figure>
-
-
-<p>关闭正在用的swap分区</p>
-
-<p>然后</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo lvextend -L +200M /dev/ubuntu/swap_1</span></code></pre></td></tr></table></div></figure>
-
-
-<p>给/dev/ubuntu/swap_1扩展了200M容量</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo mkswap /dev/ubuntu/swap_1</span></code></pre></td></tr></table></div></figure>
-
-
-<p>建立swap的文件系统</p>
-
-<p>最后</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo swapon -a</span></code></pre></td></tr></table></div></figure>
-
-
-<p>启用新的swap系统。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-console-unread-chinese/">Ubuntu Server 9.04 终端乱码问题</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>安装了ubuntu server 9.04，安装的时候选择了中文环境。</p>
-
-<p>因为server是没有桌面的，发现终端里面显示提示信息，出错信息都变成乱码了。</p>
-
-<p><strong>解决办法</strong>
-修改/etc/default/locale文件</p>
-
-<p>将zh_CN修改为en_US</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-904-show-chinese-filename/">Ubuntu Server 9.04显示中文文件</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>前面提到了用VMware的share folder功能，可以将主机系统的一个目录，自动共享到ubuntu /mnt/hgfs目录下。</p>
-
-<p>但是winxp的中文目录，到了ubuntu server下面就显示乱码了。</p>
-
-<p><strong>解决办法</strong></p>
-
-<p>安装相关软件包</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install language-pack-zh</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>配置中文环境</strong></p>
-
-<p>修改/etc/environment</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vim /etc/environment</span></code></pre></td></tr></table></div></figure>
-
-
-<p>将LANG和LANGUAGE内容修改为下面的</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>LANG=zh_CN.UTF8&lt;br&gt;
-</span><span class='line'>LANGUAGE="zh_CN:zh:en_US:en </span></code></pre></td></tr></table></div></figure>
-
-
-<p>修改/etc/default/locale</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vim /etc/default/locale</span></code></pre></td></tr></table></div></figure>
-
-
-<p>
-修改内容如下</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>LANG="zh_CN.UTF-8"&lt;br&gt;
-</span><span class='line'>LANGUAGE="zh_CN:zh" </span></code></pre></td></tr></table></div></figure>
-
-
-<p>保存后，重启系统。</p>
-
-<p>现在用putty登陆，还是发现看中文乱码。我们还要继续设置putty才可以。</p>
-
-<p><strong>设置putty使用utf-8</strong></p>
-
-<p>putty的Windows->Translation->Received data assumed to be in which character set:选择UTF-8</p>
-
-<p><img src="http://farm9.staticflickr.com/8236/8512011412_e138d2c072.jpg" alt="putty使用utf8设置" /></p>
-
-<p>这样设置后，就可以正确在putty里显示中文了。</p>
-
-<p><img src="http://farm9.staticflickr.com/8514/8510902673_84be6e3e30.jpg" alt="putty显示中文文件名" /></p>
-
-<p>以上这些就可以正常在putty里显示中文了。但是如果你用键盘鼠标从本地登陆ubuntu server，会发现，ubuntu server还是乱码。</p>
-
-<p>这个问题我查了一些文档，还是没有解决。有的说是console下的字体问题。但是/usr/share/consolefonts里的字体好像没有支持中文的。</p>
-
-<p>还有说console fonts最多支持256这个字符。。。</p>
-
-<p>反正最终这个问题没有解决掉。现在在linux自己的控制台里，显示还是乱码</p>
-
-<p>建议大家如果不是特别需要，其实服务器没有必要采用中文编码的。可以正常显示中文就好了。</p>
-
-<p>建议默认还是用en_US:UTF-8的好。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-904-install-xen/">Ubuntu 9.04安装xen</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>主要参考下面两旁文章，先贴过来，以后再整理。</p>
-
-<p><a href="http://oceanobservatories.org/spaces/display/CIDev/Xen+on+Ubuntu+9.04+(Jaunty">http://oceanobservatories.org/spaces/display/CIDev/Xen+on+Ubuntu+9.04+(Jaunty)</a>)</p>
-
-<p><a href="http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html">http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html</a></p>
-
-<p><strong>安装xen</strong></p>
-
-<p>Xen on Ubuntu 9.04 (Jaunty)</p>
-
-<p>Added by <a href="http://oceanobservatories.org/spaces/display/~thim">Thomas Im</a> , last edited by <a href="http://oceanobservatories.org/spaces/display/~thim">Thomas Im</a> on Jun 11, 2009  (<a href="http://oceanobservatories.org/spaces/pages/diffpages.action?pageId=18353165&originalId=18353171">view change</a>)
-Labels: 
-(None)
-Following applies to Ubuntu 9.04 Jaunty 64-bit installation.  Notes taken from rebuild of &#8216;amoeba&#8217; development system.
-Installation</p>
-
-<pre>sudo apt-get install ubuntu-xen-server # Jaunty Xen package does not include the dom0 Xen kernel so these must be installed separately  wget http://security.debian.org/debian-security/pool/updates/main/l/linux-2.6/linux-modules-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb wget http://security.debian.org/debian-security/pool/updates/main/l/linux-2.6/linux-image-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb  sudo dpkg -i linux-modules-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb linux-image-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb  sudo apt-get install python2.5 shutdown -r now   sudo vim /etc/network/interfaces .. auto eth0 iface eth0 inet static   address xxx.xxx.xxx.xxx   gateway xxx.xxx.xxx.xxx   netmask 255.255.255.0   sudo vim /etc/resolv.conf ... domain ucsd.edu search ucsd.edu  nameserver xxx.xxx.xxx.xxx nameserver xxx.xxx.xxx.xxx   sudo /etc/init.d/networking restart  </pre>
-
-
-<p>Create Jaunty DomU (Guest)
-[http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html]
-<img src="http://oceanobservatories.org/spaces/images/icons/emoticons/information.gif" border="0" width="16" height="16" align="absMiddle"><br><strong><strong>References:</strong></strong>
-<a href="https://help.ubuntu.com/community/Xen">https://help.ubuntu.com/community/Xen</a><br><a href="http://www.infohit.net/blog/adate/053109/archive/1.html">http://www.infohit.net/blog/adate/053109/archive/1.html</a><br><a href="http://www.chrisk.de/blog/2008/12/how-to-run-xen-in-ubuntu-intrepid-without-compiling-a-kernel-by-yourself/">http://www.chrisk.de/blog/2008/12/how-to-run-xen-in-ubuntu-intrepid-without-compiling-a-kernel-by-yourself/</a></p>
-
-<h3></h3>
-
-
-<p><strong>安装guest系统</strong>
-These are instructions for creating an Ubuntu Jaunty DomU on Debian Lenny Dom0 using Xen 3.2.1 that comes with Lenny.  I&#8217;m installing into an LVM rather than using a file image.  See <a href="http://www.howtoforge.com/xen-live-migration-of-an-lvm-based-virtual-machine-with-iscsi-on-debian-lenny">this HowtoForge article for background of my particular setup</a>.  This tutorial assumes you&#8217;re working from a similar setup with an iscsi target and LVM-based VMs.
-The reason I&#8217;m posting this is because I had such a hard time finding some combination of tools that worked correctly to do this.  I tried a few options but had little success:</p>
-
-<ul>
-<li>debootstrap - Didn&#8217;t seem to work with Jaunty at all.  It would just crash </li>
-<li>vm-install - Doesn&#8217;t support LVM-based VMs by default, but there is a procedure for converting the qcow image to an LVM</li>
-</ul>
-
-
-<p>What I found is that I could find no way of creating the LVM-based VM in Lenny.  I actually had to create a sid instance first and then install my open-iscsi and xen-utils into the sid VM, then use SID to populate the VM.  <br><u><strong>Perform the following actions in your SID vm or workstation</strong></u><br>
-Note:  You&#8217;ll need your /etc/xen-tools/xen-tools.conf setup like the instructions in the HowtoForge article (things like gateway, netmask, broadcast, passwd, fs type, install-method, etc).<br>
-Whenever I would try to build the vm with the default partitions, it would always fail.  For some reason the resulting vm would have an fstab that shows something like sda1 and sda2 instead of xvda1 and xvda2.  I had to create my own partition scheme before anything would work right.  Here&#8217;s mine: $ <strong>sudo cat /etc/xen-tools/partitions.d/with-data</strong><br>
-[root]<br>
-size=4G<br>
-type=ext3<br>
-mountpoint=/<br>
-options=sync,errors=remount-ro<br>
-[swap]<br>
-size=512M<br>
-type=swap<br>
-[data]<br>
-size=4G<br>
-type=ext3<br>
-mountpoint=/data<br>
-options=nodev
-You will need to create a symlink for jaunty so that the option is recognized at the command-line. 
-<strong>$ cd /usr/lib/xen-tools</strong>
-<strong>$ sudo ln -s edgy.d jaunty.d  </strong>
-Now, finally, you can create the image.  This step may take some time
-<strong>$ xen-create-image &#8211;hostname=myserver &#8211;dhcp &#8211;lvm=vg_xen &#8211;dist=jaunty &#8211;mirror=http://archive.ubuntu.com/ubuntu &#8211;size=4Gb &#8211;memory=512Mb &#8211;swap=512MB &#8211;arch=i386 &#8211;partitions=with-data</strong>
-Since you&#8217;re building the LVM on a different machine than it will eventually run on, you&#8217;ll need to  copy the resulting xen config to the correct server:
-<strong>$ scp /etc/xen/myserver.cfg root@realhost:/etc/xen/</strong>
-That should be all you need to get this working.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-904-install-vmware-tools/">Ubuntu 9.04 Server 安装VMware Tools解决share Folders问题</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>我的主系统是Winxp在vmware 6.5.2 build-156735下安装的ubuntu server 9.04</p>
-
-<p>因为安装vmware tools后，可以使用vmware 提供的share folders让winxp的主系统可以将某个目录映射到虚拟的ubuntu系统里。</p>
-
-<p>我就开始在vmware里面安装vmware tools工具。下面是过程，包括不能用vmhgfs的解决办法</p>
-
-<p>**安装VMware tools</p>
-
-<p>安装前，先安装需要的软件包</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>apt-get install autoconf automake binutils make cpp gcc linux-headers-$(uname -r)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>安装后，在vmware上面选择VM-》Install Vmware Tools</p>
-
-<p>然后切换到ubuntu server 9.04里，运行mount命令，将Vmware tools的光盘挂载
-<code>sudo mount /dev/cdrom /mnt</code></p>
-
-<p>拷贝安装VMware Tools需要的安装文件到/tmp目录
-<code>sudo cp /mnt/VMwareTools-7.8.5-156735.tar.gz /tmp</code></p>
-
-<p>卸载/mnt目录，因为安装的时候，需要在/mnt目录下创建hgfs目录，如果这时候挂载着CDROM，就会导致创建hgfs目录失败。<code>sudo /mnt</code></p>
-
-<p>解压安装文件并修改会出现问题的page.c文件</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cd /tmp 
-</span><span class='line'>tar zxvf VMwareTools-7.8.5-156735.tar.gz
-</span><span class='line'>cd /tmp/vmware-tools-distrib/lib/modules/source&lt;/span&gt; 
-</span><span class='line'>sudo cp ./vmhgfs.tar /tmp/&lt;/span&gt; 
-</span><span class='line'>tar xvf vmhgfs.tar &lt;/span&gt;
-</span><span class='line'>cd vmhgfs-only/ 
-</span><span class='line'>sudo vi page.c </span></code></pre></td></tr></table></div></figure>
-
-
-<p>修改page.c里面867行的一个错误函数，</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>page = __grab_cache_page(mapping, index); </span></code></pre></td></tr></table></div></figure>
-
-
-<p>将这个函数修改为</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>page = grab_cache_page_write_begin(mapping, index,flags);</span></code></pre></td></tr></table></div></figure>
-
-
-<p>
-这个函数是在/usr/src/linux-headers-2.6.28-11-server/include/linux$下的，pagemap.h里面定义的，内容如下</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>struct page *grab_cache_page_write_begin(struct address_space *mapping,
-</span><span class='line'>                        pgoff_t index, unsigned flags); </span></code></pre></td></tr></table></div></figure>
-
-
-<p>修改后，保存。然后重新打包成vmhgfs.tar文件，放置到/tmp/vmware-tools-distrib/lib/modules/source目录下。
-完成上面工作后，就可以</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cd /tmp/vmware-tools-distrib
-</span><span class='line'>sudo ./vmware-install.pl</span></code></pre></td></tr></table></div></figure>
-
-
-<p>安装提示安装就可以了。</p>
-
-<p>当看到如下提示，代表已经正确编译了vmhgfs模块了。应该可以顺利使用share folders功能。</p>
-
-<p>The vmhgfs module loads perfectly into the running kernel.</p>
-
-<p>也可以运行</p>
-
-<p><code>lsmod |grep vmhgfs</code></p>
-
-<p>如果有如下显示，表示安装成功</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vmhgfs                 53728  1 </span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样就可以用vmware提供的share folders功能和ubuntu server 9.04共享文件了。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-804-update-to-810/">Ubuntu 8.04升级到8.10</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1>升级</h1>
-
-<p>昨天开始作的升级。</p>
-
-<p>早上到单位，就开始<code>Alt+F2</code></p>
-
-<p>在弹出的命令行窗口输入
-<code>update-manager -d</code></p>
-
-<p>然后就进入了漫长的等待，单位网络那个垃圾。。。。。告诉我42天。。。。。</p>
-
-<p>一直到下班，下载了900多个文件，一共要下载1300多</p>
-
-<p>晚上到家继续update-manager -d 发现居然可以接着下载，还以为要重新来呢。家里好点，告诉我3个小时,后来就睡觉了。</p>
-
-<p>今天早上起来，发现已经下载完成了，开始到安装更新这一步了，弹出个窗口等我确认。</p>
-
-<p>我点上开始，就洗漱去了。一直到要上班也没有安装完成。（TMD，居然忘记今天星期五，不能开车。还是老婆提醒我，才想起来。）这次我可不敢关机了，怕升级一半，下次进不来系统。直接把本本和上盖子放包里了，下楼打车上班。</p>
-
-<p>在出租车里，完成了全部更新。关机。</p>
-
-<p><strong>启动</strong></p>
-
-<p>到了单位，发现系统总卡在进度条进不去。</p>
-
-<p>按Alt+F1然后 Alt+F8查看下文字模式的启动信息，发现一直卡在*Configuring network interfaces&#8230;</p>
-
-<p>这个第一次启动，没有办法（希望有好办法的，告诉下。）我就一直死等呀。。。感觉过了20分钟？？？</p>
-
-<p>进入系统了，3D显卡驱动不行。运行uname -a查看，内核还在用8.04的2.6.24-21.</p>
-
-<p>先修改网络吧
-<code>sudo gedit /etc/network/interfaces</code></p>
-
-<p>将里面的</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>auto eth0
-</span><span class='line'>iface eth0 inet dhcp
-</span><span class='line'>auto lo
-</span><span class='line'>auto wlan0</span></code></pre></td></tr></table></div></figure>
-
-
-<p>都注释掉，变成下面样子</p>
+<p>这个程序是纯php编写的开源程序，用来将我们网站的css和js文件进行整合与压缩。这样我们就可以通过整合css与js文件并压缩大小从而提高首页加载速度。
+ 
+首先将minify下载，我这里采用的是minify_2.1.3版本。将下载后的min目录放到网站的根目录。
+接着我们改造我们的程序，让css与js文件通过minify程序合并压缩。
+ 
+我是自己写了一个类，我起名为merge.php用来调用minify整合。下面是类代码</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -868,319 +129,149 @@ That should be all you need to get this working.</p>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#auto lo
-</span><span class='line'>iface lo inet loopback
-</span><span class='line'>#iface eth0 inet dhcp
-</span><span class='line'>address 10.11.10.164
-</span><span class='line'>netmask 255.255.255.0
-</span><span class='line'>gateway 10.11.10.254
-</span><span class='line'>#nameserver 202.106.0.20
-</span><span class='line'>#auto eth0
-</span><span class='line'>iface wlan0 inet dhcp
-</span><span class='line'>wpa-psk 7640768b3d6b31f834b63abc8d2d667ae10f8bc3c41a8e4e87ec2c104d963a1e
-</span><span class='line'>wpa-driver wext
-</span><span class='line'>wpa-key-mgmt WPA-PSK
-</span><span class='line'>wpa-proto WPA
-</span><span class='line'>wpa-ssid babohome
-</span><span class='line'>#auto wlan0</span></code></pre></td></tr></table></div></figure>
-
-
-<p>接着修改/etc/NetworkManager/nm-system-settings.conf文件
-<code>sudo gedit /etc/NetworkManager/nm-system-settings.conf</code></p>
-
-<p>将文件里的<code>[ifupdown] manager=false</code>改成<code>[ifupdown] manager=true</code></p>
-
-<p>这样基本启动速度的问题就正常</p>
-
-<p><strong>内核</strong></p>
-
-<p>再来说内核</p>
-
-<p>内核需要手动编辑下grub的启动配置文件了。其实2.6.27-7内核已经安装了，就是没有给我们加入的menu.lst文件里面。修改menu.lst</p>
-
-<p><code>sudo gedit /boot/grub/menu.lst</code></p>
-
-<p>我的修改如下，这个应该每个人的不太一样。大家可以拷贝以前自己的文件进行修改</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>title        Ubuntu 8.04.1, kernel 2.6.27-7-generic
-</span><span class='line'>root        (hd0,1)
-</span><span class='line'>kernel        /boot/vmlinuz-2.6.27-7-generic root=UUID=614a1c10-6ed3-45c9-b24d-f7b3e39725b2 ro quiet splash locale=zh_CN
-</span><span class='line'>initrd        /boot/initrd.img-2.6.27-7-generic
-</span><span class='line'>quiet
-</span><span class='line'>title        Ubuntu 8.04.1, kernel 2.6.27-7-generic (recovery mode)
-</span><span class='line'>root        (hd0,1)
-</span><span class='line'>kernel        /boot/vmlinuz-2.6.27-7-generic root=UUID=614a1c10-6ed3-45c9-b24d-f7b3e39725b2 ro single
-</span><span class='line'>initrd        /boot/initrd.img-2.6.27-7-generic</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这个修改后，先不要重新启动。因为我们还没有卸载显卡驱动，要不重启后，卸载驱动还要继续重启。</p>
-
-<p><strong>卸载现有的显卡驱动</strong></p>
-
-<p>我原来显卡驱动是用envyng -t来安装的，现在还用这个工具卸载</p>
-
-<p>在终端<code>envyng -t</code></p>
-
-<p>然后选卸载驱动，安后等卸载完成后，重启就ok了</p>
-
-<p><strong>安装显卡驱动</strong></p>
-
-<p>注意，如果内核还是2.6.24-21，新的驱动安装不上。</strong>这次我没有用envyng -t来安装，而是用系统->系统管理->硬件驱动来安装的</p>
-
-<p>推荐我的是nvidia 177.80的驱动</p>
-
-<p>等待安装完成后。 Ctrl+Alt+Backspace 重新启动X server</p>
-
-<p>一切ok</p>
-
-<p><strong>一些问题</strong>
-在启动过程中，发现samba deamon启动fail还没有看是什么原因。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/study-ruby-1/">学习Ruby中&#8230;&#8230;</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h4>学习Ruby中&#8230;&#8230;</h4>
-
-<p>终于拿到了Programming Ruby 中文第2版.开始认真学习Ruby</p>
-
-<p>不过感觉翻译的不是很好</p>
-
-<p>而且有网友已经整理了勘误表
-<a href="http://blogs.sun.com/yongsun/entry/programming_ruby_%C3%A7%C2%AC%C2%AC%C3%A4%C2%BA%C2%8C%C3%A7%C2%89%C2%88_%C3%A4%C2%B8%C2%AD%C3%A6%C2%96%C2%87%C3%A7%C2%89%C2%88_%C3%A5%C2%8B%C2%98%C3%A8%C2%AF%C2%AF">http://farm9.staticflickr.com/8527/8509573735_f7c64d2b5c_z.jpg</a></p>
-
-<p>我在阅读的时候,也发现了一些翻译的不是很明白的地方</p>
-
-<ul>
-<li><p>16页 第2章 2.3</p></li>
-<li><p>Ruby的数组(arrays)和散列表(hashes)是被索引的收集.(indexed collections)</p></li>
-</ul>
-
-
-<p>原文:Ruby&#8217;s arrays and hashes are indexed collections</p>
-
-<p>我感觉这句话的意思应该是说:Ruby的数组和哈希表是有(被)索引的集合</p>
-
-<p>在后面的哈希表里面,也有讲解</p>
-
-<p>Hashes (some times known as associative arrays, maps,or dictionaries) are similar to arrays in that they are indexed collections of object references.
-哈希表(有时也称关系数组,映射或者词典) 和数组的相似之处是他们都是有(被)索引的对象引用的集合</p>
-
-<ul>
-<li>45页 第4章 4.1 倒数第8行</li>
-</ul>
-
-
-<p>使用这些方法,你可以用数组来实现栈(stack),收集(set),队列(queue),双向队列(dequeue)和先进先出队列(fifo)</p>
-
-<p>原文:Using these,you can treat arrays as stacks,sets,queues,dequeues,and fifos</p>
-
-<p>我感觉这里的set应该是集合,就是说可以用数组实现集合</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-use-sqlite3/">Rails下使用sqlite3</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>参考<a href="http://wiki.rubyonrails.org/rails/pages/HowtoUseSQLite">http://wiki.rubyonrails.org/rails/pages/HowtoUseSQLite</a></p>
-
-<p><strong>安装SQLite</strong></p>
-
-<p>SQLite 是一个轻量级的sql风格数据库.可以执行大部分sql92标准SQLite全部安装只有244kb,包括命令行客户端和DLL文件SQLite不用安装服务进程，就像Access数据库一样使用方便安装只需要2个文件</p>
-
-<ul>
-<li>SQLite DLL</span></li>
-<li>SQLite command-line client for creating tables</li>
-</ul>
-
-
-<p>添加sqlite3.exe 和sqlite3.dll 到系统的path下，我放在了c:\windows\system32下了</p>
-
-<p><strong>安装sqlite3-ruby.gem</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>gem install sqlite3-rubyAttempting local installation of 'sqlite3'
-</span><span class='line'>Local gem file not found: sqlite3*.gem
-</span><span class='line'>Attempting remote installation of 'sqlite3'
-</span><span class='line'>Select which gem to install for your platform (i386-mswin32)
-</span><span class='line'>1. sqlite3-ruby 1.1.0 (mswin32)
-</span><span class='line'>2. sqlite3-ruby 1.1.0 (ruby)
-</span><span class='line'>3. sqlite3-ruby 1.0.1 (ruby)
-</span><span class='line'>...
-</span><span class='line'>&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>选择 1 安装sqlite3-ruby 1.1.0(mswin32) 现在好像2才是sqlite3-ruby 1.1.0(mswin32),总之选择(mswin32)就对了</p>
-
-<p><strong>安装图像管理工具</strong>（也可以不用，直接用命令行也很方便）<a href="http://sqlitebrowser.sourceforge.net/">http://sqlitebrowser.sourceforge.net/</a></p>
-
-<p><strong>创建数据库</strong></p>
-
-<p>进入项目所在目录，比如我的项目是testsqld:\work\testsql>sqlite db\test.db上面命令就在db目录下，创建了一个test.db数据库</p>
-
-<p><strong>配置database.yml文件，访问test.db数据库</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>development:
-</span><span class='line'>   adapter: sqlite3
-</span><span class='line'>   database: db/test.db   #username: root
-</span><span class='line'>   #password: 
-</span><span class='line'>   #host: localhost</span></code></pre></td></tr></table></div></figure>
-
-
-<p>后面如何操作，就和使用mysql数据库一样了。建立数据表可以用db:migrate来完成</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-upload-unread/">Rails下上传文件并且解决乱码问题</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>这个问题是我在<a href="http://www.javaeye.com/">www.javaeye.com</a>论坛上提出的，并且由mathsfan给出了解决办法</p>
-
-<p>首先创建一个项目，叫<strong>test</strong></p>
-
-<p>在app目录下的controllers目录下，找到<strong>test_controller.rb</strong>文件</p>
-
-<p>添加一个upload的action</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def upload
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?php
+</span><span class='line'>/**
+</span><span class='line'> * JS和CSS文件合并类
+</span><span class='line'> *
+</span><span class='line'> * @copyright (c) xinlogs.com All Rights Reserved
+</span><span class='line'> * $Id: merge.php 2011-11-16 09:54:58Z  xinlogs.com$
+</span><span class='line'> */
 </span><span class='line'>
-</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>class Merge {
+</span><span class='line'>  //定义两个数组用来存储全部css和js文件的位置
+</span><span class='line'>  static private $css_list=array();
+</span><span class='line'>  static private $js_list=array();
+</span><span class='line'>  static private $js_code=array();
+</span><span class='line'>  //定义addCssFile方法，用来添加css文件到数组
+</span><span class='line'>  static function addCssFile($addFilePath) {
+</span><span class='line'>    array_push(self::$css_list,$addFilePath);
+</span><span class='line'>  }
+</span><span class='line'>  //定义getCssList方法，用来返回css文件字符串
+</span><span class='line'>  static function getCssList(){
+</span><span class='line'>    return implode(",",self::$css_list);
+</span><span class='line'>  }
+</span><span class='line'>  //定义addJsFile方法，用来添加js文件到数组
+</span><span class='line'>  static function addJsFile($addFilePath) {
+</span><span class='line'>    array_push(self::$js_list,$addFilePath);
+</span><span class='line'>  }
+</span><span class='line'>  //定义getJsList用来返回js文件字符串
+</span><span class='line'>  static function getJsList(){
+</span><span class='line'>    return implode(",",self::$js_list);
+</span><span class='line'>  }
+</span><span class='line'>  //加入js代码
+</span><span class='line'>  static function addJsCode($addJsCode)
+</span><span class='line'>  {
+</span><span class='line'>    array_push(self::$js_code,$addJsCode);
+</span><span class='line'>  }
+</span><span class='line'>
+</span><span class='line'>  static function includejscode(){
+</span><span class='line'>    return implode(" ",self::$js_code);
+</span><span class='line'>  }
+</span><span class='line'>  //用来返回加入CSS代码的语句
+</span><span class='line'>  static function includecss() {
+</span><span class='line'>    $css="&lt;link href=".BLOG_URL."min/?f=".Merge::getCssList()." rel=\"stylesheet\" type=\"text/css\" /&gt;";
+</span><span class='line'>    return $css;
+</span><span class='line'>  }
+</span><span class='line'>  //用来返回插件js代码的语句
+</span><span class='line'>  static function includejs() {
+</span><span class='line'>    $js="&lt;script src=".BLOG_URL."min/?f=".Merge::getJsList()." type=\"text/javascript\"&gt;&lt;/script&gt;";
+</span><span class='line'>    return $js;
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
-<p>然后在view目录下的test目录下，创建一个<strong>upload.rhtml</strong>文件</p>
+<p>将merge.php放到网站include/lib目录下，emlog就会自动加载这个类了。
+ 
+接着我们修改我们的模板与插件，让所有css与js文件通过Merge这个类来处理。</p>
+
+<p>一般css与js文件都是在模板的header.php文件内加载的，这里以默认模板为例说明</p>
+
+<p>我们打开header.php文件，然后修改css文件加载的语句。将原来加载css的语句，采用Merge::addcssfile方法代替</p>
+
+<p><code>Merge::addCssFile("content/templates/default/main.css");</code></p>
+
+<p>最后在doAction后面统一输出我们合并后的css文件。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?php doAction('index_head'); ?&gt;
+</span><span class='line'>&lt;?php echo Merge::includecss();?&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们再来处理js文件，我是将模板的js文件调整到了fooder.php里加载，下面以这个footer.php为例说明
+首先将加载js文件的语句，替换为Merge::addJsFile方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?php Merge::addJsFile("include/lib/js/common_tpl.js");?&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后在doAction后面再统一调用合并后的js文件</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;%=form_tag({:action=&gt;'save'},:multipart=&gt;true)%&gt;
-</span><span class='line'>&lt;br/&gt;upload your file:&lt;%=file_field("file","file")%&gt;
-</span><span class='line'>&lt;br/&gt;
-</span><span class='line'>&lt;%=submit_tag("upload")%&gt;
-</span><span class='line'>&lt;%=end_form_tag%&gt;</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?php doAction('index_footer'); ?&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;?php echo Merge::includejs();?&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;?php echo Merge::includejscode();?&gt;</span></code></pre></td></tr></table></div></figure>
 
 
-<p>现在访问<a href="http://localhost:3000/test/upload">http://localhost:3000/test/upload</a>，应该可以看到一个上传的界面了。</p>
+<p> 
+以上只是针对模板的修改，我的这个博客还采用了高亮代码的插件，这个插件会调用一些js与css文件。所以下面我还修改这个插件的代码，使它也通过merge类来合并输出css与js。</p>
 
-<p>不过还没有处理上传后的方法呢，所以还不能实现上传。因为上面的表单是提交给save这个action 的，现在还没有写呢。</p>
+<p>这个插件主要修改drp_highlighter.php文件，在drp_highlighter_index_head方法里加入css的引入</p>
 
-<p>在写save之前，先要完成一些相关的方法</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>function drp_highlighter_index_head() {
+</span><span class='line'>
+</span><span class='line'>  Merge::addCssFile("content/plugins/drp_highlighter/css/editor.css");
+</span><span class='line'>
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
-<p>在<strong>application.rb</strong>文件里，加入</p>
+
+<p> 
+在drp_highlighter_index_footer方法里加入对js文件与代码的引入。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1194,37 +285,67 @@ That should be all you need to get this working.</p>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def uploadFile(file) #处理上传后的文件保存
-</span><span class='line'>       if !file.original_filename.empty? 
-</span><span class='line'>          #生成一个随机的文件名
-</span><span class='line'>          @filename=getFileName(file.original_filename) 
-</span><span class='line'>          #向dir目录写入文件 
-</span><span class='line'>          File.open("#{RAILS_ROOT}/public/images/#{@filename}", "wb") do |f|
-</span><span class='line'>           f.write(file.read) 
-</span><span class='line'>          end 
-</span><span class='line'>          #返回文件名称
-</span><span class='line'>          return @filename 
-</span><span class='line'>        end 
-</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>function drp_highlighter_index_footer(){
+</span><span class='line'>
+</span><span class='line'>        include(EMLOG_ROOT.'/content/plugins/drp_highlighter/config.php');
+</span><span class='line'>
+</span><span class='line'>        Merge::addJsFile("content/plugins/drp_highlighter/js/jquery.js");
+</span><span class='line'>
+</span><span class='line'>        Merge::addJsFile("content/plugins/drp_highlighter/js/jquery.highlighter.src.js");
+</span><span class='line'>
+</span><span class='line'>        $jscode="
+</span><span class='line'>
+</span><span class='line'>&lt;script type='text/javascript'&gt;
+</span><span class='line'>
+</span><span class='line'>$(document).ready(function(){
+</span><span class='line'>
+</span><span class='line'>        var option={
+</span><span class='line'>
+</span><span class='line'>                dir:'".BLOG_URL."content/plugins/drp_highlighter/js/syntaxhighlighter/',
+</span><span class='line'>
+</span><span class='line'>                name:'code',
+</span><span class='line'>
+</span><span class='line'>                showControls:true,
+</span><span class='line'>
+</span><span class='line'>                skin:'".constant('highlighter')."'
+</span><span class='line'>
+</span><span class='line'>        };
+</span><span class='line'>
+</span><span class='line'>        $.SyntaxHighlighter(option);
+</span><span class='line'>
+</span><span class='line'>});
+</span><span class='line'>
+</span><span class='line'>&lt;/script&gt;";
+</span><span class='line'>
+</span><span class='line'>        Merge::addJsCode($jscode);
+</span><span class='line'>
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def getFileName(filename) 
-</span><span class='line'>#获取文件名
-</span><span class='line'>  if !filename.nil? 
-</span><span class='line'>     return filename 
-</span><span class='line'>  end 
-</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
-
-
-<p>现在在<strong>test_controller.rb</strong>里写出save的action</p>
+<p>最后在文件最后面找到注册action的代码，和上面方法名修改对应上。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1233,45 +354,828 @@ That should be all you need to get this working.</p>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def save 
-</span><span class='line'>  unless request.get? 
-</span><span class='line'>    if filename=uploadFile(params[:file]['file']) #调用application.rb&lt;/strong&gt;里写的uploadFile对文件保存
-</span><span class='line'>       render :text=&gt;filename 
-</span><span class='line'>    end 
-</span><span class='line'>  end 
-</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>addAction('adm_sidebar_ext', 'drp_highlighter_adm_sidebar');
+</span><span class='line'>
+</span><span class='line'>addAction('index_head','drp_highlighter_index_head');
+</span><span class='line'>
+</span><span class='line'>addAction('index_footer', 'drp_highlighter_index_footer');
+</span><span class='line'>
+</span><span class='line'>addAction('adm_writelog_head','drp_highlighter_adm_head');</span></code></pre></td></tr></table></div></figure>
 
 
-<p>文件可以正确上传到public/images下
-但是中文文件名变为了乱码,但是render :text=>filename返回的名字,并不是乱码.</p>
+<p>下面是我整合css与js代码后的效果</p>
 
-<p> ###解决办法###</p>
+<p><img src="http://flic.kr/p/dYrWDd" alt="整合后效果1" /></p>
 
-<p>在ApplicationController加上：</p>
+<p>css文件降低为3个，其中有两个为新浪微博的代码，这个不好整合了。。。</p>
+
+<p><img src="http://flic.kr/p/dYrXFQ" alt="整合后效果2" /></p>
+
+<p>js文件数降低为3个，其中一个是微博的，一个是百度统计的。我们自己的代码已经整合到一个请求里调用了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/11/13/nginx-301-rewrite/">Nginx通过301统一入口域名</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-13T00:00:00+08:00" pubdate data-updated="true">Nov 13<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>我们知道网站的入口域名一般都是www.domain.com或者domain.com。有的网站选择带www而有的网站选择不带www。
+但是搜索引擎会将www.domian.com和domian.com 认为是两个地址从而分散我们的权重。所以通过nginx的301转向来统计入口域名，有利于我们的网站提高权重。
+ 
+以我的博客为例，服务器采用的就是nginx+fastcgi配合php模式。我的nginx关于博客的配置如下</p>
+
+<div id="kindeditor" class="quote">server
+  {
+    listen       80;
+    server_name  xinlogs.com www.xinlogs.com;
+</div>
+
+
+<p>这样通过xinlogs.com或者www.xinlogs.com都可以访问到我的博客，但是这样做相当于我的博客首页有了两个地址，不利于搜索引擎收录和分配权重。
+所以我采用nginx提供的rewrite来实现301转向，通过301转向的域名地址搜索引擎会将权重或者PR也一起转向过去。这样就不损失网站的PR和权重了。也就是把通过www或者不带www访问的这些流量和查询或者外链的权重整合到了一起。
+下面是我的配置，我希望通过xinlogs.com作为我博客的统一入口域名，而带www的访问全部转向到xinlogs.com域名。</p>
+
+<div id="kindeditor" class="quote">server
+  {
+    listen       80;
+    server_name  xinlogs.com www.xinlogs.com;
+    if ($host != &#8220;xinlogs.com&#8221;) {
+        rewrite ^/(.*)$ http://xinlogs.com/$1 permanent;
+    }
+</div>
+
+
+<p>经过上面的的配置，也就是那句if条件语句，将不是xinlogs.com的域名，全部转移到了xinlogs.com下。
+ 
+下面我们测试下效果，因为只有明确的看到了转向信息，才证明我的配置成功了。所以采用curl命令测试。
+测试www.xinlogs.com是否被转向</p>
+
+<div id="kindeditor" class="quote">-bash-3.2# curl -i www.xinlogs.com
+HTTP/1.1 301 Moved Permanently
+Server: nginx/1.0.8
+Date: Sun, 13 Nov 2011 05:03:22 GMT
+Content-Type: text/html
+Content-Length: 184
+Connection: keep-alive
+Location: http://xinlogs.com/
+ 
+<html>
+<head><title>301 Moved Permanently</title></head>
+<body bgcolor="white">
+<center><h1>301 Moved Permanently</h1></center>
+<hr><center>nginx/1.0.8</center>
+</body>
+</html>
+</div>
+
+
+<p>可以看到被成功转向到了location:http://xinlogs.com/了
+再看看xinlogs.com是否可以正常访问。<b><span style="color:#e53333;">注意：这个很关键，因为有时候配置错了会导致循环转向让主域名入口无法访问。</span></b></p>
+
+<div id="kindeditor" class="quote">-bash-3.2# curl -i xinlogs.com
+HTTP/1.1 200 OK
+Server: nginx/1.0.8
+Date: Sun, 13 Nov 2011 05:05:43 GMT
+Content-Type: text/html; charset=UTF-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+X-Powered-By: PHP/5.3.8
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+后面内容省略了。。。
+</div>
+
+
+<p><b><br></b>
+ 可以看到xinlogs.com域名访问正常，正确返回200 ok。而且下面的页面内容也正确返回了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/11/10/centos-linux-sshclient-unreadable-code/">Centos Linux 远程终端ssh乱码问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-10T00:00:00+08:00" pubdate data-updated="true">Nov 10<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>我们经常碰到linux乱码问题。尤其是碰到网页上传个中文文件名的文件，ssh登陆到linux一看全乱码想删除都不行。很郁闷的。如下图所示中文文件名全都是显示问号了（这个乱码由于你的编码设置不同，显示的也不太一样）</p>
+
+<p><img src="http://flic.kr/p/dYkYmM" alt="乱码截图" /></p>
+
+<p>还有一个就是vim的乱码</p>
+
+<p><img src="http://flic.kr/p/dYkZ3e" alt="vim乱码" /></p>
+
+<p><strong>解决办法：</strong></p>
+
+<p>首先需要给linux安装中文支持。这里以centos为例，所以采用yum安装</p>
+
+<p><code>yum groupinstall chinese-support</code></p>
+
+<p>然后再设置linux系统的i18n文件，位置在/etc/sysconfig/i18n</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>before_filter:set_charset 
+</pre></td><td class='code'><pre><code class=''><span class='line'>LANG="zh_CN.GB18030"
 </span><span class='line'>
-</span><span class='line'>def set_charset 
-</span><span class='line'>     @headers["Content-Type"]="text/html;charset=gb2312" 
-</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>SUPPORTED="zh_CN.UTF-8:zh_CN.GBK:zh_CN.GB18030:zh_CN:zh:en_US.UTF-8:en_US:en"
+</span><span class='line'>
+</span><span class='line'>SYSFONT="latarcyrheb-sun16"</span></code></pre></td></tr></table></div></figure>
 
 
-<p>我试验了一下，用utf8也可以正常处理,比如按照如下写法</p>
+<p>接着设置LC_ALL环境变量，在/etc/profile文件里加入</p>
+
+<p><code>export LC_ALL=zh_CN.GB18030</code></p>
+
+<p>全部设置好后，重启系统。再次登陆后，用如下命令查看</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def set_charset
-</span><span class='line'>  @headers["Content-Type"]="text/html;charset=utf8" 
-</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-bash-3.2# locale
+</span><span class='line'>
+</span><span class='line'>LANG=zh_CN.GB18030
+</span><span class='line'>
+</span><span class='line'>LC_CTYPE="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_NUMERIC="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_TIME="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_COLLATE="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_MONETARY="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_MESSAGES="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_PAPER="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_NAME="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_ADDRESS="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_TELEPHONE="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_MEASUREMENT="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_IDENTIFICATION="zh_CN.GB18030"
+</span><span class='line'>
+</span><span class='line'>LC_ALL=zh_CN.GB18030</span></code></pre></td></tr></table></div></figure>
+
+
+<p>完成以上操作，应该就可以正常显示中文文件名字了。不过这个只是linux没有问题了，我们的ssh客户端还需要支持才可以。我一般使用Putty来当做ssh客户端，下面就以putty为例子进行设置。
+先设置使用的字体，选择windows->Appearance，弹出的字体界面里选择“新宋体”，字符集选择“CHINESE_GB2312”</p>
+
+<p><img src="http://flic.kr/p/dYm1f8" alt="putty设置" /></p>
+
+<p>再设置编码</p>
+
+<p><img src="http://flic.kr/p/dYm1ZX" alt="设置编码" /></p>
+
+<p>以上设置完成后，就可以正常显示了。效果如下图所示：</p>
+
+<p><img src="http://flic.kr/p/dYrJmG" alt="正常显示的效果" /></p>
+
+<p>在命令行输入中文文件名也可以正常使用了。</p>
+
+<p><img src="http://flic.kr/p/dYrK9s" alt="输入中文效果" /></p>
+
+<p>到目前为止，ssh下操作中文文件名的问题就彻底解决了。可以正常输入中文文件名来操作了。</p>
+
+<p>下面是vim显示乱码问题，vim一般都是因为文件编码和显示编码的问题引起的乱码。</p>
+
+<p>我们打开文件发现乱码后，采用如下命令</p>
+
+<p><code>set encoding=utf-8 termencoding=gbk</code></p>
+
+<p>这样以后，vim也可以正常操作中文了。效果图</p>
+
+<p><img src="http://flic.kr/p/dYrLjU" alt="vim中文操作效果" /></p>
+
+<p><strong>注意:</strong></p>
+
+<p>网上看到一些资料说是将i18n的LANG设置为zh_CN.UTF-8，然后LC_ALL也是设置为zh_CN.UTF-8</p>
+
+<p>但是我试验了下，效果并不好（也将putty调整为了utf-8）.但是文件名显示还是乱码。需要用ls &#8211;show-control-chars来正常显示，输入中文文件名也不正常。</p>
+
+<p>以上只是在putty下使用，也许配合其他ssh客户端效果不太一样。稍后我再添加一些其他客户端效果。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/11/06/godaddy-to-dnspod/">解决godaddy注册域名无法解析问题</a></h1>
+    
+    
+      <p class="meta">
+        
 
 
 
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-06T00:00:00+08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>godaddy.com是全球知名的域名注册商。国内很多站长也是使用的这个注册商。</p>
+
+<p>但是出于各种原因，godaddy的域名服务器经常被国内封掉。导致我们注册的域名无法被解析。直接影响了网站的稳定性。</p>
+
+<p>解决办法无非两个：一、不用godaddy了，二、换域名服务器。</p>
+
+<p>如果不打算用godaddy了，我推荐name.com也不错，不过不支持支付宝了。需要用paypal支付</p>
+
+<p>而我选择了第二种办法，采用国内的dns服务器来代替godaddy自己的，这样可以很好的解决问题。</p>
+
+<p>具体步骤：</p>
+
+<p>到http://www.dnspod.cn去注册一个免费账号，不知道dnspod为何物的，可以参考下面介绍</p>
+
+<p>关于DNSPod</p>
+
+<p>DNSPod建立于2006年3月份，是国内最早提供免费智能DNS产品的网站，致力于为各类网站提供高质量的多线智能DNS免费解析。</p>
+
+<p>DNSPod以稳定性、安全性、功能强大、智能免费、高速等优 势深得广大站长和企业用户们的喜爱，以至于越来越多的企业站、地方门户站、游戏站等等都在使用DNSPod，他们喜欢的是DNSPod给他们带来的稳定性、承受能力强、访问速度快以及极高的用户体验，使用普通的DNS（像域名注册商提供的）不是不可以“用”，但是避免不了因为不稳定导致网站时常经常打不开，由于功 能限制不能实现想要实现的功能、因为用户体验不够好等丢失客户。所以选择一个好的DNS服务商可以为自己的网站带来很大的、意想不到的收益，避开不必要的损失。</p>
+
+<p>功能上：除了智能DNS解析，普通DNS解析也可以满足用户的稳定、高速等需求。相对竞争对手的产品，DNSPod除了实时生效，不限制用户添加的域名和记录数量外，还率先提供 了IPv6的支持和动态域名解析的功能，另外还支持DNS轮询、URL转发、API接口、批量修改管理等先进功能。并且所有功能都是免费提供。</p>
+
+<p>使用DNSPod的站长们知道，DNSPod不仅仅是以雄厚的技术优势，而且还是靠优质的服务赢得市场的，为几十万免费用户和几千VIP用户分别设立相应的技术支持！做到用户与DNSPod随时可以沟通，有问题及时解决！</p>
+
+<p>暴风影音、华军下载、魅族手机、VeryCD、4399、 霏凡下载、雨林木风、深度、手机之家、去看去看、站长之家、51啦、Discuz、cnBeta、 逐浪文学等知名网站都是DNSPod vip用户。</p>
+
+<p>将域名服务器修改到国内</p>
+
+<p>在 dnspod的后台域名管理中，添加自己需要转到国内的解析的域名。如下图</p>
+
+<p><img src="http://flic.kr/p/dYkR1r" alt="dnspod后台" /></p>
+
+<p>点开我们刚添加的域名，可以看到分配给我们的dns服务器。如下图</p>
+
+<p><img src="http://flic.kr/p/dYkRLr" alt="添加dns服务器" /></p>
+
+<p>现在我们登录到godaddy下，修改我们的DNS服务器到刚才dnspod分配给我们的dns服务器上。</p>
+
+<p>登录后，如下图所示，点my account</p>
+
+<p><img src="http://flic.kr/p/dYkSDR" alt="account截图" /></p>
+
+<p>然后在域名管理界面，点我们要转到国内解析的域名。如图</p>
+
+<p><img src="http://flic.kr/p/dYkTm6" alt="域名管理截图" /></p>
+
+<p>进入域名管理后，找到NameServers项，点set name servers。如图</p>
+
+<p><img src="http://flic.kr/p/dYkU18" alt="nameserver截图" /></p>
+
+<p>上面点击“Set Nameservers”后，会弹出一个窗口让你设置DNS Server。如下图</p>
+
+<p><img src="http://flic.kr/p/dYrDbN" alt="set nameserver" /></p>
+
+<p>将Nameserver1和Nameserver2里面的内容修改为dnspod分配给我们的dns服务器。nameserver3和nameserver4里面清空。</p>
+
+<p>点 “OK”按钮完成设置。</p>
+
+<p>域名服务器设置完，我们回到dnspod的后台，查看我们域名的状态。一般情况会是无法解析或者dns错误。这个说明还没有生效。最慢48小时生效。如果48小时候，还是错误就要找dnspod联系看看怎么解决了。也可以自己使用dnspod提供的域名全面诊断来判断问题。</p>
+
+<p>下面是完全生效后的状态</p>
+
+<p><img src="http://flic.kr/p/dYkWXT" alt="设置完成的状态" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/31/gvim-vimrc-file/">Gvim配置</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-31T00:00:00+08:00" pubdate data-updated="true">Oct 31<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>vim是在linux下面很有名的编辑工具。而今天说到的这个gvim呢，就是vim工具在windows下的版本。
+因为游戏、网银等种种原因，不是每个人都可以全部切换到linux下的，而linux的很多很棒的开源软件又特别好用。所以就尽量找这些软件的windows版本了。
+ 
+软件主页：<a href="http://www.vim.org/">http://www.vim.org/</a></p>
+
+<p>下载地址：<a href="ftp://ftp.vim.org/pub/vim/pc/gvim73_46.exe">ftp://ftp.vim.org/pub/vim/pc/gvim73_46.exe</a></p>
+
+<p>默认状态下的gvim是和windows软件一样，也有菜单和状态条等的。但是我个喜欢linux下的风格。下面就是我目前使用的样子</p>
+
+<p><img src="http://flic.kr/p/dYkNSP" alt="gvim截图" /></p>
+
+<p>gvim的设置全部是基于目录下的_vimrc配置文件的。</p>
+
+<p>这里具体的配置项内容我就不一一说明了，感兴趣的完全可以查看vim资料。我只是放出我的配置文件（基本也是网上其他高手分享出来的，自己修改下适合自己用就ok了）
+ </p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/26/mod-template-emidream/">修改EMiDream模板</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-26T00:00:00+08:00" pubdate data-updated="true">Oct 26<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天修改了EMiDream模板。这个模板是给wordpress制作的，应用在<a href="http://www.templatesnext.org/">http://www.templatesnext.org/</a>网站
+我是在emlog论坛找到了“通信民工”修改的过来的版本。
+我所做的修改如下：
+1、首页每条博客下面变为了中文的 评论 和 浏览
+这个修改主要是在log_list.php文件中，将28、29行改为如下内容</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;span class="postcomments"&gt;&lt;a href="&lt;?php echo $value['log_url']; ?&gt;#comments" title="查询评论"&gt;评论：&lt;?php echo $value['comnum']; ?&gt;&lt;/a&gt;&lt;/span&gt;
+</span><span class='line'>&lt;span class="postmore"&gt;浏览：&lt;?php echo $value['views']; ?&gt;&lt;/span&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p> 2、友情链接只在首页的时候显示，这个有利于SEO。
+主要是通过修改module.php实现。找到文件中关于友情链接段代码，然后在代码前后加入判断是否为首页的代码。
+具体代码如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?php
+</span><span class='line'>  //判断是否是首页，不是首页，不显示友情链接
+</span><span class='line'>  if("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'] == BLOG_URL):?&gt;
+</span><span class='line'>&lt;?php
+</span><span class='line'>//widget：链接
+</span><span class='line'>function widget_link($title){
+</span><span class='line'>  global $CACHE; 
+</span><span class='line'>  $link_cache = $CACHE-&gt;readCache('link');
+</span><span class='line'>  ?&gt;
+</span><span class='line'>  &lt;div class="widget-cat"&gt;
+</span><span class='line'>  &lt;h4&gt;&lt;?php echo $title; ?&gt;&lt;/h4&gt;
+</span><span class='line'>  &lt;ul id="link"&gt;
+</span><span class='line'>  &lt;?php foreach($link_cache as $value): ?&gt;
+</span><span class='line'>  &lt;li&gt;&lt;a href="&lt;?php echo $value['url']; ?&gt;" title="&lt;?php echo $value['des']; ?&gt;" target="_blank"&gt;&lt;?php echo $value['link']; ?&gt;&lt;/a&gt;&lt;/li&gt;
+</span><span class='line'>  &lt;?php endforeach; ?&gt;
+</span><span class='line'>  &lt;/ul&gt;
+</span><span class='line'>  &lt;/div&gt;
+</span><span class='line'>&lt;?php }?&gt;
+</span><span class='line'>&lt;?php endif;?&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>  
+3、修改了下module.php的blog_comments函数。让这个函数和default模板保持一致。<br>
+具体代码如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?php
+</span><span class='line'>//blog：博客评论列表
+</span><span class='line'>      function blog_comments($comments){
+</span><span class='line'>        //var_dump($comments);
+</span><span class='line'>    extract($comments);
+</span><span class='line'>    if($commentStacks): ?&gt;
+</span><span class='line'>  &lt;a name="comments"&gt;&lt;/a&gt;
+</span><span class='line'>  &lt;p class="comment-header"&gt;&lt;b&gt;评论：&lt;/b&gt;&lt;/p&gt;
+</span><span class='line'>  &lt;?php endif; ?&gt;
+</span><span class='line'>  &lt;?php
+</span><span class='line'>  $isGravatar = Option::get('isgravatar');
+</span><span class='line'>  foreach($commentStacks as $cid):
+</span><span class='line'>    $comment = $comments[$cid];
+</span><span class='line'>  $comment['poster'] = $comment['url'] ? '&lt;a href="'.$comment['url'].'" target="_blank" rel="nofollow"&gt;'.$comment['poster'].'&lt;/a&gt;' : $comment['poster'];
+</span><span class='line'>  ?&gt;
+</span><span class='line'>  &lt;div class="comment" id="comment-&lt;?php echo $comment['cid']; ?&gt;"&gt;
+</span><span class='line'>      &lt;a name="&lt;?php echo $comment['cid']; ?&gt;"&gt;&lt;/a&gt;
+</span><span class='line'>      &lt;?php if($isGravatar == 'y'): ?&gt;&lt;div class="avatar"&gt;&lt;img src="&lt;?php echo getGravatar($comment['mail']); ?&gt;" /&gt;&lt;/div&gt;&lt;?php endif; ?&gt;
+</span><span class='line'>      &lt;div class="comment-info"&gt;
+</span><span class='line'>          &lt;b&gt;&lt;?php echo $comment['poster']; ?&gt; &lt;/b&gt;&lt;br /&gt;&lt;span class="comment-time"&gt;&lt;?php echo $comment['date']; ?&gt;&lt;/span&gt;
+</span><span class='line'>          &lt;div class="comment-content"&gt;&lt;?php echo $comment['content']; ?&gt;&lt;/div&gt;
+</span><span class='line'>          &lt;div class="comment-reply"&gt;&lt;a href="#comment-&lt;?php echo $comment['cid']; ?&gt;" onclick="commentReply(&lt;?php echo $comment['cid']; ?&gt;,this)"&gt;回复&lt;/a&gt;&lt;/div&gt;
+</span><span class='line'>      &lt;/div&gt;
+</span><span class='line'>      &lt;?php blog_comments_children($comments, $comment['children']); ?&gt;
+</span><span class='line'>  &lt;/div&gt;
+</span><span class='line'>  &lt;?php endforeach; ?&gt;
+</span><span class='line'>    &lt;div id="pagenavi"&gt;
+</span><span class='line'>      &lt;?php echo $commentPageUrl;?&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>&lt;?php }?&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>  
+4、修复了置顶博客，不能正常显示“小星星”图标问题。
+主要是将images目录下，放入import.gif文件
+5、将评论里的对外链接加入了nofollow属性。这样有利于SEO，而且也不用担心垃圾评论来混外链了。
+主要是修改module.php文件中blog_comments函数里面关于评论作者的那句。
+具体代码如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$comment['poster'] = $comment['url'] ? '&lt;a href="'.$comment['url'].'" target="_blank" rel="nofollow"&gt;'.$comment['poster'].'&lt;/a&gt;' : $comment['poster'];</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/25/write-blog-offline/">离线博客工具-菊子曰</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-25T00:00:00+08:00" pubdate data-updated="true">Oct 25<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>因为迁移到了emlog，最近几天一直在鼓弄博客。</p>
+
+<p>今天又尝试用离线工具写博客了。</p>
+
+<p>在网站上搜索了下，发现国人开发的菊子曰不错。所以开始了这次尝试</p>
+
+<p>功能方面日常写文章应该足够了。</p>
+
+<p>就是如果是程序员用，代码高亮效果很一般
+ 
+ 
+还有就是日志摘要功能，并不能符合emlog的日志摘要，基本只能全篇发上来。感觉如果文章不是很长，建议还是采用在线编辑吧。
+再有就是采用了离线发布，将不能自动和新浪微博同步</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/25/debian-administration-site/">一个关于debian系统管理的站点</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-25T00:00:00+08:00" pubdate data-updated="true">Oct 25<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这个站点有很多关于debian系统管理的信息和经验。
+不过这个站点对于IE支持不好，页面会出现错位。建议还是采用firefox或者chrome这类的浏览器吧。
+网址：<a href="http://www.debian-administration.org/">http://www.debian-administration.org/</a>
+简介如下，照搬的原文：</p>
+
+<h1>Debian Administration</h1>
+
+
+<p>This site was created as a simple weblog designed to contain interesting and useful information related to the System Administration of <a href="http://www.debian.org/">Debian GNU/Linux</a> systems.
+Whilst there are several sites where users can post questions and have answers contributed by other users there are no other sites on the web which are specifically targeted at distributing articles of interest to Debian administrators.
+This site is designed to fill that void, with content accepted from users.
+Feel free to <a href="http://www.debian-administration.org/create/user">create your own account</a> and <a href="http://www.debian-administration.org/create/article">contribute an article, tip, or question</a> you may also <a href="http://www.debian-administration.org/create/poll">submit a poll</a>.
+User accounts aren&#8217;t necessary but they do allow you to do several additional things:</p>
+
+<ul>
+<li>See your own comment and story posting history </li>
+<li>Bookmark articles, polls, or weblogs of interest to you. </li>
+<li>
+<a href="http://www.debian-administration.org/about/FAQ%20:%20Tags">Tag articles</a>. </li>
+<li>
+<a href="http://www.debian-administration.org/about/FAQ%20:%20Site%20Adverts">Disable the adverts</a> shown upon article pages. <ul>
+<li>Or <a href="http://www.debian-administration.org/create/advert">Create your own advert</a> </li>
+</ul>
+</li>
+<li>Create and post weblog entries. </li>
+<li>Ensure the use of our <a href="http://www.debian-administration.org/about/SSL%20Certificate">SSL certificate</a> by always using https://. </li>
+</ul>
+
+
+<p>From your account page you can customize several aspects of the site - such as which sections are displayed in the sidebar, whether to receive notifications if other people reply to your comments, etc.
+It should be noted that this site is neither an official part of the Debian project, nor endorsed by it. <a href="http://www.debian.org/">The Debian project</a> has its own official website, and the name Debian is a trademark held by <a href="http://www.spi-inc.org/">Software In the Public Interest</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/25/bo-blog-to-emlog/">微博从bo-blog迁移到了emlog。</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-25T00:00:00+08:00" pubdate data-updated="true">Oct 25<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天将微博从原来的bo-blog迁移到了emlog</p>
+
+<p>bo-blog从08年就一直开始使用。感觉还是很不错的。但是一直没怎么更新了，目前很多新功能都不支持。</p>
+
+<p>其实我就打算让博客可以和新浪微博同步。新浪微博里也有个关联博客的功能，据说可以通过博客的rss内容来同步内容。</p>
+
+<p>但是我参考网上文章修改了bo-blog模板，让首页里存在
+<link rel="alternate" type="application/rss+xml" href="<a href="http://www.xinlogs.com/feed">http://www.xinlogs.com/feed</a>&#8220;  title=&#8221;鑫的方向&#8221; />
+然后又测试了<a href="http://www.xinlogs.com/feed">http://www.xinlogs.com/feed</a>，可以正常访问。
+但是新浪微博就是不能同步到我博客的内容。
+ 
+最后我发现emlog目前的更新很活跃，而且还有个插件是调用新浪微博的api来将博客内容同步到微博的。就开始了我的迁移过程
+迁移主要参考了<a href="http://bbs.bo-blog.com/thread-28348-1-1.html">http://bbs.bo-blog.com/thread-28348-1-1.html</a>
+原文如下：
+转换过程很简单，先下载并安装emlog_4.0.1，再将原BoBlog中的attachment和data文件夹以及附件中的转换工具上传到新装emlog根目录，执行转换工具按照提示运行即可。<br><br>
+        最终可以将BoBlog中的所有数据比较完美地导入emlog_4.0.1，包括原来BoBlog中的附件和自定义URL等等。对于emlog不支持UBB的问题其实应该很好解决：将UBB解析之后再导入数据库即可。由于我的777篇日志绝大部分不含UBB代码所以就没有继续折腾了……
+<strong>注意：</strong>
+我转换后，没有文章的分类了。但是查看数据库的sort表确实存在分类信息。这个时候，只要在后台建立一个分类。然后其他分类就都出现了。感觉转换效果很不错。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/21/htc-g3-hero-bast-rom/">推荐个htc G3 hero比较不错的ROM</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-21T00:00:00+08:00" pubdate data-updated="true">Oct 21<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>以前一直用ligux出的rom。因为htc G3的硬件原因，个人认为用android 2.1rom最好。刷了2.2和2.3都不是很满意。
+原来我一直采用Dauu_SENSE_with_Compacache_BFS_v1.1-signed.zip
+挺稳定的，就是速度一般。有时候内存不够了，会自动重启。
+这次是在hiapk.com上找到的
+<a href="http://bbs.hiapk.com/thread-2539001-1-1.html">新加坡Artlive2.1急速优化版、添加翻页时钟、天气动画；视频为证</a>
+这个ROM是先刷上他的ROM，然后再刷一个<span style="color:#ff0000;font-size:large;">FlyKernel-13-M518-m352.zip</span><br>
+ 
+FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，通过压缩包的文件名制定频率。比如上面的M518-m352就是最大和最小频率。
+关于这个内核补丁，可以看下面的介绍
+<a href="http://www.cnrgb.com/flykernel-13">http://www.cnrgb.com/flykernel-13</a>
+ </p>
 </div>
   
   
@@ -1294,23 +1198,27 @@ That should be all you need to get this working.</p>
     <section>
 <h1>Categories</h1>
 <ul id="categories">
-  <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
-<li class='category'><a href='/blog/categories/game/'>Game (14)</a></li>
-<li class='category'><a href='/blog/categories/hardware/'>Hardware (4)</a></li>
-<li class='category'><a href='/blog/categories/host/'>Host (2)</a></li>
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
-<li class='category'><a href='/blog/categories/life/'>Life (1)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (26)</a></li>
-<li class='category'><a href='/blog/categories/mobile/'>Mobile (2)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
-<li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
-<li class='category'><a href='/blog/categories/ruby/'>Ruby (1)</a></li>
-<li class='category'><a href='/blog/categories/software/'>Software (5)</a></li>
-<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (8)</a></li>
-<li class='category'><a href='/blog/categories/website/'>Website (1)</a></li>
-<li class='category'><a href='/blog/categories/windows/'>Windows (7)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
 
 </ul>
@@ -1332,11 +1240,11 @@ That should be all you need to get this working.</p>
       </li>
     
       <li class="post">
-        <a href="/blog/2010/03/12/HP-MSA1000-DL380G5-Centos5/">CentOS 5.4 基于HP Proliant DL380 G5服务器配置Modular Smart Array 1000存储</a>
+        <a href="/blog/2013/02/02/cloudstack-on-vmware/">cloudstack on vmware</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2010/03/12/HP-Computer-Ghost-Problem/">HP台式机器，ghost系统后，提示windows could not start</a>
+        <a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a>
       </li>
     
   </ul>

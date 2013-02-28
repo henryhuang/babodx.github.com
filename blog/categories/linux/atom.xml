@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-27T22:11:05+08:00</updated>
+  <updated>2013-02-28T22:19:12+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -14,372 +14,548 @@
 
   
   <entry>
-    <title type="html"><![CDATA[postfix+extmail的附件大小显示和限制问题解决办法]]></title>
-    <link href="http://babodx.github.com/blog/2010/01/24/postfix-extmail-attachment-bug/"/>
-    <updated>2010-01-24T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2010/01/24/postfix-extmail-attachment-bug</id>
-    <content type="html"><![CDATA[<p>最近在给一个公司部署了postfix+extmail的邮件系统后，遇到了附件大小限制问题。</p>
+    <title type="html"><![CDATA[批量部署系统方案]]></title>
+    <link href="http://babodx.github.com/blog/2013/01/22/installation-server/"/>
+    <updated>2013-01-22T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/01/22/installation-server</id>
+    <content type="html"><![CDATA[<p>最近单位一直弄刀片服务器，7个笼子，112片。安装系统是个麻烦的事情，如果单机安装，太痛苦了。
+所以就尝试了批量部署系统。
+ 
+主要是分Linux和Windows两种方案</p>
 
-<p>extmail默认设置是5M，但是由于extmail的统计大小方法问题，一般附件限制比设置的小了1/3。也就是你设置了5M，也就能到3M多。</p>
+<p>我这里Linux是CentOS。 采用了cobbler来做批量部署。</p>
 
-<p>这里先说下大小限制的配置。</p>
+<p>Windows采用的是win 2008的部署服务，就是WDS来做批量部署。</p>
 
-<p>一、修改extmail的webmail.cf文件</p>
+<p>这样Linux做一台分发服务器，Windows做一台WDS服务器，需要部署那种系统就开那台服务器就可以了。</p>
 
-<p>```
-SYS_MESSAGE_SIZE_LIMIT = 5242880 注意：以位为单位为5M字节。</p>
-
-<p>SYS_MESSAGE_SIZE_LIMIT = xxx
-```</p>
-
-<p>二、修改/etc/postfix/main.cf文件，</p>
-
-<p><code>
-message_size_limit = xxx
-</code></p>
-
-<p>三、重启postfix即可，<code>service postfix restrart</code> 和重启apache，<code>service httpd restart</code></p>
-
-<p><strong>如何解决附件限制大小和系统文件大小相差1/3呢？</strong></p>
-
-<p>首先是修改/var/www/extsuite/extmail/libs/Ext/App目录下的Compose.pm文件</p>
-
-<p>```
-sub is_oversize {</p>
-
-<pre><code>my $self = shift;   
-my $sys = $self-&gt;{sysconfig};   
-my $maxsize = $sys-&gt;{SYS_MESSAGE_SIZE_LIMIT};   
-my $tsize = shift;   
-
-return 0 unless defined $maxsize and $maxsize &gt; 0;   
-return 0 unless defined $tsize and $tsize &gt; 0;   
-
-if ($tsize &gt;= $maxsize) {   
-    return $maxsize;   
-}   
-0;   
-</code></pre>
-
-<p>} <br/>
-```</p>
-
-<p>注意到上面的if ($tsize >= $maxsize)了吧，修改为if ($tsize >= 1.29*$maxsize)</p>
-
-<p>这样修改后，基本extmail的附件限制大小就和系统显示的文件大小一样。</p>
-
-<p>目前还有一个文件，就是我们上传一个1M的内容，显示出来的附件大小大约是1.3M，这个问题需要修改一个human函数解决。</p>
-
-<p>在/var/www/extsuite/extmail/libs/Ext目录下，打开Utils.pm文件</p>
-
-<p>找到如下函数</p>
-
-<p>```
-sub human_size {</p>
-
-<pre><code>my $s = $_[0];   
-if($s&lt;1024) {   
-    return sprintf("%0.2f", $s/1024)."K";   
-}elsif($s&lt;1024*1024) {   
-    return sprintf("%0.1f", $s/1024)."K";   
-}else {   
-    return sprintf("%0.1f", $s/(1024*1024))."M";   
-}   
-</code></pre>
-
-<p>} <br/>
-```
-将函数修改如下</p>
-
-<p>```
-sub human_size {</p>
-
-<pre><code>my $s = $_[0];   
-if($s&lt;1024) {   
-    return sprintf("%0.2f", $s/1024/1.36)."K";   
-}elsif($s&lt;1024*1024) {   
-    return sprintf("%0.1f", $s/1024/1.36)."K";   
-}else {   
-    return sprintf("%0.1f", $s/(1024*1024*1.36))."M";   
-}   
-</code></pre>
-
-<p>} <br/>
-```</p>
-
-<p>这样就解决了extmail的附件大小显示和限制问题。</p>
-
-<p>目前还有一个遗留问题，就是在folder.htm模板界面里显示的邮件大小还是比系统文件大1/3。这个不知道怎么修改了。找到了对应函数，但是它直接显示的多少M或者多少K，用除1.36会出现问题。。。。这个期待高手解决了。</p>
+<p>所有刀片全部采用pxe来引导就可以了。
+ 
+具体方法就先不写了，以后再补上吧
+ </p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[extman后台登陆问题解决方法]]></title>
-    <link href="http://babodx.github.com/blog/2010/01/19/extman/"/>
-    <updated>2010-01-19T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2010/01/19/extman</id>
-    <content type="html"><![CDATA[<p>前一阵子给一个公司架设了postfix+mysql+extmail的邮件系统。</p>
+    <title type="html"><![CDATA[debian6.0.5(squeeze)安装配置xen-4.0虚拟化]]></title>
+    <link href="http://babodx.github.com/blog/2012/08/06/debian-xen-install/"/>
+    <updated>2012-08-06T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/08/06/debian-xen-install</id>
+    <content type="html"><![CDATA[<h1>系统安装</h1>
 
-<p>用了一段时间后，发现后台管理的extman不能登录了，提示如下</p>
+<p>我是通过http://mirrors.163.com下载的     debian-6.0.5-amd64-CD-1.iso
+最小安装有一张CD就可以了，安装的是debian6.0.5(squeeze) 64位版本</p>
 
-<p><code>
-Can't open /tmp/extman//sid_26da75f9aec35f2cbc6b4fa425ab525e, No such file or directory
-</code></p>
+<p>安装没啥好说的，最小化安装，除了基本系统就多选择了一个ssh server。</p>
 
-<p>后来发现是/tmp目录下的extman目录被系统清除了。。</p>
-
-<p>然后再网络上找了一些解决办法，说是Linux系统在启动的时候，会清理/tmp目录。建议将这个目录设置在/var/tmp目录下。</p>
-
-<p>结果用了一段时间后，发现一样是被清理。。。。</p>
-
-<p>我的系统是CentOS 5.3 64bit</p>
-
-<p>最后我通过修改，/var/www/extsuite/extman/webmail.cf文件里面的配置</p>
+<p>安装好系统后，进入系统首先设置网卡，不要用dhcp选择static模式
+编辑/etc/network/interfaces文件如下</p>
 
 <p>```</p>
 
-<h1>sys_sess_dir, the session dir</h1>
+<h1>The loopback network interfaceauto lo</h1>
 
-<p>SYS_SESS_DIR = /tmp/extman/
+<p>iface lo inet loopback</p>
+
+<h1>The primary network interface</h1>
+
+<h1>allow-hotplug eth0</h1>
+
+<p>auto eth0</p>
+
+<p>iface eth0 inet static</p>
+
+<p>  address 192.168.1.10</p>
+
+<p>  netmask 255.255.255.0</p>
+
+<p>  broadcast 192.168.1.255</p>
+
+<p>  network 192.168.1.0</p>
+
+<p>  gateway 192.168.1.1
 ```</p>
 
-<p>将SYS_SESS_DIR指定到了/data/extman下面了。估计这次系统不会清除这个目录了吧</p>
+<p>我这里只有一个eth0网卡，采用192.168.1.10的IP地址</p>
 
-<p>还有一种常见错误就是提示</p>
+<p>接下来修改apt的源，采用mirrors.163.com提供的服务器，这样速度比较快
+修改/etc/apt/sources.list
+内容如下</p>
 
 <p><code>
-Can't open /tmp/extman//sid_89b33ec5ce0b5903f24035aa4ad76d15, Permission denied
+deb http://mirrors.163.com/debian/ squeeze main non-free contrib
+deb http://mirrors.163.com/debian/ squeeze-proposed-updates main non-free contrib
+deb-src http://mirrors.163.com/debian/ squeeze main non-free contrib
+deb-src http://mirrors.163.com/debian/ squeeze-proposed-updates main non-free contrib
 </code></p>
 
-<p>这个是因为extman 那个临时目录的权限不对。</p>
+<p>执行apt-get update更新源</p>
 
-<p>可以设置为777就ok了</p>
+<p>经过这些设置，系统基本就是一个干净的最小系统。并且采用163的服务器作为软件源。</p>
+
+<h2>安装XEN-4.0</h2>
+
+<p>下面开始安装xen-4.0的相关软件包和配置</p>
+
+<p><code>
+apt-get install xen-hypervisor-4.0-amd64 xen-linux-system-2.6.32-5-xen-amd64 xen-utils* xenwatch xen-tools
+</code></p>
+
+<p>需要下66.2M的软件包</p>
+
+<p>安装后，再次启动选择带XEN 4.0 amd64的内核启动项</p>
+
+<p>注意：（默认的启动项虽然带xen但是不带4.0选项，启动后不能正确启动xend）
+也可以修改/etc/default/grub里面的选项，默认从这个内核启动</p>
+
+<p>修改GRBU_DEFAULT=4</p>
+
+<h3>配置xen的网络</h3>
+
+<p>修改/etc/xen/xend-config.sxp文件</p>
+
+<p>打开<code>(network-script network-bridge)</code></p>
+
+<p>采用桥接方式</p>
+
+<p>重启后，系统会将物理网卡修改为peth0，而eth0为桥接的网卡</p>
+
+<p>brctl show 显示如下</p>
+
+<p><code>
+root@node1:~# brctl show
+bridge name     bridge id                    STP enabled     interfaces
+eth0                 8000.001c42d8fe43     no                    peth0
+</code></p>
+
+<h3>通过xen-create-image安装debian虚拟系统</h3>
+
+<p>```
+xen-create-image --hostname=vm01 --size=2G --swap=128M --ide \</p>
+
+<p>--ip=192.168.1.21 --netmask=255.255.255.0 --gateway=192.168.1.1 \</p>
+
+<p>--force --dir=/vm --memory=128M -arch=i386 \</p>
+
+<p>--kernel=/boot/vmlinuz-2.6.32-5-xen-amd64 \</p>
+
+<p>--dist=squeeze --mirror=http://mirrors.163.com/debian/ --passwd \</p>
+
+<p>--install-method=debootstrap
+```</p>
+
+<p>安装以后，需要调整vm01.cfg文件，否则无法启动
+首先调整磁盘的相关配置</p>
+
+<p>```
+root        = '/dev/xvda2 ro'
+disk        = [</p>
+
+<pre><code>              'file:/vm/domains/vm01/disk.img,xvda2,w',
+              'file:/vm/domains/vm01/swap.img,xvda1,w',
+          ]
+</code></pre>
+
+<p>```</p>
+
+<p>将原来的hda2修改为xvda2</p>
+
+<p>然后是调整网卡的相关配置</p>
+
+<p><code>
+vif         = [ 'ip=192.168.1.21,mac=00:16:3E:9B:1A:90,bridge=eth0' ]
+</code></p>
+
+<p>主要是加上bridge=eth0</p>
+
+<p>这样就可以通过xm create vm01.cfg启动虚拟系统了</p>
+
+<p>```
+root@node1:~# xm list
+Name                                        ID   Mem VCPUs      State   Time(s)
+Domain-0                                   0   879     1               r-----     26.6
+vm01                                         1   128     1                -b----      1.7</p>
+
+<p>root@node1:~#<br/>
+```</p>
+
+<p>启动后，dom0下面会出现一个vif的虚拟网卡</p>
+
+<p><code>
+root@node1:~# brctl show
+bridge name     bridge id                      STP enabled     interfaces
+eth0                 8000.001c42d8fe43         no                      peth0
+</code></p>
+
+<pre><code>                                                                                            vif1.0 
+</code></pre>
+
+<p>如果在guest系统只能ping到dom0的eth0，而不能ping到外网
+可以检查下</p>
+
+<p>```
+root@node1:~# sysctl net.ipv4.ip_forward</p>
+
+<p>net.ipv4.ip_forward = 0
+```</p>
+
+<p>只要打开这个ip_forward就可以了</p>
+
+<p>修改/etc/sysctl.conf里面的net.ipv4.ip_forward=1
+或者
+<code>echo 1&gt;/proc/sys/net/ipv4/ip_forward</code></p>
+
+<p>也可以用命令临时生效
+<code>sysctl -w net.ipv4.ip_forward=1</code></p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[drupal在nginx 0.8.15下的简洁URL配置]]></title>
-    <link href="http://babodx.github.com/blog/2010/01/01/druapl-url-nginx-rewrite/"/>
-    <updated>2010-01-01T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2010/01/01/druapl-url-nginx-rewrite</id>
-    <content type="html"><![CDATA[<p>最近在学习drupal，发现这个程序比xoops、joomla都灵活，对应的学习曲线也高。反正安装后，根本不知道真没设置。呵呵</p>
+    <title type="html"><![CDATA[nginx通过轮询避免php-fpm引起的502错误]]></title>
+    <link href="http://babodx.github.com/blog/2012/08/01/Solve-nginx-502-mistakes/"/>
+    <updated>2012-08-01T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/08/01/Solve-nginx-502-mistakes</id>
+    <content type="html"><![CDATA[<h2>问题背景</h2>
 
-<p>下面先在nginx上配置了rewrite规则，让drupal支持简洁的URL</p>
+<p>最近客户的一个网站总是偶尔出现502错误</p>
+
+<p>网站架构采用的就是nginx 1.0.10+php 5.3.8+php-fpm模式</p>
+
+<h2>问题分析</h2>
+
+<p>首先要检查下php-fpm的进程数使用情况</p>
+
+<p><code>
+netstat -napo |grep "php-fpm" | wc -l
+</code></p>
+
+<p>如果这个查询出来的数量接近了你在php-fpm.conf里设置的数量，说明是进程数量不过用了。果断增加</p>
+
+<p>而我这次碰到的不是这个。继续分析</p>
+
+<p>会不会是php程序执行时间过长造成超时？</p>
+
+<p>这个可以通过我的另外一篇文章来查看[php-fpm查找php慢速代码]</p>
+
+<p>如果是这个问题，我们可以通过修改nginx.conf和php-fpm.conf里面相关的超时设置来解决</p>
+
+<p>nginx.conf里面主要是如下</p>
+
+<p><code>
+fastcgi_connect_timeout 300;
+fastcgi_send_timeout 300;
+fastcgi_read_timeout 300;
+</code>
+php-fpm.conf里如要是如下</p>
+
+<p><code>
+request_terminate_timeout = 10s
+</code></p>
+
+<p>很不幸，我碰到的也不是这个问题</p>
+
+<p>接着我开始分析是不是fastcgi缓存不够？</p>
+
+<p>主要是在nginx.conf配置里修改如下参数</p>
+
+<p><code>
+fastcgi_buffer_size 64k;
+fastcgi_buffers 4 64k;
+fastcgi_busy_buffers_size 128k
+</code></p>
+
+<p>这个我还真不清楚要设置多大合适，网站说这个配置小了，有可能引发502.</p>
+
+<h2>终极解决办法</h2>
+
+<p>既然上面的常规办法不能解决，那我就想其他办法了。可以肯定的是502引起肯定是因为php-fpm引发的，也就是nginx将正确的客户端请求发给了后端的php-fpm进程，但是因为php-fpm进程的问题导致不能正确解析php代码。最终返回给了客户端502错误。</p>
+
+<p>我觉得nginx既然upstream可以支持多组后端服务器轮询实现简单的负责均衡，并且可以做简单的健康检查。那我就用这个办法开多组php-fpm服务来实现一个php-fpm池，让nginx在这个php-fpm资源里通过stream轮询。</p>
+
+<p>因为有了健康检查机制，这样就可以在错误到达客户端前换另外一个php-fpm进程重新解析了。</p>
+
+<h3>主要配置方法</h3>
+
+<p>先修改php-fpm.conf来开启多组php-fpm进程</p>
+
+<p>我这里开启了php-cgi_www1和php-cgi_www2两组</p>
 
 <p>```
-server
-{
-listen 80;
-server_name drupal.xinlogs.com;
-index index.html index.htm index.php;
-root /data0/htdocs/drupal;</p>
+[www1]
+listen = /tmp/php-cgi_www1.sock
+user = www
+group = www
+pm = dynamic
+pm.max_children = 128
+pm.start_servers = 32
+pm.min_spare_servers = 32
+pm.max_spare_servers = 96
+pm.max_requests= 10240
+request_terminate_timeout = 10s</p>
 
-<h1>limit_conn crawler 20;</h1>
+<p>[www2]
+listen = /tmp/php-cgi_www2.sock
+user = www
+group = www
+pm = dynamic
+pm.max_children = 128
+pm.start_servers = 32
+pm.min_spare_servers = 32
+pm.max_spare_servers = 96
+pm.max_requests= 10240
+request_terminate_timeout = 10s
+```</p>
 
-<p>location = / {
-index index.php;
-}</p>
+<p>然后重启php-fpm进程，并查看/tmp目录是否已经出现了php-cgi_www1.sock和php-cgi_www2.sock的文件</p>
 
-<p>location / {
-index index.php index.html;</p>
+<p>如果存在这两个文件，说明php-fpm配置ok了。我们继续修改nginx.conf配置</p>
 
-<p>if (!-f $request_filename) {
-rewrite ^(.*)$ /index.php?q=$1 last;
-break;
-}</p>
+<p>主要在http {} 的配置块内，加入我们要使用的轮询配置</p>
 
-<p>if (!-d $request_filename) {
-rewrite ^(.*)$ /index.php?q=$1 last;
-break;
+<p><code>
+upstream php_servers{
+  server unix:/tmp/php-cgi_www1.sock;
+  server unix:/tmp/php-cgi_www2.sock;
 }
-}</p>
+fastcgi_next_upstream error timeout invalid_header http_500 http_503;
+</code></p>
 
-<p>location ~ .*.(php|php5)?$
-{
-fastcgi_pass unix:/tmp/php-cgi.sock;</p>
+<p>接着修改我们原来处理php代码的fastcgi配置</p>
 
-<h1>fastcgi_pass 127.0.0.1:9000;</h1>
+<p>```</p>
 
-<p>fastcgi_index index.php;
-include fcgi.conf;
-}</p>
+<pre><code>location ~ .*\.(php|php5)?$
+   {
+     fastcgi_pass  unix:/tmp/php-cgi_www.sock;
+     fastcgi_index index.php;
+     include fastcgi.conf;
+   }
+</code></pre>
 
-<p>location ~ .*.(gif|jpg|jpeg|png|bmp|swf)$
-{
-expires 30d;
-}</p>
+<p>```</p>
 
-<p>location ~ .*.(js|css)?$
-{
-expires 1h;
-}</p>
+<p>将其中的fastcgi_pass由原来的php-cgi_www.sock单独的php-fpm进程修改为我们创建的php_servers轮询池</p>
 
-<p>log_format drupal_access '$remote_addr - $remote_user [$time_local] "$request" '
-'$status $body_bytes_sent "$http_referer" '
-'"$http_user_agent" $http_x_forwarded_for';
-access_log /data1/logs/drupal_access.log drupal_access;
-}
+<p>```
+location ~ .*.(php|php5)?$
+   {</p>
+
+<pre><code> fastcgi_pass php_servers;
+ fastcgi_index index.php;
+ include fastcgi.conf;
+</code></pre>
+
+<p>   }
 ```</p>
+
+<p>通过这样的配置，可以肯定的是php-fpm因为采用两组来轮询工作，并且有fastcgi_next_upstream进程简单的健康检查，可以最大限度的避免502错误发生了。</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[apache下多虚拟主机的配置与管理]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/30/apache-VirtualHost-Configure/"/>
-    <updated>2009-12-30T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/30/apache-VirtualHost-Configure</id>
-    <content type="html"><![CDATA[<p>当一台服务器想给多个域名提供web服务的时候，我们可以使用apache虚拟主机配置。</p>
+    <title type="html"><![CDATA[Linux防御DDOS攻击]]></title>
+    <link href="http://babodx.github.com/blog/2012/03/21/linux-ddos-defender/"/>
+    <updated>2012-03-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/03/21/linux-ddos-defender</id>
+    <content type="html"><![CDATA[<p>这两天一个以前客户在万网购买的云主机一直被SYN Flood 攻击。</p>
 
-<p>apache的配置文件在centos系统下，默认放在/etc/httpd/conf目录下的httpd.conf文件里。</p>
+<p>其实SYN Flood到是只能拖慢系统，没到死机的地步。问题是万网发现了DDOS攻击后，直接给云主机断网24小时。</p>
 
-<p>虚拟主机的配置如下</p>
+<p>这个处理太恶心了。不说想办法切断攻击的IP，而是直接断掉客户的网络。。。有点说不过去呀</p>
 
-<p>```</p>
+<p>电话咨询了下，他们是系统自动处理的，发现了直接断网。
+ 
+一般应付DDOS攻击主要是调整SYN相关的内核参数，这个可以从/etc/sysctl.conf入手调整。</p>
 
-<h6>#######TEST VirtualHost</h6>
+<p>再有就是添加iptables规则，来限制syn和连接数量</p>
 
-<p><VirtualHost *:80>
-ServerAdmin babodx@gmail.com
-DocumentRoot "/home/babo"
-ServerName www.xinlogs.com
-DirectoryIndex index.html
-ErrorLog logs/www.xinlogs.com_error_log
-CustomLog logs/www.xinlogs.com-access_log common</p>
+<p>最后就是通过脚本检查netstat状态，自动将连接数多的ip封掉。</p>
 
-<p></VirtualHost></p>
+<p>一般linux系统能做到的就这些了，那些可以防ddos的硬防火墙老百姓搞不起。
+ 
+调整syn相关参数和iptables网上资料很多，我就不说了。</p>
 
-<p>```</p>
-
-<p>如果我们apache给10个或更多的域名提供web服务，这样的话，我们的httpd.conf就会有很多<VirtualHost *:80>这样的配置段落，看起来很长，管理起来也很麻烦。而且一个apache同时给几十个web域名提供虚拟主机，完全没有问题。那该如何写配置文件便于我们管理呢？</p>
-
-<h2>解决办法</h2>
-
-<p>为了管理方便，配置文件的结构清晰。</p>
-
-<p>我们完全可以将每个虚拟主机的配置文件放在独立文件中，这样apache的主要配置文件httpd.conf看上去很简洁。</p>
-
-<p>只要在最后加入</p>
+<p>整段封IP的话，可以用</p>
 
 <p><code>
-Include conf/vhost_*.conf
+iptables -I INPUT -s 192.0.0.0/8 -j DROP #来封掉192开头的全部ip
 </code>
  
-然后再conf目录里，每个虚拟主机的文件只要以vhost_开头，后面可以用自己的域名加.conf后缀。比如有个test.com的域名要做web。</p>
+我是通过查看messages日志文件，发现了一些大量连接的IP。然后先手动封掉这些IP。下面是部分日志信息，当然这个是靠配置iptables来实现的日志</p>
 
-<p>我们就可以直接在conf目录创建一个vhost_test.com.conf文件，文件里写入虚拟主机配置，比如</p>
+<p><code>
+Mar 20 21:51:21 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ea:c1:08:00 SRC=157.55.16.56 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=16250 DF PROTO=TCP SPT=61923 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+Mar 20 21:51:27 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ea:c1:08:00 SRC=157.55.16.56 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=21741 DF PROTO=TCP SPT=61923 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ed:c1:08:00 SRC=157.55.16.178 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=28201 DF PROTO=TCP SPT=14521 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ed:c1:08:00 SRC=157.55.16.178 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=29875 DF PROTO=TCP SPT=14588 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+</code>
+最后在介绍一款linux下防止DDOS的软件：DDoS-Defender-v2.1.0.tar.gz</p>
 
-<p>```</p>
+<p>其实DDOS也是通过分析netstat状态来判断大量连接的IP，然后采取封掉的策略。并可以设置封掉多久后自动解除。</p>
 
-<h6>#######TEST VirtualHost</h6>
-
-<p><VirtualHost *:80>
-ServerAdmin babodx@gmail.com
-DocumentRoot "/home/test.com"
-ServerName test.com
-DirectoryIndex index.html
-ErrorLog logs/test.com_error_log
-CustomLog logs/test.com-access_log common</p>
-
-<p></VirtualHost>
-```
-通过这种配置结构，我们管理再多的虚拟主机也不用怕。只要修改conf目录下对应虚拟主机的配置文件即可。</p>
+<p>基本经过上面的配置，现在万网没有再因为DDOS问题断网24小时了。</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[解决Linux下Tomcat不能重启和停止问题]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/28/Tomcat-reboot-problems/"/>
-    <updated>2009-12-28T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/28/Tomcat-reboot-problems</id>
-    <content type="html"><![CDATA[<p>我的Tomcat 5.5.28安装在CentOS 5.3 64bit系统上</p>
+    <title type="html"><![CDATA[monit监控linux服务]]></title>
+    <link href="http://babodx.github.com/blog/2012/02/02/monit-to-monitor-services/"/>
+    <updated>2012-02-02T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/02/02/monit-to-monitor-services</id>
+    <content type="html"><![CDATA[<p>最近负责的两台服务器需要监控nginx和memcached服务，防止网站访问异常。</p>
 
-<p>每次重启都停住，只要要等5-10分钟才可以。</p>
+<p>我用monit来解决这个需求。</p>
 
-<p>系统reboot或者shutdown也都卡在关闭tomcat的过程中</p>
+<p>monit是一款linux下的开源软件，可以负责监控系统的服务、进程、文件等内容，并设置一定的条件下执行特定的action。</p>
 
-<p>后来发现直接用/usr/local/tomcat/bin/shutdown.sh一样存在问题，但是如果Tomcat什么项目都不加载，却正常。</p>
+<p>我们可以通过配置，让monit来检查网站的状态和memcached的状态，发现异常的时候，自动重启服务并邮件通知我们。</p>
 
-<p>我怀疑是tomcat加载的lib或者jar文件一多，重启和关闭就会慢的巨慢。。。甚至10分钟以上。</p>
+<p>我配置了30s检查一次，出现问题发送邮件到我的gmail邮箱。我手机马上就能收到邮件提醒，非常效率。</p>
 
-<p>为了解决这个问题，我修改了/etc/init.d/目录下的tomcat文件，让关闭或者重启的时候，直接通过kill命令杀掉tomcat进程。</p>
+<p>安装配置步骤：</p>
 
-<p>下面是我/etc/init.d/tomcat文件</p>
+<p>下载monit</p>
+
+<p><code>
+wget http://mmonit.com/monit/dist/monit-5.3.2.tar.gz
+</code></p>
+
+<p>解压并安装</p>
+
+<p>```
+tar zxvf monit-5.3.2.tar.gz</p>
+
+<p>cd monit-5.3.2</p>
+
+<p>./configure --prefix=/usr/local/monit</p>
+
+<p>make</p>
+
+<p>make install
+```</p>
+
+<p>配置</p>
+
+<p>先将默认的配置文件拷贝到/etc目录下，然后编辑monitrc文件</p>
+
+<p><code>
+cp monitrc /etc/
+</code></p>
+
+<p>下面是我的一些配置：</p>
+
+<p>```
+set daemon  30   #设置30s检查一次</p>
+
+<p>set logfile /var/log/monit.log   #设定日志文件</p>
+
+<h1>设定邮件</h1>
+
+<p>set mailserver smtp.gmail.com PORT 587 USERNAME "yourname@gmail.com" PASSWORD "yourpassword" USING tlsv1</p>
+
+<h1>设定邮件格式</h1>
+
+<p>set mail-format {</p>
+
+<pre><code>  from: monit@huaximall.com
+
+  subject: monit alert --  $EVENT $SERVICE
+
+  message: $EVENT Service $SERVICE
+
+             Date:        $DATE
+
+             Action:      $ACTION
+
+             Host:        xinlogs.com
+
+             Description: $DESCRIPTION
+
+
+        Your faithful employee,
+
+        Monit
+</code></pre>
+
+<p>}</p>
+
+<h1>设定提醒超时</h1>
+
+<p>set alert babodx@gmail.com with reminder on 3 cycles</p>
+
+<h1>设定检查nginx服务</h1>
+
+<p>check process nginx with pidfile /usr/local/webserver/nginx-1.0.11/nginx.pid</p>
+
+<p>  start program = "/usr/local/webserver/nginx-1.0.11/sbin/nginx"</p>
+
+<p>  stop program = "/usr/bin/killall nginx"</p>
+
+<p>  if failed host xinlogs.com port 80 protocol http</p>
+
+<pre><code> and request "/t.html"
+
+ then restart
+</code></pre>
+
+<p>  if 2 restarts within 3 cycles then timeout</p>
+
+<h1>设定检查memcached服务</h1>
+
+<p>check process memcached with pidfile /var/run/memcache.pid</p>
+
+<pre><code>  start program = "/usr/local/memcached/bin/memcached -d -m 1024 -u root -p 11211 -c 1024 -P /var/run/memcache.pid"
+
+  stop program = "/bin/kill -9 `cat /var/run/memcache.pid`; rm /var/run/memcached.pid"
+
+  if failed host 127.0.0.1 port 11211 protocol MEMCACHE then restart
+
+  if cpu &gt; 60% for 2 cycles then alert
+
+  if cpu &gt; 98% for 5 cycles then restart
+
+  if 2 restarts within 3 cycles then timeout
+
+  group cache
+</code></pre>
 
 <p>```</p>
 
-<h1>!/bin/bash</h1>
+<p>下面再贴出来提醒的邮件样子给大家看看</p>
 
-<p>#</p>
+<p>这个是检查到nginx被终止后的提醒邮件</p>
 
-<h1>Startup script for the tomcat</h1>
+<p>```
+Does not exist Service nginx</p>
 
-<p>#</p>
+<pre><code>            Date:        Thu, 02 Feb 2012 11:31:50
+            Action:      restart
+            Host:        xinlogs.com
+            Description: process is not running
 
-<h1>chkconfig: 345 80 15</h1>
-
-<h1>description: Tomcat is a Servlet+JSP Engine.</h1>
-
-<h1>Source function library.</h1>
-
-<p>. /etc/rc.d/init.d/functions</p>
-
-<p>export JAVA_HOME=/usr/local/jdk1.6.0_16
-export CLASSPATH=.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
-export PATH=$PATH:$JAVA_HOME/bin</p>
-
-<p>export CATALINA_BASE=/usr/local/tomcat
-export CATALINA_HOME=/usr/local/tomcat
-export CATALINA_TMPDIR=/usr/local/tomcat/temp
-export JRE_HOME=/usr/local/jdk1.6.0_16</p>
-
-<p>start(){
-if [ -z $(/sbin/pidof java) ]; then
-echo "Starting tomcat"
-/usr/local/tomcat/bin/startup.sh
-touch /var/lock/subsys/tomcat
-else
-echo "tomcat allready running"
-fi
-}</p>
-
-<p>stop(){
-if [ ! -z $(/sbin/pidof java) ]; then
-echo "Shutting down tomcat"</p>
-
-<h1>下面就是关闭的核心代码了，用ps获取tomcat进程id，直接kill掉</h1>
-
-<p>ps aux|grep tomcat|grep startup|awk '{print $2}'|xargs kill -9</p>
-
-<h1>/usr/local/tomcat/bin/shutdown.sh</h1>
-
-<p>until [ -z $(/sbin/pidof java) ]; do :; done
-rm -f /var/lock/subsys/tomcat
-else
-echo "tomcat not running"
-fi
-}</p>
-
-<p>case "$1" in
-start)
-start
-;;
-stop)
-stop
-;;
-restart)
-stop
-start
-;;
-status)
-/usr/local/tomcat/bin/catalina.sh version
-;;
-*)
-echo "Usage: $0 {start|stop|restart|status}"
-esac</p>
-
-<p>exit 0</p>
+       Your faithful employee,
+       Monit
+</code></pre>
 
 <p>```</p>
+
+<p>下面是自动恢复nginx服务后的提醒邮件</p>
+
+<p>```
+Exists Service nginx</p>
+
+<pre><code>            Date:        Thu, 02 Feb 2012 11:32:28
+            Action:      alert
+            Host:        xinlogs.com
+            Description: process is running with pid 6894
+
+       Your faithful employee,
+       Monit
+</code></pre>
+
+<p>```</p>
+
+<p>有了这些就可以安心了，万一网站访问异常了。monit会尝试自动恢复的，而且第一时间通知我们。因为我的vps在美国，所以发送到gmail很及时。手机再设置个邮件提醒功能，基本就ok了。</p>
 ]]></content>
   </entry>
   
