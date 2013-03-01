@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>module DownmarkIt - RDoc Documentation</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="module">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>downmark_it.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-c-to_markdown">::to_markdown</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Jekyll.html">Jekyll</a>
+  
+    <li><a href="./Jekyll/EmlogDotCom.html">Jekyll::EmlogDotCom</a>
+  
+    <li><a href="./DownmarkIt.html">DownmarkIt</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="module">module DownmarkIt</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-to_markdown" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">to_markdown</span><span
+            class="method-args">(html)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>TODO: Add nested unordered lists inside ordered list and vice versa support</p>
+          
+
+          
+          <div class="method-source-code" id="to_markdown-source">
+            <pre><span class="ruby-comment"># File downmark_it.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">to_markdown</span>(<span class="ruby-identifier">html</span>)
+        <span class="ruby-identifier">raw</span> = <span class="ruby-constant">Hpricot</span>(<span class="ruby-identifier">html</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r(\n|\r|\t)/</span>, <span class="ruby-string">&quot;&quot;</span>))
+
+        <span class="ruby-comment"># headers</span>
+        (<span class="ruby-identifier">raw</span><span class="ruby-operator">/</span><span class="ruby-string">&quot;/&lt;h\d&gt;/&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">header</span><span class="ruby-operator">|</span>
+                <span class="ruby-keyword">if</span>(<span class="ruby-identifier">header</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r^h\d$/</span>))
+                        <span class="ruby-identifier">header_level</span> = <span class="ruby-identifier">header</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r\d/</span>).<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">to_i</span>
+                        <span class="ruby-identifier">header</span>.<span class="ruby-identifier">swap</span>(<span class="ruby-node">&quot;#{&quot;#&quot; * header_level} #{header.inner_html}\r\n&quot;</span>)
+                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+
+        <span class="ruby-comment"># horizontal rulers</span>
+        (<span class="ruby-identifier">raw</span><span class="ruby-operator">/</span><span class="ruby-string">&quot;hr&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">hruler</span><span class="ruby-operator">|</span>
+                <span class="ruby-identifier">hruler</span>.<span class="ruby-identifier">swap</span>(<span class="ruby-string">&quot;\r\n---\r\n&quot;</span>)
+        <span class="ruby-keyword">end</span>
+
+        <span class="ruby-comment"># emphasis</span>
+        (<span class="ruby-identifier">raw</span><span class="ruby-operator">/</span><span class="ruby-string">&quot;em&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">em</span><span class="ruby-operator">|</span>
+                <span class="ruby-keyword">if</span>(<span class="ruby-identifier">em</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;em&quot;</span>)
+                        <span class="ruby-identifier">em</span>.<span class="ruby-identifier">swap</span>(<span class="ruby-node">&quot;_#{em.inner_html}_&quot;</span>)
+                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+
+        <span class="ruby-comment"># strong</span>
+        (<span class="ruby-identifier">raw</span><span class="ruby-operator">/</span><span class="ruby-string">&quot;strong&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">strong</span><span class="ruby-operator">|</span>
+                <span class="ruby-keyword">if</span>(<span class="ruby-identifier">strong</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;strong&quot;</span>)
+                        <span class="ruby-identifier">strong</span>.<span class="ruby-identifier">swap</span>(<span class="ruby-node">&quot;**#{strong.inner_html}**&quot;</span>)
+                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+
+        <span class="ruby-comment"># links (anchors)</span>
+        (<span class="ruby-identifier">raw</span><span class="ruby-operator">/</span><span class="ruby-string">&quot;a&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">anchor</span><span class="ruby-operator">|</span>
+                <span class="ruby-keyword">if</span>(<span class="ruby-identifier">anchor</span>.<span class="ruby-identifier">name</span><span class="ruby-operator">==</span><span class="ruby-string">&quot;a&quot;</span>)
+                        <span class="ruby-keyword">if</span>(<span class="ruby-identifier">anchor</span>.<span class="ruby-identifier">inner_html</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;&quot;</span>)
+                                <span class="ruby-identifier">anchor</span>.<span class="ruby-identifier">swap</span>(<span class="ruby-node">&quot;[#{anchor.inner_html}](#{anchor['href']}#{&quot; \&quot;#{anchor['title']}\&quot;&quot; if anchor['title']})&quot;</span>)
+                        <span class="ruby-keyword">else</span>
+                                <span class="ruby-identifier">anchor</span>.<span class="ruby-identifier">swap</span>(<span class="ruby-node">&quot;&lt;#{anchor['href']}&gt;&quot;</span>)
+                        <span class="ruby-keyword">end</span>
+                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+
+        <span class="ruby-comment"># image</span>
+        (<span class="ruby-identifier">raw</span><span class="ruby-operator">/</span><span class="ruby-string">&quot;img&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">image</span><span class="ruby-operator">|</span>
+                <span class="ruby-identifier">image</span>.<span class="ruby-identifier">swap</span>(<span class="ruby-node">&quot;![#{image['alt']}](#{image['src']}#{&quot; \&quot;#{image['title']}\&quot;&quot; if image['title']})&quot;</span>)
+        <span class="ruby-keyword">end</span>
+
+        <span class="ruby-comment"># blockquote</span>
+        (<span class="ruby-identifier">raw</span><span class="ruby-operator">/</span><span class="ruby-string">&quot;blockquote&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">qoute</span><span class="ruby-operator">|</span>
+                <span class="ruby-keyword">if</span> <span class="ruby-identifier">qoute</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;blockquote&quot;</span>
+                        <span class="ruby-identifier">qoute</span>.<span class="ruby-identifier">swap</span>(<span class="ruby-node">&quot;&gt; #{nested_qoute(qoute)}&quot;</span>)
+                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+
+        <span class="ruby-comment"># code</span>
+        (<span class="ruby-identifier">raw</span><span class="ruby-operator">/</span><span class="ruby-string">&quot;code&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">code</span><span class="ruby-operator">|</span>
+                <span class="ruby-keyword">if</span> <span class="ruby-identifier">code</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;code&quot;</span>
+                        <span class="ruby-identifier">code</span>.<span class="ruby-identifier">swap</span>(<span class="ruby-node">&quot;``#{code.inner_html}``&quot;</span>)
+                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+
+        <span class="ruby-comment"># unordered list</span>
+        (<span class="ruby-identifier">raw</span><span class="ruby-operator">/</span><span class="ruby-string">&quot;ul&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ul</span><span class="ruby-operator">|</span>
+                <span class="ruby-keyword">if</span> <span class="ruby-identifier">ul</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;ul&quot;</span>
+                        (<span class="ruby-identifier">ul</span><span class="ruby-operator">/</span><span class="ruby-string">&quot;&gt;li&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">li</span><span class="ruby-operator">|</span>
+                                <span class="ruby-keyword">if</span> <span class="ruby-identifier">li</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;li&quot;</span>
+                                        <span class="ruby-identifier">nli</span> = <span class="ruby-identifier">nested_ul</span>(<span class="ruby-identifier">li</span>, <span class="ruby-value">0</span>)
+                                        <span class="ruby-keyword">if</span> (<span class="ruby-identifier">nli</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r - /</span>))
+                                                <span class="ruby-identifier">li_inner</span> = (<span class="ruby-identifier">li</span>.<span class="ruby-identifier">inner_text</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r^\r\n/</span>))<span class="ruby-operator">?</span>(<span class="ruby-node">&quot;#{li.inner_text.gsub(/^\r\n/, &quot;&quot;)}\r\n&quot;</span>)<span class="ruby-operator">:</span>(<span class="ruby-node">&quot;- #{li.inner_text}\r\n&quot;</span>)
+                                                <span class="ruby-identifier">li</span>.<span class="ruby-identifier">swap</span>(<span class="ruby-node">&quot;#{li_inner}&quot;</span>)
+                                        <span class="ruby-keyword">else</span>
+                                                <span class="ruby-identifier">li</span>.<span class="ruby-identifier">swap</span>(<span class="ruby-node">&quot;- #{nli}\r\n&quot;</span>)
+                                        <span class="ruby-keyword">end</span>
+                                <span class="ruby-keyword">end</span>
+                        <span class="ruby-keyword">end</span>
+                        <span class="ruby-identifier">ul</span>.<span class="ruby-identifier">swap</span>(<span class="ruby-node">&quot;#{ul.inner_html}&quot;</span>)
+                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+
+        <span class="ruby-comment"># ordered list</span>
+        (<span class="ruby-identifier">raw</span><span class="ruby-operator">/</span><span class="ruby-string">&quot;ol&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ol</span><span class="ruby-operator">|</span>
+                <span class="ruby-keyword">if</span> <span class="ruby-identifier">ol</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;ol&quot;</span>
+                        <span class="ruby-identifier">level</span> = <span class="ruby-value">0</span>
+                        (<span class="ruby-identifier">ol</span><span class="ruby-operator">/</span><span class="ruby-string">&quot;&gt;li&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">li</span><span class="ruby-operator">|</span>
+                                <span class="ruby-keyword">if</span> <span class="ruby-identifier">li</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;li&quot;</span>
+                                        <span class="ruby-identifier">nli</span> = <span class="ruby-identifier">nested_ol</span>(<span class="ruby-identifier">li</span>, <span class="ruby-value">0</span>)
+                                        <span class="ruby-keyword">if</span> (<span class="ruby-identifier">nli</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r \d+\. /</span>))
+                                                <span class="ruby-identifier">li_inner</span> = (<span class="ruby-identifier">li</span>.<span class="ruby-identifier">inner_text</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r^\r\n/</span>))<span class="ruby-operator">?</span>(<span class="ruby-node">&quot;#{li.inner_text.gsub(/^\r\n/, &quot;&quot;)}\r\n&quot;</span>)<span class="ruby-operator">:</span>(<span class="ruby-node">&quot;#{level+=1}. #{li.inner_text}\r\n&quot;</span>)
+                                                <span class="ruby-identifier">li</span>.<span class="ruby-identifier">swap</span>(<span class="ruby-node">&quot;#{li_inner}&quot;</span>)
+                                        <span class="ruby-keyword">else</span>
+                                                <span class="ruby-identifier">li</span>.<span class="ruby-identifier">swap</span>(<span class="ruby-node">&quot;#{level+=1}. #{nli}\r\n&quot;</span>)
+                                        <span class="ruby-keyword">end</span>
+                                <span class="ruby-keyword">end</span>
+                        <span class="ruby-keyword">end</span>
+                        <span class="ruby-identifier">ol</span>.<span class="ruby-identifier">swap</span>(<span class="ruby-node">&quot;#{ol.inner_html}&quot;</span>)
+                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+
+        <span class="ruby-comment"># lines</span>
+        (<span class="ruby-identifier">raw</span><span class="ruby-operator">/</span><span class="ruby-string">&quot;p&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
+                <span class="ruby-keyword">if</span> <span class="ruby-identifier">p</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;p&quot;</span>
+                        <span class="ruby-identifier">p</span>.<span class="ruby-identifier">swap</span>(<span class="ruby-node">&quot;\r\n#{p.inner_text}\r\n&quot;</span>)
+                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+
+        <span class="ruby-keyword">return</span> <span class="ruby-identifier">raw</span>.<span class="ruby-identifier">to_s</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- to_markdown-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- to_markdown-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.1.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+

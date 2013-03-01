@@ -1,5 +1,4 @@
 # coding: utf-8
-
 require 'rubygems'
 require 'hpricot'
 require 'fileutils'
@@ -62,8 +61,10 @@ module Jekyll
   module EmlogDotCom
     def self.process(filename)
       import_count = Hash.new(0)
+      puts "test"
+      puts filename
       doc = Hpricot::XML(File.read(filename))
-
+      
       (doc/:channel/:item).each do |item|
         title = item.at(:title).inner_text.strip
         permalink_title = item.at(:link).inner_text
