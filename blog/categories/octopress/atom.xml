@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-28T22:19:12+08:00</updated>
+  <updated>2013-03-03T15:04:08+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,56 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[emlog迁移到octopress]]></title>
+    <link href="http://babodx.github.com/blog/2013/02/28/emlogqian-yi-dao-octopress/"/>
+    <updated>2013-02-28T17:05:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/02/28/emlogqian-yi-dao-octopress</id>
+    <content type="html"><![CDATA[<p>用emlog的博客系统已经有2年了，本着活着就要折腾的原则。最近开始尝试使用octopress，这个博客还真的很适合技术人员。通过github版本控制，采用自己最喜欢的编辑器本地写博客，<code>rake deploy</code>发布。</p>
+
+<p>目前我原来的博客100多篇都迁移到octopress里了，不过因为原来的图片都存放在本地，这次打算全部存放到flickr.com了。这部分只能手动整理了。</p>
+
+<p>下面说说我是怎么迁移的吧</p>
+
+<!--more-->
+
+
+<p>网站上有很多人介绍了wordpress到octopress的迁移文章，可以搜索下。jekyll也有一篇专门介绍迁移的<a href="https://github.com/mojombo/jekyll/wiki/blog-migrations">wiki文章</a></p>
+
+<p><strong>思路</strong></p>
+
+<p>因为原来emlog博客是采用mysql来存储文章的，而且文章都是采用html和一些js来控制格式的和octopress差别很大，octopress每篇文章是采用markdown语法的单独文件。</p>
+
+<p>我是通过emlog的rss.php将全部博客导出为一个xml文件，然后通过一个ruby脚本将这个xml拆分为每篇一个markdown文件，并对一些html进行过滤。</p>
+
+<p>以我的博客为例，原来域名是http://xinlogs.com 首先进入后台设置，设置rss输出篇数为全部博客，且输出全文。因为默认只输出10篇并且是摘要部分。</p>
+
+<p>我将导出的xml命名为xinlogs.xml。</p>
+
+<p>然后在我的octopress/source/下面创建<em>import目录，并进入</em>import目录执行导入脚</p>
+
+<p><code>
+ruby -r "./migrate.rb" -e "Jekyll::EmlogDotCom.process('xinlogs.xml')" "xinlogs.xml"
+</code></p>
+
+<p>这个脚本是我根据网上的wordpress脚本修改的，主要是一些xml用的标签和wordpress的不同，我已经修改好了。这个脚本将把xml文件按照每篇日志拆分并保存在_post目录下面，每篇对应一个.md的文件。</p>
+
+<p>我们只要将.md文件移动到octopress/source/_post目录里，然后执行</p>
+
+<p><code>
+rake gen_deploy
+</code></p>
+
+<p>就可以发布到主机上了。</p>
+
+<p><strong>注意</strong>
+这个migrate.rb脚本调用了一些其他的gem，所以如果提示错误，需要安装相关的gem。
+例如<code>gem install hpricot</code></p>
+
+<p><a href="https://github.com/babodx/babodx.github.com/blob/source/source/_import/migrate.rb">migrate.rb</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[开始使用octopress]]></title>

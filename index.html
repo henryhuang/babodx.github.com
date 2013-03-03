@@ -9,7 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="ubuntu 12.10下初次使用git 前些时候在mac下面使用了git，感觉很棒。今天在单位安装了一台ubuntu 12.10的桌面系统，也开始尝试用git的方式来写blog。 安装 ubuntu下面安装git非常容易。 sudo apt-get install git-core &hellip;">
+  <meta name="description" content="vim以为需要安装各种插件和配置好vimrc才能适合我们开发使用。如果默认只安装vim不用任何插件，并不好用。 以前写过一篇配置gvim，那个时候还是手动安装各种差距和写vimrc 现在已经开始采用vundle来管理vim插件了。而且平台也换mac了。 mac下面自带了vim 7.3 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +64,155 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-03T14:41:00+08:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>vim以为需要安装各种插件和配置好vimrc才能适合我们开发使用。如果默认只安装vim不用任何插件，并不好用。</p>
+
+<p>以前写过一篇<a href="http://babodx.github.com/blog/2011/10/31/gvim-vimrc-file/">配置gvim</a>，那个时候还是手动安装各种差距和写vimrc</p>
+
+<p>现在已经开始采用vundle来管理vim插件了。而且平台也换mac了。</p>
+
+<p>mac下面自带了vim 7.3 但是我们在mac的图形界面下面还是原因使用macvim。所以要先安装上macvim。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>brew install macvim</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>安装vim套件</strong></p>
+
+<p>所谓vim套件其实就是一些高手整理好的vimrc和配色方案，然后通过vundle来安装上vimrc里面需要的各种插件。来达到快速让vim达到一个很好使用和适合开发的程度。</p>
+
+<p>我使用的是vundle-vimfiles项目，先抓一份文件到自己本地。</p>
+
+<p>如果你很浏览自己原来的.vim，那就先备份一下。我是直接删除了。呵呵</p>
+
+<p>切换到自己的目录<code>cd ~</code></p>
+
+<p>git代码到自己本地</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/ywjno/vundle-vimfiles.git</span></code></pre></td></tr></table></div></figure>
+
+
+<p>用vundle-vimfiles文件夹链接到~/.vim</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ln -s vundle-vimfiles ~/.vim</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后将vundle-vimfiles项目里的vimrc文件链接到~/.vimrc，vundle-vimfiles项目给我们提供了几个版本的vimrc，例如<code>vimrc</code>、<code>easy-vimrc</code>、<code>gvimrc</code></p>
+
+<p>我这里在console下面用vim，一般看代码还是喜欢用macvim打开。所以我用了两个配置文件。</p>
+
+<p>链接到console下的vim配置文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ln -s ~/.vim/vimrc ~/.vimrc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>链接到macvim的配置文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ln -s ~/.vim/gvimrc ~/.gvimrc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后我们安装好Vundle项目来帮助我们安装vimrc里面需要的各种vim plugin</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/gmarik/vundle.git ~/.vim/bundle/vundle</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装后，我们进入vim通过vundle来继续安装需要的各种plugin。进入vim后，输入如下命令安装插件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>:BundleInstall</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果以后想更新插件，主要输入<code>:BundleInstall!</code></p>
+
+<p><strong>调整配色</strong></p>
+
+<p>我的配色喜欢solarized_light，编辑~/.gvimrc在前面加入<code>:colorscheme solarized_light</code></p>
+
+<p>这样打开也就3-5分钟我们就完全配置好我们的vim编辑器了</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">Emlog迁移到octopress</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-28T17:05:00+08:00" pubdate data-updated="true">Feb 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>用emlog的博客系统已经有2年了，本着活着就要折腾的原则。最近开始尝试使用octopress，这个博客还真的很适合技术人员。通过github版本控制，采用自己最喜欢的编辑器本地写博客，<code>rake deploy</code>发布。</p>
+
+<p>目前我原来的博客100多篇都迁移到octopress里了，不过因为原来的图片都存放在本地，这次打算全部存放到flickr.com了。这部分只能手动整理了。</p>
+
+<p>下面说说我是怎么迁移的吧</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -617,7 +766,7 @@ git config user.email "youremail"
  
 脚本如下：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -672,61 +821,62 @@ git config user.email "youremail"
 <span class='line-number'>53</span>
 <span class='line-number'>54</span>
 <span class='line-number'>55</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/usr/bin/php
-</span><span class='line'>&lt;?php
-</span><span class='line'>print("=======fix_url v1=========\n");
-</span><span class='line'>print("=======write by babodx@gmail.com=======\n");
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">#!/usr/bin/php</span>
+</span><span class='line'><span class="cp">&lt;?php</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s2">&quot;=======fix_url v1=========</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s2">&quot;=======write by babodx@gmail.com=======</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
 </span><span class='line'>
 </span><span class='line'>
-</span><span class='line'>function update_url($url) {
-</span><span class='line'>    list($url_115,$url_tv1926)=explode("#",$url);
-</span><span class='line'>    $url_tv1926="http://xiazai.tv1926.com/".$url_tv1926;
-</span><span class='line'>    print("update:");
-</span><span class='line'>    print($url_115);
-</span><span class='line'>    print("&gt;&gt;");
-</span><span class='line'>    $link = mysql_connect('localhost', 'username', 'passwd');
-</span><span class='line'>    if (!$link) {
-</span><span class='line'>        die('Could not connect: ' . mysql_error());
-</span><span class='line'>    }
+</span><span class='line'><span class="k">function</span> <span class="nf">update_url</span><span class="p">(</span><span class="nv">$url</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">list</span><span class="p">(</span><span class="nv">$url_115</span><span class="p">,</span><span class="nv">$url_tv1926</span><span class="p">)</span><span class="o">=</span><span class="nb">explode</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span><span class="nv">$url</span><span class="p">);</span>
+</span><span class='line'>    <span class="nv">$url_tv1926</span><span class="o">=</span><span class="s2">&quot;http://xiazai.tv1926.com/&quot;</span><span class="o">.</span><span class="nv">$url_tv1926</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;update:&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="nv">$url_115</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nv">$link</span> <span class="o">=</span> <span class="nb">mysql_connect</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;passwd&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$link</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">die</span><span class="p">(</span><span class="s1">&#39;Could not connect: &#39;</span> <span class="o">.</span> <span class="nb">mysql_error</span><span class="p">());</span>
+</span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>    mysql_select_db('my_database', $link) or die ('Can\'t use my_database : ' .         mysql_error());
+</span><span class='line'>    <span class="nb">mysql_select_db</span><span class="p">(</span><span class="s1">&#39;my_database&#39;</span><span class="p">,</span> <span class="nv">$link</span><span class="p">)</span> <span class="k">or</span> <span class="k">die</span> <span class="p">(</span><span class="s1">&#39;Can\&#39;t use my_database : &#39;</span> <span class="o">.</span>         <span class="nb">mysql_error</span><span class="p">());</span>
 </span><span class='line'>
-</span><span class='line'>    $sql="update p8_article_content_101 set     my_801=replace(my_801,'".$url_115."','".$url_tv1926."')";
-</span><span class='line'>    mysql_query("set names gbk");
-</span><span class='line'>    $result = mysql_query($sql)
-</span><span class='line'>    or die("Invalid query: " . mysql_error());
+</span><span class='line'>    <span class="nv">$sql</span><span class="o">=</span><span class="s2">&quot;update p8_article_content_101 set     my_801=replace(my_801,&#39;&quot;</span><span class="o">.</span><span class="nv">$url_115</span><span class="o">.</span><span class="s2">&quot;&#39;,&#39;&quot;</span><span class="o">.</span><span class="nv">$url_tv1926</span><span class="o">.</span><span class="s2">&quot;&#39;)&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="nb">mysql_query</span><span class="p">(</span><span class="s2">&quot;set names gbk&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nv">$result</span> <span class="o">=</span> <span class="nb">mysql_query</span><span class="p">(</span><span class="nv">$sql</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">or</span> <span class="k">die</span><span class="p">(</span><span class="s2">&quot;Invalid query: &quot;</span> <span class="o">.</span> <span class="nb">mysql_error</span><span class="p">());</span>
 </span><span class='line'>
-</span><span class='line'>    mysql_close($link);
-</span><span class='line'>    print($url_tv1926);
-</span><span class='line'>    print("\n");
-</span><span class='line'>}
+</span><span class='line'>    <span class="nb">mysql_close</span><span class="p">(</span><span class="nv">$link</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="nv">$url_tv1926</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>if (is_null($argv[1])) {
-</span><span class='line'>    print("argv1 is null\n");
-</span><span class='line'>    exit();
-</span><span class='line'>}
-</span><span class='line'>$file_name=$argv[1];
-</span><span class='line'>print("get files name...\n");
-</span><span class='line'>$file_names=array();
-</span><span class='line'>$handle = @fopen($file_name, "r");
-</span><span class='line'>if ($handle) {
-</span><span class='line'>    while (!feof($handle)) {
-</span><span class='line'>        $buffer = fgets($handle);
-</span><span class='line'>        $tmp_file_name=trim($buffer);
-</span><span class='line'>        array_push($file_names,$tmp_file_name);
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nb">is_null</span><span class="p">(</span><span class="nv">$argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;argv1 is null</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">exit</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nv">$file_name</span><span class="o">=</span><span class="nv">$argv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s2">&quot;get files name...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nv">$file_names</span><span class="o">=</span><span class="k">array</span><span class="p">();</span>
+</span><span class='line'><span class="nv">$handle</span> <span class="o">=</span> <span class="o">@</span><span class="nb">fopen</span><span class="p">(</span><span class="nv">$file_name</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nv">$handle</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="nb">feof</span><span class="p">(</span><span class="nv">$handle</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$buffer</span> <span class="o">=</span> <span class="nb">fgets</span><span class="p">(</span><span class="nv">$handle</span><span class="p">);</span>
+</span><span class='line'>        <span class="nv">$tmp_file_name</span><span class="o">=</span><span class="nx">trim</span><span class="p">(</span><span class="nv">$buffer</span><span class="p">);</span>
+</span><span class='line'>        <span class="nb">array_push</span><span class="p">(</span><span class="nv">$file_names</span><span class="p">,</span><span class="nv">$tmp_file_name</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>    }
-</span><span class='line'>    fclose($handle);
-</span><span class='line'>}
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nb">fclose</span><span class="p">(</span><span class="nv">$handle</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>foreach ($file_names as $file_url) {
-</span><span class='line'>    update_url($file_url);
-</span><span class='line'>}
-</span><span class='line'>print("over!");
+</span><span class='line'><span class="k">foreach</span> <span class="p">(</span><span class="nv">$file_names</span> <span class="k">as</span> <span class="nv">$file_url</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">update_url</span><span class="p">(</span><span class="nv">$file_url</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s2">&quot;over!&quot;</span><span class="p">);</span>
 </span><span class='line'>
 </span><span class='line'>
 </span><span class='line'>
-</span><span class='line'>?&gt;</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
 
 </div>
   
@@ -980,267 +1130,6 @@ git config user.email "youremail"
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/08/01/Solve-nginx-502-mistakes/">Nginx通过轮询避免php-fpm引起的502错误</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-08-01T00:00:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>问题背景</h2>
-
-<p>最近客户的一个网站总是偶尔出现502错误</p>
-
-<p>网站架构采用的就是nginx 1.0.10+php 5.3.8+php-fpm模式</p>
-
-<h2>问题分析</h2>
-
-<p>首先要检查下php-fpm的进程数使用情况</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>netstat -napo |grep "php-fpm" | wc -l</span></code></pre></td></tr></table></div></figure>
-
-
-<p>如果这个查询出来的数量接近了你在php-fpm.conf里设置的数量，说明是进程数量不过用了。果断增加</p>
-
-<p>而我这次碰到的不是这个。继续分析</p>
-
-<p>会不会是php程序执行时间过长造成超时？</p>
-
-<p>这个可以通过我的另外一篇文章来查看[php-fpm查找php慢速代码]</p>
-
-<p>如果是这个问题，我们可以通过修改nginx.conf和php-fpm.conf里面相关的超时设置来解决</p>
-
-<p>nginx.conf里面主要是如下</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>fastcgi_connect_timeout 300;
-</span><span class='line'>fastcgi_send_timeout 300;
-</span><span class='line'>fastcgi_read_timeout 300;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>php-fpm.conf里如要是如下</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>request_terminate_timeout = 10s</span></code></pre></td></tr></table></div></figure>
-
-
-<p>很不幸，我碰到的也不是这个问题</p>
-
-<p>接着我开始分析是不是fastcgi缓存不够？</p>
-
-<p>主要是在nginx.conf配置里修改如下参数</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>fastcgi_buffer_size 64k;
-</span><span class='line'>fastcgi_buffers 4 64k;
-</span><span class='line'>fastcgi_busy_buffers_size 128k</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这个我还真不清楚要设置多大合适，网站说这个配置小了，有可能引发502.</p>
-
-<h2>终极解决办法</h2>
-
-<p>既然上面的常规办法不能解决，那我就想其他办法了。可以肯定的是502引起肯定是因为php-fpm引发的，也就是nginx将正确的客户端请求发给了后端的php-fpm进程，但是因为php-fpm进程的问题导致不能正确解析php代码。最终返回给了客户端502错误。</p>
-
-<p>我觉得nginx既然upstream可以支持多组后端服务器轮询实现简单的负责均衡，并且可以做简单的健康检查。那我就用这个办法开多组php-fpm服务来实现一个php-fpm池，让nginx在这个php-fpm资源里通过stream轮询。</p>
-
-<p>因为有了健康检查机制，这样就可以在错误到达客户端前换另外一个php-fpm进程重新解析了。</p>
-
-<h3>主要配置方法</h3>
-
-<p>先修改php-fpm.conf来开启多组php-fpm进程</p>
-
-<p>我这里开启了php-cgi_www1和php-cgi_www2两组</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[www1]
-</span><span class='line'>listen = /tmp/php-cgi_www1.sock
-</span><span class='line'>user = www
-</span><span class='line'>group = www
-</span><span class='line'>pm = dynamic
-</span><span class='line'>pm.max_children = 128
-</span><span class='line'>pm.start_servers = 32
-</span><span class='line'>pm.min_spare_servers = 32
-</span><span class='line'>pm.max_spare_servers = 96
-</span><span class='line'>pm.max_requests= 10240
-</span><span class='line'>request_terminate_timeout = 10s
-</span><span class='line'> 
-</span><span class='line'>[www2]
-</span><span class='line'>listen = /tmp/php-cgi_www2.sock
-</span><span class='line'>user = www
-</span><span class='line'>group = www
-</span><span class='line'>pm = dynamic
-</span><span class='line'>pm.max_children = 128
-</span><span class='line'>pm.start_servers = 32
-</span><span class='line'>pm.min_spare_servers = 32
-</span><span class='line'>pm.max_spare_servers = 96
-</span><span class='line'>pm.max_requests= 10240
-</span><span class='line'>request_terminate_timeout = 10s</span></code></pre></td></tr></table></div></figure>
-
-
-<p>然后重启php-fpm进程，并查看/tmp目录是否已经出现了php-cgi_www1.sock和php-cgi_www2.sock的文件</p>
-
-<p>如果存在这两个文件，说明php-fpm配置ok了。我们继续修改nginx.conf配置</p>
-
-<p>主要在http {} 的配置块内，加入我们要使用的轮询配置</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>upstream php_servers{
-</span><span class='line'>  server unix:/tmp/php-cgi_www1.sock;
-</span><span class='line'>  server unix:/tmp/php-cgi_www2.sock;
-</span><span class='line'>}
-</span><span class='line'>fastcgi_next_upstream error timeout invalid_header http_500 http_503;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>接着修改我们原来处理php代码的fastcgi配置</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>location ~ .*\.(php|php5)?$
-</span><span class='line'>   {
-</span><span class='line'>     fastcgi_pass  unix:/tmp/php-cgi_www.sock;
-</span><span class='line'>     fastcgi_index index.php;
-</span><span class='line'>     include fastcgi.conf;
-</span><span class='line'>   }</span></code></pre></td></tr></table></div></figure>
-
-
-<p>将其中的fastcgi_pass由原来的php-cgi_www.sock单独的php-fpm进程修改为我们创建的php_servers轮询池</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>location ~ .*\.(php|php5)?$
-</span><span class='line'>   {
-</span><span class='line'>     fastcgi_pass php_servers;
-</span><span class='line'>     fastcgi_index index.php;
-</span><span class='line'>     include fastcgi.conf;
-</span><span class='line'>   }</span></code></pre></td></tr></table></div></figure>
-
-
-<p>通过这样的配置，可以肯定的是php-fpm因为采用两组来轮询工作，并且有fastcgi_next_upstream进程简单的健康检查，可以最大限度的避免502错误发生了。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/07/29/accelerate-app-store-download/">快速提升app Store下载速度</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-29T00:00:00+08:00" pubdate data-updated="true">Jul 29<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>前两天开始更新MAC OS Mountain Lion。</p>
-
-<p>为了下载这个4.5G的内容，可是郁闷坏了。计算出来的剩余时间7天。</p>
-
-<p>于是开始找加速下载的办法，看来一些帖子以后基本知道了下载速度主要取决与dns将你的请求解析到哪台服务器。</p>
-
-<p>网上一般是都是基于自己找到一台快速的下载服务器IP，然后手动修改/etc/hosts文件的办法。
- 
-但是其实看原来就知道，如果我们设置的DNS得当，就能起到从最快服务器下载的目的。</p>
-
-<p>于是我查到了<a href="http://dns.v2ex.com/">http://dns.v2ex.com/</a>这个网站，但是使用这个dns后，速度依然很慢。</p>
-
-<p>后来又在www.weiphone.com找到了一个台湾的DNS。设置后速度大幅提升。
- 
-如果你也在北京、也用歌华有线。</p>
-
-<p>试试下面这个台湾的DNS吧
- </p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>168.95.1.1</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1265,7 +1154,7 @@ git config user.email "youremail"
 <li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
-<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
@@ -1276,12 +1165,21 @@ git config user.email "youremail"
 <li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
 <li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
 
 </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
@@ -1293,14 +1191,6 @@ git config user.email "youremail"
     
       <li class="post">
         <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/02/cloudstack-on-vmware/">cloudstack on vmware</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a>
       </li>
     
   </ul>

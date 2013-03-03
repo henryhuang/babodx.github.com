@@ -9,7 +9,8 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="我们知道网站的访问速度和很多因素相关，但是今天这里只是优化我们能力范围内的首页文件加载数量与大小。 如果首页文件很大，肯定加载慢。还有一个因素就是首页如果加载很多css和js文件，因为在加载过程中会建立很多次连接从而降低访问首页的速度。 下面是我博客默认情况下的加载css和js文件的数量 &hellip;">
+  <meta name="description" content="原来我的服务器上是MySQL 5.5.16。本来是用的挺稳定。但是当时编译的时候由于手误将DDEFAULT_COLLATION=utf8-general_ci \弄错啦。。。应该是utf8_general_ci。导致很多程序用的时候报错，或者需要修改。
+最近发现MySQL更新到了5.5.18了， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +65,404 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/11/25/Linux-source-install-multiple-versions-of-MySQL/">Linux源码安装MySQL多版本共存</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-25T00:00:00+08:00" pubdate data-updated="true">Nov 25<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>原来我的服务器上是MySQL 5.5.16。本来是用的挺稳定。但是当时编译的时候由于手误将DDEFAULT_COLLATION=utf8-general_ci \弄错啦。。。应该是utf8_general_ci。导致很多程序用的时候报错，或者需要修改。
+最近发现MySQL更新到了5.5.18了，就打算迁移到新数据库正好修正原来问题。
+为了不影响访问，就打算在5.5.16运行的情况下，继续安装好5.5.18.等顺利转移到5.5.18后，再关闭原来MySQL5.5.16版本。
+也就有了今天这篇文章。在Linux下从源码安装多版本或者多个MySQL数据库。</p>
+
+<p><strong>重点：多版本或者多个MySQL同时运行，主要就是多个MySQL需要运行在不同目录，不同的端口，采用不同的数据库路径。</strong></p>
+
+<p><strong>步骤</strong></p>
+
+<p><strong>1、首先是下载需要安装的MySQL</strong></p>
+
+<p>下载mysql 5.5.16</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.16.tar.gz/from/http://mysql.mirrors.pair.com/</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>下载mysql 5.5.18</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.16.tar.gz/from/http://mysql.mirrors.pair.com/</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>2、安装支持程序</strong></p>
+
+<p>原来版本的MySQL源码安装都是采用./configure和make这些。但是新版本的都是用cmake来弄了。所以如果系统中没有的，需要先安装cmake</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>yum install cmake</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>3、创建MySQL用户和用户组</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/usr/sbin/groupadd mysql
+</span><span class='line'>
+</span><span class='line'>/usr/sbin/useradd -g mysql mysql</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>4、解压、编译、安装MySQL</strong></p>
+
+<p><strong>解压</strong>
+<code>
+tar zxvf mysql-5.5.16.tar.gz
+cd mysql-5.5.16
+</code></p>
+
+<p><strong>编译参数</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cmake . \
+</span><span class='line'>  -DCMAKE_INSTALL_PREFIX=/usr/local/webserver/mysql5516/ \
+</span><span class='line'>  -DMYSQL_DATADIR=/data0/mysql/3306/data \
+</span><span class='line'>  -DMYSQL_UNIX_ADDR=/data0/mysql/3306/mysqld.sock \
+</span><span class='line'>  -DWITH_MYISAM_STORAGE_ENGINE=1 \
+</span><span class='line'>  -DWITH_INNOBASE_STORAGE_ENGINE=1 \
+</span><span class='line'>  -DWITH_BLACKHOLE_STORAGE_ENGINE=0 \
+</span><span class='line'>  -DWITH_ARCHIVE_STORAGE_ENGINE=0 \
+</span><span class='line'>  -DWITHOUT_PARTITION_STORAGE_ENGINE=1 \
+</span><span class='line'>  -DENABLED_LOCAL_INFILE=1 \
+</span><span class='line'>  -DMYSQL_TCP_PORT=3306 \
+</span><span class='line'>  -DEXTRA_CHARSETS=all \
+</span><span class='line'>  -DDEFAULT_CHARSET=utf8 \
+</span><span class='line'>  -DDEFAULT_COLLATION=utf8_general_ci \
+</span><span class='line'>  -DWITH_DEBUG=0 \
+</span><span class='line'>  -DWITH_EMBEDDED_SERVER=1 \
+</span><span class='line'>  -DWITH_SSL=system \
+</span><span class='line'>  -DWITH_READLINE=1</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>注意：编译参数里有几项需要根据自己具体情况设置。我这里将MySQL5.5.16运行于3306端口，并安装在mysql5516目录。</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-DCMAKE_INSTALL_PREFIX=/usr/local/webserver/mysql5516/   设置mysql的安装目录
+</span><span class='line'>
+</span><span class='line'>-DMYSQL_DATADIR=/data0/mysql/3306/data 设置mysql数据库文件的位置
+</span><span class='line'>
+</span><span class='line'>-DMYSQL_UNIX_ADDR=/data0/mysql/3306/mysqld.sock 设置mysql启动后sock文件位置
+</span><span class='line'>
+</span><span class='line'>-DMYSQL_TCP_PORT=3306 设置mysql的监听端口</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上这些设置需要根据不同版本的mysql相应修改。不然多个版本同时监听3306端口，肯定冲突了。</p>
+
+<p><strong>编译</strong></p>
+
+<p><code>make</code></p>
+
+<p><strong>安装</strong></p>
+
+<p><code>make install</code></p>
+
+<p><strong>5、配置目录权限、创建目录、建立初始数据。</strong></p>
+
+<p><strong>配置目录权限</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chmod +w /usr/local/webserver/mysql5516
+</span><span class='line'>
+</span><span class='line'>chown -R mysql:mysql /usr/local/webserver/mysql5516
+</span><span class='line'>
+</span><span class='line'>cd ../</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>创建相关目录</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir -p /data0/mysql/3306/data/
+</span><span class='line'>mkdir -p /data0/mysql/3306/binlog/
+</span><span class='line'>mkdir -p /data0/mysql/3306/relaylog/
+</span><span class='line'>chown -R mysql:mysql /data0/mysql/</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>建立初始数据</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/usr/local/webserver/mysql5516/scripts/mysql_install_db --basedir=/usr/local/webserver/mysql --datadir=/data0/mysql/3306/data --user=mysql</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>6、创建My.cnf配置文件和Mysql启动脚本</strong></p>
+
+<p>创建my.cnf配置文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cp support-files/my-small.cnf /usr/local/webserver/mysql5516/my.cnf</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>注意：原来mysql默认的配置文件放在/etc/my.cnf。现在多个版本同时运行，需要每个版本都将配置文件单独放在自己的安装目录内。</strong></p>
+
+<p><strong>创建MySQL启动脚本</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cp support-files/mysql.server /etc/init.d/mysql5516</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>注意：原来mysql默认采用mysqld脚本，现在每个mysql需要有自己的启动脚本，并通过修改启动脚本来为每个mysql指定采用的配置文件。</strong></p>
+
+<p>修改/etc/init.d/mysql5516，用来指定采用的配置文件位置。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Try to find basedir in /etc/my.cnf 
+</span><span class='line'>1  conf=/etc/my.cnf</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在文件的213和214行内容如上，我们需要修改conf=/etc/my.cnf为我们指定的my.cnf文件位置。</p>
+
+<p>在我们这里是</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>conf=/usr/local/webserver/mysql5516/my.cnf</span></code></pre></td></tr></table></div></figure>
+
+
+<p>修改mysqld5516权限为可执行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chmod +x mysqld5516</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>7、启动mysql并配置为开机运行</strong></p>
+
+<p>启动</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>service mysqld5516 start</span></code></pre></td></tr></table></div></figure>
+
+
+<p>开机运行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chkconfig mysqld5516 on</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上是MySQL 5.5.16的安装。下面5.5.18版本的安装</p>
+
+<p>5.5.18版本的安装基本和MySQL 5.5.16版本一样。我们因为要两个数据库同时运行。所以再给cmake的参数时候，需要安装上面注意的内容设定5.5.18的安装目录为/usr/local/webserver/mysql5518 再调整运行端口为3307
+具体的cmake参数如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cmake . \
+</span><span class='line'>  -DCMAKE_INSTALL_PREFIX=/usr/local/webserver/mysql5518/ \
+</span><span class='line'>  -DMYSQL_DATADIR=/data0/mysql/3307/data \
+</span><span class='line'>  -DMYSQL_UNIX_ADDR=/data0/mysql/3307/mysqld.sock \
+</span><span class='line'>  -DWITH_MYISAM_STORAGE_ENGINE=1 \
+</span><span class='line'>  -DWITH_INNOBASE_STORAGE_ENGINE=1 \
+</span><span class='line'>  -DWITH_BLACKHOLE_STORAGE_ENGINE=0 \
+</span><span class='line'>  -DWITH_ARCHIVE_STORAGE_ENGINE=0 \
+</span><span class='line'>  -DWITHOUT_PARTITION_STORAGE_ENGINE=1 \
+</span><span class='line'>  -DENABLED_LOCAL_INFILE=1 \
+</span><span class='line'>  -DMYSQL_TCP_PORT=3307 \
+</span><span class='line'>  -DEXTRA_CHARSETS=all \
+</span><span class='line'>  -DDEFAULT_CHARSET=utf8 \
+</span><span class='line'>  -DDEFAULT_COLLATION=utf8_general_ci \
+</span><span class='line'>  -DWITH_DEBUG=0 \
+</span><span class='line'>  -DWITH_EMBEDDED_SERVER=1 \
+</span><span class='line'>  -DWITH_SSL=system \
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>还需要为mysql5518配置相应权限和建立3307端口的相关目录。因为上面已经有具体步骤，这里只是罗列下命令，不具体说明</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chmod +w /usr/local/webserver/mysql5518
+</span><span class='line'>
+</span><span class='line'>chown -R mysql:mysql /usr/local/webserver/mysql5518
+</span><span class='line'>
+</span><span class='line'>cd ../
+</span><span class='line'>
+</span><span class='line'>mkdir -p /data0/mysql/3307/data/
+</span><span class='line'>mkdir -p /data0/mysql/3307/binlog/
+</span><span class='line'>mkdir -p /data0/mysql/3307/relaylog/
+</span><span class='line'>chown -R mysql:mysql /data0/mysql/</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后的启动脚本也要修改为调用5518目录下的my.cnf配置。 而且my.cnf的[mysqld]段也要指定运行端口为3307
+下面是我mysql5518目录下的my.cnf中的一些需要修改的项
+注意：下面文件并不是完整的my.cnf，只是将需要修改的列出来了</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[client]
+</span><span class='line'>port    = 3307
+</span><span class='line'>socket  = /data0/mysql/3307/mysql.sock
+</span><span class='line'>
+</span><span class='line'>[mysqld]
+</span><span class='line'>port    = 3307
+</span><span class='line'>socket  = /data0/mysql/3307/mysql.sock
+</span><span class='line'>basedir = /usr/local/webserver/mysql5518
+</span><span class='line'>datadir = /data0/mysql/3307/data
+</span><span class='line'>log-error = /data0/mysql/3307/mysql_error.log
+</span><span class='line'>pid-file = /data0/mysql/3307/mysql.pid
+</span><span class='line'>log-bin = /data0/mysql/3307/binlog/binlog
+</span><span class='line'>relay-log-index = /data0/mysql/3307/relaylog/relaylog
+</span><span class='line'>relay-log-info-file = /data0/mysql/3307/relaylog/relaylog
+</span><span class='line'>relay-log = /data0/mysql/3307/relaylog/relaylog</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样弄完后，我服务器上就可以同时运行mysql5516与mysql5518两个版本的数据库了。</p>
+
+<p>启动、关闭、重启mysql 5.5.16全部采用service mysqld5516脚本来控制。</p>
+
+<p>启动、关闭、重启mysql 5.5.18全部采用service mysqld5518脚本来控制。</p>
+
+<p><strong>总结：同时运行多个版本数据库，可以方便我们升级数据库或者对不同版本进行测试。</strong></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/11/20/emlog-alipay-pulgin/">Emlog支付插件发布</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-20T00:00:00+08:00" pubdate data-updated="true">Nov 20<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天看到支付宝可以采用http://me.alipay.com/用户名的形式创建自己的收款页面。以前要想写支付宝的付款插件，需要先申请一个商家用户，拿到分配你的密钥才可以。现在可以通过创建收款主页来直接收款，对于程序开发方便了很多（不过这个方式只能简单的收款，并不能用于商品的订单，没有回调函数不能知道是否收款成功等内容）。
+而且看到wordpress貌似已经有了这样的插件可以用来发布一个收款按钮，于是我也心血来潮写了一个。主要还是为了学习如何写一个emlog的插件。看着官方的插件开发文档，参考着公告插件的代码来写的这个支付宝收款插件。
+ 
+<strong>主要功能：</strong></p>
+
+<p>1、在博客的侧边栏显示出一个支付宝的收款按钮，基本也就是用来让人家自愿捐款用。如下图：</p>
+
+<p><img src="http://flic.kr/p/dYrZvA" alt="插件截图1" />
+ 
+2、后台可以方便的设置用来收款的支付宝收款主页地址。</p>
+
+<p><img src="http://flic.kr/p/dYmisZ" alt="插件截图2" />
+ 
+ </p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1084,105 +1483,6 @@ It should be noted that this site is neither an official part of the Debian proj
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/10/25/bo-blog-to-emlog/">微博从bo-blog迁移到了emlog。</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-10-25T00:00:00+08:00" pubdate data-updated="true">Oct 25<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天将微博从原来的bo-blog迁移到了emlog</p>
-
-<p>bo-blog从08年就一直开始使用。感觉还是很不错的。但是一直没怎么更新了，目前很多新功能都不支持。</p>
-
-<p>其实我就打算让博客可以和新浪微博同步。新浪微博里也有个关联博客的功能，据说可以通过博客的rss内容来同步内容。</p>
-
-<p>但是我参考网上文章修改了bo-blog模板，让首页里存在
-<link rel="alternate" type="application/rss+xml" href="<a href="http://www.xinlogs.com/feed">http://www.xinlogs.com/feed</a>&#8220;  title=&#8221;鑫的方向&#8221; />
-然后又测试了<a href="http://www.xinlogs.com/feed">http://www.xinlogs.com/feed</a>，可以正常访问。
-但是新浪微博就是不能同步到我博客的内容。
- 
-最后我发现emlog目前的更新很活跃，而且还有个插件是调用新浪微博的api来将博客内容同步到微博的。就开始了我的迁移过程
-迁移主要参考了<a href="http://bbs.bo-blog.com/thread-28348-1-1.html">http://bbs.bo-blog.com/thread-28348-1-1.html</a>
-原文如下：
-转换过程很简单，先下载并安装emlog_4.0.1，再将原BoBlog中的attachment和data文件夹以及附件中的转换工具上传到新装emlog根目录，执行转换工具按照提示运行即可。<br><br>
-        最终可以将BoBlog中的所有数据比较完美地导入emlog_4.0.1，包括原来BoBlog中的附件和自定义URL等等。对于emlog不支持UBB的问题其实应该很好解决：将UBB解析之后再导入数据库即可。由于我的777篇日志绝大部分不含UBB代码所以就没有继续折腾了……
-<strong>注意：</strong>
-我转换后，没有文章的分类了。但是查看数据库的sort表确实存在分类信息。这个时候，只要在后台建立一个分类。然后其他分类就都出现了。感觉转换效果很不错。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/10/21/htc-g3-hero-bast-rom/">推荐个htc G3 hero比较不错的ROM</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-10-21T00:00:00+08:00" pubdate data-updated="true">Oct 21<span>st</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>以前一直用ligux出的rom。因为htc G3的硬件原因，个人认为用android 2.1rom最好。刷了2.2和2.3都不是很满意。
-原来我一直采用Dauu_SENSE_with_Compacache_BFS_v1.1-signed.zip
-挺稳定的，就是速度一般。有时候内存不够了，会自动重启。
-这次是在hiapk.com上找到的
-<a href="http://bbs.hiapk.com/thread-2539001-1-1.html">新加坡Artlive2.1急速优化版、添加翻页时钟、天气动画；视频为证</a>
-这个ROM是先刷上他的ROM，然后再刷一个<span style="color:#ff0000;font-size:large;">FlyKernel-13-M518-m352.zip</span><br>
- 
-FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，通过压缩包的文件名制定频率。比如上面的M518-m352就是最大和最小频率。
-关于这个内核补丁，可以看下面的介绍
-<a href="http://www.cnrgb.com/flykernel-13">http://www.cnrgb.com/flykernel-13</a>
- </p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -1209,7 +1509,7 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
 <li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
-<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
@@ -1220,12 +1520,21 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
 <li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
 <li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
 
 </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
@@ -1237,14 +1546,6 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
     
       <li class="post">
         <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/02/cloudstack-on-vmware/">cloudstack on vmware</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a>
       </li>
     
   </ul>

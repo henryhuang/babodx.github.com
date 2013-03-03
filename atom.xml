@@ -4,7 +4,7 @@
   <title><![CDATA[鑫的方向]]></title>
   <link href="http://babodx.github.com/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-02-28T22:19:12+08:00</updated>
+  <updated>2013-03-03T15:04:08+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,133 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[快速配置vim和macvim]]></title>
+    <link href="http://babodx.github.com/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/"/>
+    <updated>2013-03-03T14:41:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim</id>
+    <content type="html"><![CDATA[<p>vim以为需要安装各种插件和配置好vimrc才能适合我们开发使用。如果默认只安装vim不用任何插件，并不好用。</p>
+
+<p>以前写过一篇<a href="http://babodx.github.com/blog/2011/10/31/gvim-vimrc-file/">配置gvim</a>，那个时候还是手动安装各种差距和写vimrc</p>
+
+<p>现在已经开始采用vundle来管理vim插件了。而且平台也换mac了。</p>
+
+<p>mac下面自带了vim 7.3 但是我们在mac的图形界面下面还是原因使用macvim。所以要先安装上macvim。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>brew install macvim</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>安装vim套件</strong></p>
+
+<p>所谓vim套件其实就是一些高手整理好的vimrc和配色方案，然后通过vundle来安装上vimrc里面需要的各种插件。来达到快速让vim达到一个很好使用和适合开发的程度。</p>
+
+<p>我使用的是vundle-vimfiles项目，先抓一份文件到自己本地。</p>
+
+<p>如果你很浏览自己原来的.vim，那就先备份一下。我是直接删除了。呵呵</p>
+
+<p>切换到自己的目录<code>cd ~</code></p>
+
+<p>git代码到自己本地</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/ywjno/vundle-vimfiles.git</span></code></pre></td></tr></table></div></figure>
+
+
+<p>用vundle-vimfiles文件夹链接到~/.vim</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ln -s vundle-vimfiles ~/.vim</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后将vundle-vimfiles项目里的vimrc文件链接到~/.vimrc，vundle-vimfiles项目给我们提供了几个版本的vimrc，例如<code>vimrc</code>、<code>easy-vimrc</code>、<code>gvimrc</code></p>
+
+<p>我这里在console下面用vim，一般看代码还是喜欢用macvim打开。所以我用了两个配置文件。</p>
+
+<p>链接到console下的vim配置文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ln -s ~/.vim/vimrc ~/.vimrc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>链接到macvim的配置文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ln -s ~/.vim/gvimrc ~/.gvimrc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后我们安装好Vundle项目来帮助我们安装vimrc里面需要的各种vim plugin</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/gmarik/vundle.git ~/.vim/bundle/vundle</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装后，我们进入vim通过vundle来继续安装需要的各种plugin。进入vim后，输入如下命令安装插件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>:BundleInstall</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果以后想更新插件，主要输入<code>:BundleInstall!</code></p>
+
+<p><strong>调整配色</strong></p>
+
+<p>我的配色喜欢solarized_light，编辑~/.gvimrc在前面加入<code>:colorscheme solarized_light</code></p>
+
+<p>这样打开也就3-5分钟我们就完全配置好我们的vim编辑器了</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[emlog迁移到octopress]]></title>
+    <link href="http://babodx.github.com/blog/2013/02/28/emlogqian-yi-dao-octopress/"/>
+    <updated>2013-02-28T17:05:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/02/28/emlogqian-yi-dao-octopress</id>
+    <content type="html"><![CDATA[<p>用emlog的博客系统已经有2年了，本着活着就要折腾的原则。最近开始尝试使用octopress，这个博客还真的很适合技术人员。通过github版本控制，采用自己最喜欢的编辑器本地写博客，<code>rake deploy</code>发布。</p>
+
+<p>目前我原来的博客100多篇都迁移到octopress里了，不过因为原来的图片都存放在本地，这次打算全部存放到flickr.com了。这部分只能手动整理了。</p>
+
+<p>下面说说我是怎么迁移的吧</p>
+
+<!--more-->
+
+
+<p>网站上有很多人介绍了wordpress到octopress的迁移文章，可以搜索下。jekyll也有一篇专门介绍迁移的<a href="https://github.com/mojombo/jekyll/wiki/blog-migrations">wiki文章</a></p>
+
+<p><strong>思路</strong></p>
+
+<p>因为原来emlog博客是采用mysql来存储文章的，而且文章都是采用html和一些js来控制格式的和octopress差别很大，octopress每篇文章是采用markdown语法的单独文件。</p>
+
+<p>我是通过emlog的rss.php将全部博客导出为一个xml文件，然后通过一个ruby脚本将这个xml拆分为每篇一个markdown文件，并对一些html进行过滤。</p>
+
+<p>以我的博客为例，原来域名是http://xinlogs.com 首先进入后台设置，设置rss输出篇数为全部博客，且输出全文。因为默认只输出10篇并且是摘要部分。</p>
+
+<p>我将导出的xml命名为xinlogs.xml。</p>
+
+<p>然后在我的octopress/source/下面创建<em>import目录，并进入</em>import目录执行导入脚</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ruby -r "./migrate.rb" -e "Jekyll::EmlogDotCom.process('xinlogs.xml')" "xinlogs.xml" </span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个脚本是我根据网上的wordpress脚本修改的，主要是一些xml用的标签和wordpress的不同，我已经修改好了。这个脚本将把xml文件按照每篇日志拆分并保存在_post目录下面，每篇对应一个.md的文件。</p>
+
+<p>我们只要将.md文件移动到octopress/source/_post目录里，然后执行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake gen_deploy</span></code></pre></td></tr></table></div></figure>
+
+
+<p>就可以发布到主机上了。</p>
+
+<p><strong>注意</strong>
+这个migrate.rb脚本调用了一些其他的gem，所以如果提示错误，需要安装相关的gem。
+例如<code>gem install hpricot</code></p>
+
+<p><a href="https://github.com/babodx/babodx.github.com/blob/source/source/_import/migrate.rb">migrate.rb</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[git-first-on-ubuntu]]></title>
@@ -437,7 +564,7 @@ git config user.email "youremail"
  
 脚本如下：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -492,61 +619,62 @@ git config user.email "youremail"
 <span class='line-number'>53</span>
 <span class='line-number'>54</span>
 <span class='line-number'>55</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/usr/bin/php
-</span><span class='line'>&lt;?php
-</span><span class='line'>print("=======fix_url v1=========\n");
-</span><span class='line'>print("=======write by babodx@gmail.com=======\n");
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">#!/usr/bin/php</span>
+</span><span class='line'><span class="cp">&lt;?php</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s2">&quot;=======fix_url v1=========</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s2">&quot;=======write by babodx@gmail.com=======</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
 </span><span class='line'>
 </span><span class='line'>
-</span><span class='line'>function update_url($url) {
-</span><span class='line'>    list($url_115,$url_tv1926)=explode("#",$url);
-</span><span class='line'>    $url_tv1926="http://xiazai.tv1926.com/".$url_tv1926;
-</span><span class='line'>    print("update:");
-</span><span class='line'>    print($url_115);
-</span><span class='line'>    print("&gt;&gt;");
-</span><span class='line'>    $link = mysql_connect('localhost', 'username', 'passwd');
-</span><span class='line'>    if (!$link) {
-</span><span class='line'>        die('Could not connect: ' . mysql_error());
-</span><span class='line'>    }
+</span><span class='line'><span class="k">function</span> <span class="nf">update_url</span><span class="p">(</span><span class="nv">$url</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">list</span><span class="p">(</span><span class="nv">$url_115</span><span class="p">,</span><span class="nv">$url_tv1926</span><span class="p">)</span><span class="o">=</span><span class="nb">explode</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span><span class="nv">$url</span><span class="p">);</span>
+</span><span class='line'>    <span class="nv">$url_tv1926</span><span class="o">=</span><span class="s2">&quot;http://xiazai.tv1926.com/&quot;</span><span class="o">.</span><span class="nv">$url_tv1926</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;update:&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="nv">$url_115</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nv">$link</span> <span class="o">=</span> <span class="nb">mysql_connect</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;passwd&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$link</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">die</span><span class="p">(</span><span class="s1">&#39;Could not connect: &#39;</span> <span class="o">.</span> <span class="nb">mysql_error</span><span class="p">());</span>
+</span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>    mysql_select_db('my_database', $link) or die ('Can\'t use my_database : ' .         mysql_error());
+</span><span class='line'>    <span class="nb">mysql_select_db</span><span class="p">(</span><span class="s1">&#39;my_database&#39;</span><span class="p">,</span> <span class="nv">$link</span><span class="p">)</span> <span class="k">or</span> <span class="k">die</span> <span class="p">(</span><span class="s1">&#39;Can\&#39;t use my_database : &#39;</span> <span class="o">.</span>         <span class="nb">mysql_error</span><span class="p">());</span>
 </span><span class='line'>
-</span><span class='line'>    $sql="update p8_article_content_101 set     my_801=replace(my_801,'".$url_115."','".$url_tv1926."')";
-</span><span class='line'>    mysql_query("set names gbk");
-</span><span class='line'>    $result = mysql_query($sql)
-</span><span class='line'>    or die("Invalid query: " . mysql_error());
+</span><span class='line'>    <span class="nv">$sql</span><span class="o">=</span><span class="s2">&quot;update p8_article_content_101 set     my_801=replace(my_801,&#39;&quot;</span><span class="o">.</span><span class="nv">$url_115</span><span class="o">.</span><span class="s2">&quot;&#39;,&#39;&quot;</span><span class="o">.</span><span class="nv">$url_tv1926</span><span class="o">.</span><span class="s2">&quot;&#39;)&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="nb">mysql_query</span><span class="p">(</span><span class="s2">&quot;set names gbk&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nv">$result</span> <span class="o">=</span> <span class="nb">mysql_query</span><span class="p">(</span><span class="nv">$sql</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">or</span> <span class="k">die</span><span class="p">(</span><span class="s2">&quot;Invalid query: &quot;</span> <span class="o">.</span> <span class="nb">mysql_error</span><span class="p">());</span>
 </span><span class='line'>
-</span><span class='line'>    mysql_close($link);
-</span><span class='line'>    print($url_tv1926);
-</span><span class='line'>    print("\n");
-</span><span class='line'>}
+</span><span class='line'>    <span class="nb">mysql_close</span><span class="p">(</span><span class="nv">$link</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="nv">$url_tv1926</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>if (is_null($argv[1])) {
-</span><span class='line'>    print("argv1 is null\n");
-</span><span class='line'>    exit();
-</span><span class='line'>}
-</span><span class='line'>$file_name=$argv[1];
-</span><span class='line'>print("get files name...\n");
-</span><span class='line'>$file_names=array();
-</span><span class='line'>$handle = @fopen($file_name, "r");
-</span><span class='line'>if ($handle) {
-</span><span class='line'>    while (!feof($handle)) {
-</span><span class='line'>        $buffer = fgets($handle);
-</span><span class='line'>        $tmp_file_name=trim($buffer);
-</span><span class='line'>        array_push($file_names,$tmp_file_name);
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nb">is_null</span><span class="p">(</span><span class="nv">$argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;argv1 is null</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">exit</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nv">$file_name</span><span class="o">=</span><span class="nv">$argv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s2">&quot;get files name...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nv">$file_names</span><span class="o">=</span><span class="k">array</span><span class="p">();</span>
+</span><span class='line'><span class="nv">$handle</span> <span class="o">=</span> <span class="o">@</span><span class="nb">fopen</span><span class="p">(</span><span class="nv">$file_name</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nv">$handle</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="nb">feof</span><span class="p">(</span><span class="nv">$handle</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$buffer</span> <span class="o">=</span> <span class="nb">fgets</span><span class="p">(</span><span class="nv">$handle</span><span class="p">);</span>
+</span><span class='line'>        <span class="nv">$tmp_file_name</span><span class="o">=</span><span class="nx">trim</span><span class="p">(</span><span class="nv">$buffer</span><span class="p">);</span>
+</span><span class='line'>        <span class="nb">array_push</span><span class="p">(</span><span class="nv">$file_names</span><span class="p">,</span><span class="nv">$tmp_file_name</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>    }
-</span><span class='line'>    fclose($handle);
-</span><span class='line'>}
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nb">fclose</span><span class="p">(</span><span class="nv">$handle</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>foreach ($file_names as $file_url) {
-</span><span class='line'>    update_url($file_url);
-</span><span class='line'>}
-</span><span class='line'>print("over!");
+</span><span class='line'><span class="k">foreach</span> <span class="p">(</span><span class="nv">$file_names</span> <span class="k">as</span> <span class="nv">$file_url</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">update_url</span><span class="p">(</span><span class="nv">$file_url</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s2">&quot;over!&quot;</span><span class="p">);</span>
 </span><span class='line'>
 </span><span class='line'>
 </span><span class='line'>
-</span><span class='line'>?&gt;</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
 
 ]]></content>
   </entry>
@@ -2148,253 +2276,6 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
 <p>不过fastcgi_cache的应用也有它的弊端，就是要通过程序控制好刷新和不缓存内容。不然登陆后的用户都显示一个界面，或者发布的消息迟迟不能显示在首页都是它要解决的问题。</p>
 
 <p>一般用户还是建议采用eaccelerator模块加速，因为这样基本无需修改代码，最容易实现。fastcgi_cache很难在不调整代码的情况下使用，因为他会缓存全部php文件，至少我的博客在启用了fastcgi_cache后，后台不正常。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[centos 单独安装apachebench]]></title>
-    <link href="http://babodx.github.com/blog/2012/01/19/install-ApacheBench-on-CentOS-without-Apache/"/>
-    <updated>2012-01-19T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2012/01/19/install-ApacheBench-on-CentOS-without-Apache</id>
-    <content type="html"><![CDATA[<p>这两天在测试php性能优化方法。</p>
-
-<p>为了做压力测试可观察效果，就选择了ApacheBench来作为压力测试工具。其实就是大家常说的ab。</p>
-
-<p>但是这个工具是安装apache web server的时候自带的，现在我服务器上都是跑nginx。也不想为了用这个工具就再装个apache。所以在用下面方法单独安装ab工具，这里记录下步骤。
- 
-首先安装ab运行需要的软件包apr-util</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>yum install apr-util</span></code></pre></td></tr></table></div></figure>
-
-
-<p>然后安装一个yum的工具包，为了可以单独弄出来ab。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>yum install yum-utils</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上面两个安装好以后，我们开始单独安装ab，其实就是下载到apache的rpm包，然后解压后，cp出来ab工具。</p>
-
-<p>下载apache的rpm包就交给yumdownloader完成了，下载前我们建立一个临时目录用来存放。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir httpd
-</span><span class='line'>
-</span><span class='line'>cd httpd
-</span><span class='line'>
-</span><span class='line'>yumdownloader httpd</span></code></pre></td></tr></table></div></figure>
-
-
-<p>下载后，我们对rpm进行解包</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>rpm2cpio httpd-2.2.3-43.el5.centos.3.i386.rpm | cpio -idmv</span></code></pre></td></tr></table></div></figure>
-
-
-<p>最后将我们用到的ab拷贝到系统的/usr/bin目录下就可以了。最后再删除临时目录就全部ok了。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mv usr/bin/ab /usr/bin/ab
-</span><span class='line'>cd ..
-</span><span class='line'>rm -rf httpd</span></code></pre></td></tr></table></div></figure>
-
-
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[squid缓存php页面]]></title>
-    <link href="http://babodx.github.com/blog/2012/01/17/squid-cache-php-script/"/>
-    <updated>2012-01-17T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2012/01/17/squid-cache-php-script</id>
-    <content type="html"><![CDATA[<p>这两天在看squid反向代理加速web应用方面的内容。</p>
-
-<p>总体来看squid的cache都是缓存一些静态内容，例如图片、css、js等文件。而动态内容是不能缓存的。那有没有办法让squid缓存php文件呢？答案是肯定的。</p>
-
-<p>首先用squid反向代理后，我们访问一个test.html的静态页面。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# curl -I http://xinlogs.com:3128/test.html
-</span><span class='line'>HTTP/1.0 200 OK
-</span><span class='line'>Content-Type: text/html
-</span><span class='line'>Content-Length: 77
-</span><span class='line'>Accept-Ranges: bytes
-</span><span class='line'>Server: Tengine/1.2.1
-</span><span class='line'>Date: Tue, 17 Jan 2012 12:38:36 GMT
-</span><span class='line'>Last-Modified: Tue, 17 Jan 2012 01:29:47 GMT
-</span><span class='line'>X-Cache: HIT from squid.xinlogs.com
-</span><span class='line'>Via: 1.1 squid.xinlogs.com:3128 (squid/2.7.STABLE9)
-</span><span class='line'>Connection: close</span></code></pre></td></tr></table></div></figure>
-
-
-<p>可以看到X-Cache: HIT from squid.xinlogs.com，成功命中缓存。说明是被squid缓存的内容直接给我们了。
-而访问一个动态页面呢？</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# curl -I http://xinlogs.com:3128/test.php
-</span><span class='line'>
-</span><span class='line'>HTTP/1.0 200 OK
-</span><span class='line'>
-</span><span class='line'>Server: Tengine/1.2.1
-</span><span class='line'>
-</span><span class='line'>Date: Tue, 17 Jan 2012 12:40:52 GMT
-</span><span class='line'>
-</span><span class='line'>Content-Type: text/html
-</span><span class='line'>
-</span><span class='line'>Vary: Accept-Encoding
-</span><span class='line'>
-</span><span class='line'>X-Powered-By: PHP/5.3.8
-</span><span class='line'>
-</span><span class='line'>X-Cache: MISS from squid.xinlogs.com
-</span><span class='line'>
-</span><span class='line'>Via: 1.1 squid.xinlogs.com:3128 (squid/2.7.STABLE9)
-</span><span class='line'>
-</span><span class='line'>Connection: close</span></code></pre></td></tr></table></div></figure>
-
-
-<p>通过X-Cache: MISS from squid.xinlogs.com，可以看到是未命中，也就是从squid后端的nginx请求到的内容。</p>
-
-<p>查了写资料，发现之所以不缓存动态脚本，主要是php文件没有输出Last-Modified: Tue, 17 Jan 2012 01:29:47 GMT这行头信息。</p>
-
-<p>下面我们构造一个可以输出头信息的php文件test2.php来测试下。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?php
-</span><span class='line'>$now = time();
-</span><span class='line'>$generatedAt = gmdate("D, d M Y H:i:s T",$now);
-</span><span class='line'>//print_r($generatedAt);
-</span><span class='line'>$lastModified = gmdate("D, d M Y 00:00:00 T",$now);
-</span><span class='line'>$expiresAt = gmdate("D, D M Y H:i:s T",strtotime($lastModified)+86400);
-</span><span class='line'>$maxAge=strtotime($expiresAt)-strtotime($generatedAt);
-</span><span class='line'>header('Last-modified: '.$lastModified);
-</span><span class='line'>header('Cache-control: max-age=' . $maxAge);
-</span><span class='line'>echo "Test".time();</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这里我们通过header函数来构造了Last-Modified和Cache-control头信息。</p>
-
-<p>再让我们通过curl -I来查看下是否可以缓存这个test2.php文件</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>[root@localhost ~]# curl -I http://xinlogs.com:3128/test2.php
-</span><span class='line'>
-</span><span class='line'>HTTP/1.0 200 OK
-</span><span class='line'>
-</span><span class='line'>Server: Tengine/1.2.1
-</span><span class='line'>
-</span><span class='line'>Date: Tue, 17 Jan 2012 12:46:08 GMT
-</span><span class='line'>
-</span><span class='line'>Content-Type: text/html
-</span><span class='line'>
-</span><span class='line'>Vary: Accept-Encoding
-</span><span class='line'>
-</span><span class='line'>X-Powered-By: PHP/5.3.8
-</span><span class='line'>
-</span><span class='line'>Last-Modified: Tue, 17 Jan 2012 00:00:00 GMT
-</span><span class='line'>
-</span><span class='line'>Cache-Control: max-age=-1169168
-</span><span class='line'>
-</span><span class='line'>Age: 60
-</span><span class='line'>
-</span><span class='line'>Content-Length: 14
-</span><span class='line'>
-</span><span class='line'>X-Cache: HIT from squid.xinlogs.com
-</span><span class='line'>
-</span><span class='line'>Via: 1.1 squid.xinlogs.com:3128 (squid/2.7.STABLE9)
-</span><span class='line'>
-</span><span class='line'>Connection: close</span></code></pre></td></tr></table></div></figure>
-
-
-<p>通过上面信息，可以看到test2.php已经被缓存了。</p>
-
-<p><strong>总结：通过在php脚本里输出header头信息，还是可以让squid缓存上php文件的。</strong></p>
-
-<p><strong>但是目前还有一些问题没有解决：</strong></p>
-
-<p>通过IE浏览器访问可以正常命中，通过chrome或者firefox浏览器每次访问都是如下未命中</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>1326794201.750      1 210.56.223.167 TCP_REFRESH_MISS/200 355 GET http://xinlogs.com:3128/test2.php - FIRST_UP_PARENT/xinlogs text/html</span></code></pre></td></tr></table></div></figure>
-
-
-<p>而且不同访问方式的第一次访问也都是未命中，比如wget -S第一次访问未命中，如果换了curl -I再访问，还是未命中。</p>
-
-<p>尝试在squid.conf文件里加入了reload-into-ims on选项，但是无效。</p>
-
-<p>以上问题估计还需要看看是不是需要配合nginx的设置来解决，因为静态文件是不存在这些问题的。</p>
 ]]></content>
   </entry>
   

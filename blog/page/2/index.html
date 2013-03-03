@@ -9,7 +9,8 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="最近一直在摸索macbook air的使用方法，目前大部分工作都已经可以放弃windows了。 今天又将华为的E1750上网卡在macbook air上正确安装了。 我的3g上网卡如下 这个上网卡是09年的，现在直接插入usb后，macbook air没有任何反应。 安装方法： 1、 &hellip;">
+  <meta name="description" content="问题背景 最近客户的一个网站总是偶尔出现502错误 网站架构采用的就是nginx 1.0.10+php 5.3.8+php-fpm模式 问题分析 首先要检查下php-fpm的进程数使用情况 1
+netstat -napo |grep "php-fpm" | wc -l &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +65,267 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/08/01/Solve-nginx-502-mistakes/">Nginx通过轮询避免php-fpm引起的502错误</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-01T00:00:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>问题背景</h2>
+
+<p>最近客户的一个网站总是偶尔出现502错误</p>
+
+<p>网站架构采用的就是nginx 1.0.10+php 5.3.8+php-fpm模式</p>
+
+<h2>问题分析</h2>
+
+<p>首先要检查下php-fpm的进程数使用情况</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>netstat -napo |grep "php-fpm" | wc -l</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果这个查询出来的数量接近了你在php-fpm.conf里设置的数量，说明是进程数量不过用了。果断增加</p>
+
+<p>而我这次碰到的不是这个。继续分析</p>
+
+<p>会不会是php程序执行时间过长造成超时？</p>
+
+<p>这个可以通过我的另外一篇文章来查看[php-fpm查找php慢速代码]</p>
+
+<p>如果是这个问题，我们可以通过修改nginx.conf和php-fpm.conf里面相关的超时设置来解决</p>
+
+<p>nginx.conf里面主要是如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>fastcgi_connect_timeout 300;
+</span><span class='line'>fastcgi_send_timeout 300;
+</span><span class='line'>fastcgi_read_timeout 300;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>php-fpm.conf里如要是如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>request_terminate_timeout = 10s</span></code></pre></td></tr></table></div></figure>
+
+
+<p>很不幸，我碰到的也不是这个问题</p>
+
+<p>接着我开始分析是不是fastcgi缓存不够？</p>
+
+<p>主要是在nginx.conf配置里修改如下参数</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>fastcgi_buffer_size 64k;
+</span><span class='line'>fastcgi_buffers 4 64k;
+</span><span class='line'>fastcgi_busy_buffers_size 128k</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个我还真不清楚要设置多大合适，网站说这个配置小了，有可能引发502.</p>
+
+<h2>终极解决办法</h2>
+
+<p>既然上面的常规办法不能解决，那我就想其他办法了。可以肯定的是502引起肯定是因为php-fpm引发的，也就是nginx将正确的客户端请求发给了后端的php-fpm进程，但是因为php-fpm进程的问题导致不能正确解析php代码。最终返回给了客户端502错误。</p>
+
+<p>我觉得nginx既然upstream可以支持多组后端服务器轮询实现简单的负责均衡，并且可以做简单的健康检查。那我就用这个办法开多组php-fpm服务来实现一个php-fpm池，让nginx在这个php-fpm资源里通过stream轮询。</p>
+
+<p>因为有了健康检查机制，这样就可以在错误到达客户端前换另外一个php-fpm进程重新解析了。</p>
+
+<h3>主要配置方法</h3>
+
+<p>先修改php-fpm.conf来开启多组php-fpm进程</p>
+
+<p>我这里开启了php-cgi_www1和php-cgi_www2两组</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[www1]
+</span><span class='line'>listen = /tmp/php-cgi_www1.sock
+</span><span class='line'>user = www
+</span><span class='line'>group = www
+</span><span class='line'>pm = dynamic
+</span><span class='line'>pm.max_children = 128
+</span><span class='line'>pm.start_servers = 32
+</span><span class='line'>pm.min_spare_servers = 32
+</span><span class='line'>pm.max_spare_servers = 96
+</span><span class='line'>pm.max_requests= 10240
+</span><span class='line'>request_terminate_timeout = 10s
+</span><span class='line'> 
+</span><span class='line'>[www2]
+</span><span class='line'>listen = /tmp/php-cgi_www2.sock
+</span><span class='line'>user = www
+</span><span class='line'>group = www
+</span><span class='line'>pm = dynamic
+</span><span class='line'>pm.max_children = 128
+</span><span class='line'>pm.start_servers = 32
+</span><span class='line'>pm.min_spare_servers = 32
+</span><span class='line'>pm.max_spare_servers = 96
+</span><span class='line'>pm.max_requests= 10240
+</span><span class='line'>request_terminate_timeout = 10s</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后重启php-fpm进程，并查看/tmp目录是否已经出现了php-cgi_www1.sock和php-cgi_www2.sock的文件</p>
+
+<p>如果存在这两个文件，说明php-fpm配置ok了。我们继续修改nginx.conf配置</p>
+
+<p>主要在http {} 的配置块内，加入我们要使用的轮询配置</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>upstream php_servers{
+</span><span class='line'>  server unix:/tmp/php-cgi_www1.sock;
+</span><span class='line'>  server unix:/tmp/php-cgi_www2.sock;
+</span><span class='line'>}
+</span><span class='line'>fastcgi_next_upstream error timeout invalid_header http_500 http_503;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>接着修改我们原来处理php代码的fastcgi配置</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>location ~ .*\.(php|php5)?$
+</span><span class='line'>   {
+</span><span class='line'>     fastcgi_pass  unix:/tmp/php-cgi_www.sock;
+</span><span class='line'>     fastcgi_index index.php;
+</span><span class='line'>     include fastcgi.conf;
+</span><span class='line'>   }</span></code></pre></td></tr></table></div></figure>
+
+
+<p>将其中的fastcgi_pass由原来的php-cgi_www.sock单独的php-fpm进程修改为我们创建的php_servers轮询池</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>location ~ .*\.(php|php5)?$
+</span><span class='line'>   {
+</span><span class='line'>     fastcgi_pass php_servers;
+</span><span class='line'>     fastcgi_index index.php;
+</span><span class='line'>     include fastcgi.conf;
+</span><span class='line'>   }</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过这样的配置，可以肯定的是php-fpm因为采用两组来轮询工作，并且有fastcgi_next_upstream进程简单的健康检查，可以最大限度的避免502错误发生了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/29/accelerate-app-store-download/">快速提升app Store下载速度</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-29T00:00:00+08:00" pubdate data-updated="true">Jul 29<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前两天开始更新MAC OS Mountain Lion。</p>
+
+<p>为了下载这个4.5G的内容，可是郁闷坏了。计算出来的剩余时间7天。</p>
+
+<p>于是开始找加速下载的办法，看来一些帖子以后基本知道了下载速度主要取决与dns将你的请求解析到哪台服务器。</p>
+
+<p>网上一般是都是基于自己找到一台快速的下载服务器IP，然后手动修改/etc/hosts文件的办法。
+ 
+但是其实看原来就知道，如果我们设置的DNS得当，就能起到从最快服务器下载的目的。</p>
+
+<p>于是我查到了<a href="http://dns.v2ex.com/">http://dns.v2ex.com/</a>这个网站，但是使用这个dns后，速度依然很慢。</p>
+
+<p>后来又在www.weiphone.com找到了一个台湾的DNS。设置后速度大幅提升。
+ 
+如果你也在北京、也用歌华有线。</p>
+
+<p>试试下面这个台湾的DNS吧
+ </p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>168.95.1.1</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1456,307 +1718,6 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/19/install-ApacheBench-on-CentOS-without-Apache/">Centos 单独安装apachebench</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-19T00:00:00+08:00" pubdate data-updated="true">Jan 19<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>这两天在测试php性能优化方法。</p>
-
-<p>为了做压力测试可观察效果，就选择了ApacheBench来作为压力测试工具。其实就是大家常说的ab。</p>
-
-<p>但是这个工具是安装apache web server的时候自带的，现在我服务器上都是跑nginx。也不想为了用这个工具就再装个apache。所以在用下面方法单独安装ab工具，这里记录下步骤。
- 
-首先安装ab运行需要的软件包apr-util</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>yum install apr-util</span></code></pre></td></tr></table></div></figure>
-
-
-<p>然后安装一个yum的工具包，为了可以单独弄出来ab。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>yum install yum-utils</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上面两个安装好以后，我们开始单独安装ab，其实就是下载到apache的rpm包，然后解压后，cp出来ab工具。</p>
-
-<p>下载apache的rpm包就交给yumdownloader完成了，下载前我们建立一个临时目录用来存放。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir httpd
-</span><span class='line'>
-</span><span class='line'>cd httpd
-</span><span class='line'>
-</span><span class='line'>yumdownloader httpd</span></code></pre></td></tr></table></div></figure>
-
-
-<p>下载后，我们对rpm进行解包</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>rpm2cpio httpd-2.2.3-43.el5.centos.3.i386.rpm | cpio -idmv</span></code></pre></td></tr></table></div></figure>
-
-
-<p>最后将我们用到的ab拷贝到系统的/usr/bin目录下就可以了。最后再删除临时目录就全部ok了。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mv usr/bin/ab /usr/bin/ab
-</span><span class='line'>cd ..
-</span><span class='line'>rm -rf httpd</span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/17/squid-cache-php-script/">Squid缓存php页面</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-17T00:00:00+08:00" pubdate data-updated="true">Jan 17<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>这两天在看squid反向代理加速web应用方面的内容。</p>
-
-<p>总体来看squid的cache都是缓存一些静态内容，例如图片、css、js等文件。而动态内容是不能缓存的。那有没有办法让squid缓存php文件呢？答案是肯定的。</p>
-
-<p>首先用squid反向代理后，我们访问一个test.html的静态页面。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# curl -I http://xinlogs.com:3128/test.html
-</span><span class='line'>HTTP/1.0 200 OK
-</span><span class='line'>Content-Type: text/html
-</span><span class='line'>Content-Length: 77
-</span><span class='line'>Accept-Ranges: bytes
-</span><span class='line'>Server: Tengine/1.2.1
-</span><span class='line'>Date: Tue, 17 Jan 2012 12:38:36 GMT
-</span><span class='line'>Last-Modified: Tue, 17 Jan 2012 01:29:47 GMT
-</span><span class='line'>X-Cache: HIT from squid.xinlogs.com
-</span><span class='line'>Via: 1.1 squid.xinlogs.com:3128 (squid/2.7.STABLE9)
-</span><span class='line'>Connection: close</span></code></pre></td></tr></table></div></figure>
-
-
-<p>可以看到X-Cache: HIT from squid.xinlogs.com，成功命中缓存。说明是被squid缓存的内容直接给我们了。
-而访问一个动态页面呢？</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# curl -I http://xinlogs.com:3128/test.php
-</span><span class='line'>
-</span><span class='line'>HTTP/1.0 200 OK
-</span><span class='line'>
-</span><span class='line'>Server: Tengine/1.2.1
-</span><span class='line'>
-</span><span class='line'>Date: Tue, 17 Jan 2012 12:40:52 GMT
-</span><span class='line'>
-</span><span class='line'>Content-Type: text/html
-</span><span class='line'>
-</span><span class='line'>Vary: Accept-Encoding
-</span><span class='line'>
-</span><span class='line'>X-Powered-By: PHP/5.3.8
-</span><span class='line'>
-</span><span class='line'>X-Cache: MISS from squid.xinlogs.com
-</span><span class='line'>
-</span><span class='line'>Via: 1.1 squid.xinlogs.com:3128 (squid/2.7.STABLE9)
-</span><span class='line'>
-</span><span class='line'>Connection: close</span></code></pre></td></tr></table></div></figure>
-
-
-<p>通过X-Cache: MISS from squid.xinlogs.com，可以看到是未命中，也就是从squid后端的nginx请求到的内容。</p>
-
-<p>查了写资料，发现之所以不缓存动态脚本，主要是php文件没有输出Last-Modified: Tue, 17 Jan 2012 01:29:47 GMT这行头信息。</p>
-
-<p>下面我们构造一个可以输出头信息的php文件test2.php来测试下。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?php
-</span><span class='line'>$now = time();
-</span><span class='line'>$generatedAt = gmdate("D, d M Y H:i:s T",$now);
-</span><span class='line'>//print_r($generatedAt);
-</span><span class='line'>$lastModified = gmdate("D, d M Y 00:00:00 T",$now);
-</span><span class='line'>$expiresAt = gmdate("D, D M Y H:i:s T",strtotime($lastModified)+86400);
-</span><span class='line'>$maxAge=strtotime($expiresAt)-strtotime($generatedAt);
-</span><span class='line'>header('Last-modified: '.$lastModified);
-</span><span class='line'>header('Cache-control: max-age=' . $maxAge);
-</span><span class='line'>echo "Test".time();</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这里我们通过header函数来构造了Last-Modified和Cache-control头信息。</p>
-
-<p>再让我们通过curl -I来查看下是否可以缓存这个test2.php文件</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>[root@localhost ~]# curl -I http://xinlogs.com:3128/test2.php
-</span><span class='line'>
-</span><span class='line'>HTTP/1.0 200 OK
-</span><span class='line'>
-</span><span class='line'>Server: Tengine/1.2.1
-</span><span class='line'>
-</span><span class='line'>Date: Tue, 17 Jan 2012 12:46:08 GMT
-</span><span class='line'>
-</span><span class='line'>Content-Type: text/html
-</span><span class='line'>
-</span><span class='line'>Vary: Accept-Encoding
-</span><span class='line'>
-</span><span class='line'>X-Powered-By: PHP/5.3.8
-</span><span class='line'>
-</span><span class='line'>Last-Modified: Tue, 17 Jan 2012 00:00:00 GMT
-</span><span class='line'>
-</span><span class='line'>Cache-Control: max-age=-1169168
-</span><span class='line'>
-</span><span class='line'>Age: 60
-</span><span class='line'>
-</span><span class='line'>Content-Length: 14
-</span><span class='line'>
-</span><span class='line'>X-Cache: HIT from squid.xinlogs.com
-</span><span class='line'>
-</span><span class='line'>Via: 1.1 squid.xinlogs.com:3128 (squid/2.7.STABLE9)
-</span><span class='line'>
-</span><span class='line'>Connection: close</span></code></pre></td></tr></table></div></figure>
-
-
-<p>通过上面信息，可以看到test2.php已经被缓存了。</p>
-
-<p><strong>总结：通过在php脚本里输出header头信息，还是可以让squid缓存上php文件的。</strong></p>
-
-<p><strong>但是目前还有一些问题没有解决：</strong></p>
-
-<p>通过IE浏览器访问可以正常命中，通过chrome或者firefox浏览器每次访问都是如下未命中</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>1326794201.750      1 210.56.223.167 TCP_REFRESH_MISS/200 355 GET http://xinlogs.com:3128/test2.php - FIRST_UP_PARENT/xinlogs text/html</span></code></pre></td></tr></table></div></figure>
-
-
-<p>而且不同访问方式的第一次访问也都是未命中，比如wget -S第一次访问未命中，如果换了curl -I再访问，还是未命中。</p>
-
-<p>尝试在squid.conf文件里加入了reload-into-ims on选项，但是无效。</p>
-
-<p>以上问题估计还需要看看是不是需要配合nginx的设置来解决，因为静态文件是不存在这些问题的。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1783,7 +1744,7 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
 <li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
-<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
@@ -1794,12 +1755,21 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
 <li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
 <li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
 
 </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
@@ -1811,14 +1781,6 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
     
       <li class="post">
         <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/02/cloudstack-on-vmware/">cloudstack on vmware</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a>
       </li>
     
   </ul>

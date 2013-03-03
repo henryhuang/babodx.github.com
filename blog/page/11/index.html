@@ -9,8 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="升级 昨天开始作的升级。 早上到单位，就开始Alt+F2 在弹出的命令行窗口输入
-update-manager -d 然后就进入了漫长的等待，单位网络那个垃圾。。。。。告诉我42天。。。。。 一直到下班，下载了900多个文件，一共要下载1300多 晚上到家继续update-manager -d &hellip;">
+  <meta name="description" content="主要参考下面两旁文章，先贴过来，以后再整理。 http://oceanobservatories.org/spaces/display/CIDev/Xen+on+Ubuntu+9.04+(Jaunty)) http://linux.com/community/blogs/Xen-Create-a- &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +64,226 @@ update-manager -d 然后就进入了漫长的等待，单位网络那个垃圾�
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-904-install-xen/">Ubuntu 9.04安装xen</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>主要参考下面两旁文章，先贴过来，以后再整理。</p>
+
+<p><a href="http://oceanobservatories.org/spaces/display/CIDev/Xen+on+Ubuntu+9.04+(Jaunty">http://oceanobservatories.org/spaces/display/CIDev/Xen+on+Ubuntu+9.04+(Jaunty)</a>)</p>
+
+<p><a href="http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html">http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html</a></p>
+
+<p><strong>安装xen</strong></p>
+
+<p>Xen on Ubuntu 9.04 (Jaunty)</p>
+
+<p>Added by <a href="http://oceanobservatories.org/spaces/display/~thim">Thomas Im</a> , last edited by <a href="http://oceanobservatories.org/spaces/display/~thim">Thomas Im</a> on Jun 11, 2009  (<a href="http://oceanobservatories.org/spaces/pages/diffpages.action?pageId=18353165&originalId=18353171">view change</a>)
+Labels: 
+(None)
+Following applies to Ubuntu 9.04 Jaunty 64-bit installation.  Notes taken from rebuild of &#8216;amoeba&#8217; development system.
+Installation</p>
+
+<pre>sudo apt-get install ubuntu-xen-server # Jaunty Xen package does not include the dom0 Xen kernel so these must be installed separately  wget http://security.debian.org/debian-security/pool/updates/main/l/linux-2.6/linux-modules-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb wget http://security.debian.org/debian-security/pool/updates/main/l/linux-2.6/linux-image-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb  sudo dpkg -i linux-modules-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb linux-image-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb  sudo apt-get install python2.5 shutdown -r now   sudo vim /etc/network/interfaces .. auto eth0 iface eth0 inet static   address xxx.xxx.xxx.xxx   gateway xxx.xxx.xxx.xxx   netmask 255.255.255.0   sudo vim /etc/resolv.conf ... domain ucsd.edu search ucsd.edu  nameserver xxx.xxx.xxx.xxx nameserver xxx.xxx.xxx.xxx   sudo /etc/init.d/networking restart  </pre>
+
+
+<p>Create Jaunty DomU (Guest)
+[http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html]
+<img src="http://oceanobservatories.org/spaces/images/icons/emoticons/information.gif" border="0" width="16" height="16" align="absMiddle"><br><strong><strong>References:</strong></strong>
+<a href="https://help.ubuntu.com/community/Xen">https://help.ubuntu.com/community/Xen</a><br><a href="http://www.infohit.net/blog/adate/053109/archive/1.html">http://www.infohit.net/blog/adate/053109/archive/1.html</a><br><a href="http://www.chrisk.de/blog/2008/12/how-to-run-xen-in-ubuntu-intrepid-without-compiling-a-kernel-by-yourself/">http://www.chrisk.de/blog/2008/12/how-to-run-xen-in-ubuntu-intrepid-without-compiling-a-kernel-by-yourself/</a></p>
+
+<h3></h3>
+
+
+<p><strong>安装guest系统</strong>
+These are instructions for creating an Ubuntu Jaunty DomU on Debian Lenny Dom0 using Xen 3.2.1 that comes with Lenny.  I&#8217;m installing into an LVM rather than using a file image.  See <a href="http://www.howtoforge.com/xen-live-migration-of-an-lvm-based-virtual-machine-with-iscsi-on-debian-lenny">this HowtoForge article for background of my particular setup</a>.  This tutorial assumes you&#8217;re working from a similar setup with an iscsi target and LVM-based VMs.
+The reason I&#8217;m posting this is because I had such a hard time finding some combination of tools that worked correctly to do this.  I tried a few options but had little success:</p>
+
+<ul>
+<li>debootstrap - Didn&#8217;t seem to work with Jaunty at all.  It would just crash </li>
+<li>vm-install - Doesn&#8217;t support LVM-based VMs by default, but there is a procedure for converting the qcow image to an LVM</li>
+</ul>
+
+
+<p>What I found is that I could find no way of creating the LVM-based VM in Lenny.  I actually had to create a sid instance first and then install my open-iscsi and xen-utils into the sid VM, then use SID to populate the VM.  <br><u><strong>Perform the following actions in your SID vm or workstation</strong></u><br>
+Note:  You&#8217;ll need your /etc/xen-tools/xen-tools.conf setup like the instructions in the HowtoForge article (things like gateway, netmask, broadcast, passwd, fs type, install-method, etc).<br>
+Whenever I would try to build the vm with the default partitions, it would always fail.  For some reason the resulting vm would have an fstab that shows something like sda1 and sda2 instead of xvda1 and xvda2.  I had to create my own partition scheme before anything would work right.  Here&#8217;s mine: $ <strong>sudo cat /etc/xen-tools/partitions.d/with-data</strong><br>
+[root]<br>
+size=4G<br>
+type=ext3<br>
+mountpoint=/<br>
+options=sync,errors=remount-ro<br>
+[swap]<br>
+size=512M<br>
+type=swap<br>
+[data]<br>
+size=4G<br>
+type=ext3<br>
+mountpoint=/data<br>
+options=nodev
+You will need to create a symlink for jaunty so that the option is recognized at the command-line. 
+<strong>$ cd /usr/lib/xen-tools</strong>
+<strong>$ sudo ln -s edgy.d jaunty.d  </strong>
+Now, finally, you can create the image.  This step may take some time
+<strong>$ xen-create-image &#8211;hostname=myserver &#8211;dhcp &#8211;lvm=vg_xen &#8211;dist=jaunty &#8211;mirror=http://archive.ubuntu.com/ubuntu &#8211;size=4Gb &#8211;memory=512Mb &#8211;swap=512MB &#8211;arch=i386 &#8211;partitions=with-data</strong>
+Since you&#8217;re building the LVM on a different machine than it will eventually run on, you&#8217;ll need to  copy the resulting xen config to the correct server:
+<strong>$ scp /etc/xen/myserver.cfg root@realhost:/etc/xen/</strong>
+That should be all you need to get this working.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-904-install-vmware-tools/">Ubuntu 9.04 Server 安装VMware Tools解决share Folders问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>我的主系统是Winxp在vmware 6.5.2 build-156735下安装的ubuntu server 9.04</p>
+
+<p>因为安装vmware tools后，可以使用vmware 提供的share folders让winxp的主系统可以将某个目录映射到虚拟的ubuntu系统里。</p>
+
+<p>我就开始在vmware里面安装vmware tools工具。下面是过程，包括不能用vmhgfs的解决办法</p>
+
+<p>**安装VMware tools</p>
+
+<p>安装前，先安装需要的软件包</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>apt-get install autoconf automake binutils make cpp gcc linux-headers-$(uname -r)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装后，在vmware上面选择VM-》Install Vmware Tools</p>
+
+<p>然后切换到ubuntu server 9.04里，运行mount命令，将Vmware tools的光盘挂载
+<code>sudo mount /dev/cdrom /mnt</code></p>
+
+<p>拷贝安装VMware Tools需要的安装文件到/tmp目录
+<code>sudo cp /mnt/VMwareTools-7.8.5-156735.tar.gz /tmp</code></p>
+
+<p>卸载/mnt目录，因为安装的时候，需要在/mnt目录下创建hgfs目录，如果这时候挂载着CDROM，就会导致创建hgfs目录失败。<code>sudo /mnt</code></p>
+
+<p>解压安装文件并修改会出现问题的page.c文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /tmp 
+</span><span class='line'>tar zxvf VMwareTools-7.8.5-156735.tar.gz
+</span><span class='line'>cd /tmp/vmware-tools-distrib/lib/modules/source&lt;/span&gt; 
+</span><span class='line'>sudo cp ./vmhgfs.tar /tmp/&lt;/span&gt; 
+</span><span class='line'>tar xvf vmhgfs.tar &lt;/span&gt;
+</span><span class='line'>cd vmhgfs-only/ 
+</span><span class='line'>sudo vi page.c </span></code></pre></td></tr></table></div></figure>
+
+
+<p>修改page.c里面867行的一个错误函数，</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>page = __grab_cache_page(mapping, index); </span></code></pre></td></tr></table></div></figure>
+
+
+<p>将这个函数修改为</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>page = grab_cache_page_write_begin(mapping, index,flags);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+这个函数是在/usr/src/linux-headers-2.6.28-11-server/include/linux$下的，pagemap.h里面定义的，内容如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>struct page *grab_cache_page_write_begin(struct address_space *mapping,
+</span><span class='line'>                        pgoff_t index, unsigned flags); </span></code></pre></td></tr></table></div></figure>
+
+
+<p>修改后，保存。然后重新打包成vmhgfs.tar文件，放置到/tmp/vmware-tools-distrib/lib/modules/source目录下。
+完成上面工作后，就可以</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /tmp/vmware-tools-distrib
+</span><span class='line'>sudo ./vmware-install.pl</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装提示安装就可以了。</p>
+
+<p>当看到如下提示，代表已经正确编译了vmhgfs模块了。应该可以顺利使用share folders功能。</p>
+
+<p>The vmhgfs module loads perfectly into the running kernel.</p>
+
+<p>也可以运行</p>
+
+<p><code>lsmod |grep vmhgfs</code></p>
+
+<p>如果有如下显示，表示安装成功</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vmhgfs                 53728  1 </span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就可以用vmware提供的share folders功能和ubuntu server 9.04共享文件了。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -904,94 +1123,6 @@ update-manager -d 然后就进入了漫长的等待，单位网络那个垃圾�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/opensource-im/">一个很好的开源企业内部IM解决方案</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天发现了<a href="http://www.igniterealtime.org/">http://www.igniterealtime.org</a>这个项目首页</p>
-
-<p>这个项目可以在企业内部架设一台服务器，来完成内部IM功能。客户端可以想QQ或者MSN一样登陆。并且通过服务器上设置GATEWAY功能，还能与MSN等主流软件通讯。</p>
-
-<p>具体功能还没有测试，不过打算有时间的时候架设下进行试用。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/navicat/">一个在windows下很好用的MySQL工具Navicat</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>为了解决中文乱码，我的Mysql都设置了使用utf8编码</p>
-
-<p>这样一来，使用SQLyog Enterprise查看表里面内容，就都不能正常显示了。可能SQLyog需要设置？反正我没有搞出来。</p>
-
-<p>不过后来我换用了Navicat 7以后，感觉很好。所有中文内容都可以正确显示</p>
-
-<p>比mysql front也要强很多。以后我就用这个了
-<img src="http://www.navicat.com/images/stories/product/mysql/product/win/win_big.jpg" alt="navicat" /></p>
-
-<p>而且支持Linux,windows,mac三个平台。下面是介绍</p>
-
-<p><span>PremiumSoft Navicat™ is a powerful MySQL database administration and development tool that is not only sophisticated enough for professional developers, but also easy to learn for new users. With an user-friendly GUI, Navicat™ lets you quickly and easily create, organize, access and share information in a secure and convenient way. </span>
-<span>PremiumSoft Navicat supports multiple MySQL server connections which can be connected locally or remotely. Your remote MySQL server can be running on Linux, Unix, Mac OS X or Windows platform.<br></span></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/12/">&larr; Older</a>
@@ -1018,7 +1149,7 @@ update-manager -d 然后就进入了漫长的等待，单位网络那个垃圾�
 <li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
-<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
@@ -1029,12 +1160,21 @@ update-manager -d 然后就进入了漫长的等待，单位网络那个垃圾�
 <li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
 <li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
 
 </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
@@ -1046,14 +1186,6 @@ update-manager -d 然后就进入了漫长的等待，单位网络那个垃圾�
     
       <li class="post">
         <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/02/cloudstack-on-vmware/">cloudstack on vmware</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a>
       </li>
     
   </ul>

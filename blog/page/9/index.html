@@ -9,7 +9,24 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="Installation guide 安装手册 Prerequisites 前提条件 To run the play framework, you need Java 5 or later. If you wish to build play from source, you will need &hellip;">
+  <meta name="description" content="最近在学习drupal，发现这个程序比xoops、joomla都灵活，对应的学习曲线也高。反正安装后，根本不知道真没设置。呵呵 下面先在nginx上配置了rewrite规则，让drupal支持简洁的URL 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +81,303 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/01/01/druapl-url-nginx-rewrite/">Drupal在nginx 0.8.15下的简洁URL配置</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-01T00:00:00+08:00" pubdate data-updated="true">Jan 1<span>st</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近在学习drupal，发现这个程序比xoops、joomla都灵活，对应的学习曲线也高。反正安装后，根本不知道真没设置。呵呵</p>
+
+<p>下面先在nginx上配置了rewrite规则，让drupal支持简洁的URL</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>server
+</span><span class='line'>{
+</span><span class='line'>listen 80;
+</span><span class='line'>server_name drupal.xinlogs.com;
+</span><span class='line'>index index.html index.htm index.php;
+</span><span class='line'>root /data0/htdocs/drupal;
+</span><span class='line'> 
+</span><span class='line'>#limit_conn crawler 20;
+</span><span class='line'>location = / {
+</span><span class='line'>index index.php;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>location / {
+</span><span class='line'>index index.php index.html;
+</span><span class='line'> 
+</span><span class='line'>if (!-f $request_filename) {
+</span><span class='line'>rewrite ^(.*)$ /index.php?q=$1 last;
+</span><span class='line'>break;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>if (!-d $request_filename) {
+</span><span class='line'>rewrite ^(.*)$ /index.php?q=$1 last;
+</span><span class='line'>break;
+</span><span class='line'>}
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>location ~ .*.(php|php5)?$
+</span><span class='line'>{
+</span><span class='line'>fastcgi_pass unix:/tmp/php-cgi.sock;
+</span><span class='line'>#fastcgi_pass 127.0.0.1:9000;
+</span><span class='line'>fastcgi_index index.php;
+</span><span class='line'>include fcgi.conf;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>location ~ .*.(gif|jpg|jpeg|png|bmp|swf)$
+</span><span class='line'>{
+</span><span class='line'>expires 30d;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>location ~ .*.(js|css)?$
+</span><span class='line'>{
+</span><span class='line'>expires 1h;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>log_format drupal_access '$remote_addr - $remote_user [$time_local] "$request" '
+</span><span class='line'>'$status $body_bytes_sent "$http_referer" '
+</span><span class='line'>'"$http_user_agent" $http_x_forwarded_for';
+</span><span class='line'>access_log /data1/logs/drupal_access.log drupal_access;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/31/bo-blog-insert-googleadsense/">Bo-blog 2.1.1如何加入google广告条</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-31T00:00:00+08:00" pubdate data-updated="true">Dec 31<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>刚开始使用的bo-blog的时候也不知道如何加入google广告条，经过这几天的咕哝，现在已经成功在右边和下面加入。方法记录如下</p>
+
+<p><strong>右侧边栏加入google广告</strong></p>
+
+<p>进入后台管理->常规管理->模块配置</p>
+
+<p>点击左侧的新建/编辑项目 如图</p>
+
+<p><img src="http://farm9.staticflickr.com/8102/8512175362_3d5fd9e7c9.jpg" alt="编辑项目截图" /></p>
+
+<p>然后在手动添加项目中选择侧边模块，确定。如图</p>
+
+<p><img src="http://farm9.staticflickr.com/8370/8512175480_2bb7b4d188.jpg" alt="侧边截图" /></p>
+
+<p>确认后，进入到新增/编辑项目页面</p>
+
+<p>项目名称&#8211;这个是在后台编辑的时候，给自己分辨模块用的，随意命名。我的叫做googleadsense，注意：只能字母和数字</p>
+
+<p>项目描述&#8211;随意填写</p>
+
+<p>抬头文字&#8211;显示在首页侧边栏上，我的叫做广告栏，根据个人情况写</p>
+
+<p>栏目内容&#8211;这里写入google的广告代码就可以了</p>
+
+<p>这个办法最容易，不用修改模板。如果加入后，首页显示google广告栏，里面内容是白的，不要着急，过段时间就可以显示了。我第一个广告大约在30分钟后，才正确显示出来。</p>
+
+<p>博客底部加入google广告</p>
+
+<p>底部加入广告，也可以用上面类似的办法，通过加入底部模块实现。但是我尝试了，不好对齐，而且有的模板会破坏底部风格。所以我没有用添加底部模块的办法。</p>
+
+<p>我采用直接修改模板的elements.php文件方法。</p>
+
+<p>到bo-blog的template目录下，找到自己使用的模板文件夹，我用的neowin2，所以对应目录就是neowin2</p>
+
+<p>在模板目录下，打开elements.php文件。找到文件里的displayfooter位置，在displayfooter段里面加入google广告代码。入下所示</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">$elements[&#39;displayfooter&#39;]=&lt;&lt;&lt;eot</span>
+</span><span class='line'><span class="x">&lt;div class=&quot;clear&quot;&gt; &lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;div class=&quot;content-box-b&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;div class=&quot;content-box-b-r&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;div class=&quot;content-box-b-l&quot;&gt;&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">/* 下面为google广告代码 */</span>
+</span><span class='line'><span class="x">&lt;center&gt;</span>
+</span><span class='line'><span class="x">&lt;script type=&quot;text/javascript&quot;&gt;&lt;!--</span>
+</span><span class='line'><span class="x">google_ad_client = &quot;pub-2759888315234430&quot;;</span>
+</span><span class='line'><span class="x">/* 728x90, ... 09-12-21 */</span>
+</span><span class='line'><span class="x">google_ad_slot = &quot;9531615827&quot;;</span>
+</span><span class='line'><span class="x">google_ad_width = 728;</span>
+</span><span class='line'><span class="x">google_ad_height = 90;</span>
+</span><span class='line'><span class="x">//--&gt;</span>
+</span><span class='line'><span class="x">&lt;/script&gt;</span>
+</span><span class='line'><span class="x">&lt;script type=&quot;text/javascript&quot;</span>
+</span><span class='line'><span class="x">src=&quot;http://pagead2.googlesyndication.com/pagead/show_ads.js&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;/script&gt;</span>
+</span><span class='line'><span class="x">&lt;/center&gt;</span>
+</span><span class='line'><span class="x">/*google广告代码结束*/</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;footer&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;footer-r&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;footer-l&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;footer-misc&quot;&gt;</span>
+</span><span class='line'><span class="x">Skin By &lt;a href=&quot;http://www.neowin.net/&quot; target=&quot;_blank&quot;&gt;Neowin&lt;/a&gt;&lt;br /&gt;</span>
+</span><span class='line'><span class="x">Transplanted By &lt;a href=&quot;http://blog.meiu.cn/&quot; target=&quot;_blank&quot;&gt;Lingter&lt;/a&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;footer-copyright&quot;&gt;</span>
+</span><span class='line'><span class="x">{section_foot_components}</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;processtime&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;div class=&quot;clear&quot;&gt;&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">eot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面的代码就是在博客下面，footer信息的上面，加入一条google广告。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -784,82 +1098,6 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-xyz/">有想恶补三角函数的冲动！</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近在咕哝魔兽世界的坐标系统，发现这个游戏的坐标系统如下图所示</p>
-
-<p><img src="http://farm9.staticflickr.com/8228/8510673160_84e4f8b348.jpg" alt="wow坐标系统" /></p>
-
-<p>游戏的平面坐标为X,Y,用2π代表360度的方向。Z为高度，我们可以不用考虑。现在如果我们知道A点坐标X=2,Y=2 ，B点坐标X=4,Y=3那要想从A点出发到B点，我们的方向应该是多少呢？(目前我就知道Y轴正方向的话，角度为0 。X轴正方向 为π/4=90度)该怎么写这个三角函数得到这个角的的数值呢？</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-robot-battlegroud/">TBC 2.3如何挂战场</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>目前TBC 2.3了，荣誉又开始有用处了，可以购买S1装备。但是如何挂战场呢？毕竟不是每个人都能不上班，每天玩10个小时。。。我目前的办法是使用国外开发的一款练级外挂glider，再配合一个自己些的程序和修改过的一个插件来实现的。glider可以控制人物按照设定的线路跑动和打怪。我用c#些一个程序，来监控着角色，如果死亡了，就停止wowglider，等待复活。如果复活了，就开glider。战斗结束了，就点npc排队。然后用我写的插件回答GM问题。。。。总之还算可以吧。用了大约1-2个晚上也业余时间解决的。c#确实使用起来很简单，至少之前我没有用过c#。但写个简单的网络程序，负责控制其它程序，实现起来很容易。基本都是采用TcpClient类，就可以了<a href="http://www.pvpbot.com/">www.pvpbot.com</a>也是个选择，但是收费比较贵。其实可以考虑用c#写个简单的web服务器，通过dns欺骗，来对pvpbot的bgtool做本地验证。关于pvpbot的验证，确实不怎么好。至少我用了不到1个小时抓包，分析和测试。已经可以本地验证了，不过懒得写个简单web服务器实现验证了。（以前没有写过，还要查资料。。）关于网络验证，glider做的就比较好。我觉得至少要对时间和硬件编号和用户名同时加密发送到服务器。然后再服务器验证后，对那个时间和是否验证通过等信息再加密，大乱顺序后发送回来。这样就算抓包，因为每次发送的时间不同，每次抓到的信息也不同。如果不知道算法，很难实现本地验证。不过c#的代码保护太差，反编译后和看源代码差不多。。。。。。这个很难解决。。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/10/">&larr; Older</a>
@@ -886,7 +1124,7 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
 <li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
-<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
@@ -897,12 +1135,21 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
 <li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
 <li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
 
 </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
@@ -914,14 +1161,6 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
     
       <li class="post">
         <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/02/cloudstack-on-vmware/">cloudstack on vmware</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a>
       </li>
     
   </ul>

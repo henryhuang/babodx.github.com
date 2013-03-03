@@ -9,13 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="获得ruby源代码 1
-wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p290.tar.gz 解压并编译ruby 1
-2
-3
-4
-5
-tar zxvf ruby-1.9.2-p290.tar.gz  cd ruby-1.9.2-p290 &hellip;">
+  <meta name="description" content="今天将微博从原来的bo-blog迁移到了emlog bo-blog从08年就一直开始使用。感觉还是很不错的。但是一直没怎么更新了，目前很多新功能都不支持。 其实我就打算让博客可以和新浪微博同步。新浪微博里也有个关联博客的功能，据说可以通过博客的rss内容来同步内容。 但是我参考网上文章修改了bo- &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -70,6 +64,105 @@ tar zxvf ruby-1.9.2-p290.tar.gz  cd ruby-1.9.2-p290 &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/25/bo-blog-to-emlog/">微博从bo-blog迁移到了emlog。</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-25T00:00:00+08:00" pubdate data-updated="true">Oct 25<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天将微博从原来的bo-blog迁移到了emlog</p>
+
+<p>bo-blog从08年就一直开始使用。感觉还是很不错的。但是一直没怎么更新了，目前很多新功能都不支持。</p>
+
+<p>其实我就打算让博客可以和新浪微博同步。新浪微博里也有个关联博客的功能，据说可以通过博客的rss内容来同步内容。</p>
+
+<p>但是我参考网上文章修改了bo-blog模板，让首页里存在
+<link rel="alternate" type="application/rss+xml" href="<a href="http://www.xinlogs.com/feed">http://www.xinlogs.com/feed</a>&#8220;  title=&#8221;鑫的方向&#8221; />
+然后又测试了<a href="http://www.xinlogs.com/feed">http://www.xinlogs.com/feed</a>，可以正常访问。
+但是新浪微博就是不能同步到我博客的内容。
+ 
+最后我发现emlog目前的更新很活跃，而且还有个插件是调用新浪微博的api来将博客内容同步到微博的。就开始了我的迁移过程
+迁移主要参考了<a href="http://bbs.bo-blog.com/thread-28348-1-1.html">http://bbs.bo-blog.com/thread-28348-1-1.html</a>
+原文如下：
+转换过程很简单，先下载并安装emlog_4.0.1，再将原BoBlog中的attachment和data文件夹以及附件中的转换工具上传到新装emlog根目录，执行转换工具按照提示运行即可。<br><br>
+        最终可以将BoBlog中的所有数据比较完美地导入emlog_4.0.1，包括原来BoBlog中的附件和自定义URL等等。对于emlog不支持UBB的问题其实应该很好解决：将UBB解析之后再导入数据库即可。由于我的777篇日志绝大部分不含UBB代码所以就没有继续折腾了……
+<strong>注意：</strong>
+我转换后，没有文章的分类了。但是查看数据库的sort表确实存在分类信息。这个时候，只要在后台建立一个分类。然后其他分类就都出现了。感觉转换效果很不错。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/21/htc-g3-hero-bast-rom/">推荐个htc G3 hero比较不错的ROM</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-21T00:00:00+08:00" pubdate data-updated="true">Oct 21<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>以前一直用ligux出的rom。因为htc G3的硬件原因，个人认为用android 2.1rom最好。刷了2.2和2.3都不是很满意。
+原来我一直采用Dauu_SENSE_with_Compacache_BFS_v1.1-signed.zip
+挺稳定的，就是速度一般。有时候内存不够了，会自动重启。
+这次是在hiapk.com上找到的
+<a href="http://bbs.hiapk.com/thread-2539001-1-1.html">新加坡Artlive2.1急速优化版、添加翻页时钟、天气动画；视频为证</a>
+这个ROM是先刷上他的ROM，然后再刷一个<span style="color:#ff0000;font-size:large;">FlyKernel-13-M518-m352.zip</span><br>
+ 
+FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，通过压缩包的文件名制定频率。比如上面的M518-m352就是最大和最小频率。
+关于这个内核补丁，可以看下面的介绍
+<a href="http://www.cnrgb.com/flykernel-13">http://www.cnrgb.com/flykernel-13</a>
+ </p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -634,104 +727,6 @@ tar zxvf ruby-1.9.2-p290.tar.gz  cd ruby-1.9.2-p290 &hellip;">
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/11/28/anti-virus-test-file/">病毒测试样本</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-11-28T00:00:00+08:00" pubdate data-updated="true">Nov 28<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>我们在安装好杀毒软件后，如何测试下效果呢？
-下面的网站给我们提供了病毒测试样本：
-<a href="http://www.eicar.org/anti_virus_test_file.htm">http://www.eicar.org/anti_virus_test_file.htm</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/11/26/tomcat-memory-check/">监控tomcat内存占用</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-11-26T00:00:00+08:00" pubdate data-updated="true">Nov 26<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近单位给客户部署的一台服务器，主要跑的JAVA应用，一个物业OA系统。经常因为Tomcat内存占用过高而停止响应。</p>
-
-<p>观察了一下，每次停止响应时候，Tomcat进程占用内存超过1.2G</p>
-
-<p>初步怀疑是程序不够完善有内存泄露的地方，但是一时半会也找不到具体代码哪里有问题。</p>
-
-<p>我就写了一个shell不断监控Tomcat进程内存占用，当发现内存占用大于800M，我就自动重启一次Tomcat。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/sh   
-</span><span class='line'>MEM=`ps aux|grep tomcat|grep startup|awk '{print $6}'`   
-</span><span class='line'>#echo $MEM  
-</span><span class='line'>if [ $MEM -gt 800000 ]; then   
-</span><span class='line'>   echo "tomcat mem too large,restart tomcat!"  
-</span><span class='line'>   service tomcat restart   
-</span><span class='line'>fi   </span></code></pre></td></tr></table></div></figure>
-
-
-<p>注意：如果service tomcat restart不能正常重启Tomcat，可以参考我前面写的[CentOS下的Tomcat停止脚本]</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -758,7 +753,7 @@ tar zxvf ruby-1.9.2-p290.tar.gz  cd ruby-1.9.2-p290 &hellip;">
 <li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
-<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
@@ -769,12 +764,21 @@ tar zxvf ruby-1.9.2-p290.tar.gz  cd ruby-1.9.2-p290 &hellip;">
 <li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
 <li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
 
 </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
@@ -786,14 +790,6 @@ tar zxvf ruby-1.9.2-p290.tar.gz  cd ruby-1.9.2-p290 &hellip;">
     
       <li class="post">
         <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/02/cloudstack-on-vmware/">cloudstack on vmware</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a>
       </li>
     
   </ul>

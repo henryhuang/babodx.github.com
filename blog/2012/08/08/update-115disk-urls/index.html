@@ -114,7 +114,7 @@
  
 脚本如下：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -169,61 +169,62 @@
 <span class='line-number'>53</span>
 <span class='line-number'>54</span>
 <span class='line-number'>55</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/usr/bin/php
-</span><span class='line'>&lt;?php
-</span><span class='line'>print("=======fix_url v1=========\n");
-</span><span class='line'>print("=======write by babodx@gmail.com=======\n");
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">#!/usr/bin/php</span>
+</span><span class='line'><span class="cp">&lt;?php</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s2">&quot;=======fix_url v1=========</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s2">&quot;=======write by babodx@gmail.com=======</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
 </span><span class='line'>
 </span><span class='line'>
-</span><span class='line'>function update_url($url) {
-</span><span class='line'>    list($url_115,$url_tv1926)=explode("#",$url);
-</span><span class='line'>    $url_tv1926="http://xiazai.tv1926.com/".$url_tv1926;
-</span><span class='line'>    print("update:");
-</span><span class='line'>    print($url_115);
-</span><span class='line'>    print("&gt;&gt;");
-</span><span class='line'>    $link = mysql_connect('localhost', 'username', 'passwd');
-</span><span class='line'>    if (!$link) {
-</span><span class='line'>        die('Could not connect: ' . mysql_error());
-</span><span class='line'>    }
+</span><span class='line'><span class="k">function</span> <span class="nf">update_url</span><span class="p">(</span><span class="nv">$url</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">list</span><span class="p">(</span><span class="nv">$url_115</span><span class="p">,</span><span class="nv">$url_tv1926</span><span class="p">)</span><span class="o">=</span><span class="nb">explode</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span><span class="nv">$url</span><span class="p">);</span>
+</span><span class='line'>    <span class="nv">$url_tv1926</span><span class="o">=</span><span class="s2">&quot;http://xiazai.tv1926.com/&quot;</span><span class="o">.</span><span class="nv">$url_tv1926</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;update:&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="nv">$url_115</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nv">$link</span> <span class="o">=</span> <span class="nb">mysql_connect</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;passwd&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$link</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">die</span><span class="p">(</span><span class="s1">&#39;Could not connect: &#39;</span> <span class="o">.</span> <span class="nb">mysql_error</span><span class="p">());</span>
+</span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>    mysql_select_db('my_database', $link) or die ('Can\'t use my_database : ' .         mysql_error());
+</span><span class='line'>    <span class="nb">mysql_select_db</span><span class="p">(</span><span class="s1">&#39;my_database&#39;</span><span class="p">,</span> <span class="nv">$link</span><span class="p">)</span> <span class="k">or</span> <span class="k">die</span> <span class="p">(</span><span class="s1">&#39;Can\&#39;t use my_database : &#39;</span> <span class="o">.</span>         <span class="nb">mysql_error</span><span class="p">());</span>
 </span><span class='line'>
-</span><span class='line'>    $sql="update p8_article_content_101 set     my_801=replace(my_801,'".$url_115."','".$url_tv1926."')";
-</span><span class='line'>    mysql_query("set names gbk");
-</span><span class='line'>    $result = mysql_query($sql)
-</span><span class='line'>    or die("Invalid query: " . mysql_error());
+</span><span class='line'>    <span class="nv">$sql</span><span class="o">=</span><span class="s2">&quot;update p8_article_content_101 set     my_801=replace(my_801,&#39;&quot;</span><span class="o">.</span><span class="nv">$url_115</span><span class="o">.</span><span class="s2">&quot;&#39;,&#39;&quot;</span><span class="o">.</span><span class="nv">$url_tv1926</span><span class="o">.</span><span class="s2">&quot;&#39;)&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="nb">mysql_query</span><span class="p">(</span><span class="s2">&quot;set names gbk&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nv">$result</span> <span class="o">=</span> <span class="nb">mysql_query</span><span class="p">(</span><span class="nv">$sql</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">or</span> <span class="k">die</span><span class="p">(</span><span class="s2">&quot;Invalid query: &quot;</span> <span class="o">.</span> <span class="nb">mysql_error</span><span class="p">());</span>
 </span><span class='line'>
-</span><span class='line'>    mysql_close($link);
-</span><span class='line'>    print($url_tv1926);
-</span><span class='line'>    print("\n");
-</span><span class='line'>}
+</span><span class='line'>    <span class="nb">mysql_close</span><span class="p">(</span><span class="nv">$link</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="nv">$url_tv1926</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>if (is_null($argv[1])) {
-</span><span class='line'>    print("argv1 is null\n");
-</span><span class='line'>    exit();
-</span><span class='line'>}
-</span><span class='line'>$file_name=$argv[1];
-</span><span class='line'>print("get files name...\n");
-</span><span class='line'>$file_names=array();
-</span><span class='line'>$handle = @fopen($file_name, "r");
-</span><span class='line'>if ($handle) {
-</span><span class='line'>    while (!feof($handle)) {
-</span><span class='line'>        $buffer = fgets($handle);
-</span><span class='line'>        $tmp_file_name=trim($buffer);
-</span><span class='line'>        array_push($file_names,$tmp_file_name);
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nb">is_null</span><span class="p">(</span><span class="nv">$argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;argv1 is null</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">exit</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nv">$file_name</span><span class="o">=</span><span class="nv">$argv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s2">&quot;get files name...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nv">$file_names</span><span class="o">=</span><span class="k">array</span><span class="p">();</span>
+</span><span class='line'><span class="nv">$handle</span> <span class="o">=</span> <span class="o">@</span><span class="nb">fopen</span><span class="p">(</span><span class="nv">$file_name</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nv">$handle</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="nb">feof</span><span class="p">(</span><span class="nv">$handle</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$buffer</span> <span class="o">=</span> <span class="nb">fgets</span><span class="p">(</span><span class="nv">$handle</span><span class="p">);</span>
+</span><span class='line'>        <span class="nv">$tmp_file_name</span><span class="o">=</span><span class="nx">trim</span><span class="p">(</span><span class="nv">$buffer</span><span class="p">);</span>
+</span><span class='line'>        <span class="nb">array_push</span><span class="p">(</span><span class="nv">$file_names</span><span class="p">,</span><span class="nv">$tmp_file_name</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>    }
-</span><span class='line'>    fclose($handle);
-</span><span class='line'>}
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nb">fclose</span><span class="p">(</span><span class="nv">$handle</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>foreach ($file_names as $file_url) {
-</span><span class='line'>    update_url($file_url);
-</span><span class='line'>}
-</span><span class='line'>print("over!");
+</span><span class='line'><span class="k">foreach</span> <span class="p">(</span><span class="nv">$file_names</span> <span class="k">as</span> <span class="nv">$file_url</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">update_url</span><span class="p">(</span><span class="nv">$file_url</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s2">&quot;over!&quot;</span><span class="p">);</span>
 </span><span class='line'>
 </span><span class='line'>
 </span><span class='line'>
-</span><span class='line'>?&gt;</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
 
 </div>
 
@@ -297,7 +298,7 @@
 <li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
-<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
@@ -308,12 +309,21 @@
 <li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
 <li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
 
 </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
@@ -325,14 +335,6 @@
     
       <li class="post">
         <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/02/cloudstack-on-vmware/">cloudstack on vmware</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a>
       </li>
     
   </ul>

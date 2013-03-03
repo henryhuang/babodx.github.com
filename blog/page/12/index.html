@@ -9,11 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="要想记录下提交到mysql数据库的全部sql语句，可以通过修改my.cnf来实现 修改/etc/my.cnf文件 找到[mysqld]段
-加入 1
-2
-log=queryLog
-log-slow-queries=showquerylog 然后就可以到/var/lib/mysql/ &hellip;">
+  <meta name="description" content="今天发现了http://www.igniterealtime.org这个项目首页 这个项目可以在企业内部架设一台服务器，来完成内部IM功能。客户端可以想QQ或者MSN一样登陆。并且通过服务器上设置GATEWAY功能，还能与MSN等主流软件通讯。 具体功能还没有测试， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +64,94 @@ log-slow-queries=showquerylog 然后就可以到/var/lib/mysql/ &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/opensource-im/">一个很好的开源企业内部IM解决方案</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天发现了<a href="http://www.igniterealtime.org/">http://www.igniterealtime.org</a>这个项目首页</p>
+
+<p>这个项目可以在企业内部架设一台服务器，来完成内部IM功能。客户端可以想QQ或者MSN一样登陆。并且通过服务器上设置GATEWAY功能，还能与MSN等主流软件通讯。</p>
+
+<p>具体功能还没有测试，不过打算有时间的时候架设下进行试用。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/navicat/">一个在windows下很好用的MySQL工具Navicat</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>为了解决中文乱码，我的Mysql都设置了使用utf8编码</p>
+
+<p>这样一来，使用SQLyog Enterprise查看表里面内容，就都不能正常显示了。可能SQLyog需要设置？反正我没有搞出来。</p>
+
+<p>不过后来我换用了Navicat 7以后，感觉很好。所有中文内容都可以正确显示</p>
+
+<p>比mysql front也要强很多。以后我就用这个了
+<img src="http://www.navicat.com/images/stories/product/mysql/product/win/win_big.jpg" alt="navicat" /></p>
+
+<p>而且支持Linux,windows,mac三个平台。下面是介绍</p>
+
+<p><span>PremiumSoft Navicat™ is a powerful MySQL database administration and development tool that is not only sophisticated enough for professional developers, but also easy to learn for new users. With an user-friendly GUI, Navicat™ lets you quickly and easily create, organize, access and share information in a secure and convenient way. </span>
+<span>PremiumSoft Navicat supports multiple MySQL server connections which can be connected locally or remotely. Your remote MySQL server can be running on Linux, Unix, Mac OS X or Windows platform.<br></span></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -727,285 +811,6 @@ It is up to you to create and configure this script to do the right thing. A sam
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/get-xen-guestos-image/">获取XEN guestOS的images文件</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>我们可以从<a href="http://stacklet.com/">http://stacklet.com/</a>其实就是原来<a href="http://jailtime.org/">http://jailtime.org/</a>站点找我们需要的xen image文件</p>
-
-<p>在2009年的时候，jailtime.org发布了一个新闻</p>
-
-<h6>May 4th, 2009</h6>
-
-<p>The jailtime project has been relaunched with a new name and site: <a href="http://stacklet.com/">Stacklet</a>
-As part of the relaunch all of the distributions currently on jailtime have been upgraded to their latest versions. Also, all of the code for creating the images is now publically available – see <a href="http://stacklet.com/">http://stacklet.com/</a> for further details&#8230;.
-Jailtime will remain online but downloads will probably be turned off eventually as the transition to stacklet proceeds.</p>
-
-<p>所以现在就访问<a href="http://stacklet.com/">http://stacklet.com/</a>就可以了。</p>
-
-<p>包括如下系统</p>
-
-<p><li>
-<a href="http://stacklet.com/downloads/images/list/CentOS">CentOS</a> <ul>
-<li>
-<a href="http://stacklet.com/downloads/images/centos/5.3">5.3</a> </li>
-<li><a href="http://stacklet.com/downloads/images/centos/5.3.64bit">5.3 (64-bit)</a></li>
-</ul>
-</li>
-<li>
-<a href="http://stacklet.com/downloads/images/list/Debian">Debian</a> <ul>
-<li>
-<a href="http://stacklet.com/downloads/images/debian/5.0">5.0 (Lenny)</a> </li>
-<li><a href="http://stacklet.com/downloads/images/debian/5.0.64bit">5.0 (Lenny, 64-bit)</a></li>
-</ul>
-</li>
-<li>
-<a href="http://stacklet.com/downloads/images/list/Fedora">Fedora</a> <ul>
-<li>
-<a href="http://stacklet.com/downloads/images/fedora/10">10</a> </li>
-<li><a href="http://stacklet.com/downloads/images/fedora/10.64bit">10 (64-bit)</a></li>
-</ul>
-</li>
-<li>
-<a href="http://stacklet.com/downloads/images/list/Gentoo">Gentoo</a> <ul>
-<li>
-<a href="http://stacklet.com/downloads/images/gentoo/2008-0">2008.0</a> </li>
-<li><a href="http://stacklet.com/downloads/images/gentoo/2008-0.64bit">2008.0 (64-bit)</a></li>
-</ul>
-</li>
-<li>
-<a href="http://stacklet.com/downloads/images/list/Mandriva">Mandriva</a> <ul>
-<li>
-<a href="http://stacklet.com/downloads/images/mandriva/2009.0">2009.0</a> </li>
-<li><a href="http://stacklet.com/downloads/images/mandriva/2009.0.64bit">2009.0 (64-bit)</a></li>
-</ul>
-</li>
-<li>
-<a href="http://stacklet.com/downloads/images/list/Slackware">Slackware</a> <ul>
-<li><a href="http://stacklet.com/node/13">12.2</a></li>
-</ul>
-</li>
-<li>
-<a href="http://stacklet.com/downloads/images/list/Ubuntu">Ubuntu</a> <ul>
-<li>
-<a href="http://stacklet.com/downloads/images/ubuntu/9.04">9.04 (Jaunty)</a> </li>
-<li><a href="http://stacklet.com/downloads/images/ubuntu/9.04.64bit">9.04 (Jaunty, 64-bit)</a></li>
-</ul>
-</li>
-</ul></li>
-<li></p>
-
-<p><strong>下面是一个站点提供的img文件的简单说明</strong>
-<strong>All files on this site are provided without guarantee or warranty. Use at your own risk.</strong>
-Each download is a bzipped tarball containing an image and cfg files:</p>
-
-<ul>
-<li>a xen guest filesystem
-</li>
-<li>sample xen configuration files to be used with <strong>xm create</strong>
-</li>
-</ul>
-
-
-<p>The naming convention of the download tarball is:
-<strong><distribution>.<distro-version>.<created-date>.img.tar.bz2</strong>.
-For example centos.5-3.x86.20090423.img.tar.bz2 contains</p>
-
-<ul>
-<li>centos.5-3.x86.img
-</li>
-<li>centos.5-3.x86.xen3.cfg
-</li>
-<li>centos.5-3.x86.xen3.pygrub.cfg（这个文件比较重要，如果用的是CentOS 5.3的虚拟化，就需要这个文件才可以启动guestOS。因为CentOS 5.3没有提供Xen-U的内核。）
-</li>
-</ul>
-
-
-<p>All of the packages installed in the image will be the latest versions available as of the created date, which is in yyyy-mm-dd format.</p>
-
-<h3>Prerequisites</h3>
-
-
-<ol>
-<li>Working installation of Xen version 3
-</li>
-<li>The xen daemon (xend) must be running
-</li>
-<li>Enough filesystem space to accomodate the uncompressed tarball (generally 1GB)
-</li>
-<li>Enough unallocated RAM to run the xen guest (generally 128MB)
-</li>
-</ol>
-
-
-<h3>Default Configuration and Networking</h3>
-
-
-<p>Each filesystem is configured to use dhcp. The *.xen.cfg also is also configured for dhcp. It is recommended that you first test the filesystem using dhcp if possible before attempting other networking parameters. Each download page has additional notes on networking that is appropriate for a particular distribution.
-The root login is root/password. It is highly recommened that you change the root password immediately.</p>
-
-<h3>Installation</h3>
-
-
-<p>You will need to uncompress the tarball to a local directory and edit the *.xen.cfg file to point to the uncompressed image and swap file.
-If all is well you will see the guest’s boot messages scrolling by.
-<strong>一些HOWTO文档</strong></p>
-
-<h3><strong>HOWTO: Filesystems</strong></h3>
-
-
-<p>In the following howto’s, <image file> should be replaced with a reference to a specific .img file.</p>
-
-<h4><strong>How do I mount an image without booting it?</strong></h4>
-
-
-<ul>
-<li>mkdir -p /mnt/loop
-</li>
-<li>mount -o loop <image file> /mnt/loop/
-</li>
-</ul>
-
-
-<h4><strong>How do I resize an image file?</strong></h4>
-
-
-<p>First, make sure that the image file is not already mounted and is not already running as a xen guest. The following commands increase an image file to 2.5GB. Backup the image before attempting this.</p>
-
-<ul>
-<li>dd if=/dev/zero of=<image file> bs=1M conv=notrunc count=1 seek=2500 
-</li>
-<li>losetup /dev/loop0 <image file>
-</li>
-<li>e2fsck -f /dev/loop0
-</li>
-<li>resize2fs /dev/loop0
-</li>
-<li>e2fsck -f /dev/loop0
-</li>
-<li>losetup -d /dev/loop0
-</li>
-</ul>
-
-
-<p>You may then boot or mount the image to confirm the increased size. The e2fsck checks in this howto are not strictly necessary.</p>
-
-<h4><strong>How do I move the contents of an img file to a regular partition?</strong></h4>
-
-
-<p>Mount the img file using the above howto. Assuming the destination partition is mounted at /mnt/dest, execute the following:</p>
-
-<ul>
-<li>cp -a /mnt/loop/* /mnt/dest/
-</li>
-</ul>
-
-
-<p>You will then be able to boot the filesystem using the partition instead of the image file, which should provide better performance. You will need to update the *.xen.cfg file to reference the partition instead of the img file (the <strong>disk</strong> parameter will need to change, see the <a href="http://www.cl.cam.ac.uk/Research/SRG/netos/xen/readmes/user/user.html">Xen Manual</a>). Also, remember to unmount partitions or img files before booting a xen guest from them!</p>
-
-<p></li></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/first-lfs/">第一次安装LFS</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>在经过了大约40小时左右，我的LFS终于顺利启动了。从内核到系统每一个软件都是自己从源代码编译的，感觉很爽。</p>
-
-<p>本次安装采用LiveCD 6.3作为宿主系统，在VMware上的一个8G scsi盘上安装。</p>
-
-<p>首先碰到的问题就是GCC编译出现问题。后来发现是因为我用的liveCD是64位的问题。</p>
-
-<p>换了liveCD 32位的。问题解决</p>
-
-<p>第二个问题就是glibc总编译不过去，后来发现是我的Linux-2.6.22.5 API Headers从网上下的版本不对</p>
-
-<p>我一直是看着LFS BOOK 6.2的中文手册安装的，而用的LiveCD和软件包都是6.3</p>
-
-<p>6.3里面的这个Linux-2.6.22.5 API Headers需要从Linux-2.6.22.5.tar.bz2里面获取</p>
-
-<p>建议还是看liveCD启动后/usr/share/LFS-BOOK-6.3目录下的文档，这个文档和liveCD带的软件包配套的。</p>
-
-<p>或者参考中文的</p>
-
-<p>手把手教你如何建立自己的Linux系统 第二版 作者：孙海勇</p>
-
-<p>其他就没有碰到什么大问题了。也就是忘记安装个软件包、或者关机重启后，如何从liveCD恢复到工作状态。</p>
-
-<p>通过这次安装，让我觉得LFS真的是学习Linux的捷径。而且发现了一个牛人的博客，就是上面的孙海勇  网名 冲天飞豹  http://youbest.cublog.cn/</p>
-
-<p>博客里面有大量关于构建linux系统的技术文章，而且都是原创。</p>
-
-<p>而且这次通过安装LFS，也找到了Linux 如何在控制台显示UTF-8中文的办法。原来是要给内核打补丁才可以。</p>
-
-<p><img src="http://farm9.staticflickr.com/8530/8511996426_72a8bf974d.jpg" alt="utf8内核补丁" /></p>
-
-<p>具体的办法可以看</p>
-
-<p>内核补丁：字符终端下显示UTF-8字符</p>
-
-<p>总结
-安装是顺利完成了，后面要学习的内容还有很多。比如安装时候的每一个包都包含的什么内容、每一条配置的用途。这些安装手册配置容易，如果没有手册自己弄起来就难了。所以后面的时间，就是自己看文档，消化这些知识了。至少顺利迈出第一步！</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -1032,7 +837,7 @@ If all is well you will see the guest’s boot messages scrolling by.
 <li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
-<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
 <li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
@@ -1043,12 +848,21 @@ If all is well you will see the guest’s boot messages scrolling by.
 <li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
 <li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
 
 </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
@@ -1060,14 +874,6 @@ If all is well you will see the guest’s boot messages scrolling by.
     
       <li class="post">
         <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/02/cloudstack-on-vmware/">cloudstack on vmware</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a>
       </li>
     
   </ul>
