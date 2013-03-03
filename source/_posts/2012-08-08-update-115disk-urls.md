@@ -25,7 +25,7 @@ http://115.com/file/e78cpwkh#Dark_Energy.rar
  
 脚本如下：
 
-``` 
+``` php 
 #!/usr/bin/php
 <?php
 print("=======fix_url v1=========\n");
