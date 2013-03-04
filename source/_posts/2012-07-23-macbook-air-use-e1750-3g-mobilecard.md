@@ -1,4 +1,4 @@
---- 
+---
 categories: ['Hardware','Mac']
 comments: true
 layout: post
@@ -10,7 +10,7 @@ title: "2012 macbook Air 使用华为E1750 3g上网卡"
 
 我的3g上网卡如下
 
-![e1750图](http://flic.kr/p/dYtJa9)
+![e1750图](http://farm9.staticflickr.com/8390/8515414834_9758e77ab7_m.jpg)
 
 这个上网卡是09年的，现在直接插入usb后，macbook air没有任何反应。
 
@@ -36,5 +36,5 @@ E1750 WINMACB300D00SP05C112(UTPS11.301.08.30.112_MAC11.301.06.13.112)(China Unic
 
 3、安装好后的程序界面
 
-![运行界面](http://flic.kr/p/dYtJPN)
+![运行界面](http://farm9.staticflickr.com/8507/8515417076_b7b7b101f4_z.jpg)
 
