@@ -1,4 +1,4 @@
---- 
+---
 categories: ['Vim']
 comments: true
 layout: post
@@ -13,7 +13,7 @@ vim是在linux下面很有名的编辑工具。而今天说到的这个gvim呢�
 
 默认状态下的gvim是和windows软件一样，也有菜单和状态条等的。但是我个喜欢linux下的风格。下面就是我目前使用的样子
 
-![gvim截图](http://flic.kr/p/dYkNSP)
+![gvim截图](http://farm9.staticflickr.com/8528/8513869811_fb6ff8fe29_z.jpg)
 
 gvim的设置全部是基于目录下的_vimrc配置文件的。
 
