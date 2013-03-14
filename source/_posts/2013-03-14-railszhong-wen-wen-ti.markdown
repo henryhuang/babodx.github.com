@@ -3,7 +3,7 @@ layout: post
 title: "rails中文问题"
 date: 2013-03-14 10:56
 comments: true
-categories: ["rails"]
+categories: ['Rails']
 ---
 ##rails controller中的中文问题
 
