@@ -9,10 +9,8 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="我们在安装好杀毒软件后，如何测试下效果呢？
-下面的网站给我们提供了病毒测试样本：
-http://www.eicar.org/anti_virus_test_file.htm
-">
+  <meta name="description" content="今天遇到个问题，有个程序从Windows导入到Linux的时候，表格全部小写了。但程序里很多DAO全是大写调用。 Linux默认安装的Mysql是表名区分大小写的。 这个设置主要是在/etc/my.cnf里面的[mysqld]段，加入如下设置项 1
+lower_case_table_names &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +65,53 @@ http://www.eicar.org/anti_virus_test_file.htm
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/01/13/mysql-tablename-lowercase/">Mysql设置不区分表名大小写</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-13T00:00:00+08:00" pubdate data-updated="true">Jan 13<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天遇到个问题，有个程序从Windows导入到Linux的时候，表格全部小写了。但程序里很多DAO全是大写调用。</p>
+
+<p>Linux默认安装的Mysql是表名区分大小写的。</p>
+
+<p>这个设置主要是在/etc/my.cnf里面的[mysqld]段，加入如下设置项</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>lower_case_table_names = 1</span></code></pre></td></tr></table></div></figure>
+
+
+<p> 
+如果设置为0，就是区分大小写。设置为1就是不区分了。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -784,67 +829,6 @@ http://www.eicar.org/anti_virus_test_file.htm
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/07/12/win7-install-oracle/">Win7安装oracle10g完美解决方案</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-07-12T00:00:00+08:00" pubdate data-updated="true">Jul 12<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近由于项目需要，要求安装oracle10g数据库进行开发。在安装的时候碰到一些问题，这里记录下解决办法。</p>
-
-<p>我的系统是win7 中文32位旗舰版。</p>
-
-<p>数据库是oracle10g</p>
-
-<p><strong>问题1</strong></p>
-
-<p>在安装的时候，首先是系统检查。因为默认oracle是不支持win7系统的，所以我们需要修改下文件，让它支持。</p>
-
-<p>具体办法：</p>
-
-<p>找到database\stage\prereq\db\refhost.xml文件，在文件里添加如下内容</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;!--Microsoft Windows 7--&gt;    
-</span><span class='line'>&lt;OPERATING_SYSTEM&gt;    
-</span><span class='line'>&lt;VERSION VALUE="6.1"/&gt;    
-</span><span class='line'>&lt;/OPERATING_SYSTEM&gt;   </span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>问题2</strong>
-上面只是检查系统是否符合要求，这个时候如果运行setup.exe还有可能出现错误提示。这个时候只要我们右键点setup.exe文件，然后选择“兼容性”标签，勾选上“以兼容模式运行这个程序”并在列表里选择“windows xp(service pack 3)”。然后记得安装的时候选择基本安装模式，不要用高级模式。高级模式到后面还是不能通过。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -882,6 +866,7 @@ http://www.eicar.org/anti_virus_test_file.htm
 <li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
 <li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
 
 </ul>
@@ -889,6 +874,10 @@ http://www.eicar.org/anti_virus_test_file.htm
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
@@ -904,10 +893,6 @@ http://www.eicar.org/anti_virus_test_file.htm
     
       <li class="post">
         <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
       </li>
     
   </ul>

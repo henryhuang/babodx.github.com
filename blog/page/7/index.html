@@ -9,9 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="上次介绍了下使用Android 2.1的体会，当时因为导航等问题，最终放弃了2.1系统，继续刷回1.5系统用了。
-经过这段时间，android 2.1系统不断完善，导航问题也有了突破。感谢各位高手贡献自己的力量。
-这次我刷的还是F大制作的Rom：Daguu Sense v1.0(Official &hellip;">
+  <meta name="description" content="最近由于项目需要，要求安装oracle10g数据库进行开发。在安装的时候碰到一些问题，这里记录下解决办法。 我的系统是win7 中文32位旗舰版。 数据库是oracle10g 问题1 在安装的时候，首先是系统检查。因为默认oracle是不支持win7系统的，所以我们需要修改下文件，让它支持。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +64,67 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/07/12/win7-install-oracle/">Win7安装oracle10g完美解决方案</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-12T00:00:00+08:00" pubdate data-updated="true">Jul 12<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近由于项目需要，要求安装oracle10g数据库进行开发。在安装的时候碰到一些问题，这里记录下解决办法。</p>
+
+<p>我的系统是win7 中文32位旗舰版。</p>
+
+<p>数据库是oracle10g</p>
+
+<p><strong>问题1</strong></p>
+
+<p>在安装的时候，首先是系统检查。因为默认oracle是不支持win7系统的，所以我们需要修改下文件，让它支持。</p>
+
+<p>具体办法：</p>
+
+<p>找到database\stage\prereq\db\refhost.xml文件，在文件里添加如下内容</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;!--Microsoft Windows 7--&gt;    
+</span><span class='line'>&lt;OPERATING_SYSTEM&gt;    
+</span><span class='line'>&lt;VERSION VALUE="6.1"/&gt;    
+</span><span class='line'>&lt;/OPERATING_SYSTEM&gt;   </span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>问题2</strong>
+上面只是检查系统是否符合要求，这个时候如果运行setup.exe还有可能出现错误提示。这个时候只要我们右键点setup.exe文件，然后选择“兼容性”标签，勾选上“以兼容模式运行这个程序”并在列表里选择“windows xp(service pack 3)”。然后记得安装的时候选择基本安装模式，不要用高级模式。高级模式到后面还是不能通过。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1726,241 +1785,6 @@ cp /usr/share/doc/openvpn-2.0.9/sample-config-files/server.conf /etc/openvpn/</p
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/03/12/HP-MSA1000-DL380G5-Centos5/">CentOS 5.4 基于HP Proliant DL380 G5服务器配置Modular Smart Array 1000存储</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-03-12T00:00:00+08:00" pubdate data-updated="true">Mar 12<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>原来单位的存储一直是分两个800G的区，挂在到Windows下。Windows的系统总要担心病毒，所以打算迁移到CentOS Linux下。</p>
-
-<p>参考了<a href="http://blog.s135.com/post/415/">http://blog.s135.com/post/415/</a>这篇文章，但是他的文章里是单控制器，并且没有用到光纤。所以配置上有些不同</p>
-
-<p><strong>硬件配置</strong></p>
-
-<ul>
-<li>一台HP MSA 1000存储设备（包含两个Modular Smart Array 1000控制器）</li>
-<li>一台HP Storage SAN 4/8光纤交换机</li>
-<li>一台HP Proliant DL380 G5 2U服务器</li>
-<li>七块SCSI 300G硬盘</li>
-<li>一块HP StorageWorks FC1142SR 4GB PCI-E 光纤卡</li>
-</ul>
-
-
-<p><img src="http://farm9.staticflickr.com/8085/8512593854_1e49c77451.jpg" alt="硬件图片MSA1000" /></p>
-
-<p>从两个Modular Smart Array 1000的控制器后面连接光纤到光纤交换机。然后将光纤卡安装到服务器上，用光纤连接光纤卡到光纤交换机。</p>
-
-<p><img src="http://farm9.staticflickr.com/8233/8511486023_2fd88da704.jpg" alt="hba" />
-<img src="http://farm9.staticflickr.com/8532/8511486191_d0cc8c932f.jpg" alt="hba2" /></p>
-
-<p><strong>软件配置</strong></p>
-
-<p>先对各种硬件的fireware进行下更新。</p>
-
-<p>从惠普网站下载update fireware光盘，下载的文件为firmware-8.60-0.zip，大小463M左右，然后解压刻成光盘</p>
-
-<p>下载地址<a href="ftp://ftp.hp.com/pub/softlib2/software1/cd/p1040529012/v53483/firmware-8.60-0.zip">ftp://ftp.hp.com/pub/softlib2/software1/cd/p1040529012/v53483/firmware-8.60-0.zip</a></p>
-
-<p>用光盘启动服务器，然后安装提示做就可以。它会更新网卡、服务器等设备的fireware。都是自动检测并更新的，很简单</p>
-
-<p>确保各种fireware都更新后，下面需要用到smartstart光盘来对存储进行配置了</p>
-
-<p>从惠普网站下载smartstart光盘，下载的文件smartstart-8.30-0-x86.zip，大小576M左右，也是解压刻录光盘</p>
-
-<p>下载地址<a href="ftp://ftp.hp.com/pub/softlib2/software1/cd/p1040463476/v49882/smartstart-8.30-0-x86.zip">ftp://ftp.hp.com/pub/softlib2/software1/cd/p1040463476/v49882/smartstart-8.30-0-x86.zip</a></p>
-
-<p>然后用光盘启动服务器，按照提示进入后，选择第2项配置存储卡，第一项是用来安装操作系统的，我发现没有Linux的操作系统。。。都是Windows系列。</p>
-
-<p>可以发现服务器自己的raid卡 HP Smart Array E200和MSA 1000存储。</p>
-
-<p>我是先将服务器的3块硬盘组成一个Raid 5，然后再配置MSA 1000的存储，也是将7块盘组成Raid 5。我看了下资料，说raid 6比raid5要损失8%-15%的性能，但是可以保证同时坏2块盘不丢失数据。不过我觉得raid5够用了。</p>
-
-<p>因为是双控制器，我这里的fireware是4.48所以采用的是active/standby模式。如果打算用active/active模式，需要更新fireware到7.0版本</p>
-
-<p>用smartstart光盘做好raid后，就可以给服务器安装系统了。</p>
-
-<p><strong>安装CentOS 5.4 64bit</strong></p>
-
-<p>安装CentOS 5.4 64bit版本前，先将连接到服务器的光纤拔掉，要不系统总是提示/dev/sda不可读取，这里的sda就是我们存储。
-一切安装正常安装就可以。</p>
-
-<p>正常安装后，连接好光纤，再启动服务器。</p>
-
-<p>这个时候因为没有安装驱动，服务器在启动过程中会报很多end_request: error</p>
-
-<p>而且我还发现如果不安装驱动，我们可以通过fdisk -l查找到存储设备，但是每次重启或者存储关机再开，存储的设备名都会变，有时候是/dev/sda有时候是/dev/sdb。所以很难在/etc/fstab里写入mount的配置。</p>
-
-<p>安装HBA卡驱动</p>
-
-<p>到HP网站下载驱动
-<a href="http://h20000.www2.hp.com/bizsupport/TechSupport/SoftwareIndex.jsp?lang=en&amp;cc=us&amp;prodNameId=1809832&amp;prodTypeId=12169&amp;prodSeriesId=1809835&amp;swLang=8&amp;taskId=135&amp;swEnvOID=4004">http://h20000.www2.hp.com/bizsupport/TechSupport/SoftwareIndex.jsp?lang=en&amp;cc=us&amp;prodNameId=1809832&amp;prodTypeId=12169&amp;prodSeriesId=1809835&amp;swLang=8&amp;taskId=135&amp;swEnvOID=4004</a></p>
-
-<p>也可以直接下载
-<a href="ftp://ftp.hp.com/pub/softlib/software10/COL19426/co-74973-1/hp_qla2x00-2009-03-17.tar.gz">ftp://ftp.hp.com/pub/softlib/software10/COL19426/co-74973-1/hp_qla2x00-2009-03-17.tar.gz</a></p>
-
-<p><a href="ftp://ftp.hp.com/pub/softlib/software11/COL28061/co-69719-3/hp-fc-enablement-2009-12-16.tar.gz">ftp://ftp.hp.com/pub/softlib/software11/COL28061/co-69719-3/hp-fc-enablement-2009-12-16.tar.gz</a></p>
-
-<p>上面两个文件，一个是qla2x00的驱动，后面一个是Linux fibre channel enablement kits for QLogic HBAs and mezzanine cards</p>
-
-<p>下载后解压安装</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Installation instructions
-</span><span class='line'> 
-</span><span class='line'>Download the appropriate driver kit for your distribution. The driver kit file will be in the format hp_qla2x00-yyyy-mm-dd.tar.gz.
-</span><span class='line'>Copy the driver kit to the target system.
-</span><span class='line'>Uncompress and untar the driver kit using the following command:
-</span><span class='line'># tar zxvf hp_qla2x00-yyyy-mm-dd.tar.gz
-</span><span class='line'>Change directory to the hp_qla2x00-yyyy-mm-dd directory.
-</span><span class='line'>Execute the INSTALL command.
-</span><span class='line'>The INSTALL command syntax will vary depending on your conﬁguration. If a previous driver kit is installed, you can invoke the INSTALL command without any arguments as the script will use the currently loaded conﬁguration:
-</span><span class='line'># ./INSTALL
-</span><span class='line'>To force the installation to failover mode, use the -f ﬂag:
-</span><span class='line'># ./INSTALL -f
-</span><span class='line'>To force the installation to single-path mode, use the -s ﬂag:
-</span><span class='line'># ./INSTALL -s
-</span><span class='line'>Use the -h option of the INSTALL script for a list of all supported arguments. The INSTALL script will install the appropriate driver RPM for your conﬁguration, as well as the appropriate ﬁbreutils RPM. Once the INSTALL script is ﬁnished, you will either have to reload the QLogic driver modules (qla2xxx, qla2300, qla2400, qla2xxx_conf) or reboot your server.
-</span><span class='line'>The commands to reload the driver are:
-</span><span class='line'># /opt/hp/src/hp_qla2x00src/unload.sh
-</span><span class='line'># modprobe qla2xxx_conf
-</span><span class='line'># modprobe qla2xxx
-</span><span class='line'># modprobe qla2300
-</span><span class='line'># modprobe qla2400
-</span><span class='line'>The command to reboot the server is:
-</span><span class='line'># reboot
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>CAUTION: If your boot device is a SAN attached device you will have to reboot your server.
-</span><span class='line'>
-</span><span class='line'>To verify which RPM versions are installed, use the rpm command with the -q option.
-</span><span class='line'>For example:
-</span><span class='line'># rpm -q hp_qla2x00src
-</span><span class='line'># rpm –q fibreutils</span></code></pre></td></tr></table></div></figure>
-
-
-<p>然后在继续安装HP Fibre Channel Enablement Kit</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Installing the HP Fibre Channel Enablement Kit
-</span><span class='line'> 
-</span><span class='line'>To install the HP Fibre Channel Enablement Kit, do the following:
-</span><span class='line'>Download the hp-fc-enablement-yyyy-mm-dd.tar.gz file for your operating system and copy it to the target server
-</span><span class='line'>Untar the enablement kit by executing the command to create the directory, hp-fc-enablement-yyyy-mm-dd.
-</span><span class='line'># tar zxvf hp-fc-enablement-yyyy-mm-dd.tar.gz
-</span><span class='line'>Browse to the directory hp-fc-enablement-yyyy-mm-dd.
-</span><span class='line'>Do one of the following to execute the install.sh script.
-</span><span class='line'>If you are not using Device Mapper multipathing execute the following command:
-</span><span class='line'># ./install.sh -s
-</span><span class='line'>If you are using Device Mapper multipathing execute the following command:
-</span><span class='line'># ./install.sh -m
-</span><span class='line'>The hp-fc-enablement and fibreutils RPMs should be installed once this install completes. To verify the installation, enter the following commands:
-</span><span class='line'># rpm -q hp-fc-enablement
-</span><span class='line'># rpm -q fibreutils
-</span><span class='line'>
-</span><span class='line'>NOTE: For use with the driver that comes with the kernel you will need fibreutils 3.x or greater.
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>全部完成后，我们需要查看下/etc/modprobe.conf
-如果有下面图中标记的一些信息加入，说明上面的驱动安装正确。</p>
-
-<p><img src="http://farm9.staticflickr.com/8378/8512177477_69fd3f3534_z.jpg" alt="msa1000配置图片" /></p>
-
-<p>确实正确后，我们重启下服务器。</p>
-
-<p>当再次进入系统后，我们的存储应该被识别为/dev/sda设备</p>
-
-<p>用fdisk -l /dev/sda查看下，如果没有问题了，就可以使用fdisk /dev/sda进行分区</p>
-
-<p>我是把全部1.6T分成一个区/dev/sda1</p>
-
-<p>然后e2lable /dev/sda1 /data给卷标</p>
-
-<p>在/etc/fstab文件里加入/dev/sda1的挂着位置</p>
-
-<p>这样以后每次启动系统，就自动将存储挂着到系统的/data目录中了。如下图</p>
-
-<p><img src="http://farm9.staticflickr.com/8112/8512182419_1370b691bf.jpg" alt="存储mount成功" /></p>
-
-<p><strong>总结</strong></p>
-
-<p>本来参考<a href="www.s135.com">http://www.s135.com</a>博主的文章配置的，后来发现因为用了光纤卡，不安装驱动会有问题。还有就是双控制器的active/active和active/standby模式需要通过刷新不同的fireware实现。总得来说这个存储配置起来不难，安装官方文档和网络上一些文档就可以。写这篇文档就是为了记录下自己的配置过程，省的以后再配置还要到处找文档查资料。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -1998,6 +1822,7 @@ cp /usr/share/doc/openvpn-2.0.9/sample-config-files/server.conf /etc/openvpn/</p
 <li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
 <li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
 
 </ul>
@@ -2005,6 +1830,10 @@ cp /usr/share/doc/openvpn-2.0.9/sample-config-files/server.conf /etc/openvpn/</p
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
@@ -2020,10 +1849,6 @@ cp /usr/share/doc/openvpn-2.0.9/sample-config-files/server.conf /etc/openvpn/</p
     
       <li class="post">
         <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
       </li>
     
   </ul>

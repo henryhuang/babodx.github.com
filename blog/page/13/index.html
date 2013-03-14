@@ -9,7 +9,10 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="我们可以从http://stacklet.com/其实就是原来http://jailtime.org/站点找我们需要的xen image文件 在2009年的时候，jailtime.org发布了一个新闻 May 4th, 2009 The jailtime project has been &hellip;">
+  <meta name="description" content="建立Mysql两个表间的外键,需要满足三个条件 两个表必须是InnoDB表类型
+使用在外键关系的域必须为索引型(Index)
+使用在外键关系的域必须与数据类型相似 下面举例说明 我们创建一个班级表和一个学生表,并建立一个外键 创建班级表 1
+CREATE TABLE class (id INT &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +67,108 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/howto-create-foreign-key-on-mysql/">如何建立两个表间的外键</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>建立Mysql两个表间的外键,需要满足三个条件</p>
+
+<ol>
+<li>两个表必须是InnoDB表类型</li>
+<li>使用在外键关系的域必须为索引型(Index)</li>
+<li>使用在外键关系的域必须与数据类型相似</li>
+</ol>
+
+
+<p>下面举例说明</p>
+
+<p>我们创建一个班级表和一个学生表,并建立一个外键</p>
+
+<p>创建班级表</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE class (id INT NOT NULL AUTO_INCREMENT, classname VARCHAR(50) NOT NULL, PRIMARY KEY(id)) ENGINE=INNODB;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>插入班级数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO class VALUES (1,"一班"),(2,"二班"),(3,"三班");</span></code></pre></td></tr></table></div></figure>
+
+
+<p>创建学生表</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE students (id INT(4) NOT NULL, name VARCHAR(50) NOT NULL, FK_class INT(4) NOT NULL, INDEX (FK_class), FOREIGN KEY (FK_class) REFERENCES class (id), PRIMARY KEY(id)) ENGINE=INNODB;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>验证外键约束性,我们向students表插入一个学生数据,并让FK_class的值为一个在class表里面不存在的值.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; INSERT INTO students VALUES (1,"zhang",5);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>马上就会看到Mysql报错</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR 1452 : Cannot add or update a child row: a foreign key constraint fails (`test/students`, CONSTRAINT `students_ibfk_1` FOREIGN KEY (`FK_class`) REFERENCES `class` (`id`))</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上证明外键可以正常工作了</p>
+
+<p>在Mysql下测试了以下,不建立index,并且不指定innodb格式.
+版本</p>
+
+<p>+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-+
+| version()            |
++&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-+
+| 5.0.24a-community-nt |
++&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-+</p>
+
+<p>建立class表</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE class (id INT NOT NULL AUTO_INCREMENT, classname VARCHAR(50) NOT NULL, PRIMARY KEY(id));</span></code></pre></td></tr></table></div></figure>
+
+
+<p>建立students表</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE students (id INT(4) NOT NULL, name VARCHAR(50) NOT NULL, FK_class INT(4) NOT NULL, FOREIGN KEY (FK_class) REFERENCES class (id), PRIMARY KEY(id));</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过Navicat查看,上面语句建立的两个表,也会默认用INNODB存储,而且也在students表建立了index和外键.一切正常.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -883,191 +988,6 @@ If all is well you will see the guest’s boot messages scrolling by.
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-5-3-64bit-install-on-hp-380-g5/">CentOS 5.3 64bit安装在HP 380G5服务器</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天安装了一台CentOS 5.3 64bit服务器。</p>
-
-<p>服务器硬件HP 380G5，4U高</p>
-
-<ul>
-<li>CPU 4核处理器 2颗</li>
-<li>内存 4G 硬盘 147G*3</li>
-</ul>
-
-
-<p>安装很顺利，采用server模式，去掉了不用的软件，加入虚拟化。</p>
-
-<p>安装后启动，占用内存在230M左右，感觉比CentOS 4.7高了很多呀。。。我在一台HP 140的1U服务器安装的CentOS 4.7 启动后，只占用29M内存。</p>
-
-<p>内存占用问题，还需要看看具体是什么原因。</p>
-
-<p>测试下性能，我比较喜欢用unixbench测试。</p>
-
-<p><a href="http://www.hermit.org/Linux/Benchmarking/">http://www.hermit.org/Linux/Benchmarking/</a></p>
-
-<p>我这次下载的5.0版本，因为5.1以后支持2D,3D我没有装X11，运行不了。</p>
-
-<p>结果5.0也是运行了一半就出问题了。奇怪呀。</p>
-
-<p>我的一台CentOS 4.4 装在一个双核 Intel(R) Xeon(TM) CPU 2.66GHz，1G内存的机器上。用4.1.0-wht测试，得分只有145.不过是跑着java、tomcat、apache、mysql和vmserver的时候测试的。内存使用400M左右的时候。</p>
-
-<p>我看到网上很多128M的VPS居然也可以得到160多分，真是奇怪呀。而我这台双4核处理器xeon e7320,4G内存，装CentOS的机器，也只有下面的数据</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@moodle unixbench-4.1.0-wht-2]# ./Run
-</span><span class='line'>make all
-</span><span class='line'>make[1]: Entering directory `/root/unixbench-4.1.0-wht-2'
-</span><span class='line'>Checking distribution of files
-</span><span class='line'>./pgms exists
-</span><span class='line'>./src exists
-</span><span class='line'>./testdir exists
-</span><span class='line'>./tmp exists
-</span><span class='line'>./results exists
-</span><span class='line'>make[1]: Leaving directory `/root/unixbench-4.1.0-wht-2'
-</span><span class='line'>   #    # #    # # #    #          #####   ###### #    #   ####   #    #&lt;br&gt;
-</span><span class='line'>   #    # ##   # #   # #           #    # #       ##   # #    # #    #&lt;br&gt;
-</span><span class='line'>   #    # # # # #    ##            #####   #####   # # # #       ######&lt;br&gt;
-</span><span class='line'>   #    # # # # #    ##            #    # #       # # # #       #    #&lt;br&gt;
-</span><span class='line'>   #    # #   ## #   # #           #    # #       #   ## #    # #    #&lt;br&gt;
-</span><span class='line'>    ####   #    # # #    #          #####   ###### #    #   ####   #    #
-</span><span class='line'>                 4        1           Based on the Byte Magazine Unix Benchmark
-</span><span class='line'>                44       11
-</span><span class='line'>   v   v       4 4        1
-</span><span class='line'>    v v       44444       1           v4.1 revisions mostly by David C. Niemi,
-</span><span class='line'>     v           4   o   111 - WHT.2 Reston, VA, USA niemi@tux.org
-</span><span class='line'>WHT Variant by Andy A. Lee andylee@dslextreme.com
-</span><span class='line'>See: http://www.webhostingtalk.com/showthread.php?s=&threadid=308055
-</span><span class='line'>
-</span><span class='line'>Dhrystone 2 using register variables 1 2
-</span><span class='line'>Double-Precision Whetstone 1 2
-</span><span class='line'>Execl Throughput 1
-</span><span class='line'>Filesystem Throughput 1024 bufsize 2000 maxblocks 1
-</span><span class='line'>Filesystem Throughput 256 bufsize 500 maxblocks 1
-</span><span class='line'>Filesystem Throughput 4096 bufsize 8000 maxblocks 1
-</span><span class='line'>Pipe Throughput 1 2
-</span><span class='line'>Pipe-based Context Switching 1 2
-</span><span class='line'>Process Creation 1
-</span><span class='line'>System Call Overhead 1 2
-</span><span class='line'>Shell Scripts (8 concurrent) 1
-</span><span class='line'>==============================================================
-</span><span class='line'>BYTE UNIX Benchmarks (Version 4.1-wht.2)
-</span><span class='line'>System -- Linux moodle.ict 2.6.18-128.el5xen #1 SMP Wed Jan 21 11:12:42 EST 2009 x86_64 x86_64 x86_64 GNU/Linux
-</span><span class='line'>                     271677672   3293760 254360848   2% /
-</span><span class='line'>Start Benchmark Run: Tue Jun 30 06:43:06 CST 2009
-</span><span class='line'>06:43:06 up 7:53, 1 user, load average: 0.19, 0.76, 0.81
-</span><span class='line'>End Benchmark Run: Tue Jun 30 06:53:17 CST 2009
-</span><span class='line'>06:53:17 up 8:03, 1 user, load average: 15.43, 6.42, 3.16
-</span><span class='line'>
-</span><span class='line'>                     INDEX VALUES
-</span><span class='line'>TEST                                        BASELINE     RESULT      INDEX
-</span><span class='line'>Dhrystone 2 using register variables        376783.7 19031818.6      505.1
-</span><span class='line'>Double-Precision Whetstone                      83.1     1448.6      174.3
-</span><span class='line'>Execl Throughput                               188.3     1593.9       84.6
-</span><span class='line'>File Copy 1024 bufsize 2000 maxblocks         2672.0   118911.0      445.0
-</span><span class='line'>File Copy 256 bufsize 500 maxblocks           1077.0    42442.0      394.1
-</span><span class='line'>File Read 4096 bufsize 8000 maxblocks        15382.0   946428.0      615.3
-</span><span class='line'>Pipe-based Context Switching                 15448.6   253316.5      164.0
-</span><span class='line'>Pipe Throughput                             111814.6 1223105.0      109.4
-</span><span class='line'>Process Creation                               569.3     3279.0       57.6
-</span><span class='line'>Shell Scripts (8 concurrent)                    44.8      508.7      113.5
-</span><span class='line'>System Call Overhead                        114433.5   907496.2       79.3
-</span><span class='line'>                                                                 =========
-</span><span class='line'>     FINAL SCORE                                                     182.5</span></code></pre></td></tr></table></div></figure>
-
-
-<p>总分 182.5 真不知都那些VPS测试出 400分的，是什么情况。
-难道是可以针对unixbench优化？</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/14/">&larr; Older</a>
@@ -1105,6 +1025,7 @@ If all is well you will see the guest’s boot messages scrolling by.
 <li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
 <li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
 
 </ul>
@@ -1112,6 +1033,10 @@ If all is well you will see the guest’s boot messages scrolling by.
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
@@ -1127,10 +1052,6 @@ If all is well you will see the guest’s boot messages scrolling by.
     
       <li class="post">
         <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
       </li>
     
   </ul>

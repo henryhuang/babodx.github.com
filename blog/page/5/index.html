@@ -9,7 +9,10 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="今天将微博从原来的bo-blog迁移到了emlog bo-blog从08年就一直开始使用。感觉还是很不错的。但是一直没怎么更新了，目前很多新功能都不支持。 其实我就打算让博客可以和新浪微博同步。新浪微博里也有个关联博客的功能，据说可以通过博客的rss内容来同步内容。 但是我参考网上文章修改了bo- &hellip;">
+  <meta name="description" content="这个站点有很多关于debian系统管理的信息和经验。
+不过这个站点对于IE支持不好，页面会出现错位。建议还是采用firefox或者chrome这类的浏览器吧。
+网址：http://www.debian-administration.org/
+简介如下，照搬的原文： Debian &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +67,72 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/25/debian-administration-site/">一个关于debian系统管理的站点</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-25T00:00:00+08:00" pubdate data-updated="true">Oct 25<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这个站点有很多关于debian系统管理的信息和经验。
+不过这个站点对于IE支持不好，页面会出现错位。建议还是采用firefox或者chrome这类的浏览器吧。
+网址：<a href="http://www.debian-administration.org/">http://www.debian-administration.org/</a>
+简介如下，照搬的原文：</p>
+
+<h1>Debian Administration</h1>
+
+
+<p>This site was created as a simple weblog designed to contain interesting and useful information related to the System Administration of <a href="http://www.debian.org/">Debian GNU/Linux</a> systems.
+Whilst there are several sites where users can post questions and have answers contributed by other users there are no other sites on the web which are specifically targeted at distributing articles of interest to Debian administrators.
+This site is designed to fill that void, with content accepted from users.
+Feel free to <a href="http://www.debian-administration.org/create/user">create your own account</a> and <a href="http://www.debian-administration.org/create/article">contribute an article, tip, or question</a> you may also <a href="http://www.debian-administration.org/create/poll">submit a poll</a>.
+User accounts aren&#8217;t necessary but they do allow you to do several additional things:</p>
+
+<ul>
+<li>See your own comment and story posting history </li>
+<li>Bookmark articles, polls, or weblogs of interest to you. </li>
+<li>
+<a href="http://www.debian-administration.org/about/FAQ%20:%20Tags">Tag articles</a>. </li>
+<li>
+<a href="http://www.debian-administration.org/about/FAQ%20:%20Site%20Adverts">Disable the adverts</a> shown upon article pages. <ul>
+<li>Or <a href="http://www.debian-administration.org/create/advert">Create your own advert</a> </li>
+</ul>
+</li>
+<li>Create and post weblog entries. </li>
+<li>Ensure the use of our <a href="http://www.debian-administration.org/about/SSL%20Certificate">SSL certificate</a> by always using https://. </li>
+</ul>
+
+
+<p>From your account page you can customize several aspects of the site - such as which sections are displayed in the sidebar, whether to receive notifications if other people reply to your comments, etc.
+It should be noted that this site is neither an official part of the Debian project, nor endorsed by it. <a href="http://www.debian.org/">The Debian project</a> has its own official website, and the name Debian is a trademark held by <a href="http://www.spi-inc.org/">Software In the Public Interest</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -680,53 +749,6 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/01/13/mysql-tablename-lowercase/">Mysql设置不区分表名大小写</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-01-13T00:00:00+08:00" pubdate data-updated="true">Jan 13<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天遇到个问题，有个程序从Windows导入到Linux的时候，表格全部小写了。但程序里很多DAO全是大写调用。</p>
-
-<p>Linux默认安装的Mysql是表名区分大小写的。</p>
-
-<p>这个设置主要是在/etc/my.cnf里面的[mysqld]段，加入如下设置项</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>lower_case_table_names = 1</span></code></pre></td></tr></table></div></figure>
-
-
-<p> 
-如果设置为0，就是区分大小写。设置为1就是不区分了。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -764,6 +786,7 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
 <li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
 <li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
 
 </ul>
@@ -771,6 +794,10 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
@@ -786,10 +813,6 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
     
       <li class="post">
         <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a>
       </li>
     
   </ul>
