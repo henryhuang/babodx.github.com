@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Host | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/host/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-03-14T13:53:55+08:00</updated>
+  <updated>2013-03-14T15:30:34+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -48,29 +48,29 @@
 
 <p>在 dnspod的后台域名管理中，添加自己需要转到国内的解析的域名。如下图</p>
 
-<p><img src="http://flic.kr/p/dYkR1r" alt="dnspod后台" /></p>
+<p><img src="http://farm9.staticflickr.com/8251/8513876981_070153af29_z.jpg" alt="dnspod后台" /></p>
 
 <p>点开我们刚添加的域名，可以看到分配给我们的dns服务器。如下图</p>
 
-<p><img src="http://flic.kr/p/dYkRLr" alt="添加dns服务器" /></p>
+<p><img src="http://farm9.staticflickr.com/8105/8513879533_140115711c_z.jpg" alt="添加dns服务器" /></p>
 
 <p>现在我们登录到godaddy下，修改我们的DNS服务器到刚才dnspod分配给我们的dns服务器上。</p>
 
 <p>登录后，如下图所示，点my account</p>
 
-<p><img src="http://flic.kr/p/dYkSDR" alt="account截图" /></p>
+<p><img src="http://farm9.staticflickr.com/8530/8513882515_d24da3b0d9_z.jpg" alt="account截图" /></p>
 
 <p>然后在域名管理界面，点我们要转到国内解析的域名。如图</p>
 
-<p><img src="http://flic.kr/p/dYkTm6" alt="域名管理截图" /></p>
+<p><img src="http://farm9.staticflickr.com/8520/8513884849_f2c2282477_z.jpg" alt="域名管理截图" /></p>
 
 <p>进入域名管理后，找到NameServers项，点set name servers。如图</p>
 
-<p><img src="http://flic.kr/p/dYkU18" alt="nameserver截图" /></p>
+<p><img src="http://farm9.staticflickr.com/8374/8513887055_cf354bfba5_z.jpg" alt="nameserver截图" /></p>
 
 <p>上面点击“Set Nameservers”后，会弹出一个窗口让你设置DNS Server。如下图</p>
 
-<p><img src="http://flic.kr/p/dYrDbN" alt="set nameserver" /></p>
+<p><img src="http://farm9.staticflickr.com/8518/8515007886_405481c010_z.jpg" alt="set nameserver" /></p>
 
 <p>将Nameserver1和Nameserver2里面的内容修改为dnspod分配给我们的dns服务器。nameserver3和nameserver4里面清空。</p>
 
@@ -80,7 +80,7 @@
 
 <p>下面是完全生效后的状态</p>
 
-<p><img src="http://flic.kr/p/dYkWXT" alt="设置完成的状态" /></p>
+<p><img src="http://farm9.staticflickr.com/8371/8513897017_913b9e6764_z.jpg" alt="设置完成的状态" /></p>
 ]]></content>
   </entry>
   

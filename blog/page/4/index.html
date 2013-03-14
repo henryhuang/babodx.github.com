@@ -57,6 +57,7 @@
 <ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/service">运维服务</a></li>
 </ul>
 
 </nav>
@@ -541,11 +542,11 @@ cd mysql-5.5.16
 
 <p>1、在博客的侧边栏显示出一个支付宝的收款按钮，基本也就是用来让人家自愿捐款用。如下图：</p>
 
-<p><img src="http://flic.kr/p/dYrZvA" alt="插件截图1" />
+<p><img src="http://farm9.staticflickr.com/8372/8515076256_1ddf6232e9.jpg" alt="插件截图1" />
  
 2、后台可以方便的设置用来收款的支付宝收款主页地址。</p>
 
-<p><img src="http://flic.kr/p/dYmisZ" alt="插件截图2" />
+<p><img src="http://farm9.staticflickr.com/8520/8513965985_7f871e8d28.jpg" alt="插件截图2" />
  
  </p>
 </div>
@@ -589,9 +590,9 @@ cd mysql-5.5.16
 
 <p>下面是我博客默认情况下的加载css和js文件的数量</p>
 
-<p><img src="http://flic.kr/p/dYrS9W" alt="请求数截图" /></p>
+<p><img src="http://farm9.staticflickr.com/8246/8515051510_535fdf1923_z.jpg" alt="请求数截图" /></p>
 
-<p><img src="http://flic.kr/p/dYmaVv" alt="文件数" /></p>
+<p><img src="http://farm9.staticflickr.com/8087/8513940611_b373e87aea_z.jpg" alt="文件数" /></p>
 
 <p>从图上可以看到加载了4个css文件和5个js文件。大小分别为54.2kb和45.5kb。
  
@@ -855,11 +856,11 @@ cd mysql-5.5.16
 
 <p>下面是我整合css与js代码后的效果</p>
 
-<p><img src="http://flic.kr/p/dYrWDd" alt="整合后效果1" /></p>
+<p><img src="http://farm9.staticflickr.com/8088/8515066606_1e38661e7f_z.jpg" alt="整合后效果1" /></p>
 
 <p>css文件降低为3个，其中有两个为新浪微博的代码，这个不好整合了。。。</p>
 
-<p><img src="http://flic.kr/p/dYrXFQ" alt="整合后效果2" /></p>
+<p><img src="http://farm9.staticflickr.com/8234/8515070122_92e6aab78e_z.jpg" alt="整合后效果2" /></p>
 
 <p>js文件数降低为3个，其中一个是微博的，一个是百度统计的。我们自己的代码已经整合到一个请求里调用了。</p>
 </div>
@@ -902,25 +903,34 @@ cd mysql-5.5.16
  
 以我的博客为例，服务器采用的就是nginx+fastcgi配合php模式。我的nginx关于博客的配置如下</p>
 
-<div id="kindeditor" class="quote">server
-  {
-    listen       80;
-    server_name  xinlogs.com www.xinlogs.com;
-</div>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>server
+</span><span class='line'>  {
+</span><span class='line'>    listen       80;
+</span><span class='line'>    server_name  xinlogs.com www.xinlogs.com;</span></code></pre></td></tr></table></div></figure>
 
 
 <p>这样通过xinlogs.com或者www.xinlogs.com都可以访问到我的博客，但是这样做相当于我的博客首页有了两个地址，不利于搜索引擎收录和分配权重。
 所以我采用nginx提供的rewrite来实现301转向，通过301转向的域名地址搜索引擎会将权重或者PR也一起转向过去。这样就不损失网站的PR和权重了。也就是把通过www或者不带www访问的这些流量和查询或者外链的权重整合到了一起。
 下面是我的配置，我希望通过xinlogs.com作为我博客的统一入口域名，而带www的访问全部转向到xinlogs.com域名。</p>
 
-<div id="kindeditor" class="quote">server
-  {
-    listen       80;
-    server_name  xinlogs.com www.xinlogs.com;
-    if ($host != &#8220;xinlogs.com&#8221;) {
-        rewrite ^/(.*)$ http://xinlogs.com/$1 permanent;
-    }
-</div>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>server
+</span><span class='line'>  {
+</span><span class='line'>    listen       80;
+</span><span class='line'>    server_name  xinlogs.com www.xinlogs.com;
+</span><span class='line'>    if ($host != "xinlogs.com") {
+</span><span class='line'>        rewrite ^/(.*)$ http://xinlogs.com/$1 permanent;
+</span><span class='line'>    }</span></code></pre></td></tr></table></div></figure>
 
 
 <p>经过上面的的配置，也就是那句if条件语句，将不是xinlogs.com的域名，全部转移到了xinlogs.com下。
@@ -928,49 +938,65 @@ cd mysql-5.5.16
 下面我们测试下效果，因为只有明确的看到了转向信息，才证明我的配置成功了。所以采用curl命令测试。
 测试www.xinlogs.com是否被转向</p>
 
-<div id="kindeditor" class="quote">-bash-3.2# curl -i www.xinlogs.com
-HTTP/1.1 301 Moved Permanently
-Server: nginx/1.0.8
-Date: Sun, 13 Nov 2011 05:03:22 GMT
-Content-Type: text/html
-Content-Length: 184
-Connection: keep-alive
-Location: http://xinlogs.com/
- 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-bash-3.2# curl -i www.xinlogs.com
+</span><span class='line'>HTTP/1.1 301 Moved Permanently
+</span><span class='line'>Server: nginx/1.0.8
+</span><span class='line'>Date: Sun, 13 Nov 2011 05:03:22 GMT
+</span><span class='line'>Content-Type: text/html
+</span><span class='line'>Content-Length: 184
+</span><span class='line'>Connection: keep-alive
+</span><span class='line'>Location: http://xinlogs.com/</span></code></pre></td></tr></table></div></figure>
+
+
+<p> 
 <html>
 <head><title>301 Moved Permanently</title></head>
-<body bgcolor="white">
-<center><h1>301 Moved Permanently</h1></center>
-<hr><center>nginx/1.0.8</center>
-</body>
-</html>
-</div>
+<body bgcolor="white"></p>
 
+<center><h1>301 Moved Permanently</h1></center>
+
+
+<hr><center>nginx/1.0.8</center>
+
+
+<p></body>
+</html>
+</div></p>
 
 <p>可以看到被成功转向到了location:http://xinlogs.com/了
 再看看xinlogs.com是否可以正常访问。<b><span style="color:#e53333;">注意：这个很关键，因为有时候配置错了会导致循环转向让主域名入口无法访问。</span></b></p>
 
-<div id="kindeditor" class="quote">-bash-3.2# curl -i xinlogs.com
-HTTP/1.1 200 OK
-Server: nginx/1.0.8
-Date: Sun, 13 Nov 2011 05:05:43 GMT
-Content-Type: text/html; charset=UTF-8
-Transfer-Encoding: chunked
-Connection: keep-alive
-Vary: Accept-Encoding
-X-Powered-By: PHP/5.3.8
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-bash-3.2# curl -i xinlogs.com
+</span><span class='line'>HTTP/1.1 200 OK
+</span><span class='line'>Server: nginx/1.0.8
+</span><span class='line'>Date: Sun, 13 Nov 2011 05:05:43 GMT
+</span><span class='line'>Content-Type: text/html; charset=UTF-8
+</span><span class='line'>Transfer-Encoding: chunked
+</span><span class='line'>Connection: keep-alive
+</span><span class='line'>Vary: Accept-Encoding
+</span><span class='line'>X-Powered-By: PHP/5.3.8</span></code></pre></td></tr></table></div></figure>
 
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-后面内容省略了。。。
-</div>
+<p>后面内容省略了。。。</p>
 
-
-<p><b><br></b>
- 可以看到xinlogs.com域名访问正常，正确返回200 ok。而且下面的页面内容也正确返回了。</p>
+<p> 可以看到xinlogs.com域名访问正常，正确返回200 ok。而且下面的页面内容也正确返回了。</p>
 </div>
   
   
@@ -1008,11 +1034,11 @@ X-Powered-By: PHP/5.3.8
 
   <div class="entry-content"><p>我们经常碰到linux乱码问题。尤其是碰到网页上传个中文文件名的文件，ssh登陆到linux一看全乱码想删除都不行。很郁闷的。如下图所示中文文件名全都是显示问号了（这个乱码由于你的编码设置不同，显示的也不太一样）</p>
 
-<p><img src="http://flic.kr/p/dYkYmM" alt="乱码截图" /></p>
+<p><img src="http://farm9.staticflickr.com/8094/8513901709_166ee71c2c.jpg" alt="乱码截图" /></p>
 
 <p>还有一个就是vim的乱码</p>
 
-<p><img src="http://flic.kr/p/dYkZ3e" alt="vim乱码" /></p>
+<p><img src="http://farm9.staticflickr.com/8235/8513903997_2edf6ef68a_m.jpg" alt="vim乱码" /></p>
 
 <p><strong>解决办法：</strong></p>
 
@@ -1103,19 +1129,19 @@ X-Powered-By: PHP/5.3.8
 <p>完成以上操作，应该就可以正常显示中文文件名字了。不过这个只是linux没有问题了，我们的ssh客户端还需要支持才可以。我一般使用Putty来当做ssh客户端，下面就以putty为例子进行设置。
 先设置使用的字体，选择windows->Appearance，弹出的字体界面里选择“新宋体”，字符集选择“CHINESE_GB2312”</p>
 
-<p><img src="http://flic.kr/p/dYm1f8" alt="putty设置" /></p>
+<p><img src="http://farm9.staticflickr.com/8369/8513908051_06d0c35864_z.jpg" alt="putty设置" /></p>
 
 <p>再设置编码</p>
 
-<p><img src="http://flic.kr/p/dYm1ZX" alt="设置编码" /></p>
+<p><img src="http://farm9.staticflickr.com/8225/8513910593_16685f713a.jpg" alt="设置编码" /></p>
 
 <p>以上设置完成后，就可以正常显示了。效果如下图所示：</p>
 
-<p><img src="http://flic.kr/p/dYrJmG" alt="正常显示的效果" /></p>
+<p><img src="http://farm9.staticflickr.com/8379/8515025280_c0816e5461.jpg" alt="正常显示的效果" /></p>
 
 <p>在命令行输入中文文件名也可以正常使用了。</p>
 
-<p><img src="http://flic.kr/p/dYrK9s" alt="输入中文效果" /></p>
+<p><img src="http://farm9.staticflickr.com/8097/8515027934_4514657da8_m.jpg" alt="输入中文效果" /></p>
 
 <p>到目前为止，ssh下操作中文文件名的问题就彻底解决了。可以正常输入中文文件名来操作了。</p>
 
@@ -1127,7 +1153,7 @@ X-Powered-By: PHP/5.3.8
 
 <p>这样以后，vim也可以正常操作中文了。效果图</p>
 
-<p><img src="http://flic.kr/p/dYrLjU" alt="vim中文操作效果" /></p>
+<p><img src="http://farm9.staticflickr.com/8248/8515031904_d608be830d_z.jpg" alt="vim中文操作效果" /></p>
 
 <p><strong>注意:</strong></p>
 
@@ -1201,29 +1227,29 @@ X-Powered-By: PHP/5.3.8
 
 <p>在 dnspod的后台域名管理中，添加自己需要转到国内的解析的域名。如下图</p>
 
-<p><img src="http://flic.kr/p/dYkR1r" alt="dnspod后台" /></p>
+<p><img src="http://farm9.staticflickr.com/8251/8513876981_070153af29_z.jpg" alt="dnspod后台" /></p>
 
 <p>点开我们刚添加的域名，可以看到分配给我们的dns服务器。如下图</p>
 
-<p><img src="http://flic.kr/p/dYkRLr" alt="添加dns服务器" /></p>
+<p><img src="http://farm9.staticflickr.com/8105/8513879533_140115711c_z.jpg" alt="添加dns服务器" /></p>
 
 <p>现在我们登录到godaddy下，修改我们的DNS服务器到刚才dnspod分配给我们的dns服务器上。</p>
 
 <p>登录后，如下图所示，点my account</p>
 
-<p><img src="http://flic.kr/p/dYkSDR" alt="account截图" /></p>
+<p><img src="http://farm9.staticflickr.com/8530/8513882515_d24da3b0d9_z.jpg" alt="account截图" /></p>
 
 <p>然后在域名管理界面，点我们要转到国内解析的域名。如图</p>
 
-<p><img src="http://flic.kr/p/dYkTm6" alt="域名管理截图" /></p>
+<p><img src="http://farm9.staticflickr.com/8520/8513884849_f2c2282477_z.jpg" alt="域名管理截图" /></p>
 
 <p>进入域名管理后，找到NameServers项，点set name servers。如图</p>
 
-<p><img src="http://flic.kr/p/dYkU18" alt="nameserver截图" /></p>
+<p><img src="http://farm9.staticflickr.com/8374/8513887055_cf354bfba5_z.jpg" alt="nameserver截图" /></p>
 
 <p>上面点击“Set Nameservers”后，会弹出一个窗口让你设置DNS Server。如下图</p>
 
-<p><img src="http://flic.kr/p/dYrDbN" alt="set nameserver" /></p>
+<p><img src="http://farm9.staticflickr.com/8518/8515007886_405481c010_z.jpg" alt="set nameserver" /></p>
 
 <p>将Nameserver1和Nameserver2里面的内容修改为dnspod分配给我们的dns服务器。nameserver3和nameserver4里面清空。</p>
 
@@ -1233,7 +1259,7 @@ X-Powered-By: PHP/5.3.8
 
 <p>下面是完全生效后的状态</p>
 
-<p><img src="http://flic.kr/p/dYkWXT" alt="设置完成的状态" /></p>
+<p><img src="http://farm9.staticflickr.com/8371/8513897017_913b9e6764_z.jpg" alt="设置完成的状态" /></p>
 </div>
   
   
@@ -1278,7 +1304,7 @@ X-Powered-By: PHP/5.3.8
 
 <p>默认状态下的gvim是和windows软件一样，也有菜单和状态条等的。但是我个喜欢linux下的风格。下面就是我目前使用的样子</p>
 
-<p><img src="http://flic.kr/p/dYkNSP" alt="gvim截图" /></p>
+<p><img src="http://farm9.staticflickr.com/8528/8513869811_fb6ff8fe29_z.jpg" alt="gvim截图" /></p>
 
 <p>gvim的设置全部是基于目录下的_vimrc配置文件的。</p>
 
@@ -1521,6 +1547,10 @@ X-Powered-By: PHP/5.3.8
 <aside class="sidebar">
   
     <section>
+  <h1>公告:</h1>
+  <p>博客从原来的emlog迁移到了octopress。正在学习当中，原来的文章基本转移过来了。</p>
+</section>
+<section>
 <h1>Categories</h1>
 <ul id="categories">
   <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
@@ -1540,13 +1570,12 @@ X-Powered-By: PHP/5.3.8
 <li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
-<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (2)</a></li>
 <li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
 <li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
 <li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
 <li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
-<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
 
 </ul>
 </section>

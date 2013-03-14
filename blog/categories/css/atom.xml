@@ -4,7 +4,7 @@
   <title><![CDATA[Category: CSS | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/css/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-03-14T13:53:55+08:00</updated>
+  <updated>2013-03-14T15:30:34+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -24,9 +24,9 @@
 
 <p>下面是我博客默认情况下的加载css和js文件的数量</p>
 
-<p><img src="http://flic.kr/p/dYrS9W" alt="请求数截图" /></p>
+<p><img src="http://farm9.staticflickr.com/8246/8515051510_535fdf1923_z.jpg" alt="请求数截图" /></p>
 
-<p><img src="http://flic.kr/p/dYmaVv" alt="文件数" /></p>
+<p><img src="http://farm9.staticflickr.com/8087/8513940611_b373e87aea_z.jpg" alt="文件数" /></p>
 
 <p>从图上可以看到加载了4个css文件和5个js文件。大小分别为54.2kb和45.5kb。
  
@@ -220,11 +220,11 @@ addAction('adm_sidebar_ext', 'drp_highlighter_adm_sidebar');</p>
 
 <p>下面是我整合css与js代码后的效果</p>
 
-<p><img src="http://flic.kr/p/dYrWDd" alt="整合后效果1" /></p>
+<p><img src="http://farm9.staticflickr.com/8088/8515066606_1e38661e7f_z.jpg" alt="整合后效果1" /></p>
 
 <p>css文件降低为3个，其中有两个为新浪微博的代码，这个不好整合了。。。</p>
 
-<p><img src="http://flic.kr/p/dYrXFQ" alt="整合后效果2" /></p>
+<p><img src="http://farm9.staticflickr.com/8234/8515070122_92e6aab78e_z.jpg" alt="整合后效果2" /></p>
 
 <p>js文件数降低为3个，其中一个是微博的，一个是百度统计的。我们自己的代码已经整合到一个请求里调用了。</p>
 ]]></content>
