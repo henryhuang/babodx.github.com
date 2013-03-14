@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>HP台式机器，ghost系统后，提示windows could not start - 鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="今天单位一台HP dx7518的台式机器，ghost了一个winxp系统。但是只要一开机，就提示 1
+2
+3
+windows could not start because of a computer disk hardware configuration problem could not &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/2010/03/12/HP-Computer-Ghost-Problem/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">HP台式机器，ghost系统后，提示windows Could Not Start</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-12T00:00:00+08:00" pubdate data-updated="true">Mar 12<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>今天单位一台HP dx7518的台式机器，ghost了一个winxp系统。但是只要一开机，就提示</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>windows could not start because of a computer disk hardware configuration problem    
+</span><span class='line'>could not read from the selected boot disk check boot path and disk harware   
+</span><span class='line'>please check the windows documentation about hardware disk configuation and your hardware refer once manuals for additional information   </span></code></pre></td></tr></table></div></figure>
+
+
+<p>开始我以为是硬盘的设置问题，后来发现硬盘已经设置为IDE模式了。</p>
+
+<p>后来网上查找，发现是和BIOS里的WDRT Support选项有关系。。。</p>
+
+<p><strong>解决办法</strong></p>
+
+<p>开机进入bios设置，选择Power management Setup 再选择WDRT Support 将后面值修改为disable</p>
+
+<p>WDRT SUPPORT：watchdog resource table 一种加密狗。通过这种加密保护来拒绝安装非随机配备的操作系统。同样，全系的HP 家用、商用台式机、笔记本，进行GHOST安装后报错，也可以用此方法解决。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-12T00:00:00+08:00" pubdate data-updated="true">Mar 12<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/hardware/'>Hardware</a>, <a class='category' href='/blog/categories/windows/'>Windows</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2010/03/12/HP-Computer-Ghost-Problem/" data-via="" data-counturl="http://babodx.github.com/blog/2010/03/12/HP-Computer-Ghost-Problem/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/02/12/HUAWEI-E1750-on-Win7/" title="Previous Post: win7下使用联通无线上网卡HUAWEI E1750">&laquo; win7下使用联通无线上网卡HUAWEI E1750</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2010/03/12/HP-MSA1000-DL380G5-Centos5/" title="Next Post: CentOS 5.4 基于HP Proliant DL380 G5服务器配置Modular Smart Array 1000存储">CentOS 5.4 基于HP Proliant DL380 G5服务器配置Modular Smart Array 1000存储 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

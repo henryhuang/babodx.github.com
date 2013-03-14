@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Hardware | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/hardware/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-03-14T13:53:55+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[2012 macbook Air 使用华为E1750 3g上网卡]]></title>
+    <link href="http://babodx.github.com/blog/2012/07/23/macbook-air-use-e1750-3g-mobilecard/"/>
+    <updated>2012-07-23T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/07/23/macbook-air-use-e1750-3g-mobilecard</id>
+    <content type="html"><![CDATA[<p>最近一直在摸索macbook air的使用方法，目前大部分工作都已经可以放弃windows了。</p>
+
+<p>今天又将华为的E1750上网卡在macbook air上正确安装了。</p>
+
+<p>我的3g上网卡如下</p>
+
+<p><img src="http://farm9.staticflickr.com/8390/8515414834_9758e77ab7_m.jpg" alt="e1750图" /></p>
+
+<p>这个上网卡是09年的，现在直接插入usb后，macbook air没有任何反应。</p>
+
+<p><strong>安装方法：</strong></p>
+
+<p>1、首先要在Windows机器上更新固件</p>
+
+<p>先在windows机器安装mobile_card_driver驱动。</p>
+
+<p>然后再到华为主页下载固件更新程序</p>
+
+<p>E1750 WINMACB300D00SP05C112(UTPS11.301.08.30.112_MAC11.301.06.13.112)(China Unicom)(05019744)</p>
+
+<p>将上网卡插入windows的usb接口，可以被驱动正确识别以后，运行固件更新程序开始更新固件。</p>
+
+<p>2、macbook下安装</p>
+
+<p>更新好固件以后，我们就可以插入macbook的笔记本。这个时候会识别出来一个mobile card的光驱。</p>
+
+<p>我们从finder进入这个光驱，就会发现“无线上网卡.app“程序</p>
+
+<p>直接安装这个程序就可以了</p>
+
+<p>3、安装好后的程序界面</p>
+
+<p><img src="http://farm9.staticflickr.com/8507/8515417076_b7b7b101f4_z.jpg" alt="运行界面" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[2012 macbook Air 使用感受]]></title>
+    <link href="http://babodx.github.com/blog/2012/07/13/buy-macbook-air/"/>
+    <updated>2012-07-13T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/07/13/buy-macbook-air</id>
+    <content type="html"><![CDATA[<p>6月底，我购买了一台2012新款macbook air笔记本。将近一个月的使用，记录下心得。</p>
+
+<p>以前从来没有用过mac os系统，不过对于linux还是很熟悉的。</p>
+
+<p>早就打算买一台玩玩，一个是没钱，一个是总觉得单位配的也够用。后来又打算学习下ios开发，就下决心购买一台了。</p>
+
+<p>正好赶上6月新款发布，北京正规零售店都没有上市呢，于是在macx.cn上面看到大家都在福利社购买，于是我也去了。
+ 
+<strong>购买心得</strong></p>
+
+<p>福利社的价格还算不错，和北京官方公布的教育优化价格相当。而且是香港过来的本，一旦大陆上市还有保修。
+我购买的是macbook air 低配版本，128G硬盘，4G内存 13'显示 价格：8500</p>
+
+<p>购买的时候需要什么软件还可以帮助安装。我就安装了常用的虚拟机和xcode
+ 
+<strong>使用心得</strong></p>
+
+<p>用来一个月下来，感觉mac os的系统确实不错。不愧是基于unix的。稳定！</p>
+
+<p>首先对于我经常需要服务器运维工作来说，mac os下面的软件完全可以满足</p>
+
+<p>自带的“终端” 可以支持大部分linux下的命令，要连接远程服务器直接ssh就可以，</p>
+
+<p>为了管理方便，我还是安装了secureCRT for mac</p>
+
+<p>输入法用IMKQIM（搜狗的词库）</p>
+
+<p>像office、qq、股票、远程桌面等常用软件都存在mac版本</p>
+
+<p>使用下来，没有任何的不适应。而且手势操作也很大的提高了效率。
+ 
+感受最大的是电池可以使用7小时，而且不用关机。在不用的时候，直接合上笔记本就休眠了。下次打开直接就是桌面感觉和用Ipad似的。
+ 
+因为我需要作一些php开发，在mac下面也可以使用XAMPP for mac版本</p>
+
+<p>编辑器我采用的是sublime text 2
+ 
+一个月下来，主要工作全部可以用mac系统替代了，感觉很好</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[H3C路由器 tracert超时，解决办法。]]></title>
+    <link href="http://babodx.github.com/blog/2011/09/21/h3c-ttl-expires/"/>
+    <updated>2011-09-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2011/09/21/h3c-ttl-expires</id>
+    <content type="html"><![CDATA[<p>单位的H3C路由器和交换机上，tracert总是超时。但是可以正常上网或者ping到目标。
+后来查找资料，找到了解决办法。</p>
+
+<p>解决方法：</p>
+
+<p>    ip ttl-expires enable     ip unreachables enable</p>
+
+<p>（官方说法这两条命令默认开启，可能跟版本有关，有的默认未开启。）</p>
+
+<p>官方对这两条命令解释是：</p>
+
+<p>ip ttl-expires enable命 令用来开启设备的ICMP超时报文的发送功能。undo ip ttl-expires命令用来关闭设备的ICMP超 时报文的发送功能。（缺省情况下，ICMP超时报文发送功能处于开启状 态。）</p>
+
+<p>需要注意的是，关闭ICMP超时报文发送 功能后，设备不会再发送“TTL超时”ICMP差 错报文，但“重组超时”ICMP差错报文仍会正常发送。</p>
+
+<p>ip unreachables enable命 令用来开启设备的ICMP目的不可达报文的发送功能。undo ip unreachables命令用来关闭设备的ICMP目 的不可达报文的发送功能。（缺省情况下，ICMP目的不可达报文发送功 能处于关闭状态。）
+ </p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[周末给老婆买了个HTC legend(G6)玩]]></title>
+    <link href="http://babodx.github.com/blog/2010/07/28/htc-g6/"/>
+    <updated>2010-07-28T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/07/28/htc-g6</id>
+    <content type="html"><![CDATA[<p>我一直使用G3，老婆看功能强大，打算也购买一个玩。
+去了中关村，挑来挑去，最后老婆还是看上了G6.
+感觉G6的金属外壳、后盖的设计都很好，而且有闪光灯。这些都是比较好的设计。
+不过数据线接口变了，不在和G3通用，这个不太喜欢。
+按键也感觉没有G3的好，觉得按键很粗糙，一按就咔咔的响（不是按键发音哦，纯机械声音）。
+没有了通话和挂机键，也感觉不方便。
+不过老婆还是挺喜欢的。
+购买就是注意别买到阿三机器就可以了。（好像目前阿三机器也可以通过降级破解了）</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HTC hero g3 openvpn设置]]></title>
+    <link href="http://babodx.github.com/blog/2010/03/17/HTC-Hero-Openvpn/"/>
+    <updated>2010-03-17T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/03/17/HTC-Hero-Openvpn</id>
+    <content type="html"><![CDATA[<p>现在YouTube和google博客等站点都被屏蔽，为了打破限制，只能用vpn来穿越了。</p>
+
+<p>原来一直用pptpd类型vpn，这种类型速度快，但是要求防火墙或者网关支持。对内外支持不好（反正我在单位和家里歌华宽带都不支持）</p>
+
+<p>后来改用openvpn类型的vpn了，发现虽然openvpn配置麻烦，需要安装客户端。但却是对内网支持良好，穿透能力强。</p>
+
+<p>openvpn可以支持多系统（服务器我肯定用linux，这里多系统主要指客户端）</p>
+
+<p>Windows系统可以采用openvpn gui，这个在我博客以前文章提到了，今天要说的是我的手机，htc hero这次也可以让手机连接openvpn服务器上youtube等站点了。</p>
+
+<p><strong>手机型号及系统</strong></p>
+
+<p>我的手机是HTC hero g3</p>
+
+<p>采用的ROM是Flyzup制作的基于android 1.5修改的。</p>
+
+<p>Rom可以到Flyzup网站下载
+<a href="http://www.innovative-space.com/2010/02/21/flzyup-custom-rom-v1-6-final-release/">http://www.innovative-space.com/2010/02/21/flzyup-custom-rom-v1-6-final-release/</a></p>
+
+<p>其实只要手机用的Rom可以支持openvpn，存在tun.so文件就可以</p>
+
+<p><strong>安装相关软件</strong></p>
+
+<p>首先需要需要安装openvpn，这个软件我们可以到下面地址下载已经编译好的版本。因为是static编译的，所以不需要任何动态库支持直接解压就可以使用。
+<a href="http://github.com/downloads/fries/android-external-openvpn/openvpn-static-2.1.1.bz2">http://github.com/downloads/fries/android-external-openvpn/openvpn-static-2.1.1.bz2</a></p>
+
+<p>将解压后得到的openvpn-static-2.1.1文件改名为openvpn 并拷贝到手机的/system/xbin/目录下</p>
+
+<p>我是采用手机上安装的Better Terminal Emulator Pro来操作的，也可以用adb连接上usb操作。</p>
+
+<p>有了openvpn后，我们还要创建两个软连接才可以让后面的openvpn顺利建立连接</p>
+
+<p>用Better Terminal Emulator Pro进入终端模式，输入如下命令</p>
+
+<p><code>
+mkdir /system/xbin/bb
+ln -s /system/xbin/ifconfig /system/xbin/bb/ifconfig
+ln -s /system/xbin/route /system/xbin/bb/route
+</code></p>
+
+<p>上面创建两个命令的软连接，是因为后面安装的TunnelDroid软件，总是调用/system/xbin/bb目录下的命令，如果没有命令，就会出错。</p>
+
+<p>用google的电子市场，查找TunnelDroid软件，安装TunnelDroid软件。</p>
+
+<p><strong>配置TunnelDroid</strong></p>
+
+<p>其实和配置Windows下的客户端一样，也需要一个配置文件和3个密钥文件</p>
+
+<p>我们在sd卡的跟目录创建openvpn目录</p>
+
+<p>在openvpn目录放入client.ovpn配置文件和ca.crt、client-1.crt和client-1.key密钥文件</p>
+
+<p>这样启动TunnelDroid后，就会出现client.ovpn的选项，直接选择连接就可以。上面的配置文件和密钥，我都是从配置好的Windows机器拷贝过来的。</p>
+
+<p>目前我测试的android手机、windowsxp、windows7和Linux全部都可以连接openvpn服务器。</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,940 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="今天遇到个问题，有个程序从Windows导入到Linux的时候，表格全部小写了。但程序里很多DAO全是大写调用。 Linux默认安装的Mysql是表名区分大小写的。 这个设置主要是在/etc/my.cnf里面的[mysqld]段，加入如下设置项 1
+lower_case_table_names &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/page/6/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/01/13/mysql-tablename-lowercase/">Mysql设置不区分表名大小写</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-13T00:00:00+08:00" pubdate data-updated="true">Jan 13<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天遇到个问题，有个程序从Windows导入到Linux的时候，表格全部小写了。但程序里很多DAO全是大写调用。</p>
+
+<p>Linux默认安装的Mysql是表名区分大小写的。</p>
+
+<p>这个设置主要是在/etc/my.cnf里面的[mysqld]段，加入如下设置项</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>lower_case_table_names = 1</span></code></pre></td></tr></table></div></figure>
+
+
+<p> 
+如果设置为0，就是区分大小写。设置为1就是不区分了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/11/28/anti-virus-test-file/">病毒测试样本</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-28T00:00:00+08:00" pubdate data-updated="true">Nov 28<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>我们在安装好杀毒软件后，如何测试下效果呢？
+下面的网站给我们提供了病毒测试样本：
+<a href="http://www.eicar.org/anti_virus_test_file.htm">http://www.eicar.org/anti_virus_test_file.htm</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/11/26/tomcat-memory-check/">监控tomcat内存占用</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-26T00:00:00+08:00" pubdate data-updated="true">Nov 26<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近单位给客户部署的一台服务器，主要跑的JAVA应用，一个物业OA系统。经常因为Tomcat内存占用过高而停止响应。</p>
+
+<p>观察了一下，每次停止响应时候，Tomcat进程占用内存超过1.2G</p>
+
+<p>初步怀疑是程序不够完善有内存泄露的地方，但是一时半会也找不到具体代码哪里有问题。</p>
+
+<p>我就写了一个shell不断监控Tomcat进程内存占用，当发现内存占用大于800M，我就自动重启一次Tomcat。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/sh   
+</span><span class='line'>MEM=`ps aux|grep tomcat|grep startup|awk '{print $6}'`   
+</span><span class='line'>#echo $MEM  
+</span><span class='line'>if [ $MEM -gt 800000 ]; then   
+</span><span class='line'>   echo "tomcat mem too large,restart tomcat!"  
+</span><span class='line'>   service tomcat restart   
+</span><span class='line'>fi   </span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意：如果service tomcat restart不能正常重启Tomcat，可以参考我前面写的[CentOS下的Tomcat停止脚本]</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/11/25/HeidiSQL/">HeidiSQL一款开源的MySQL图形管理软件</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-25T00:00:00+08:00" pubdate data-updated="true">Nov 25<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>以前一直使用Navicat客户端，功能确实强大。不过这个客户端是收费的商业软件。
+最近发现有一款HeidiSQL的开源软件，也可以很好的管理MySQL。使用后，发现很不错。这里推荐下
+官方介绍：</p>
+
+<h2>What&#8217;s this?</h2>
+
+
+<p><strong>HeidiSQL</strong> is an easy-to-use interface and a &#8220;working-horse&#8221; for web-developers using the popular <a href="http://www.mysql.com/">MySQL-Database</a>. It allows you to manage and browse your databases and tables from an intuitive Windows® interface.
+放一张官方截图</p>
+
+<p><img src="http://flic.kr/p/dYr8K9" alt="HeidiSQL截图" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/11/04/stop-tomcat-shell/">CentOS下的Tomcat停止脚本</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-04T00:00:00+08:00" pubdate data-updated="true">Nov 4<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>我在CentOS 5.3 64bit上安装的Tomcat有个小问题，就是不能通过service tomcat stop停止或者server tomcat restart重启。</p>
+
+<p>我看了下/etc/init.d/tomcat的文件，和以前没有什么不一样，但就是不能正常停止。</p>
+
+<p>后来我自己修改了/etc/init.d/tomcat文件，改为直接kill进程。目前已经可以正常通过service关闭或者重启tomcat了。</p>
+
+<p>下面是我/etc/init.d/tomcat文件内容，贴出来留着以后查看。呵呵</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    #!/bin/bash   
+</span><span class='line'>    #   
+</span><span class='line'>    # Startup script for the tomcat   
+</span><span class='line'>    #   
+</span><span class='line'>    # chkconfig: 345 80 15   
+</span><span class='line'>    # description: Tomcat is a Servlet+JSP Engine.   
+</span><span class='line'>      
+</span><span class='line'>    # Source function library.   
+</span><span class='line'>    . /etc/rc.d/init.d/functions   
+</span><span class='line'>      
+</span><span class='line'>      
+</span><span class='line'>    export JAVA_HOME=/usr/local/jdk1.6.0_16   
+</span><span class='line'>    export CLASSPATH=.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar   
+</span><span class='line'>    export PATH=$PATH:$JAVA_HOME/bin   
+</span><span class='line'>      
+</span><span class='line'>    export CATALINA_BASE=/usr/local/tomcat   
+</span><span class='line'>    export CATALINA_HOME=/usr/local/tomcat   
+</span><span class='line'>    export CATALINA_TMPDIR=/usr/local/tomcat/temp   
+</span><span class='line'>    export JRE_HOME=/usr/local/jdk1.6.0_16   
+</span><span class='line'>      
+</span><span class='line'>      
+</span><span class='line'>      
+</span><span class='line'>    start(){   
+</span><span class='line'>    if [ -z $(/sbin/pidof java) ]; then   
+</span><span class='line'>    echo "Starting tomcat"  
+</span><span class='line'>    /usr/local/tomcat/bin/startup.sh   
+</span><span class='line'>    touch /var/lock/subsys/tomcat   
+</span><span class='line'>    else  
+</span><span class='line'>    echo "tomcat allready running"  
+</span><span class='line'>    fi   
+</span><span class='line'>    }   
+</span><span class='line'>      
+</span><span class='line'>    stop(){   
+</span><span class='line'>    if [ ! -z $(/sbin/pidof java) ]; then   
+</span><span class='line'>    echo "Shutting down tomcat"  
+</span><span class='line'>    ps aux|grep tomcat|grep startup|awk '{print $2}'|xargs kill -9   
+</span><span class='line'>    #/usr/local/tomcat/bin/shutdown.sh   
+</span><span class='line'>    until [ -z $(/sbin/pidof java) ]; do :; done   
+</span><span class='line'>    rm -f /var/lock/subsys/tomcat   
+</span><span class='line'>    else  
+</span><span class='line'>    echo "tomcat not running"  
+</span><span class='line'>    fi   
+</span><span class='line'>    }   
+</span><span class='line'>      
+</span><span class='line'>    case "$1" in   
+</span><span class='line'>    start)   
+</span><span class='line'>    start   
+</span><span class='line'>    ;;   
+</span><span class='line'>    stop)   
+</span><span class='line'>    stop   
+</span><span class='line'>    ;;   
+</span><span class='line'>    restart)   
+</span><span class='line'>    stop   
+</span><span class='line'>    start   
+</span><span class='line'>    ;;   
+</span><span class='line'>    status)   
+</span><span class='line'>    /usr/local/tomcat/bin/catalina.sh version   
+</span><span class='line'>    ;;   
+</span><span class='line'>    *)   
+</span><span class='line'>    echo "Usage: $0 {start|stop|restart|status}"  
+</span><span class='line'>    esac   
+</span><span class='line'>      
+</span><span class='line'>    exit 0   
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/10/27/eMule-VPN-HighID/">通过VPN获取eMule的HighID</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-27T00:00:00+08:00" pubdate data-updated="true">Oct 27<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>一般单位里，我们都是通过单位网关上网。这种情况下打开eMule肯定获取到的是LowID（低ID）。那么既然我们可以通过VPN来翻墙，有没有办法通过VPN来获取到eMule的HighID（高ID）呢？</p>
+
+<p>答案是肯定的：可以。</p>
+
+<p>只要我们将VPN服务器的外网IP上的对应端口映射到我们VPN客户端获取到的IP端口上就可以。</p>
+
+<p>我的VPN服务器，就是跑在我这台博客服务器上的openvpn server。笔记本采用openvpn gui客户端连接。</p>
+
+<p>我笔记本分到的ip 10.8.0.2  </p>
+
+<ul>
+<li>vpn server的外网ip：204.74.212.217</li>
+<li>vpn server的tap0 ip地址：10.8.0.1</li>
+</ul>
+
+
+<p>下面是我的iptables配置：</p>
+
+<p>加入如下两条规则</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>iptables -t nat -A PREROUTING -p tcp -d 204.74.212.217 --dport 13242 -j DNAT --to 10.8.0.2:13242   
+</span><span class='line'>iptables -t nat -A PREROUTING -p udp -d 204.74.212.217 --dport 11324 -j DNAT --to 10.8.0.2:11324   </span></code></pre></td></tr></table></div></figure>
+
+
+<p>其中13242和11324端口，要和自己安装的emule端口对应。这个可以在emule的选项-》连接界面查看。</p>
+
+<p>以上配置后，还不能获取高ID的话，基本都是windows防火墙原因了。</p>
+
+<p>修改win7 防火墙</p>
+
+<p>在“高级安全Windows防火墙”中的“入站规则”和“出站规则”中，都允许eMule的通过。</p>
+
+<p>然后断开eMule连接，重新连接一次。就可以获取高ID了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/10/11/rashost-vps/">瑞豪开源(RASHOST)VPS10个月使用感受</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-11T00:00:00+08:00" pubdate data-updated="true">Oct 11<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>从2009年12月算来，我使用<strong>瑞豪开源(RASHOST)</strong>提供的VPS已经10个月了，下面说说我的感受。
+我选择的是128M Linux VPS，系统采用的CentOS 5
+选择理由：因为我就是跑自己的blog，还有开openvpn用来访问一些被墙的站点，所以不需要太多内存。当然这也归功于<strong>瑞豪开源(RASHOST)</strong>他们的技术实力优秀。他们提供的VPS 系统都是经过裁剪和优化的。默认启动系统只需要20多M内存占用。
+10个月使用下来，感觉<strong>瑞豪开源(RASHOST)</strong>提供的VPS相当稳定，10个月中将就出现过一次线路问题，大约不到1个小时就解决了。虽然我测试过<strong>瑞豪开源(RASHOST)</strong>提供的VPS网络速度不是很快，从北京ping过去大约300-400ms，但是很稳定。
+再说说服务，在使用vps过程中，开始的时候总会有些这样那样的问题，<strong>瑞豪开源(RASHOST)</strong>是通过提交服务单进行解决的。每个服务单都有记录，会很好的解决我遇到的问题。感谢<strong>瑞豪开源(RASHOST)</strong>提供的技术支持。
+最后就是方便的支付方式。我选择的是3个月支付一次。一般提前10天就会收到他们的邮件提示，按照提供的账单，通过支付宝就可以完成支付。不需要人工开通和确认了。只要支付完成，后台就显示支付成功。VPS的到期时间也自动计算好了。
+我主要是通过nginx+fastcgi+php跑blog，然后又安装了openvpn来做vpn服务器。优化后，大约用35-40M内存，当然这个随着访问量增大而增大。但是感觉个人128M足以。如果以后内存吃紧，通过一些<strong>瑞豪开源(RASHOST)</strong>的推广活动，还可以免费增加部分内存。这个活动很好，我最喜欢了。
+目前我已经续费到2011年1月。一直使用良好，在此推荐下。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/08/26/lingtu-on-hero-android21/">Hero G3 Android 2.1下好用的导航软件</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-26T00:00:00+08:00" pubdate data-updated="true">Aug 26<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Hero G3在升级到Android 2.1后就没有什么好用的导航软件了。google map需要流量，这个等于导航的时候随时收费，偶尔用用还可以，不适合长期使用。</p>
+
+<p>凯立德在anroid 2.1有可用版本，但是操作体验比较差，经常按个按钮，半天没有反映需要反复按。而且我还遇到过不能定位的问题，后来重启了手机才解决。</p>
+
+<p>不过现在天行者10终于可以运行在android 2.1下面了。我申请了测试号，感觉使用效果不错。以前andorid 1.5的时候，就是用的天行者9。我习惯要去什么地方都先到<a href="http://www.51ditu.com">www.51ditu.com</a>查查，因为都是图灵的资源，所以51ditu上找到了，基本天行者里肯定可以导航。</p>
+
+<p>目前缺点：没有横屏，开车的时候手机一般都横着放，不是很方便。</p>
+
+<p>触摸反映不灵敏，有的按键也是需要反复按几次才有反映。</p>
+
+<p>下面放几张运行截图（我手机hero g3,系统是自己刷的android 2.1）</p>
+
+<p><img src="http://farm9.staticflickr.com/8527/8514884434_9b172e9fb4.jpg" alt="灵图1" />
+<img src="http://flic.kr/p/dYkjan" alt="灵图2" />
+<img src="http://flic.kr/p/dYkjbK" alt="灵图3" />
+<img src="http://flic.kr/p/dYr1yG" alt="灵图4" />
+ </p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/08/26/Centos-install-mudos/">CENTOS下安装MUDOS跑侠客行</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-26T00:00:00+08:00" pubdate data-updated="true">Aug 26<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近在放假，我又玩了玩很久以前的网络游戏北美侠客行。一个纯文字的MUD游戏。而且自己在CentOS下也架设了一个，下面就说说我的安装过程，给自己做个记录，怕以后忘记。</p>
+
+<p>要架设一个MUD游戏，需要MUDOS和MUDLIB两部分。这里简单解释一下，其实我也刚接触，有不对的地方还望见谅。</p>
+
+<p>MUDOS我理解就是一个跑MUD游戏的平台或者理解为模拟器，只要符合MUDOS要求的MUDLIB都可以通过MUDOS驱动起来。</p>
+
+<p>MUDLIB才是具体游戏的代码，各种MUD游戏其实就是MUDLIB不同，而底层平台基本都是MUDOS。</p>
+
+<p>当然现在除了MUDOS还可以采用FluffOS作为运行平台。</p>
+
+<p>下面贴个我架设的侠客行MUD截图（采用XKX早期代码修改来的，和北美侠客行最接近）
+<img src="http://farm9.staticflickr.com/8087/8514869856_f372e947e4_z.jpg" alt="xkx截图" /></p>
+
+<p><strong>下载MUDOS</strong>
+我采用的是<a href="http://www.pkuxkx.net/download/soft.php?id=20"><b>MudOSv22pre11 For Linux</b></a> 从北大侠客行官方网站下载的。</p>
+
+<p><strong>下载MUDLIB</strong></p>
+
+<p>至于mudlib才是能不能玩的重点，网上可以找到很多版本。我主要下载了如下几种</p>
+
+<p>金庸梦（个人感觉很完整的一套代码，基本是基于98年xkx修改而来）</p>
+
+<p>xkx2001（这个版本是早期一个xkx版本，和北美xkx比较接近）</p>
+
+<p>xkx6dao（和早期xkx最接近的一个版本）</p>
+
+<p>以上三个版本都可以在windows下正常运行，我们要做的就是选择一款移植到linux下。</p>
+
+<p>我是基于xkx6到的mudlib，将xkx2001和金庸梦的部分代码加入过来。这样基本实现了北美侠客行的大部分任务系统，包括斧头帮、镖局、门派任务等</p>
+
+<p><strong>安装mudos</strong></p>
+
+<p>1、将我们下载的<a href="http://www.pkuxkx.net/download/soft.php?id=20"><b>MudOSv22pre11 For Linux</b></a>解压缩，然后进入到解压后的目录。</p>
+
+<p>2、运行 ./build.MudOS</p>
+
+<p>提示如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Preparing to build standard MudOS driver ...
+</span><span class='line'>Trying out some stuff to see what works; ignore errors ...
+</span><span class='line'>gmake: Nothing to be done for `nothing'.
+</span><span class='line'>./build.MudOS: line 170: xlc: command not found
+</span><span class='line'>mkdir: ÎÞ·¨´´½¨Ä¿Â¼¡®tmp¡¯: ÎÄ¼þÒÑ´æÔÚ
+</span><span class='line'>install£ºÎÞÐ§Ñ¡Ïî -- f
+</span><span class='line'>Çë³¢ÊÔÖ´ÐÐ¡®install --help¡¯À´»ñÈ¡¸ü¶àÐÅÏ¢¡£
+</span><span class='line'>rm: ÎÞ·¨É¾³ý¡®tmp/insttest¡¯: Ã»ÓÐÄÇ¸öÎÄ¼þ»òÄ¿Â¼
+</span><span class='line'>mkdir: ÎÞ·¨´´½¨Ä¿Â¼¡®obj¡¯: ÎÄ¼þÒÑ´æÔÚ
+</span><span class='line'>***************** Configuration completed **************
+</span><span class='line'>Installing MudOS on Linux
+</span><span class='line'>Using install -c to install binaries in ../bin.
+</span><span class='line'>Using gcc -E for preprocessing.
+</span><span class='line'>Using gcc -O2 -fomit-frame-pointer -fstrength-reduce to compile.
+</span><span class='line'>Using bison -d -y to make the compiler.
+</span><span class='line'>Edit GNUmakefile if this is not what you want
+</span><span class='line'>Otherwise, type 'gmake' to build MudOS, then 'gmake install'.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面有些是乱码，因为linux的中文不能正常贴过来，主要是提示一些目录存在和一些安装选项无效。可以不用管。
+在安装前，我们用gmake clean 清理一下</p>
+
+<p>3、执行gmake和gmake install进行编译和安装</p>
+
+<p>正常的话，我们就可以在目录下发现driver文件了，这个driver就是为了驱动MUDLIB的。</p>
+
+<p><strong>配置MUDLIB和运行</strong></p>
+
+<p>配置mudlib的过程麻烦一些，一个是driver是否符合mudlib需要，另外一个是mudlib的配置。</p>
+
+<p>先说下mudlib的配置，一般是在mudlib的根目录下存在一个config.h的文件（这个名字可以自己修改为任意名字）</p>
+
+<p>这个配置文件一般需要根据自己的实际路径进行修改</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>name: 侠客行      (指定你的游戏名字)
+</span><span class='line'>port number: 5555  (指定游戏运行的端口)
+</span><span class='line'>mudlib directory: /mud/xkx/ (指向到你mudlib的目录)
+</span><span class='line'>binary directory: /mud/xkx/ (同样指向到你mudlib目录，其实是你配置文件目录)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其他默认就可以</p>
+
+<p>如果配置全部完成，没有问题。</p>
+
+<p>只要将driver文件拷贝到mudlib目录，我这里是/mud/xkx目录。</p>
+
+<p>然后</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /mud/xkx
+</span><span class='line'>./driver config.h &</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面是我的运行提示</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@ict xkx]# using config file: config.h
+</span><span class='line'>Initializing internal tables....
+</span><span class='line'>----------------------------------------------------------------------------
+</span><span class='line'>侠客行 (MudOS v22pre11) starting up on Linux - Thu Aug 26 10:21:29 2010
+</span><span class='line'>
+</span><span class='line'>Connection to address server (localhost 3992) refused.
+</span><span class='line'>]simul_efun loaded successfully.
+</span><span class='line'>Loading preloaded files ...
+</span><span class='line'>Initializations complete.
+</span><span class='line'>Accepting connections on port 5555.
+</span><span class='line'>[root@ict xkx]#</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>常见问题</strong></p>
+
+<p><strong>编码问题：</strong>因为我们的mudlib是从windows平台移植过去的，所以文件都是dos格式，需要进行转换。采用如下命令</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>find . -name *.c|xargs dos2unix
+</span><span class='line'>find . -name *.h|xargs dos2unix
+</span><span class='line'>find . -name *.o|xargs dos2unix</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上命令将所有.c .h .o结尾的文件转换为unix文件格式</p>
+
+<p><strong>driver编译问题：</strong>很多时候我们编译的driver并不能很好的驱动我们的mudlib。这个时候需要自己查看log目录下的debug.log文件找出具体原因。主要是通过修改 options.h  文件进行调整。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/07/28/htc-g6/">周末给老婆买了个HTC legend(G6)玩</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-28T00:00:00+08:00" pubdate data-updated="true">Jul 28<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>我一直使用G3，老婆看功能强大，打算也购买一个玩。
+去了中关村，挑来挑去，最后老婆还是看上了G6.
+感觉G6的金属外壳、后盖的设计都很好，而且有闪光灯。这些都是比较好的设计。
+不过数据线接口变了，不在和G3通用，这个不太喜欢。
+按键也感觉没有G3的好，觉得按键很粗糙，一按就咔咔的响（不是按键发音哦，纯机械声音）。
+没有了通话和挂机键，也感觉不方便。
+不过老婆还是挺喜欢的。
+购买就是注意别买到阿三机器就可以了。（好像目前阿三机器也可以通过降级破解了）</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/7/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/5/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

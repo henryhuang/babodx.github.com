@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Windows | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/windows/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-03-14T13:53:55+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[批量部署系统方案]]></title>
+    <link href="http://babodx.github.com/blog/2013/01/22/installation-server/"/>
+    <updated>2013-01-22T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/01/22/installation-server</id>
+    <content type="html"><![CDATA[<p>最近单位一直弄刀片服务器，7个笼子，112片。安装系统是个麻烦的事情，如果单机安装，太痛苦了。
+所以就尝试了批量部署系统。
+ 
+主要是分Linux和Windows两种方案</p>
+
+<p>我这里Linux是CentOS。 采用了cobbler来做批量部署。</p>
+
+<p>Windows采用的是win 2008的部署服务，就是WDS来做批量部署。</p>
+
+<p>这样Linux做一台分发服务器，Windows做一台WDS服务器，需要部署那种系统就开那台服务器就可以了。</p>
+
+<p>所有刀片全部采用pxe来引导就可以了。
+ 
+具体方法就先不写了，以后再补上吧
+ </p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[winxp的远程桌面设置]]></title>
+    <link href="http://babodx.github.com/blog/2012/07/13/config-winxp-remote-desktop/"/>
+    <updated>2012-07-13T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/07/13/config-winxp-remote-desktop</id>
+    <content type="html"><![CDATA[<p>最近换了mac的笔记本，由于一些程序需要跑在winxp上面，比如zmud等。。。</p>
+
+<p>于是就在服务器上安装了xen，开了个winxp的虚拟机。本来xen支持vnc远程访问的，但是vnc感觉真心不给里，比windows自带的远程桌面慢了很多。</p>
+
+<p>于是开始考虑使用远程桌面，可是winxp不是服务器版本，所以远程桌面有一些限制。</p>
+
+<p>一个是解决多用户登陆问题</p>
+
+<p>下面是网上找到的解决办法，测试好用</p>
+
+<p>Windows XP不支持多个用户同时登录远程桌面，当其他用户远程登录Windows XP时，主机上当前已登录的用户</p>
+
+<p>即会自动退出。不过在Windows XP SP2中提供了允许连接会话并发功能，可通过远程桌面进行多用户的同时登录，</p>
+
+<p>但其在默认状态下关闭了该项特性，需要通过修改注册表开启该功能。</p>
+
+<p>打开注册表编辑器，依次展开
+<code>
+“HKEY_LOCAL_MACHINE\System \CurrentControlSet\Control\Terminal Server\Licensing Core”
+</code>
+分支，转到右侧窗口，在其中新建一个类型为DWORD的子键，将该键命名为“EnableConcurrentSessions”，
+并将键值设置为“1”，即可开启多用户登录功能。</p>
+
+<p>还有就是空密码登陆问题，因为winxp就是平时随便用用，每次输入密码太麻烦。但是远程桌面默认空密码不让登陆</p>
+
+<p><strong>解决办法如下</strong></p>
+
+<p>在运行里，输入<code>gpedit.msc</code>调出组策略界面</p>
+
+<p>依次找到“计算机配置”－》“windows设置”－》“安全设置”－》“本地策略”－》“安全选项”
+将其中的“帐户：使用空白密码的本地帐户只运行使用控制台登陆”禁用掉。</p>
+
+<p>通过上面的设置就ok了</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[通过VPN获取eMule的HighID]]></title>
+    <link href="http://babodx.github.com/blog/2010/10/27/eMule-VPN-HighID/"/>
+    <updated>2010-10-27T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/10/27/eMule-VPN-HighID</id>
+    <content type="html"><![CDATA[<p>一般单位里，我们都是通过单位网关上网。这种情况下打开eMule肯定获取到的是LowID（低ID）。那么既然我们可以通过VPN来翻墙，有没有办法通过VPN来获取到eMule的HighID（高ID）呢？</p>
+
+<p>答案是肯定的：可以。</p>
+
+<p>只要我们将VPN服务器的外网IP上的对应端口映射到我们VPN客户端获取到的IP端口上就可以。</p>
+
+<p>我的VPN服务器，就是跑在我这台博客服务器上的openvpn server。笔记本采用openvpn gui客户端连接。</p>
+
+<p>我笔记本分到的ip 10.8.0.2  </p>
+
+<ul>
+<li>vpn server的外网ip：204.74.212.217</li>
+<li>vpn server的tap0 ip地址：10.8.0.1</li>
+</ul>
+
+
+<p>下面是我的iptables配置：</p>
+
+<p>加入如下两条规则</p>
+
+<p>```</p>
+
+<pre><code>iptables -t nat -A PREROUTING -p tcp -d 204.74.212.217 --dport 13242 -j DNAT --to 10.8.0.2:13242   
+iptables -t nat -A PREROUTING -p udp -d 204.74.212.217 --dport 11324 -j DNAT --to 10.8.0.2:11324   
+</code></pre>
+
+<p>```</p>
+
+<p>其中13242和11324端口，要和自己安装的emule端口对应。这个可以在emule的选项-》连接界面查看。</p>
+
+<p>以上配置后，还不能获取高ID的话，基本都是windows防火墙原因了。</p>
+
+<p>修改win7 防火墙</p>
+
+<p>在“高级安全Windows防火墙”中的“入站规则”和“出站规则”中，都允许eMule的通过。</p>
+
+<p>然后断开eMule连接，重新连接一次。就可以获取高ID了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HP台式机器，ghost系统后，提示windows could not start]]></title>
+    <link href="http://babodx.github.com/blog/2010/03/12/HP-Computer-Ghost-Problem/"/>
+    <updated>2010-03-12T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/03/12/HP-Computer-Ghost-Problem</id>
+    <content type="html"><![CDATA[<p>今天单位一台HP dx7518的台式机器，ghost了一个winxp系统。但是只要一开机，就提示</p>
+
+<p><code>
+windows could not start because of a computer disk hardware configuration problem    
+could not read from the selected boot disk check boot path and disk harware   
+please check the windows documentation about hardware disk configuation and your hardware refer once manuals for additional information   
+</code></p>
+
+<p>开始我以为是硬盘的设置问题，后来发现硬盘已经设置为IDE模式了。</p>
+
+<p>后来网上查找，发现是和BIOS里的WDRT Support选项有关系。。。</p>
+
+<p><strong>解决办法</strong></p>
+
+<p>开机进入bios设置，选择Power management Setup 再选择WDRT Support 将后面值修改为disable</p>
+
+<p>WDRT SUPPORT：watchdog resource table 一种加密狗。通过这种加密保护来拒绝安装非随机配备的操作系统。同样，全系的HP 家用、商用台式机、笔记本，进行GHOST安装后报错，也可以用此方法解决。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[win7下使用联通无线上网卡HUAWEI E1750]]></title>
+    <link href="http://babodx.github.com/blog/2010/02/12/HUAWEI-E1750-on-Win7/"/>
+    <updated>2010-02-12T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/02/12/HUAWEI-E1750-on-Win7</id>
+    <content type="html"><![CDATA[<p>老婆单位年底搞活动，抽奖中了一个联通的无线上网卡。型号HUAWEI E1750</p>
+
+<p>本来打算给我笔记本用的，我系统是Windows 7。结果发现用不了，安装上以后，无线上网软件提示找不到设备。。。。。。</p>
+
+<p><strong>解决办法</strong></p>
+
+<p>让Windows 7自动找驱动，肯定是没戏了。用光盘自带软件的驱动也不灵。后来到HUAWEI网站查找最近驱动，最终下面网站找到了相关更新</p>
+
+<p><code>http://www.huaweidevice.com/cn/downloadCenter.do?method=doListSoftwareid=1&amp;fla y=findsoftwareName=E1750</code></p>
+
+<p><code>
+E1750 E1750-WINMACB300D00SP04C112( U TPS11[1].301.08.24.112_MAC11.3 01.06.07.112)(China Unicom) China Unicom  2009-12-23
+</code>
+以上是Win7下可以使用的驱动更新。大约28M</p>
+
+<p>安装步骤是先安装Mobile_Card_Driver_3.09.exe驱动，然后正确识别设备后，运行UTPS11.301.08.24.112_MAC11.301.06.07.112.B433.exe更新设备的固件。最后再安装无线上网软件。</p>
+
+<p>可是我安装文档的方法，在Win7下并没有成功，运行UTPS11.301.08.24.112_MAC11.301.06.07.112.B433.exe更新的时候，总是提示没有找到设备或者正在有软件占用设备或者没有管理员权限。。。。。</p>
+
+<p>后来找了一台WinXP系统的机器，按照文档步骤一次成功。</p>
+
+<p>然后再将更新过的E1750插到Win7上面，就可以自动识别设备了。识别成功后如下图。</p>
+
+<p><img src="http://farm9.staticflickr.com/8251/8512574602_ee146a4011.jpg" alt="e1750驱动截图" /></p>
+
+<p>这样继续安装无线上网软件就可以正确识别并上网了。下面是正确识别后的截图</p>
+
+<p><img src="http://farm9.staticflickr.com/8105/8511465149_d5c86d6172.jpg" alt="e1750成功驱动" /></p>
+]]></content>
+  </entry>
+  
+</feed>

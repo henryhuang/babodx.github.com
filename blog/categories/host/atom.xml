@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Host | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/host/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-03-14T13:53:55+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[解决godaddy注册域名无法解析问题]]></title>
+    <link href="http://babodx.github.com/blog/2011/11/06/godaddy-to-dnspod/"/>
+    <updated>2011-11-06T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2011/11/06/godaddy-to-dnspod</id>
+    <content type="html"><![CDATA[<p>godaddy.com是全球知名的域名注册商。国内很多站长也是使用的这个注册商。</p>
+
+<p>但是出于各种原因，godaddy的域名服务器经常被国内封掉。导致我们注册的域名无法被解析。直接影响了网站的稳定性。</p>
+
+<p>解决办法无非两个：一、不用godaddy了，二、换域名服务器。</p>
+
+<p>如果不打算用godaddy了，我推荐name.com也不错，不过不支持支付宝了。需要用paypal支付</p>
+
+<p>而我选择了第二种办法，采用国内的dns服务器来代替godaddy自己的，这样可以很好的解决问题。</p>
+
+<p>具体步骤：</p>
+
+<p>到http://www.dnspod.cn去注册一个免费账号，不知道dnspod为何物的，可以参考下面介绍</p>
+
+<p>关于DNSPod</p>
+
+<p>DNSPod建立于2006年3月份，是国内最早提供免费智能DNS产品的网站，致力于为各类网站提供高质量的多线智能DNS免费解析。</p>
+
+<p>DNSPod以稳定性、安全性、功能强大、智能免费、高速等优 势深得广大站长和企业用户们的喜爱，以至于越来越多的企业站、地方门户站、游戏站等等都在使用DNSPod，他们喜欢的是DNSPod给他们带来的稳定性、承受能力强、访问速度快以及极高的用户体验，使用普通的DNS（像域名注册商提供的）不是不可以“用”，但是避免不了因为不稳定导致网站时常经常打不开，由于功 能限制不能实现想要实现的功能、因为用户体验不够好等丢失客户。所以选择一个好的DNS服务商可以为自己的网站带来很大的、意想不到的收益，避开不必要的损失。</p>
+
+<p>功能上：除了智能DNS解析，普通DNS解析也可以满足用户的稳定、高速等需求。相对竞争对手的产品，DNSPod除了实时生效，不限制用户添加的域名和记录数量外，还率先提供 了IPv6的支持和动态域名解析的功能，另外还支持DNS轮询、URL转发、API接口、批量修改管理等先进功能。并且所有功能都是免费提供。</p>
+
+<p>使用DNSPod的站长们知道，DNSPod不仅仅是以雄厚的技术优势，而且还是靠优质的服务赢得市场的，为几十万免费用户和几千VIP用户分别设立相应的技术支持！做到用户与DNSPod随时可以沟通，有问题及时解决！</p>
+
+<p>暴风影音、华军下载、魅族手机、VeryCD、4399、 霏凡下载、雨林木风、深度、手机之家、去看去看、站长之家、51啦、Discuz、cnBeta、 逐浪文学等知名网站都是DNSPod vip用户。</p>
+
+<p>将域名服务器修改到国内</p>
+
+<p>在 dnspod的后台域名管理中，添加自己需要转到国内的解析的域名。如下图</p>
+
+<p><img src="http://flic.kr/p/dYkR1r" alt="dnspod后台" /></p>
+
+<p>点开我们刚添加的域名，可以看到分配给我们的dns服务器。如下图</p>
+
+<p><img src="http://flic.kr/p/dYkRLr" alt="添加dns服务器" /></p>
+
+<p>现在我们登录到godaddy下，修改我们的DNS服务器到刚才dnspod分配给我们的dns服务器上。</p>
+
+<p>登录后，如下图所示，点my account</p>
+
+<p><img src="http://flic.kr/p/dYkSDR" alt="account截图" /></p>
+
+<p>然后在域名管理界面，点我们要转到国内解析的域名。如图</p>
+
+<p><img src="http://flic.kr/p/dYkTm6" alt="域名管理截图" /></p>
+
+<p>进入域名管理后，找到NameServers项，点set name servers。如图</p>
+
+<p><img src="http://flic.kr/p/dYkU18" alt="nameserver截图" /></p>
+
+<p>上面点击“Set Nameservers”后，会弹出一个窗口让你设置DNS Server。如下图</p>
+
+<p><img src="http://flic.kr/p/dYrDbN" alt="set nameserver" /></p>
+
+<p>将Nameserver1和Nameserver2里面的内容修改为dnspod分配给我们的dns服务器。nameserver3和nameserver4里面清空。</p>
+
+<p>点 “OK”按钮完成设置。</p>
+
+<p>域名服务器设置完，我们回到dnspod的后台，查看我们域名的状态。一般情况会是无法解析或者dns错误。这个说明还没有生效。最慢48小时生效。如果48小时候，还是错误就要找dnspod联系看看怎么解决了。也可以自己使用dnspod提供的域名全面诊断来判断问题。</p>
+
+<p>下面是完全生效后的状态</p>
+
+<p><img src="http://flic.kr/p/dYkWXT" alt="设置完成的状态" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[我的网站开通了，www.xinlogs.com.]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/19/startup-xinlogs/"/>
+    <updated>2009-12-19T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/19/startup-xinlogs</id>
+    <content type="html"><![CDATA[<p>以前一直在断断续续的写Blog，开始放在百度的空间。网址http://hi.baidu.com/babodx</p>
+
+<p>后来在09年7月，觉得<a href="http://hi.baidu.com/babodx">http://hi.baidu.com/babodx</a>空间的功能太少了，就搬家到了<a href="http://babodx.spaces.live.com">ttp://babodx.spaces.live.com</a>并且注册了xinlogs.com域名。后来就一直关注VPS空间，觉得这个很好，相当于自己有了一台虚拟的服务器，完全可以自己在上面配置各种服务。</p>
+
+<p>于是在2009年12月18日，我终于决定购买了rashost.com的1款128M内存的VPS，位置在美国的洛杉矶机房。</p>
+
+<p>价格还算便宜1个月68元。rashost的有点就是不限制流量，而且CPU采用intel至强的。速度也不错</p>
+
+<p>我选择了CentOS 5.3系统</p>
+
+<p><strong>CPU信息</strong></p>
+
+<p>model name      : Intel(R) Xeon(R) CPU           X3220  @ 2.40GHz</p>
+
+<p><strong>内存信息</strong></p>
+
+<p><code>
+             total       used       free     shared    buffers     cached
+Mem:           128        119          8          0          9         67
+-/+ buffers/cache:         42         86
+Swap:          255          0        255
+</code>
+我的网站采用Nginx+PHP+MySQL+Bo-Blog架设，参考了<a href="www.s135.com">http://www.s135.com/</a>上的优化方法。</p>
+
+<p>后面剩下的工作就是如何将以前blog的文章搬家够来了。。。估计够折腾一阵子的。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[从百度空间转移到spaces live]]></title>
+    <link href="http://babodx.github.com/blog/2009/07/17/blog-migrate-to-spaces-live/"/>
+    <updated>2009-07-17T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/07/17/blog-migrate-to-spaces-live</id>
+    <content type="html"><![CDATA[<p>本来打算购买一个在美国的VPS，来自己架设个blog程序用的，但是老婆说我太糟蹋钱了，不让玩。</p>
+
+<p>只好选择live spaces的25G免费空间了。为了这次转移，我写了一个小程序帮忙。</p>
+
+<p>现在已经把原来<a href="http://hi.baidu.com/babodx">http://hi.baidu.com/babodx</a>的博客内容全部搬到了<a href="http://babodx.spaces.live.com">http://babodx.spaces.live.com/</a></p>
+
+<p>而且还申请了一个域名玩，可以直接通过<a href="www.xinlogs.com">http://www.xinlogs.com/</a>访问</p>
+
+<p>这次域名是在<a href="www.namecheap.com">http://www.namecheap.com/</a>直接用美元买的，据说这样比较保险。</p>
+
+<p>国内的域名服务商信誉很差。</p>
+
+<p><strong>转移步骤</strong></p>
+
+<p>我的想法是先用一个程序把百度空间上，我的博客全部保存到本地。然后在用个程序把保存下来的内容发送到spaces live上，就完成了转移。</p>
+
+<p>一、将百度空间的博客保存到本地</p>
+
+<p>首先用程序抓取百度空间的博客内容这个程序并不完全是我自己写的，我参考了很多人的文章和程序。参考如下</p>
+
+<p><a href="http://www.agileprogrammer.com/dotnetguy/articles/BlogImporterInRuby.aspx">Blog Importer in Ruby</a></p>
+
+<p><a href="http://crafterm.net/blog/articles/2006/09/22/blog-content-migration-from-movabletype-to-typo-using-xml-rpc">Blog content migration from MovableType to Typo using XML-RPC</a></p>
+
+<p><a href="http://cxc200026.blog.163.com/blog/static/342686720092895235567/">lsblog改进版本</a></p>
+
+<p>根据前人的经验，我写了一个程序，根据用户名抓取百度空间的博客，然后保存为用户名.xml文件文件格式如下</p>
+
+<p>```
+<baidu_space total="70" id="babodx" pagecnt="7"></p>
+
+<p> <page blogcnt="10" index="0"></p>
+
+<p>   <item href="http://hi.baidu.com/babodx/blog/item/fb1ebcb14ea2075d08230218.html"></p>
+
+<pre><code> &lt;date&gt;2009-07-12 00:23&lt;/date&gt;
+
+ &lt;title&gt;ubuntu server 9.04 终端乱码问题&lt;/title&gt;
+
+ &lt;category&gt;Linux&lt;/category&gt;
+
+ &lt;body&gt;&lt;p&gt;安装了ubuntu server 9.04，安装的时候选择了中文环境。&lt;/p&gt; &lt;p&gt;因为server是没有桌面的，发现终端里面显示提示信息，出错信息都变成乱码了。&lt;/p&gt; &lt;p&gt;解决办法&lt;/p&gt; &lt;p&gt;修改/etc/default/locale文件&lt;/p&gt; &lt;p&gt;将zh_CN修改为en_US&lt;/p&gt;&lt;/body&gt;
+
+&lt;/item&gt;
+</code></pre>
+
+<p>```</p>
+
+<p>用ｉｔｅｍ标签来包含每个博客，用date,title,category,body分别代表发表时间、标题、分类、内容。</p>
+
+<p>RUBY代码主要参考了lsblog的改进版。</p>
+
+<p><a href="http://cid-4986f8f322cc617b.skydrive.live.com/self.aspx/.Public/saveblog.rb">savelog.rb</a></p>
+
+<p>只要提供用户名，就可以将全部博客保存为ｘｍｌ文件</p>
+
+<p>二、将本地保存的xml文件，上传到spaces live空间</p>
+
+<p>这里遇到很多麻烦，以至最终这部分没有能用程序实现。</p>
+
+<p>我的想法是用ruby调用metaweblog api接口来发送blog到spaces live空间</p>
+
+<p>可以参考</p>
+
+<p><a href="http://msdn.microsoft.com/en-us/library/bb259702.aspx">Windows Live Spaces MetaWeblog API</a></p>
+
+<p>后来发送简单的文本已经可以实现了。但是问题出在对ｂｏｄｙ的处理，从百度空间抓过来的ｂｏｄｙ是ｈｔｍｌ代码，里面包含了文章和图片的引用。</p>
+
+<p>如果直接用ＭｅｔａＷｅｂｌｏｇ　ＡＰＩ发送，这些ｈｔｍｌ就直接显示在ｂｌｏｇ上面了，而不是应该有的格式。</p>
+
+<p>我查看了一些文档，也没有找到解决办法，因而只要放弃了。</p>
+
+<p>后来是手动通过live writer把本地的blog.xml发送到live spaces空间的。那个累呀。。。。</p>
+
+<p><strong>待解决问题</strong></p>
+
+<p>一是如何让程序自动发送html格式的blog内容到live spaces空间。</p>
+
+<p>二是如何处理博客里面的图片，原来图片都是放在百度空间的，如果在live spaces引用，会出现错误。</p>
+
+<p>ruby可以直接从百度抓图片，问题还是如何上传到live spaces</p>
+]]></content>
+  </entry>
+  
+</feed>

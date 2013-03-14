@@ -1,0 +1,384 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>批量更换115网盘链接 - 鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="今天115网盘关闭了对外分享链接的功能。我的客户有人是用115网盘作为服务器资源存储用的，网站上下载资源都是采用115网盘地址来发布的。这样直接造成全部资源都无法下载了，我临时写了个php脚本来更新全部的115网盘链接到本地服务器地址。
+ 
+主要思路： 首先将网盘里的资源全部下载到服务器， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/2012/08/08/update-115disk-urls/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">批量更换115网盘链接</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-08T00:00:00+08:00" pubdate data-updated="true">Aug 8<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>今天115网盘关闭了对外分享链接的功能。我的客户有人是用115网盘作为服务器资源存储用的，网站上下载资源都是采用115网盘地址来发布的。这样直接造成全部资源都无法下载了，我临时写了个php脚本来更新全部的115网盘链接到本地服务器地址。
+ 
+<strong>主要思路：</strong></p>
+
+<p>首先将网盘里的资源全部下载到服务器，然后导出一个网盘地址和文件实际名字的列表</p>
+
+<p>如下所示：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>http://115.com/file/e78cpfjd#Dark_Room.rar
+</span><span class='line'>http://115.com/file/e78cpwkh#Dark_Energy.rar</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到前面是网盘下载的url，＃号后面是实际的文件名。</p>
+
+<p>我将这个列表保存在一个文件里，便于php脚本获取。</p>
+
+<p>然后编写一个php脚本，把文件里每行的url取出来，到数据库里把这个下载链接替换为我们服务器上的地址。主要是采用mysql的replace函数实现
+ 
+脚本如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">#!/usr/bin/php</span>
+</span><span class='line'><span class="cp">&lt;?php</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s2">&quot;=======fix_url v1=========</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s2">&quot;=======write by babodx@gmail.com=======</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">function</span> <span class="nf">update_url</span><span class="p">(</span><span class="nv">$url</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">list</span><span class="p">(</span><span class="nv">$url_115</span><span class="p">,</span><span class="nv">$url_tv1926</span><span class="p">)</span><span class="o">=</span><span class="nb">explode</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span><span class="nv">$url</span><span class="p">);</span>
+</span><span class='line'>    <span class="nv">$url_tv1926</span><span class="o">=</span><span class="s2">&quot;http://xiazai.tv1926.com/&quot;</span><span class="o">.</span><span class="nv">$url_tv1926</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;update:&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="nv">$url_115</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nv">$link</span> <span class="o">=</span> <span class="nb">mysql_connect</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;passwd&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$link</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">die</span><span class="p">(</span><span class="s1">&#39;Could not connect: &#39;</span> <span class="o">.</span> <span class="nb">mysql_error</span><span class="p">());</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">mysql_select_db</span><span class="p">(</span><span class="s1">&#39;my_database&#39;</span><span class="p">,</span> <span class="nv">$link</span><span class="p">)</span> <span class="k">or</span> <span class="k">die</span> <span class="p">(</span><span class="s1">&#39;Can\&#39;t use my_database : &#39;</span> <span class="o">.</span>         <span class="nb">mysql_error</span><span class="p">());</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nv">$sql</span><span class="o">=</span><span class="s2">&quot;update p8_article_content_101 set     my_801=replace(my_801,&#39;&quot;</span><span class="o">.</span><span class="nv">$url_115</span><span class="o">.</span><span class="s2">&quot;&#39;,&#39;&quot;</span><span class="o">.</span><span class="nv">$url_tv1926</span><span class="o">.</span><span class="s2">&quot;&#39;)&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="nb">mysql_query</span><span class="p">(</span><span class="s2">&quot;set names gbk&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nv">$result</span> <span class="o">=</span> <span class="nb">mysql_query</span><span class="p">(</span><span class="nv">$sql</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">or</span> <span class="k">die</span><span class="p">(</span><span class="s2">&quot;Invalid query: &quot;</span> <span class="o">.</span> <span class="nb">mysql_error</span><span class="p">());</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">mysql_close</span><span class="p">(</span><span class="nv">$link</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="nv">$url_tv1926</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nb">is_null</span><span class="p">(</span><span class="nv">$argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;argv1 is null</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">exit</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nv">$file_name</span><span class="o">=</span><span class="nv">$argv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s2">&quot;get files name...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nv">$file_names</span><span class="o">=</span><span class="k">array</span><span class="p">();</span>
+</span><span class='line'><span class="nv">$handle</span> <span class="o">=</span> <span class="o">@</span><span class="nb">fopen</span><span class="p">(</span><span class="nv">$file_name</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nv">$handle</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="nb">feof</span><span class="p">(</span><span class="nv">$handle</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$buffer</span> <span class="o">=</span> <span class="nb">fgets</span><span class="p">(</span><span class="nv">$handle</span><span class="p">);</span>
+</span><span class='line'>        <span class="nv">$tmp_file_name</span><span class="o">=</span><span class="nx">trim</span><span class="p">(</span><span class="nv">$buffer</span><span class="p">);</span>
+</span><span class='line'>        <span class="nb">array_push</span><span class="p">(</span><span class="nv">$file_names</span><span class="p">,</span><span class="nv">$tmp_file_name</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nb">fclose</span><span class="p">(</span><span class="nv">$handle</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">foreach</span> <span class="p">(</span><span class="nv">$file_names</span> <span class="k">as</span> <span class="nv">$file_url</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">update_url</span><span class="p">(</span><span class="nv">$file_url</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s2">&quot;over!&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-08T00:00:00+08:00" pubdate data-updated="true">Aug 8<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/php/'>PHP</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2012/08/08/update-115disk-urls/" data-via="" data-counturl="http://babodx.github.com/blog/2012/08/08/update-115disk-urls/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/08/06/debian-xen-install/" title="Previous Post: debian6.0.5(squeeze)安装配置xen-4.0虚拟化">&laquo; debian6.0.5(squeeze)安装配置xen-4.0虚拟化</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/08/10/mac-xdebug-netbeans-config/" title="Next Post: mac下配置php调试环境">mac下配置php调试环境 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

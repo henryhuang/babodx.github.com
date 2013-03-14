@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>快速配置vim和macvim - 鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="vim以为需要安装各种插件和配置好vimrc才能适合我们开发使用。如果默认只安装vim不用任何插件，并不好用。 以前写过一篇配置gvim，那个时候还是手动安装各种差距和写vimrc 现在已经开始采用vundle来管理vim插件了。而且平台也换mac了。 mac下面自带了vim 7.3 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">快速配置vim和macvim</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-03T14:41:00+08:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>vim以为需要安装各种插件和配置好vimrc才能适合我们开发使用。如果默认只安装vim不用任何插件，并不好用。</p>
+
+<p>以前写过一篇<a href="http://babodx.github.com/blog/2011/10/31/gvim-vimrc-file/">配置gvim</a>，那个时候还是手动安装各种差距和写vimrc</p>
+
+<p>现在已经开始采用vundle来管理vim插件了。而且平台也换mac了。</p>
+
+<p>mac下面自带了vim 7.3 但是我们在mac的图形界面下面还是原因使用macvim。所以要先安装上macvim。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>brew install macvim</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>安装vim套件</strong></p>
+
+<p>所谓vim套件其实就是一些高手整理好的vimrc和配色方案，然后通过vundle来安装上vimrc里面需要的各种插件。来达到快速让vim达到一个很好使用和适合开发的程度。</p>
+
+<p>我使用的是vundle-vimfiles项目，先抓一份文件到自己本地。</p>
+
+<p>如果你很浏览自己原来的.vim，那就先备份一下。我是直接删除了。呵呵</p>
+
+<p>切换到自己的目录<code>cd ~</code></p>
+
+<p>git代码到自己本地</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/ywjno/vundle-vimfiles.git</span></code></pre></td></tr></table></div></figure>
+
+
+<p>用vundle-vimfiles文件夹链接到~/.vim</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ln -s vundle-vimfiles ~/.vim</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后将vundle-vimfiles项目里的vimrc文件链接到~/.vimrc，vundle-vimfiles项目给我们提供了几个版本的vimrc，例如<code>vimrc</code>、<code>easy-vimrc</code>、<code>gvimrc</code></p>
+
+<p>我这里在console下面用vim，一般看代码还是喜欢用macvim打开。所以我用了两个配置文件。</p>
+
+<p>链接到console下的vim配置文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ln -s ~/.vim/vimrc ~/.vimrc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>链接到macvim的配置文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ln -s ~/.vim/gvimrc ~/.gvimrc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后我们安装好Vundle项目来帮助我们安装vimrc里面需要的各种vim plugin</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/gmarik/vundle.git ~/.vim/bundle/vundle</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装后，我们进入vim通过vundle来继续安装需要的各种plugin。进入vim后，输入如下命令安装插件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>:BundleInstall</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果以后想更新插件，主要输入<code>:BundleInstall!</code></p>
+
+<p><strong>调整配色</strong></p>
+
+<p>我的配色喜欢solarized_light，编辑~/.gvimrc在前面加入<code>:colorscheme solarized_light</code></p>
+
+<p>这样打开也就3-5分钟我们就完全配置好我们的vim编辑器了</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-03T14:41:00+08:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/vim/'>vim</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/" data-via="" data-counturl="http://babodx.github.com/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/02/28/emlogqian-yi-dao-octopress/" title="Previous Post: emlog迁移到octopress">&laquo; emlog迁移到octopress</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/03/14/railszhong-wen-wen-ti/" title="Next Post: rails中文问题">rails中文问题 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Virtualization | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/virtualization/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-03-14T13:53:55+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[debian6.0.5(squeeze)安装配置xen-4.0虚拟化]]></title>
+    <link href="http://babodx.github.com/blog/2012/08/06/debian-xen-install/"/>
+    <updated>2012-08-06T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/08/06/debian-xen-install</id>
+    <content type="html"><![CDATA[<h1>系统安装</h1>
+
+<p>我是通过http://mirrors.163.com下载的     debian-6.0.5-amd64-CD-1.iso
+最小安装有一张CD就可以了，安装的是debian6.0.5(squeeze) 64位版本</p>
+
+<p>安装没啥好说的，最小化安装，除了基本系统就多选择了一个ssh server。</p>
+
+<p>安装好系统后，进入系统首先设置网卡，不要用dhcp选择static模式
+编辑/etc/network/interfaces文件如下</p>
+
+<p>```</p>
+
+<h1>The loopback network interfaceauto lo</h1>
+
+<p>iface lo inet loopback</p>
+
+<h1>The primary network interface</h1>
+
+<h1>allow-hotplug eth0</h1>
+
+<p>auto eth0</p>
+
+<p>iface eth0 inet static</p>
+
+<p>  address 192.168.1.10</p>
+
+<p>  netmask 255.255.255.0</p>
+
+<p>  broadcast 192.168.1.255</p>
+
+<p>  network 192.168.1.0</p>
+
+<p>  gateway 192.168.1.1
+```</p>
+
+<p>我这里只有一个eth0网卡，采用192.168.1.10的IP地址</p>
+
+<p>接下来修改apt的源，采用mirrors.163.com提供的服务器，这样速度比较快
+修改/etc/apt/sources.list
+内容如下</p>
+
+<p><code>
+deb http://mirrors.163.com/debian/ squeeze main non-free contrib
+deb http://mirrors.163.com/debian/ squeeze-proposed-updates main non-free contrib
+deb-src http://mirrors.163.com/debian/ squeeze main non-free contrib
+deb-src http://mirrors.163.com/debian/ squeeze-proposed-updates main non-free contrib
+</code></p>
+
+<p>执行apt-get update更新源</p>
+
+<p>经过这些设置，系统基本就是一个干净的最小系统。并且采用163的服务器作为软件源。</p>
+
+<h2>安装XEN-4.0</h2>
+
+<p>下面开始安装xen-4.0的相关软件包和配置</p>
+
+<p><code>
+apt-get install xen-hypervisor-4.0-amd64 xen-linux-system-2.6.32-5-xen-amd64 xen-utils* xenwatch xen-tools
+</code></p>
+
+<p>需要下66.2M的软件包</p>
+
+<p>安装后，再次启动选择带XEN 4.0 amd64的内核启动项</p>
+
+<p>注意：（默认的启动项虽然带xen但是不带4.0选项，启动后不能正确启动xend）
+也可以修改/etc/default/grub里面的选项，默认从这个内核启动</p>
+
+<p>修改GRBU_DEFAULT=4</p>
+
+<h3>配置xen的网络</h3>
+
+<p>修改/etc/xen/xend-config.sxp文件</p>
+
+<p>打开<code>(network-script network-bridge)</code></p>
+
+<p>采用桥接方式</p>
+
+<p>重启后，系统会将物理网卡修改为peth0，而eth0为桥接的网卡</p>
+
+<p>brctl show 显示如下</p>
+
+<p><code>
+root@node1:~# brctl show
+bridge name     bridge id                    STP enabled     interfaces
+eth0                 8000.001c42d8fe43     no                    peth0
+</code></p>
+
+<h3>通过xen-create-image安装debian虚拟系统</h3>
+
+<p>```
+xen-create-image --hostname=vm01 --size=2G --swap=128M --ide \</p>
+
+<p>--ip=192.168.1.21 --netmask=255.255.255.0 --gateway=192.168.1.1 \</p>
+
+<p>--force --dir=/vm --memory=128M -arch=i386 \</p>
+
+<p>--kernel=/boot/vmlinuz-2.6.32-5-xen-amd64 \</p>
+
+<p>--dist=squeeze --mirror=http://mirrors.163.com/debian/ --passwd \</p>
+
+<p>--install-method=debootstrap
+```</p>
+
+<p>安装以后，需要调整vm01.cfg文件，否则无法启动
+首先调整磁盘的相关配置</p>
+
+<p>```
+root        = '/dev/xvda2 ro'
+disk        = [</p>
+
+<pre><code>              'file:/vm/domains/vm01/disk.img,xvda2,w',
+              'file:/vm/domains/vm01/swap.img,xvda1,w',
+          ]
+</code></pre>
+
+<p>```</p>
+
+<p>将原来的hda2修改为xvda2</p>
+
+<p>然后是调整网卡的相关配置</p>
+
+<p><code>
+vif         = [ 'ip=192.168.1.21,mac=00:16:3E:9B:1A:90,bridge=eth0' ]
+</code></p>
+
+<p>主要是加上bridge=eth0</p>
+
+<p>这样就可以通过xm create vm01.cfg启动虚拟系统了</p>
+
+<p>```
+root@node1:~# xm list
+Name                                        ID   Mem VCPUs      State   Time(s)
+Domain-0                                   0   879     1               r-----     26.6
+vm01                                         1   128     1                -b----      1.7</p>
+
+<p>root@node1:~#<br/>
+```</p>
+
+<p>启动后，dom0下面会出现一个vif的虚拟网卡</p>
+
+<p><code>
+root@node1:~# brctl show
+bridge name     bridge id                      STP enabled     interfaces
+eth0                 8000.001c42d8fe43         no                      peth0
+</code></p>
+
+<pre><code>                                                                                            vif1.0 
+</code></pre>
+
+<p>如果在guest系统只能ping到dom0的eth0，而不能ping到外网
+可以检查下</p>
+
+<p>```
+root@node1:~# sysctl net.ipv4.ip_forward</p>
+
+<p>net.ipv4.ip_forward = 0
+```</p>
+
+<p>只要打开这个ip_forward就可以了</p>
+
+<p>修改/etc/sysctl.conf里面的net.ipv4.ip_forward=1
+或者
+<code>echo 1&gt;/proc/sys/net/ipv4/ip_forward</code></p>
+
+<p>也可以用命令临时生效
+<code>sysctl -w net.ipv4.ip_forward=1</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ubuntu 9.04安装xen]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/ubuntu-904-install-xen/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/ubuntu-904-install-xen</id>
+    <content type="html"><![CDATA[<p>主要参考下面两旁文章，先贴过来，以后再整理。</p>
+
+<p><a href="http://oceanobservatories.org/spaces/display/CIDev/Xen+on+Ubuntu+9.04+(Jaunty">http://oceanobservatories.org/spaces/display/CIDev/Xen+on+Ubuntu+9.04+(Jaunty)</a>)</p>
+
+<p><a href="http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html">http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html</a></p>
+
+<p><strong>安装xen</strong></p>
+
+<p>Xen on Ubuntu 9.04 (Jaunty)</p>
+
+<p>Added by <a href="http://oceanobservatories.org/spaces/display/~thim">Thomas Im</a> , last edited by <a href="http://oceanobservatories.org/spaces/display/~thim">Thomas Im</a> on Jun 11, 2009  (<a href="http://oceanobservatories.org/spaces/pages/diffpages.action?pageId=18353165&originalId=18353171">view change</a>)
+Labels: 
+(None)
+Following applies to Ubuntu 9.04 Jaunty 64-bit installation.  Notes taken from rebuild of 'amoeba' development system.
+Installation</p>
+
+<pre>sudo apt-get install ubuntu-xen-server # Jaunty Xen package does not include the dom0 Xen kernel so these must be installed separately  wget http://security.debian.org/debian-security/pool/updates/main/l/linux-2.6/linux-modules-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb wget http://security.debian.org/debian-security/pool/updates/main/l/linux-2.6/linux-image-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb  sudo dpkg -i linux-modules-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb linux-image-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb  sudo apt-get install python2.5 shutdown -r now   sudo vim /etc/network/interfaces .. auto eth0 iface eth0 inet static   address xxx.xxx.xxx.xxx   gateway xxx.xxx.xxx.xxx   netmask 255.255.255.0   sudo vim /etc/resolv.conf ... domain ucsd.edu search ucsd.edu  nameserver xxx.xxx.xxx.xxx nameserver xxx.xxx.xxx.xxx   sudo /etc/init.d/networking restart  </pre>
+
+
+<p>Create Jaunty DomU (Guest)
+[http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html]
+<img src="http://oceanobservatories.org/spaces/images/icons/emoticons/information.gif" border="0" width="16" height="16" align="absMiddle"><br><strong><strong>References:</strong></strong>
+<a href="https://help.ubuntu.com/community/Xen">https://help.ubuntu.com/community/Xen</a><br><a href="http://www.infohit.net/blog/adate/053109/archive/1.html">http://www.infohit.net/blog/adate/053109/archive/1.html</a><br><a href="http://www.chrisk.de/blog/2008/12/how-to-run-xen-in-ubuntu-intrepid-without-compiling-a-kernel-by-yourself/">http://www.chrisk.de/blog/2008/12/how-to-run-xen-in-ubuntu-intrepid-without-compiling-a-kernel-by-yourself/</a></p>
+
+<h3></h3>
+
+
+<p><strong>安装guest系统</strong>
+These are instructions for creating an Ubuntu Jaunty DomU on Debian Lenny Dom0 using Xen 3.2.1 that comes with Lenny.  I'm installing into an LVM rather than using a file image.  See <a href="http://www.howtoforge.com/xen-live-migration-of-an-lvm-based-virtual-machine-with-iscsi-on-debian-lenny">this HowtoForge article for background of my particular setup</a>.  This tutorial assumes you're working from a similar setup with an iscsi target and LVM-based VMs.
+The reason I'm posting this is because I had such a hard time finding some combination of tools that worked correctly to do this.  I tried a few options but had little success:</p>
+
+<ul>
+<li>debootstrap - Didn't seem to work with Jaunty at all.  It would just crash </li>
+<li>vm-install - Doesn't support LVM-based VMs by default, but there is a procedure for converting the qcow image to an LVM</li>
+</ul>
+
+
+<p>What I found is that I could find no way of creating the LVM-based VM in Lenny.  I actually had to create a sid instance first and then install my open-iscsi and xen-utils into the sid VM, then use SID to populate the VM.  <br><u><strong>Perform the following actions in your SID vm or workstation</strong></u><br>
+Note:  You'll need your /etc/xen-tools/xen-tools.conf setup like the instructions in the HowtoForge article (things like gateway, netmask, broadcast, passwd, fs type, install-method, etc).<br>
+Whenever I would try to build the vm with the default partitions, it would always fail.  For some reason the resulting vm would have an fstab that shows something like sda1 and sda2 instead of xvda1 and xvda2.  I had to create my own partition scheme before anything would work right.  Here's mine: $ <strong>sudo cat /etc/xen-tools/partitions.d/with-data</strong><br>
+[root]<br>
+size=4G<br>
+type=ext3<br>
+mountpoint=/<br>
+options=sync,errors=remount-ro<br>
+[swap]<br>
+size=512M<br>
+type=swap<br>
+[data]<br>
+size=4G<br>
+type=ext3<br>
+mountpoint=/data<br>
+options=nodev
+You will need to create a symlink for jaunty so that the option is recognized at the command-line. 
+<strong>$ cd /usr/lib/xen-tools</strong>
+<strong>$ sudo ln -s edgy.d jaunty.d  </strong>
+Now, finally, you can create the image.  This step may take some time
+<strong>$ xen-create-image --hostname=myserver --dhcp --lvm=vg_xen --dist=jaunty --mirror=http://archive.ubuntu.com/ubuntu --size=4Gb --memory=512Mb --swap=512MB --arch=i386 --partitions=with-data</strong>
+Since you're building the LVM on a different machine than it will eventually run on, you'll need to  copy the resulting xen config to the correct server:
+<strong>$ scp /etc/xen/myserver.cfg root@realhost:/etc/xen/</strong>
+That should be all you need to get this working.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[安装和使用xen-shell]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/install-xen-shell/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/install-xen-shell</id>
+    <content type="html"><![CDATA[<p>转自：<a href="http://www.xen-tools.org/software/xen-shell/install.html">http://www.xen-tools.org/software/xen-shell/install.html</a></p>
+
+<p>Installing &amp; using the Xen-Shell</p>
+
+<p>This shell makes several assumptions in the way that it operates:</p>
+
+<ul>
+<li>That you have a Xen 3.x host running.</li>
+<li>Then Xen host has several guests running.</li>
+<li>That you don't wish to give your users shell access on the host.</li>
+</ul>
+
+
+<p>If these assumptions are not valid for your environment then you might find that you have problems.</p>
+
+<p><strong>Installation</strong></p>
+
+<p>Download either <a href="http://www.xen-tools.org/releases.html">a release</a>, or a current version of <a href="http://www.xen-tools.org/cvs.html">the CVS repository</a> and install it by executing:</p>
+
+<p><code>make install</code></p>
+
+<p><strong>Configuring Users</strong></p>
+
+<p>Each user is expected to login directly to the xen-shell, and not have any other access to the host system. To do this change their login shell by running:</p>
+
+<p><code>chsh -s /usr/local/bin/xen-login-shell username</code></p>
+
+<p>This will ensure when they connect to the system they will login to the shell, and run it within GNU Screen.</p>
+
+<p><strong>Note:</strong>CVS and Debian binary packages use /usr/bin instead of /usr/local/.
+Once you've changed the shell for the user you must update your Xen configuration files so that they include the username(s) of the users who can control them.
+To allow the user "bob" and the user "steve" to control the Xen guest "builder.my.flat" you would add the following to /etc/xen/builder.my.flat.cfg:</p>
+
+<p>```</p>
+
+<h1>All instances must have a name name = 'builder.my.flat'    </h1>
+
+<h1>These users may control this instance. xen_shell = 'bob, steve'</h1>
+
+<p>```</p>
+
+<p><strong>Bandwidth Accounting</strong></p>
+
+<p>The shell allows the user to view the bandwidth they have transferred over a given period, using the bandwidth command.
+For this to work the vnstat tool must be installed and configured upon dom0. It is assumed that each Xen guest will have their network interface named the same as the guest name.
+For example a Xen guest called 'skx' will have a network interface 'skx' upon dom0. If you're using the standard Xen configuration setup you can achieve this by changing your skx.cfg file to read:</p>
+
+<p><code>vif = [ 'vifname=skx,ip=1.2.3.4' ]</code></p>
+
+<p><strong>Note:</strong> if you have more than one IP address allocated to a guest you will have to create a more complicated setup.</p>
+
+<p><strong>Security</strong></p>
+
+<p>Since the xen administrator command xm requires root privileges to run you will need to configure sudo to allow the users who are running your shell to execute that command, without being prompted for a password, as root.
+Add something similar to the following to your /etc/sudoers file:</p>
+
+<p><code>
+User_Alias   XENUSERS = steve,bob,fred,foo
+Cmnd_Alias   XEN      = /usr/sbin/xm
+Cmnd_Alias   XENIMG   = /usr/bin/xen-create-image
+XENUSERS     ALL      = NOPASSWD: XEN,XENIMG
+</code></p>
+
+<p><strong>Note:</strong>you only need to grant the ability to run xen-create-image if you wish to enable reimaging support in the shell.</p>
+
+<p><strong>DNS Updates</strong></p>
+
+<p>When the shell starts it will look for the file ips.txt in the home directory of the user who connects. If that file doesn't exist then the rdns command will be disabled.</p>
+
+<p>If you wish to allow users to control their reverse DNS create that file and give it contents such as these:</p>
+
+<p><code>192.168.1.1 foo.my.domain 192.168.1.2 bar.my.domain</code></p>
+
+<p>This file will be updated by the user when they invoke the rdns command. It is up to you to read the files and create the corresponding zonefiles / DNS updates. The shell will only manipulate the file - not push DNS updates itself.</p>
+
+<p><strong>Reimaging Support</strong></p>
+
+<p>If a user connects to the shell and has the executable file image.sh in their home directory the reimage command will be enabled.
+When the user invokes the command the image.sh script is executed after prompting for confirmation, and performing a last-chance count-down.
+It is up to you to create and configure this script to do the right thing. A sample file for user bob could look like this:</p>
+
+<p>```</p>
+
+<h1>!/bin/sh /usr/bin/xen-create-image --hostname=bob \  </h1>
+
+<p>--ip=192.168.1.1  \  
+--ip=192.168.1.2 \  
+--size=9.5G \  
+--swap=512M  --mem=256M \  
+--force
+```</p>
+
+<p>This will require a correctly configured instance of <a href="http://www.xen-tools.org/software/xen-tools/">xen-tools</a> and the sudoer file to contain the ability for the user to run xen-create-image.</p>
+
+<p>Any remaining questions? <a href="http://www.xen-tools.org/contact/">contact the author</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[怎么mount一个xen的img映像。转载]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/howto-mount-xen-img</id>
+    <content type="html"><![CDATA[<ul>
+<li>First you need to find out the partitions and the startsector of partitions:</li>
+</ul>
+
+
+<p><code>
+[root@xen rruban]# file rheltest.img rheltest.img: x86 boot sector, GRand Unified Bootloader (0.94);
+partition
+1: ID=0x83, active, starthead 1, startsector 63, 208782 sectors; partition
+2: ID=0x8e, starthead 0, startsector 208845, 3871665 sectors, code offset 0x48
+</code></p>
+
+<p>There are 3 partitions inside the image file. The startsector of each partition is also listed. Boot partition will have start sector 63.</p>
+
+<ul>
+<li>Now you need to get the sector size:</li>
+</ul>
+
+
+<p><code>
+[root@xen]fdisk -lu rheltest.img
+Disk rheltest.img: 0 MB, 0 bytes 255 heads, 63 sectors/track, 0 cylinders, total 0 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Device Boot Start End Blocks Id System
+rheltest.img1 * 63 208844 104391 83 Linux
+rheltest.img2 208845 4080509 1935832+ 8e Linux LVM
+</code></p>
+
+<p>The above shows the sector byte size is 512 byte.</p>
+
+<ul>
+<li>To calculating the offset: offset = start_sector x sector_byte_size.</li>
+</ul>
+
+
+<p>The startsector is 63 for the first partition, therefore the first partition offset is: 63x512=32256</p>
+
+<ul>
+<li>Finally, to mount the xen image, use:</li>
+</ul>
+
+
+<p><code>
+mount -o loop,offset=32256 test.img /foldername
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[获取XEN guestOS的images文件]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/get-xen-guestos-image/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/get-xen-guestos-image</id>
+    <content type="html"><![CDATA[<p>我们可以从<a href="http://stacklet.com/">http://stacklet.com/</a>其实就是原来<a href="http://jailtime.org/">http://jailtime.org/</a>站点找我们需要的xen image文件</p>
+
+<p>在2009年的时候，jailtime.org发布了一个新闻</p>
+
+<h6>May 4th, 2009</h6>
+
+<p>The jailtime project has been relaunched with a new name and site: <a href="http://stacklet.com/">Stacklet</a>
+As part of the relaunch all of the distributions currently on jailtime have been upgraded to their latest versions. Also, all of the code for creating the images is now publically available – see <a href="http://stacklet.com/">http://stacklet.com/</a> for further details....
+Jailtime will remain online but downloads will probably be turned off eventually as the transition to stacklet proceeds.</p>
+
+<p>所以现在就访问<a href="http://stacklet.com/">http://stacklet.com/</a>就可以了。</p>
+
+<p>包括如下系统</p>
+
+<p><li>
+<a href="http://stacklet.com/downloads/images/list/CentOS">CentOS</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/centos/5.3">5.3</a> </li>
+<li><a href="http://stacklet.com/downloads/images/centos/5.3.64bit">5.3 (64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Debian">Debian</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/debian/5.0">5.0 (Lenny)</a> </li>
+<li><a href="http://stacklet.com/downloads/images/debian/5.0.64bit">5.0 (Lenny, 64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Fedora">Fedora</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/fedora/10">10</a> </li>
+<li><a href="http://stacklet.com/downloads/images/fedora/10.64bit">10 (64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Gentoo">Gentoo</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/gentoo/2008-0">2008.0</a> </li>
+<li><a href="http://stacklet.com/downloads/images/gentoo/2008-0.64bit">2008.0 (64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Mandriva">Mandriva</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/mandriva/2009.0">2009.0</a> </li>
+<li><a href="http://stacklet.com/downloads/images/mandriva/2009.0.64bit">2009.0 (64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Slackware">Slackware</a> <ul>
+<li><a href="http://stacklet.com/node/13">12.2</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Ubuntu">Ubuntu</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/ubuntu/9.04">9.04 (Jaunty)</a> </li>
+<li><a href="http://stacklet.com/downloads/images/ubuntu/9.04.64bit">9.04 (Jaunty, 64-bit)</a></li>
+</ul>
+</li>
+</ul></li>
+<li></p>
+
+<p><strong>下面是一个站点提供的img文件的简单说明</strong>
+<strong>All files on this site are provided without guarantee or warranty. Use at your own risk.</strong>
+Each download is a bzipped tarball containing an image and cfg files:</p>
+
+<ul>
+<li>a xen guest filesystem
+</li>
+<li>sample xen configuration files to be used with <strong>xm create</strong>
+</li>
+</ul>
+
+
+<p>The naming convention of the download tarball is:
+<strong><distribution>.<distro-version>.<created-date>.img.tar.bz2</strong>.
+For example centos.5-3.x86.20090423.img.tar.bz2 contains</p>
+
+<ul>
+<li>centos.5-3.x86.img
+</li>
+<li>centos.5-3.x86.xen3.cfg
+</li>
+<li>centos.5-3.x86.xen3.pygrub.cfg（这个文件比较重要，如果用的是CentOS 5.3的虚拟化，就需要这个文件才可以启动guestOS。因为CentOS 5.3没有提供Xen-U的内核。）
+</li>
+</ul>
+
+
+<p>All of the packages installed in the image will be the latest versions available as of the created date, which is in yyyy-mm-dd format.</p>
+
+<h3>Prerequisites</h3>
+
+
+<ol>
+<li>Working installation of Xen version 3
+</li>
+<li>The xen daemon (xend) must be running
+</li>
+<li>Enough filesystem space to accomodate the uncompressed tarball (generally 1GB)
+</li>
+<li>Enough unallocated RAM to run the xen guest (generally 128MB)
+</li>
+</ol>
+
+
+<h3>Default Configuration and Networking</h3>
+
+
+<p>Each filesystem is configured to use dhcp. The *.xen.cfg also is also configured for dhcp. It is recommended that you first test the filesystem using dhcp if possible before attempting other networking parameters. Each download page has additional notes on networking that is appropriate for a particular distribution.
+The root login is root/password. It is highly recommened that you change the root password immediately.</p>
+
+<h3>Installation</h3>
+
+
+<p>You will need to uncompress the tarball to a local directory and edit the *.xen.cfg file to point to the uncompressed image and swap file.
+If all is well you will see the guest’s boot messages scrolling by.
+<strong>一些HOWTO文档</strong></p>
+
+<h3><strong>HOWTO: Filesystems</strong></h3>
+
+
+<p>In the following howto’s, <image file> should be replaced with a reference to a specific .img file.</p>
+
+<h4><strong>How do I mount an image without booting it?</strong></h4>
+
+
+<ul>
+<li>mkdir -p /mnt/loop
+</li>
+<li>mount -o loop <image file> /mnt/loop/
+</li>
+</ul>
+
+
+<h4><strong>How do I resize an image file?</strong></h4>
+
+
+<p>First, make sure that the image file is not already mounted and is not already running as a xen guest. The following commands increase an image file to 2.5GB. Backup the image before attempting this.</p>
+
+<ul>
+<li>dd if=/dev/zero of=<image file> bs=1M conv=notrunc count=1 seek=2500 
+</li>
+<li>losetup /dev/loop0 <image file>
+</li>
+<li>e2fsck -f /dev/loop0
+</li>
+<li>resize2fs /dev/loop0
+</li>
+<li>e2fsck -f /dev/loop0
+</li>
+<li>losetup -d /dev/loop0
+</li>
+</ul>
+
+
+<p>You may then boot or mount the image to confirm the increased size. The e2fsck checks in this howto are not strictly necessary.</p>
+
+<h4><strong>How do I move the contents of an img file to a regular partition?</strong></h4>
+
+
+<p>Mount the img file using the above howto. Assuming the destination partition is mounted at /mnt/dest, execute the following:</p>
+
+<ul>
+<li>cp -a /mnt/loop/* /mnt/dest/
+</li>
+</ul>
+
+
+<p>You will then be able to boot the filesystem using the partition instead of the image file, which should provide better performance. You will need to update the *.xen.cfg file to reference the partition instead of the img file (the <strong>disk</strong> parameter will need to change, see the <a href="http://www.cl.cam.ac.uk/Research/SRG/netos/xen/readmes/user/user.html">Xen Manual</a>). Also, remember to unmount partitions or img files before booting a xen guest from them!</p>
+
+<p></li></p>
+]]></content>
+  </entry>
+  
+</feed>

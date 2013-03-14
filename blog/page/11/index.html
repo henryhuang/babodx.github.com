@@ -1,0 +1,1236 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="前面提到了用VMware的share folder功能，可以将主机系统的一个目录，自动共享到ubuntu /mnt/hgfs目录下。 但是winxp的中文目录，到了ubuntu server下面就显示乱码了。 解决办法 安装相关软件包 1
+sudo apt-get install language &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/page/11/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-904-show-chinese-filename/">Ubuntu Server 9.04显示中文文件</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前面提到了用VMware的share folder功能，可以将主机系统的一个目录，自动共享到ubuntu /mnt/hgfs目录下。</p>
+
+<p>但是winxp的中文目录，到了ubuntu server下面就显示乱码了。</p>
+
+<p><strong>解决办法</strong></p>
+
+<p>安装相关软件包</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install language-pack-zh</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>配置中文环境</strong></p>
+
+<p>修改/etc/environment</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vim /etc/environment</span></code></pre></td></tr></table></div></figure>
+
+
+<p>将LANG和LANGUAGE内容修改为下面的</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>LANG=zh_CN.UTF8&lt;br&gt;
+</span><span class='line'>LANGUAGE="zh_CN:zh:en_US:en </span></code></pre></td></tr></table></div></figure>
+
+
+<p>修改/etc/default/locale</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vim /etc/default/locale</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+修改内容如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>LANG="zh_CN.UTF-8"&lt;br&gt;
+</span><span class='line'>LANGUAGE="zh_CN:zh" </span></code></pre></td></tr></table></div></figure>
+
+
+<p>保存后，重启系统。</p>
+
+<p>现在用putty登陆，还是发现看中文乱码。我们还要继续设置putty才可以。</p>
+
+<p><strong>设置putty使用utf-8</strong></p>
+
+<p>putty的Windows->Translation->Received data assumed to be in which character set:选择UTF-8</p>
+
+<p><img src="http://farm9.staticflickr.com/8236/8512011412_e138d2c072.jpg" alt="putty使用utf8设置" /></p>
+
+<p>这样设置后，就可以正确在putty里显示中文了。</p>
+
+<p><img src="http://farm9.staticflickr.com/8514/8510902673_84be6e3e30.jpg" alt="putty显示中文文件名" /></p>
+
+<p>以上这些就可以正常在putty里显示中文了。但是如果你用键盘鼠标从本地登陆ubuntu server，会发现，ubuntu server还是乱码。</p>
+
+<p>这个问题我查了一些文档，还是没有解决。有的说是console下的字体问题。但是/usr/share/consolefonts里的字体好像没有支持中文的。</p>
+
+<p>还有说console fonts最多支持256这个字符。。。</p>
+
+<p>反正最终这个问题没有解决掉。现在在linux自己的控制台里，显示还是乱码</p>
+
+<p>建议大家如果不是特别需要，其实服务器没有必要采用中文编码的。可以正常显示中文就好了。</p>
+
+<p>建议默认还是用en_US:UTF-8的好。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-904-install-xen/">Ubuntu 9.04安装xen</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>主要参考下面两旁文章，先贴过来，以后再整理。</p>
+
+<p><a href="http://oceanobservatories.org/spaces/display/CIDev/Xen+on+Ubuntu+9.04+(Jaunty">http://oceanobservatories.org/spaces/display/CIDev/Xen+on+Ubuntu+9.04+(Jaunty)</a>)</p>
+
+<p><a href="http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html">http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html</a></p>
+
+<p><strong>安装xen</strong></p>
+
+<p>Xen on Ubuntu 9.04 (Jaunty)</p>
+
+<p>Added by <a href="http://oceanobservatories.org/spaces/display/~thim">Thomas Im</a> , last edited by <a href="http://oceanobservatories.org/spaces/display/~thim">Thomas Im</a> on Jun 11, 2009  (<a href="http://oceanobservatories.org/spaces/pages/diffpages.action?pageId=18353165&originalId=18353171">view change</a>)
+Labels: 
+(None)
+Following applies to Ubuntu 9.04 Jaunty 64-bit installation.  Notes taken from rebuild of &#8216;amoeba&#8217; development system.
+Installation</p>
+
+<pre>sudo apt-get install ubuntu-xen-server # Jaunty Xen package does not include the dom0 Xen kernel so these must be installed separately  wget http://security.debian.org/debian-security/pool/updates/main/l/linux-2.6/linux-modules-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb wget http://security.debian.org/debian-security/pool/updates/main/l/linux-2.6/linux-image-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb  sudo dpkg -i linux-modules-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb linux-image-2.6.26-2-xen-amd64_2.6.26-15lenny3_amd64.deb  sudo apt-get install python2.5 shutdown -r now   sudo vim /etc/network/interfaces .. auto eth0 iface eth0 inet static   address xxx.xxx.xxx.xxx   gateway xxx.xxx.xxx.xxx   netmask 255.255.255.0   sudo vim /etc/resolv.conf ... domain ucsd.edu search ucsd.edu  nameserver xxx.xxx.xxx.xxx nameserver xxx.xxx.xxx.xxx   sudo /etc/init.d/networking restart  </pre>
+
+
+<p>Create Jaunty DomU (Guest)
+[http://linux.com/community/blogs/Xen-Create-a-Jaunty-DomU-using-xen-create-image.html]
+<img src="http://oceanobservatories.org/spaces/images/icons/emoticons/information.gif" border="0" width="16" height="16" align="absMiddle"><br><strong><strong>References:</strong></strong>
+<a href="https://help.ubuntu.com/community/Xen">https://help.ubuntu.com/community/Xen</a><br><a href="http://www.infohit.net/blog/adate/053109/archive/1.html">http://www.infohit.net/blog/adate/053109/archive/1.html</a><br><a href="http://www.chrisk.de/blog/2008/12/how-to-run-xen-in-ubuntu-intrepid-without-compiling-a-kernel-by-yourself/">http://www.chrisk.de/blog/2008/12/how-to-run-xen-in-ubuntu-intrepid-without-compiling-a-kernel-by-yourself/</a></p>
+
+<h3></h3>
+
+
+<p><strong>安装guest系统</strong>
+These are instructions for creating an Ubuntu Jaunty DomU on Debian Lenny Dom0 using Xen 3.2.1 that comes with Lenny.  I&#8217;m installing into an LVM rather than using a file image.  See <a href="http://www.howtoforge.com/xen-live-migration-of-an-lvm-based-virtual-machine-with-iscsi-on-debian-lenny">this HowtoForge article for background of my particular setup</a>.  This tutorial assumes you&#8217;re working from a similar setup with an iscsi target and LVM-based VMs.
+The reason I&#8217;m posting this is because I had such a hard time finding some combination of tools that worked correctly to do this.  I tried a few options but had little success:</p>
+
+<ul>
+<li>debootstrap - Didn&#8217;t seem to work with Jaunty at all.  It would just crash </li>
+<li>vm-install - Doesn&#8217;t support LVM-based VMs by default, but there is a procedure for converting the qcow image to an LVM</li>
+</ul>
+
+
+<p>What I found is that I could find no way of creating the LVM-based VM in Lenny.  I actually had to create a sid instance first and then install my open-iscsi and xen-utils into the sid VM, then use SID to populate the VM.  <br><u><strong>Perform the following actions in your SID vm or workstation</strong></u><br>
+Note:  You&#8217;ll need your /etc/xen-tools/xen-tools.conf setup like the instructions in the HowtoForge article (things like gateway, netmask, broadcast, passwd, fs type, install-method, etc).<br>
+Whenever I would try to build the vm with the default partitions, it would always fail.  For some reason the resulting vm would have an fstab that shows something like sda1 and sda2 instead of xvda1 and xvda2.  I had to create my own partition scheme before anything would work right.  Here&#8217;s mine: $ <strong>sudo cat /etc/xen-tools/partitions.d/with-data</strong><br>
+[root]<br>
+size=4G<br>
+type=ext3<br>
+mountpoint=/<br>
+options=sync,errors=remount-ro<br>
+[swap]<br>
+size=512M<br>
+type=swap<br>
+[data]<br>
+size=4G<br>
+type=ext3<br>
+mountpoint=/data<br>
+options=nodev
+You will need to create a symlink for jaunty so that the option is recognized at the command-line. 
+<strong>$ cd /usr/lib/xen-tools</strong>
+<strong>$ sudo ln -s edgy.d jaunty.d  </strong>
+Now, finally, you can create the image.  This step may take some time
+<strong>$ xen-create-image &#8211;hostname=myserver &#8211;dhcp &#8211;lvm=vg_xen &#8211;dist=jaunty &#8211;mirror=http://archive.ubuntu.com/ubuntu &#8211;size=4Gb &#8211;memory=512Mb &#8211;swap=512MB &#8211;arch=i386 &#8211;partitions=with-data</strong>
+Since you&#8217;re building the LVM on a different machine than it will eventually run on, you&#8217;ll need to  copy the resulting xen config to the correct server:
+<strong>$ scp /etc/xen/myserver.cfg root@realhost:/etc/xen/</strong>
+That should be all you need to get this working.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-904-install-vmware-tools/">Ubuntu 9.04 Server 安装VMware Tools解决share Folders问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>我的主系统是Winxp在vmware 6.5.2 build-156735下安装的ubuntu server 9.04</p>
+
+<p>因为安装vmware tools后，可以使用vmware 提供的share folders让winxp的主系统可以将某个目录映射到虚拟的ubuntu系统里。</p>
+
+<p>我就开始在vmware里面安装vmware tools工具。下面是过程，包括不能用vmhgfs的解决办法</p>
+
+<p>**安装VMware tools</p>
+
+<p>安装前，先安装需要的软件包</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>apt-get install autoconf automake binutils make cpp gcc linux-headers-$(uname -r)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装后，在vmware上面选择VM-》Install Vmware Tools</p>
+
+<p>然后切换到ubuntu server 9.04里，运行mount命令，将Vmware tools的光盘挂载
+<code>sudo mount /dev/cdrom /mnt</code></p>
+
+<p>拷贝安装VMware Tools需要的安装文件到/tmp目录
+<code>sudo cp /mnt/VMwareTools-7.8.5-156735.tar.gz /tmp</code></p>
+
+<p>卸载/mnt目录，因为安装的时候，需要在/mnt目录下创建hgfs目录，如果这时候挂载着CDROM，就会导致创建hgfs目录失败。<code>sudo /mnt</code></p>
+
+<p>解压安装文件并修改会出现问题的page.c文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /tmp 
+</span><span class='line'>tar zxvf VMwareTools-7.8.5-156735.tar.gz
+</span><span class='line'>cd /tmp/vmware-tools-distrib/lib/modules/source&lt;/span&gt; 
+</span><span class='line'>sudo cp ./vmhgfs.tar /tmp/&lt;/span&gt; 
+</span><span class='line'>tar xvf vmhgfs.tar &lt;/span&gt;
+</span><span class='line'>cd vmhgfs-only/ 
+</span><span class='line'>sudo vi page.c </span></code></pre></td></tr></table></div></figure>
+
+
+<p>修改page.c里面867行的一个错误函数，</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>page = __grab_cache_page(mapping, index); </span></code></pre></td></tr></table></div></figure>
+
+
+<p>将这个函数修改为</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>page = grab_cache_page_write_begin(mapping, index,flags);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+这个函数是在/usr/src/linux-headers-2.6.28-11-server/include/linux$下的，pagemap.h里面定义的，内容如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>struct page *grab_cache_page_write_begin(struct address_space *mapping,
+</span><span class='line'>                        pgoff_t index, unsigned flags); </span></code></pre></td></tr></table></div></figure>
+
+
+<p>修改后，保存。然后重新打包成vmhgfs.tar文件，放置到/tmp/vmware-tools-distrib/lib/modules/source目录下。
+完成上面工作后，就可以</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /tmp/vmware-tools-distrib
+</span><span class='line'>sudo ./vmware-install.pl</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装提示安装就可以了。</p>
+
+<p>当看到如下提示，代表已经正确编译了vmhgfs模块了。应该可以顺利使用share folders功能。</p>
+
+<p>The vmhgfs module loads perfectly into the running kernel.</p>
+
+<p>也可以运行</p>
+
+<p><code>lsmod |grep vmhgfs</code></p>
+
+<p>如果有如下显示，表示安装成功</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vmhgfs                 53728  1 </span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就可以用vmware提供的share folders功能和ubuntu server 9.04共享文件了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/ubuntu-804-update-to-810/">Ubuntu 8.04升级到8.10</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>升级</h1>
+
+<p>昨天开始作的升级。</p>
+
+<p>早上到单位，就开始<code>Alt+F2</code></p>
+
+<p>在弹出的命令行窗口输入
+<code>update-manager -d</code></p>
+
+<p>然后就进入了漫长的等待，单位网络那个垃圾。。。。。告诉我42天。。。。。</p>
+
+<p>一直到下班，下载了900多个文件，一共要下载1300多</p>
+
+<p>晚上到家继续update-manager -d 发现居然可以接着下载，还以为要重新来呢。家里好点，告诉我3个小时,后来就睡觉了。</p>
+
+<p>今天早上起来，发现已经下载完成了，开始到安装更新这一步了，弹出个窗口等我确认。</p>
+
+<p>我点上开始，就洗漱去了。一直到要上班也没有安装完成。（TMD，居然忘记今天星期五，不能开车。还是老婆提醒我，才想起来。）这次我可不敢关机了，怕升级一半，下次进不来系统。直接把本本和上盖子放包里了，下楼打车上班。</p>
+
+<p>在出租车里，完成了全部更新。关机。</p>
+
+<p><strong>启动</strong></p>
+
+<p>到了单位，发现系统总卡在进度条进不去。</p>
+
+<p>按Alt+F1然后 Alt+F8查看下文字模式的启动信息，发现一直卡在*Configuring network interfaces&#8230;</p>
+
+<p>这个第一次启动，没有办法（希望有好办法的，告诉下。）我就一直死等呀。。。感觉过了20分钟？？？</p>
+
+<p>进入系统了，3D显卡驱动不行。运行uname -a查看，内核还在用8.04的2.6.24-21.</p>
+
+<p>先修改网络吧
+<code>sudo gedit /etc/network/interfaces</code></p>
+
+<p>将里面的</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>auto eth0
+</span><span class='line'>iface eth0 inet dhcp
+</span><span class='line'>auto lo
+</span><span class='line'>auto wlan0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>都注释掉，变成下面样子</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#auto lo
+</span><span class='line'>iface lo inet loopback
+</span><span class='line'>#iface eth0 inet dhcp
+</span><span class='line'>address 10.11.10.164
+</span><span class='line'>netmask 255.255.255.0
+</span><span class='line'>gateway 10.11.10.254
+</span><span class='line'>#nameserver 202.106.0.20
+</span><span class='line'>#auto eth0
+</span><span class='line'>iface wlan0 inet dhcp
+</span><span class='line'>wpa-psk 7640768b3d6b31f834b63abc8d2d667ae10f8bc3c41a8e4e87ec2c104d963a1e
+</span><span class='line'>wpa-driver wext
+</span><span class='line'>wpa-key-mgmt WPA-PSK
+</span><span class='line'>wpa-proto WPA
+</span><span class='line'>wpa-ssid babohome
+</span><span class='line'>#auto wlan0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>接着修改/etc/NetworkManager/nm-system-settings.conf文件
+<code>sudo gedit /etc/NetworkManager/nm-system-settings.conf</code></p>
+
+<p>将文件里的<code>[ifupdown] manager=false</code>改成<code>[ifupdown] manager=true</code></p>
+
+<p>这样基本启动速度的问题就正常</p>
+
+<p><strong>内核</strong></p>
+
+<p>再来说内核</p>
+
+<p>内核需要手动编辑下grub的启动配置文件了。其实2.6.27-7内核已经安装了，就是没有给我们加入的menu.lst文件里面。修改menu.lst</p>
+
+<p><code>sudo gedit /boot/grub/menu.lst</code></p>
+
+<p>我的修改如下，这个应该每个人的不太一样。大家可以拷贝以前自己的文件进行修改</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>title        Ubuntu 8.04.1, kernel 2.6.27-7-generic
+</span><span class='line'>root        (hd0,1)
+</span><span class='line'>kernel        /boot/vmlinuz-2.6.27-7-generic root=UUID=614a1c10-6ed3-45c9-b24d-f7b3e39725b2 ro quiet splash locale=zh_CN
+</span><span class='line'>initrd        /boot/initrd.img-2.6.27-7-generic
+</span><span class='line'>quiet
+</span><span class='line'>title        Ubuntu 8.04.1, kernel 2.6.27-7-generic (recovery mode)
+</span><span class='line'>root        (hd0,1)
+</span><span class='line'>kernel        /boot/vmlinuz-2.6.27-7-generic root=UUID=614a1c10-6ed3-45c9-b24d-f7b3e39725b2 ro single
+</span><span class='line'>initrd        /boot/initrd.img-2.6.27-7-generic</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个修改后，先不要重新启动。因为我们还没有卸载显卡驱动，要不重启后，卸载驱动还要继续重启。</p>
+
+<p><strong>卸载现有的显卡驱动</strong></p>
+
+<p>我原来显卡驱动是用envyng -t来安装的，现在还用这个工具卸载</p>
+
+<p>在终端<code>envyng -t</code></p>
+
+<p>然后选卸载驱动，安后等卸载完成后，重启就ok了</p>
+
+<p><strong>安装显卡驱动</strong></p>
+
+<p>注意，如果内核还是2.6.24-21，新的驱动安装不上。</strong>这次我没有用envyng -t来安装，而是用系统->系统管理->硬件驱动来安装的</p>
+
+<p>推荐我的是nvidia 177.80的驱动</p>
+
+<p>等待安装完成后。 Ctrl+Alt+Backspace 重新启动X server</p>
+
+<p>一切ok</p>
+
+<p><strong>一些问题</strong>
+在启动过程中，发现samba deamon启动fail还没有看是什么原因。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/study-ruby-1/">学习Ruby中&#8230;&#8230;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>学习Ruby中&#8230;&#8230;</h4>
+
+<p>终于拿到了Programming Ruby 中文第2版.开始认真学习Ruby</p>
+
+<p>不过感觉翻译的不是很好</p>
+
+<p>而且有网友已经整理了勘误表
+<a href="http://blogs.sun.com/yongsun/entry/programming_ruby_%C3%A7%C2%AC%C2%AC%C3%A4%C2%BA%C2%8C%C3%A7%C2%89%C2%88_%C3%A4%C2%B8%C2%AD%C3%A6%C2%96%C2%87%C3%A7%C2%89%C2%88_%C3%A5%C2%8B%C2%98%C3%A8%C2%AF%C2%AF">http://farm9.staticflickr.com/8527/8509573735_f7c64d2b5c_z.jpg</a></p>
+
+<p>我在阅读的时候,也发现了一些翻译的不是很明白的地方</p>
+
+<ul>
+<li><p>16页 第2章 2.3</p></li>
+<li><p>Ruby的数组(arrays)和散列表(hashes)是被索引的收集.(indexed collections)</p></li>
+</ul>
+
+
+<p>原文:Ruby&#8217;s arrays and hashes are indexed collections</p>
+
+<p>我感觉这句话的意思应该是说:Ruby的数组和哈希表是有(被)索引的集合</p>
+
+<p>在后面的哈希表里面,也有讲解</p>
+
+<p>Hashes (some times known as associative arrays, maps,or dictionaries) are similar to arrays in that they are indexed collections of object references.
+哈希表(有时也称关系数组,映射或者词典) 和数组的相似之处是他们都是有(被)索引的对象引用的集合</p>
+
+<ul>
+<li>45页 第4章 4.1 倒数第8行</li>
+</ul>
+
+
+<p>使用这些方法,你可以用数组来实现栈(stack),收集(set),队列(queue),双向队列(dequeue)和先进先出队列(fifo)</p>
+
+<p>原文:Using these,you can treat arrays as stacks,sets,queues,dequeues,and fifos</p>
+
+<p>我感觉这里的set应该是集合,就是说可以用数组实现集合</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-use-sqlite3/">Rails下使用sqlite3</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>参考<a href="http://wiki.rubyonrails.org/rails/pages/HowtoUseSQLite">http://wiki.rubyonrails.org/rails/pages/HowtoUseSQLite</a></p>
+
+<p><strong>安装SQLite</strong></p>
+
+<p>SQLite 是一个轻量级的sql风格数据库.可以执行大部分sql92标准SQLite全部安装只有244kb,包括命令行客户端和DLL文件SQLite不用安装服务进程，就像Access数据库一样使用方便安装只需要2个文件</p>
+
+<ul>
+<li>SQLite DLL</span></li>
+<li>SQLite command-line client for creating tables</li>
+</ul>
+
+
+<p>添加sqlite3.exe 和sqlite3.dll 到系统的path下，我放在了c:\windows\system32下了</p>
+
+<p><strong>安装sqlite3-ruby.gem</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install sqlite3-rubyAttempting local installation of 'sqlite3'
+</span><span class='line'>Local gem file not found: sqlite3*.gem
+</span><span class='line'>Attempting remote installation of 'sqlite3'
+</span><span class='line'>Select which gem to install for your platform (i386-mswin32)
+</span><span class='line'>1. sqlite3-ruby 1.1.0 (mswin32)
+</span><span class='line'>2. sqlite3-ruby 1.1.0 (ruby)
+</span><span class='line'>3. sqlite3-ruby 1.0.1 (ruby)
+</span><span class='line'>...
+</span><span class='line'>&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>选择 1 安装sqlite3-ruby 1.1.0(mswin32) 现在好像2才是sqlite3-ruby 1.1.0(mswin32),总之选择(mswin32)就对了</p>
+
+<p><strong>安装图像管理工具</strong>（也可以不用，直接用命令行也很方便）<a href="http://sqlitebrowser.sourceforge.net/">http://sqlitebrowser.sourceforge.net/</a></p>
+
+<p><strong>创建数据库</strong></p>
+
+<p>进入项目所在目录，比如我的项目是testsqld:\work\testsql>sqlite db\test.db上面命令就在db目录下，创建了一个test.db数据库</p>
+
+<p><strong>配置database.yml文件，访问test.db数据库</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>development:
+</span><span class='line'>   adapter: sqlite3
+</span><span class='line'>   database: db/test.db   #username: root
+</span><span class='line'>   #password: 
+</span><span class='line'>   #host: localhost</span></code></pre></td></tr></table></div></figure>
+
+
+<p>后面如何操作，就和使用mysql数据库一样了。建立数据表可以用db:migrate来完成</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-upload-unread/">Rails下上传文件并且解决乱码问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这个问题是我在<a href="http://www.javaeye.com/">www.javaeye.com</a>论坛上提出的，并且由mathsfan给出了解决办法</p>
+
+<p>首先创建一个项目，叫<strong>test</strong></p>
+
+<p>在app目录下的controllers目录下，找到<strong>test_controller.rb</strong>文件</p>
+
+<p>添加一个upload的action</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def upload
+</span><span class='line'>
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后在view目录下的test目录下，创建一个<strong>upload.rhtml</strong>文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;%=form_tag({:action=&gt;'save'},:multipart=&gt;true)%&gt;
+</span><span class='line'>&lt;br/&gt;upload your file:&lt;%=file_field("file","file")%&gt;
+</span><span class='line'>&lt;br/&gt;
+</span><span class='line'>&lt;%=submit_tag("upload")%&gt;
+</span><span class='line'>&lt;%=end_form_tag%&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在访问<a href="http://localhost:3000/test/upload">http://localhost:3000/test/upload</a>，应该可以看到一个上传的界面了。</p>
+
+<p>不过还没有处理上传后的方法呢，所以还不能实现上传。因为上面的表单是提交给save这个action 的，现在还没有写呢。</p>
+
+<p>在写save之前，先要完成一些相关的方法</p>
+
+<p>在<strong>application.rb</strong>文件里，加入</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def uploadFile(file) #处理上传后的文件保存
+</span><span class='line'>       if !file.original_filename.empty? 
+</span><span class='line'>          #生成一个随机的文件名
+</span><span class='line'>          @filename=getFileName(file.original_filename) 
+</span><span class='line'>          #向dir目录写入文件 
+</span><span class='line'>          File.open("#{RAILS_ROOT}/public/images/#{@filename}", "wb") do |f|
+</span><span class='line'>           f.write(file.read) 
+</span><span class='line'>          end 
+</span><span class='line'>          #返回文件名称
+</span><span class='line'>          return @filename 
+</span><span class='line'>        end 
+</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def getFileName(filename) 
+</span><span class='line'>#获取文件名
+</span><span class='line'>  if !filename.nil? 
+</span><span class='line'>     return filename 
+</span><span class='line'>  end 
+</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在在<strong>test_controller.rb</strong>里写出save的action</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def save 
+</span><span class='line'>  unless request.get? 
+</span><span class='line'>    if filename=uploadFile(params[:file]['file']) #调用application.rb&lt;/strong&gt;里写的uploadFile对文件保存
+</span><span class='line'>       render :text=&gt;filename 
+</span><span class='line'>    end 
+</span><span class='line'>  end 
+</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
+
+
+<p>文件可以正确上传到public/images下
+但是中文文件名变为了乱码,但是render :text=>filename返回的名字,并不是乱码.</p>
+
+<p> ###解决办法###</p>
+
+<p>在ApplicationController加上：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>before_filter:set_charset 
+</span><span class='line'>
+</span><span class='line'>def set_charset 
+</span><span class='line'>     @headers["Content-Type"]="text/html;charset=gb2312" 
+</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
+
+
+<p>我试验了一下，用utf8也可以正常处理,比如按照如下写法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def set_charset
+</span><span class='line'>  @headers["Content-Type"]="text/html;charset=utf8" 
+</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-request/">Rails下request.raw_post的一些问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>我在学习Agile Web Development with Rails在第18章 Observers的例子中</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;%=text_field_tag :search%&gt;
+</span><span class='line'>&lt;%=observe_field( :search,
+</span><span class='line'>                  :frequency =&gt; 0.5,
+</span><span class='line'>                  :update =&gt; :results,
+</span><span class='line'>                  :url =&gt; {:action =&gt; :search})%&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>将text_field_tag里面的内容，每间隔0.5就提交给search这个action,然后将结果显示在<div id="results"></div>层</p>
+
+<p>在search方法里面可以通过request.raw_post获取提交的数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def search
+</span><span class='line'>     render:text=&gt;request.raw_post   
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>问题是上面这样返回的内容，总是在提交的内容后多一个=号</p>
+
+<p>比如在文本框输入div层显示的就是a=</p>
+
+<p>后来只能通过把最后2位抹去，来达到正常效果render:text=>request.raw_post.to(request.raw_post.length-2)</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-graphical-verification-code/">Rails实现图片验证码</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>写在了babo.javaeye.com了</p>
+
+<p><a href="http://babo.javaeye.com/blog/72298">http://babo.javaeye.com/blog/72298</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-fckeditor/">Rails配合fckeditor实现文本编辑工具条</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>主要参考了</p>
+
+<p><a href="http://blog.caronsoftware.com/articles/2006/08/07/fckeditor-plugin-for-rails">http://blog.caronsoftware.com/articles/2006/08/07/fckeditor-plugin-for-rails</a></p>
+
+<p><a href="http://www.blogjava.net/rocky/archive/2006/11/04/rails-fckeditor-integration.html">http://www.blogjava.net/rocky/archive/2006/11/04/rails-fckeditor-integration.html</a></p>
+
+<p><strong>安装</strong></p>
+
+<p>下载<a href="http://rubyforge.org/projects/fckeditorp/">http://rubyforge.org/projects/fckeditorp/</a>项目的 FCKEditor Plugin for Rails，将下载的文件加压缩后，保存到fckeditor文件夹中</p>
+
+<p>将fckeditor文件夹拷贝到自己项目的vendor/plugins目录下</p>
+
+<p>运行rack fckeditor:install</p>
+
+<p>然后在需要用到这个插件的页面，输入<code>&lt;%= javascript_include_tag "fckeditor/fckeditor" %&gt;</code>或者将这句话添加到app/view/layouts/下的对应文件中</p>
+
+<p><strong>使用</strong></p>
+
+<p>需要使用这个工具条的地方，输入</p>
+
+<p><code>&lt;%=fckeditor_textarea("post", "body", :toolbarSet =&gt; 'Simple', :width =&gt; '100%', :height =&gt; '500px' )%&gt;</code></p>
+
+<p>注意fckeditor_textarea的一个参数post必须是action传过来的一个实体类，如果action没有传过来，就会提示出错</p>
+
+<p>比如我这里用到了post,我的action如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def new&lt;br&gt;
+</span><span class='line'>      @post = Post.new&lt;br&gt;
+</span><span class='line'>    end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>第二个参数，body对应表单里的字段</p>
+
+<p>第三个参数toolbarSet=>&#8221;Simple&#8221;为工具条风格，这个风格可以在public/javascripts/fckcustom.js文件里面定义（修改后，要关闭浏览器再开才起作用）</p>
+
+<p>第四、五个参数，代表文本区域的大小</p>
+
+<p><strong>图片上传</strong></p>
+
+<p>默认安装后，图片上传不能用，需要修改vendor/plugins/fckeditor/app/controllers/fckeditor_controller.rb文件的upload_file action如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def upload_file
+</span><span class='line'>      @new_file = params[:NewFile]
+</span><span class='line'>      @url = upload_directory_path
+</span><span class='line'>      begin
+</span><span class='line'>        ftype = @new_file.content_type.strip
+</span><span class='line'>        if ! MIME_TYPES.include?(ftype)
+</span><span class='line'>          @errorNumber = 202
+</span><span class='line'>          puts "#{ftype} is invalid MIME type"
+</span><span class='line'>          raise "#{ftype} is invalid MIME type"
+</span><span class='line'>        else
+</span><span class='line'>          path = current_directory_path + "/" + @new_file.original_filename
+</span><span class='line'>          File.open(path,"wb",0664) do |fp|
+</span><span class='line'>            FileUtils.copy_stream(@new_file, fp)
+</span><span class='line'>          end
+</span><span class='line'>          @errorNumber = 0
+</span><span class='line'>        end
+</span><span class='line'>      rescue =&gt; e
+</span><span class='line'>        @errorNumber = 110 if @errorNumber.nil?
+</span><span class='line'>      end
+</span><span class='line'>    
+</span><span class='line'>      # Fix provided by Nicola Piccinini -- &lt;a href="http://superfluo.org/"&gt;http://superfluo.org&lt;/a&gt;
+</span><span class='line'>      render :text =&gt; %Q'&lt;script&gt;window.parent.OnUploadCompleted(&lt;a href="mailto:#%7B@errorNumber%7D,%20%22#%7BUPLOADED+%22/%22+params%5B:Type%5D+%22/%22+@new_file.original_filename%7D%20%22);&lt;/script&gt;%20"&gt;#{@errorNumber},\"#{UPLOADED+"/"+params[:Type]+"/"+@new_file.original_filename}\");&lt;/script&gt;'&lt;/a&gt;
+</span><span class='line'>    
+</span><span class='line'>    end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>关于工具条具体某个工具怎么显示，提供那些功能，可以在public/javascripts/fckeditor/fckconfig.js文件里面定义</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/12/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/10/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

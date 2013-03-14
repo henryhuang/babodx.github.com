@@ -1,0 +1,1471 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="系统安装 我是通过http://mirrors.163.com下载的 debian-6.0.5-amd64-CD-1.iso
+最小安装有一张CD就可以了，安装的是debian6.0.5(squeeze) 64位版本 安装没啥好说的，最小化安装，除了基本系统就多选择了一个ssh server。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/page/2/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/08/06/debian-xen-install/">debian6.0.5(squeeze)安装配置xen-4.0虚拟化</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-06T00:00:00+08:00" pubdate data-updated="true">Aug 6<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>系统安装</h1>
+
+<p>我是通过http://mirrors.163.com下载的     debian-6.0.5-amd64-CD-1.iso
+最小安装有一张CD就可以了，安装的是debian6.0.5(squeeze) 64位版本</p>
+
+<p>安装没啥好说的，最小化安装，除了基本系统就多选择了一个ssh server。</p>
+
+<p>安装好系统后，进入系统首先设置网卡，不要用dhcp选择static模式
+编辑/etc/network/interfaces文件如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># The loopback network interfaceauto lo
+</span><span class='line'> 
+</span><span class='line'>iface lo inet loopback
+</span><span class='line'> 
+</span><span class='line'># The primary network interface
+</span><span class='line'> 
+</span><span class='line'>#allow-hotplug eth0
+</span><span class='line'> 
+</span><span class='line'>auto eth0
+</span><span class='line'> 
+</span><span class='line'>iface eth0 inet static
+</span><span class='line'> 
+</span><span class='line'>  address 192.168.1.10
+</span><span class='line'> 
+</span><span class='line'>  netmask 255.255.255.0
+</span><span class='line'> 
+</span><span class='line'>  broadcast 192.168.1.255
+</span><span class='line'> 
+</span><span class='line'>  network 192.168.1.0
+</span><span class='line'> 
+</span><span class='line'>  gateway 192.168.1.1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我这里只有一个eth0网卡，采用192.168.1.10的IP地址</p>
+
+<p>接下来修改apt的源，采用mirrors.163.com提供的服务器，这样速度比较快
+修改/etc/apt/sources.list
+内容如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>deb http://mirrors.163.com/debian/ squeeze main non-free contrib
+</span><span class='line'>deb http://mirrors.163.com/debian/ squeeze-proposed-updates main non-free contrib
+</span><span class='line'>deb-src http://mirrors.163.com/debian/ squeeze main non-free contrib 
+</span><span class='line'>deb-src http://mirrors.163.com/debian/ squeeze-proposed-updates main non-free contrib</span></code></pre></td></tr></table></div></figure>
+
+
+<p>执行apt-get update更新源</p>
+
+<p>经过这些设置，系统基本就是一个干净的最小系统。并且采用163的服务器作为软件源。</p>
+
+<h2>安装XEN-4.0</h2>
+
+<p>下面开始安装xen-4.0的相关软件包和配置</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>apt-get install xen-hypervisor-4.0-amd64 xen-linux-system-2.6.32-5-xen-amd64 xen-utils* xenwatch xen-tools</span></code></pre></td></tr></table></div></figure>
+
+
+<p>需要下66.2M的软件包</p>
+
+<p>安装后，再次启动选择带XEN 4.0 amd64的内核启动项</p>
+
+<p>注意：（默认的启动项虽然带xen但是不带4.0选项，启动后不能正确启动xend）
+也可以修改/etc/default/grub里面的选项，默认从这个内核启动</p>
+
+<p>修改GRBU_DEFAULT=4</p>
+
+<h3>配置xen的网络</h3>
+
+<p>修改/etc/xen/xend-config.sxp文件</p>
+
+<p>打开<code>(network-script network-bridge)</code></p>
+
+<p>采用桥接方式</p>
+
+<p>重启后，系统会将物理网卡修改为peth0，而eth0为桥接的网卡</p>
+
+<p>brctl show 显示如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>root@node1:~# brctl show
+</span><span class='line'>bridge name     bridge id                    STP enabled     interfaces
+</span><span class='line'>eth0                 8000.001c42d8fe43     no                    peth0</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>通过xen-create-image安装debian虚拟系统</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>xen-create-image --hostname=vm01 --size=2G --swap=128M --ide \ 
+</span><span class='line'>
+</span><span class='line'>--ip=192.168.1.21 --netmask=255.255.255.0 --gateway=192.168.1.1 \
+</span><span class='line'>
+</span><span class='line'>--force --dir=/vm --memory=128M -arch=i386 \
+</span><span class='line'>
+</span><span class='line'>--kernel=/boot/vmlinuz-2.6.32-5-xen-amd64 \
+</span><span class='line'>
+</span><span class='line'>--dist=squeeze --mirror=http://mirrors.163.com/debian/ --passwd \
+</span><span class='line'>
+</span><span class='line'>--install-method=debootstrap</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装以后，需要调整vm01.cfg文件，否则无法启动
+首先调整磁盘的相关配置</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>root        = '/dev/xvda2 ro'
+</span><span class='line'>disk        = [
+</span><span class='line'>                  'file:/vm/domains/vm01/disk.img,xvda2,w',
+</span><span class='line'>                  'file:/vm/domains/vm01/swap.img,xvda1,w',
+</span><span class='line'>              ]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>将原来的hda2修改为xvda2</p>
+
+<p>然后是调整网卡的相关配置</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vif         = [ 'ip=192.168.1.21,mac=00:16:3E:9B:1A:90,bridge=eth0' ]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>主要是加上bridge=eth0</p>
+
+<p>这样就可以通过xm create vm01.cfg启动虚拟系统了</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>root@node1:~# xm list
+</span><span class='line'>Name                                        ID   Mem VCPUs      State   Time(s)
+</span><span class='line'>Domain-0                                   0   879     1               r-----     26.6
+</span><span class='line'>vm01                                         1   128     1                -b----      1.7
+</span><span class='line'>
+</span><span class='line'>root@node1:~#  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>启动后，dom0下面会出现一个vif的虚拟网卡</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>root@node1:~# brctl show
+</span><span class='line'>bridge name     bridge id                      STP enabled     interfaces
+</span><span class='line'>eth0                 8000.001c42d8fe43         no                      peth0</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>                                                                                            vif1.0 
+</code></pre>
+
+<p>如果在guest系统只能ping到dom0的eth0，而不能ping到外网
+可以检查下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>root@node1:~# sysctl net.ipv4.ip_forward
+</span><span class='line'>
+</span><span class='line'>net.ipv4.ip_forward = 0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>只要打开这个ip_forward就可以了</p>
+
+<p>修改/etc/sysctl.conf里面的net.ipv4.ip_forward=1
+或者
+<code>echo 1&gt;/proc/sys/net/ipv4/ip_forward</code></p>
+
+<p>也可以用命令临时生效
+<code>sysctl -w net.ipv4.ip_forward=1</code></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/08/01/Solve-nginx-502-mistakes/">Nginx通过轮询避免php-fpm引起的502错误</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-01T00:00:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>问题背景</h2>
+
+<p>最近客户的一个网站总是偶尔出现502错误</p>
+
+<p>网站架构采用的就是nginx 1.0.10+php 5.3.8+php-fpm模式</p>
+
+<h2>问题分析</h2>
+
+<p>首先要检查下php-fpm的进程数使用情况</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>netstat -napo |grep "php-fpm" | wc -l</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果这个查询出来的数量接近了你在php-fpm.conf里设置的数量，说明是进程数量不过用了。果断增加</p>
+
+<p>而我这次碰到的不是这个。继续分析</p>
+
+<p>会不会是php程序执行时间过长造成超时？</p>
+
+<p>这个可以通过我的另外一篇文章来查看[php-fpm查找php慢速代码]</p>
+
+<p>如果是这个问题，我们可以通过修改nginx.conf和php-fpm.conf里面相关的超时设置来解决</p>
+
+<p>nginx.conf里面主要是如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>fastcgi_connect_timeout 300;
+</span><span class='line'>fastcgi_send_timeout 300;
+</span><span class='line'>fastcgi_read_timeout 300;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>php-fpm.conf里如要是如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>request_terminate_timeout = 10s</span></code></pre></td></tr></table></div></figure>
+
+
+<p>很不幸，我碰到的也不是这个问题</p>
+
+<p>接着我开始分析是不是fastcgi缓存不够？</p>
+
+<p>主要是在nginx.conf配置里修改如下参数</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>fastcgi_buffer_size 64k;
+</span><span class='line'>fastcgi_buffers 4 64k;
+</span><span class='line'>fastcgi_busy_buffers_size 128k</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个我还真不清楚要设置多大合适，网站说这个配置小了，有可能引发502.</p>
+
+<h2>终极解决办法</h2>
+
+<p>既然上面的常规办法不能解决，那我就想其他办法了。可以肯定的是502引起肯定是因为php-fpm引发的，也就是nginx将正确的客户端请求发给了后端的php-fpm进程，但是因为php-fpm进程的问题导致不能正确解析php代码。最终返回给了客户端502错误。</p>
+
+<p>我觉得nginx既然upstream可以支持多组后端服务器轮询实现简单的负责均衡，并且可以做简单的健康检查。那我就用这个办法开多组php-fpm服务来实现一个php-fpm池，让nginx在这个php-fpm资源里通过stream轮询。</p>
+
+<p>因为有了健康检查机制，这样就可以在错误到达客户端前换另外一个php-fpm进程重新解析了。</p>
+
+<h3>主要配置方法</h3>
+
+<p>先修改php-fpm.conf来开启多组php-fpm进程</p>
+
+<p>我这里开启了php-cgi_www1和php-cgi_www2两组</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[www1]
+</span><span class='line'>listen = /tmp/php-cgi_www1.sock
+</span><span class='line'>user = www
+</span><span class='line'>group = www
+</span><span class='line'>pm = dynamic
+</span><span class='line'>pm.max_children = 128
+</span><span class='line'>pm.start_servers = 32
+</span><span class='line'>pm.min_spare_servers = 32
+</span><span class='line'>pm.max_spare_servers = 96
+</span><span class='line'>pm.max_requests= 10240
+</span><span class='line'>request_terminate_timeout = 10s
+</span><span class='line'> 
+</span><span class='line'>[www2]
+</span><span class='line'>listen = /tmp/php-cgi_www2.sock
+</span><span class='line'>user = www
+</span><span class='line'>group = www
+</span><span class='line'>pm = dynamic
+</span><span class='line'>pm.max_children = 128
+</span><span class='line'>pm.start_servers = 32
+</span><span class='line'>pm.min_spare_servers = 32
+</span><span class='line'>pm.max_spare_servers = 96
+</span><span class='line'>pm.max_requests= 10240
+</span><span class='line'>request_terminate_timeout = 10s</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后重启php-fpm进程，并查看/tmp目录是否已经出现了php-cgi_www1.sock和php-cgi_www2.sock的文件</p>
+
+<p>如果存在这两个文件，说明php-fpm配置ok了。我们继续修改nginx.conf配置</p>
+
+<p>主要在http {} 的配置块内，加入我们要使用的轮询配置</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>upstream php_servers{
+</span><span class='line'>  server unix:/tmp/php-cgi_www1.sock;
+</span><span class='line'>  server unix:/tmp/php-cgi_www2.sock;
+</span><span class='line'>}
+</span><span class='line'>fastcgi_next_upstream error timeout invalid_header http_500 http_503;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>接着修改我们原来处理php代码的fastcgi配置</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>location ~ .*\.(php|php5)?$
+</span><span class='line'>   {
+</span><span class='line'>     fastcgi_pass  unix:/tmp/php-cgi_www.sock;
+</span><span class='line'>     fastcgi_index index.php;
+</span><span class='line'>     include fastcgi.conf;
+</span><span class='line'>   }</span></code></pre></td></tr></table></div></figure>
+
+
+<p>将其中的fastcgi_pass由原来的php-cgi_www.sock单独的php-fpm进程修改为我们创建的php_servers轮询池</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>location ~ .*\.(php|php5)?$
+</span><span class='line'>   {
+</span><span class='line'>     fastcgi_pass php_servers;
+</span><span class='line'>     fastcgi_index index.php;
+</span><span class='line'>     include fastcgi.conf;
+</span><span class='line'>   }</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过这样的配置，可以肯定的是php-fpm因为采用两组来轮询工作，并且有fastcgi_next_upstream进程简单的健康检查，可以最大限度的避免502错误发生了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/29/accelerate-app-store-download/">快速提升app Store下载速度</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-29T00:00:00+08:00" pubdate data-updated="true">Jul 29<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前两天开始更新MAC OS Mountain Lion。</p>
+
+<p>为了下载这个4.5G的内容，可是郁闷坏了。计算出来的剩余时间7天。</p>
+
+<p>于是开始找加速下载的办法，看来一些帖子以后基本知道了下载速度主要取决与dns将你的请求解析到哪台服务器。</p>
+
+<p>网上一般是都是基于自己找到一台快速的下载服务器IP，然后手动修改/etc/hosts文件的办法。
+ 
+但是其实看原来就知道，如果我们设置的DNS得当，就能起到从最快服务器下载的目的。</p>
+
+<p>于是我查到了<a href="http://dns.v2ex.com/">http://dns.v2ex.com/</a>这个网站，但是使用这个dns后，速度依然很慢。</p>
+
+<p>后来又在www.weiphone.com找到了一个台湾的DNS。设置后速度大幅提升。
+ 
+如果你也在北京、也用歌华有线。</p>
+
+<p>试试下面这个台湾的DNS吧
+ </p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>168.95.1.1</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/23/macbook-air-use-e1750-3g-mobilecard/">2012 Macbook Air 使用华为E1750 3g上网卡</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-23T00:00:00+08:00" pubdate data-updated="true">Jul 23<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近一直在摸索macbook air的使用方法，目前大部分工作都已经可以放弃windows了。</p>
+
+<p>今天又将华为的E1750上网卡在macbook air上正确安装了。</p>
+
+<p>我的3g上网卡如下</p>
+
+<p><img src="http://farm9.staticflickr.com/8390/8515414834_9758e77ab7_m.jpg" alt="e1750图" /></p>
+
+<p>这个上网卡是09年的，现在直接插入usb后，macbook air没有任何反应。</p>
+
+<p><strong>安装方法：</strong></p>
+
+<p>1、首先要在Windows机器上更新固件</p>
+
+<p>先在windows机器安装mobile_card_driver驱动。</p>
+
+<p>然后再到华为主页下载固件更新程序</p>
+
+<p>E1750 WINMACB300D00SP05C112(UTPS11.301.08.30.112_MAC11.301.06.13.112)(China Unicom)(05019744)</p>
+
+<p>将上网卡插入windows的usb接口，可以被驱动正确识别以后，运行固件更新程序开始更新固件。</p>
+
+<p>2、macbook下安装</p>
+
+<p>更新好固件以后，我们就可以插入macbook的笔记本。这个时候会识别出来一个mobile card的光驱。</p>
+
+<p>我们从finder进入这个光驱，就会发现“无线上网卡.app“程序</p>
+
+<p>直接安装这个程序就可以了</p>
+
+<p>3、安装好后的程序界面</p>
+
+<p><img src="http://farm9.staticflickr.com/8507/8515417076_b7b7b101f4_z.jpg" alt="运行界面" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/22/config-esmtp-via-gmail-sendmail/">配置ecshop通过本地esmtp发信</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-22T00:00:00+08:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>问题：</h1>
+
+<p>最近有个客户的ecshop总是卡在下订单的地方。查询了下日志。发现如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>script_filename = /public_html/quick_buy.php
+</span><span class='line'>[0x0a29511c] fgets() /public_html/includes/cls_smtp.php:314
+</span><span class='line'>[0x0a295074] get_data() /public_html/includes/cls_smtp.php:230
+</span><span class='line'>[0x0a294f5c] auth() /public_html/includes/cls_smtp.php:146
+</span><span class='line'>[0x0a294da8] send() ~:299
+</span><span class='line'>[0x0a293e80] send_mail() ~:2161</span></code></pre></td></tr></table></div></figure>
+
+
+<p>发现问题主要是因为在ecshop里的邮件服务器设置了采用其他smtp服务器方式。我估计是到达smtp服务器验证的时间有时候太长，导致这个订单流程失败。</p>
+
+<p>看到ecshop推荐采用本地邮件服务来发信，于是开始考虑采用这个方式。</p>
+
+<p>客户的服务器采用centos的linux服务器，php 5.3.8。</p>
+
+<p>首先说说php的mail函数的条件，需要在php.ini里面指定sendmail_path.</p>
+
+<p>先说下最简单的方式，就是服务器上安装sendmail，然后调用sendmail发送邮件。</p>
+
+<p>如果怕服务器sendmail不正常，最好卸载下再重新安装。</p>
+
+<p>卸载：
+<code>yum remove sendmail</code>
+安装
+<code>yum install sendmail</code></p>
+
+<p>再设置下php.ini里的sendmail_path=/usr/sbin/sendmail -t -i</p>
+
+<p>这样后，就可以通过ecshop里面的本地邮件服务发信了。不过这种方式有个致命缺点，因为一般我们的服务器都不被大的邮件服务商认可，所以这样发过去的邮件基本都是被拦截后者放入垃圾邮件里。</p>
+
+<h1>解决方法：</h1>
+
+<p>还是采用本地邮件服务，不过本地只是一个代理的作用，由本地的代理程序调用gmail的stmp功能发送邮件。</p>
+
+<p>本地安装esmtp程序，用来将我们的邮件通过gmail的帐号发送。这样就可以避免邮件被拦截或者认为是垃圾邮件了。</p>
+
+<p>为了一会测试方便，我们先安装一个linux下的邮件客户程序</p>
+
+<p><code>yum install mailx</code></p>
+
+<p>安装后，我们就有了mail命令。可以通过下面的命令来发信到babodx@qq.com的邮箱</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>echo "测试"|mail -s "ceshi" babodx@qq.com</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>安装esmtp：</h2>
+
+<p>为了安装esmtp，我们必须先安装它依赖的一个库文件libesmtp-1.0.6</p>
+
+<h3>安装libesmtp-1.0.6</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar zxvf libesmtp-1.0.6.tar.gz
+</span><span class='line'>cd libesmtp-1.0.6
+</span><span class='line'>./configure
+</span><span class='line'>make
+</span><span class='line'>make install</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装esmtp 1.2</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar jxvf esmtp-1.2.tar.bz2
+</span><span class='line'>cd esmtp-1.2
+</span><span class='line'>./configure --prefix=/usr/local/webserver/esmtp
+</span><span class='line'>make
+</span><span class='line'>make install</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>配置esmtp通过gmail帐号发信</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vi /usr/local/webserver/esmtp/etc/esmtprc</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>内容如下</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>identity yourname@gmail.com       
+</span><span class='line'>        hostname smtp.gmail.com:587
+</span><span class='line'>        username "yourname@gmail.com"
+</span><span class='line'>        password "yourpasswd"
+</span><span class='line'>        starttls enabled
+</span><span class='line'>        default
+</span><span class='line'> 
+</span><span class='line'>mda "/usr/bin/procmail -d %T"</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>mail测试</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>echo "测试邮件"|mail -s "ceshi" babodx@qq.com</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果测试通过，我们就再将/usr/sbin/sendmail链接到/usr/local/webserver/esmtp/bin/esmtp。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ln -s /usr/local/webserver/esmtp/bin/esmtp /usr/sbin/sendmail</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以后就可以在ecshop里面通过本地邮件服务发信了。并且收件人显示的发件人是你设定的gmail帐号。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/13/mac-vnc-rdp-over-ssh/">Mac下用ssh转发端口</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-13T00:00:00+08:00" pubdate data-updated="true">Jul 13<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>起因是这样的，我在服务器上安装了个虚拟winxp。但是想要在外网远程控制却不行，因为这个虚拟系统没有公网IP。</p>
+
+<p>我的服务器是有公网IP的，例如：210.1.1.1</p>
+
+<p>服务器所在内网全部是10.0.1.x 网段，外网IP是通过路由器映射给服务器的，也就是说服务器上查看IP，只有10.0.1.1这个
+ 
+虚拟机我是用的xen，然后采用nat方式将一个192.168.122.x的ip分配给虚拟winxp使用。这个192.168.122.x段ip只有虚拟服务器和虚拟机可以访问到，就连同一个内网的10.0.1.x段其他机器都不能访问</p>
+
+<p>我要想远程控制winxp，只有两个办法，一个是通过xen提供的vnc来访问。也就是访问10.0.1.1:5901或者外网210.1.1.1:5901</p>
+
+<p>但是vnc的速度确实比winxp的远程桌面慢，有时候刷屏都很卡。但是winxp的ip又不能从外面访问，只能虚拟服务器自己用。
+ 
+后来我就想到了用ssh来做跳转，将192.168.122.1（winxp的ip）下3389端口转发过来，这样不是就可以远程通过3389访问了？
+ 
+因为mac下面的命令行直接支持ssh，确实比windows方面。linux下的常用命令和工具都支持！</p>
+
+<p>我就直接在外网通过下面命令建立了ssh隧道</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ssh -N -L3389:192.168.122.1:3389 root@114.251.211.103</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其中－N表示不用显示提示符，这个选项也可以不要
+－L表示建立一个隧道，格式：[-L [bind_address:]port:host:hostport]</p>
+
+<p>我的这条命令就是将本地的3389端口通过ssh转发到192.168.122.1的3389端口，注意：这里的192.168.122.1必须是远程ssh服务器可以访问的。</p>
+
+<p>这样你访问本地127.0.0.1:3389就相当于直接访问192.168.122.1:3389了</p>
+
+<p>当然，通过调整端口也可以实现vnc的转发</p>
+
+<p>其实通过ssh －D等选项，还可以建立ssh通道，让浏览器翻墙使用。这个网上资料很多，就不多说了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/13/config-winxp-remote-desktop/">Winxp的远程桌面设置</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-13T00:00:00+08:00" pubdate data-updated="true">Jul 13<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近换了mac的笔记本，由于一些程序需要跑在winxp上面，比如zmud等。。。</p>
+
+<p>于是就在服务器上安装了xen，开了个winxp的虚拟机。本来xen支持vnc远程访问的，但是vnc感觉真心不给里，比windows自带的远程桌面慢了很多。</p>
+
+<p>于是开始考虑使用远程桌面，可是winxp不是服务器版本，所以远程桌面有一些限制。</p>
+
+<p>一个是解决多用户登陆问题</p>
+
+<p>下面是网上找到的解决办法，测试好用</p>
+
+<p>Windows XP不支持多个用户同时登录远程桌面，当其他用户远程登录Windows XP时，主机上当前已登录的用户</p>
+
+<p>即会自动退出。不过在Windows XP SP2中提供了允许连接会话并发功能，可通过远程桌面进行多用户的同时登录，</p>
+
+<p>但其在默认状态下关闭了该项特性，需要通过修改注册表开启该功能。</p>
+
+<p>打开注册表编辑器，依次展开</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>“HKEY_LOCAL_MACHINE\System \CurrentControlSet\Control\Terminal Server\Licensing Core”</span></code></pre></td></tr></table></div></figure>
+
+
+<p>分支，转到右侧窗口，在其中新建一个类型为DWORD的子键，将该键命名为“EnableConcurrentSessions”，
+并将键值设置为“1”，即可开启多用户登录功能。</p>
+
+<p>还有就是空密码登陆问题，因为winxp就是平时随便用用，每次输入密码太麻烦。但是远程桌面默认空密码不让登陆</p>
+
+<p><strong>解决办法如下</strong></p>
+
+<p>在运行里，输入<code>gpedit.msc</code>调出组策略界面</p>
+
+<p>依次找到“计算机配置”－》“windows设置”－》“安全设置”－》“本地策略”－》“安全选项”
+将其中的“帐户：使用空白密码的本地帐户只运行使用控制台登陆”禁用掉。</p>
+
+<p>通过上面的设置就ok了</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/13/buy-macbook-air/">2012 Macbook Air 使用感受</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-13T00:00:00+08:00" pubdate data-updated="true">Jul 13<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>6月底，我购买了一台2012新款macbook air笔记本。将近一个月的使用，记录下心得。</p>
+
+<p>以前从来没有用过mac os系统，不过对于linux还是很熟悉的。</p>
+
+<p>早就打算买一台玩玩，一个是没钱，一个是总觉得单位配的也够用。后来又打算学习下ios开发，就下决心购买一台了。</p>
+
+<p>正好赶上6月新款发布，北京正规零售店都没有上市呢，于是在macx.cn上面看到大家都在福利社购买，于是我也去了。
+ 
+<strong>购买心得</strong></p>
+
+<p>福利社的价格还算不错，和北京官方公布的教育优化价格相当。而且是香港过来的本，一旦大陆上市还有保修。
+我购买的是macbook air 低配版本，128G硬盘，4G内存 13&#8217;显示 价格：8500</p>
+
+<p>购买的时候需要什么软件还可以帮助安装。我就安装了常用的虚拟机和xcode
+ 
+<strong>使用心得</strong></p>
+
+<p>用来一个月下来，感觉mac os的系统确实不错。不愧是基于unix的。稳定！</p>
+
+<p>首先对于我经常需要服务器运维工作来说，mac os下面的软件完全可以满足</p>
+
+<p>自带的“终端” 可以支持大部分linux下的命令，要连接远程服务器直接ssh就可以，</p>
+
+<p>为了管理方便，我还是安装了secureCRT for mac</p>
+
+<p>输入法用IMKQIM（搜狗的词库）</p>
+
+<p>像office、qq、股票、远程桌面等常用软件都存在mac版本</p>
+
+<p>使用下来，没有任何的不适应。而且手势操作也很大的提高了效率。
+ 
+感受最大的是电池可以使用7小时，而且不用关机。在不用的时候，直接合上笔记本就休眠了。下次打开直接就是桌面感觉和用Ipad似的。
+ 
+因为我需要作一些php开发，在mac下面也可以使用XAMPP for mac版本</p>
+
+<p>编辑器我采用的是sublime text 2
+ 
+一个月下来，主要工作全部可以用mac系统替代了，感觉很好</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/21/linux-ddos-defender/">Linux防御DDOS攻击</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-21T00:00:00+08:00" pubdate data-updated="true">Mar 21<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这两天一个以前客户在万网购买的云主机一直被SYN Flood 攻击。</p>
+
+<p>其实SYN Flood到是只能拖慢系统，没到死机的地步。问题是万网发现了DDOS攻击后，直接给云主机断网24小时。</p>
+
+<p>这个处理太恶心了。不说想办法切断攻击的IP，而是直接断掉客户的网络。。。有点说不过去呀</p>
+
+<p>电话咨询了下，他们是系统自动处理的，发现了直接断网。
+ 
+一般应付DDOS攻击主要是调整SYN相关的内核参数，这个可以从/etc/sysctl.conf入手调整。</p>
+
+<p>再有就是添加iptables规则，来限制syn和连接数量</p>
+
+<p>最后就是通过脚本检查netstat状态，自动将连接数多的ip封掉。</p>
+
+<p>一般linux系统能做到的就这些了，那些可以防ddos的硬防火墙老百姓搞不起。
+ 
+调整syn相关参数和iptables网上资料很多，我就不说了。</p>
+
+<p>整段封IP的话，可以用</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>iptables -I INPUT -s 192.0.0.0/8 -j DROP #来封掉192开头的全部ip</span></code></pre></td></tr></table></div></figure>
+
+
+<p> 
+我是通过查看messages日志文件，发现了一些大量连接的IP。然后先手动封掉这些IP。下面是部分日志信息，当然这个是靠配置iptables来实现的日志</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Mar 20 21:51:21 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ea:c1:08:00 SRC=157.55.16.56 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=16250 DF PROTO=TCP SPT=61923 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+</span><span class='line'>Mar 20 21:51:27 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ea:c1:08:00 SRC=157.55.16.56 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=21741 DF PROTO=TCP SPT=61923 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+</span><span class='line'>Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ed:c1:08:00 SRC=157.55.16.178 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=28201 DF PROTO=TCP SPT=14521 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+</span><span class='line'>Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ed:c1:08:00 SRC=157.55.16.178 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=29875 DF PROTO=TCP SPT=14588 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 </span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后在介绍一款linux下防止DDOS的软件：DDoS-Defender-v2.1.0.tar.gz</p>
+
+<p>其实DDOS也是通过分析netstat状态来判断大量连接的IP，然后采取封掉的策略。并可以设置封掉多久后自动解除。</p>
+
+<p>基本经过上面的配置，现在万网没有再因为DDOS问题断网24小时了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/02/02/monit-to-monitor-services/">Monit监控linux服务</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-02T00:00:00+08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近负责的两台服务器需要监控nginx和memcached服务，防止网站访问异常。</p>
+
+<p>我用monit来解决这个需求。</p>
+
+<p>monit是一款linux下的开源软件，可以负责监控系统的服务、进程、文件等内容，并设置一定的条件下执行特定的action。</p>
+
+<p>我们可以通过配置，让monit来检查网站的状态和memcached的状态，发现异常的时候，自动重启服务并邮件通知我们。</p>
+
+<p>我配置了30s检查一次，出现问题发送邮件到我的gmail邮箱。我手机马上就能收到邮件提醒，非常效率。</p>
+
+<p>安装配置步骤：</p>
+
+<p>下载monit</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget http://mmonit.com/monit/dist/monit-5.3.2.tar.gz</span></code></pre></td></tr></table></div></figure>
+
+
+<p>解压并安装</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar zxvf monit-5.3.2.tar.gz
+</span><span class='line'>
+</span><span class='line'>cd monit-5.3.2
+</span><span class='line'>
+</span><span class='line'>./configure --prefix=/usr/local/monit
+</span><span class='line'>
+</span><span class='line'>make
+</span><span class='line'>
+</span><span class='line'>make install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>配置</p>
+
+<p>先将默认的配置文件拷贝到/etc目录下，然后编辑monitrc文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cp monitrc /etc/</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面是我的一些配置：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>set daemon  30   #设置30s检查一次
+</span><span class='line'>
+</span><span class='line'>set logfile /var/log/monit.log   #设定日志文件
+</span><span class='line'>
+</span><span class='line'>#设定邮件
+</span><span class='line'>
+</span><span class='line'>set mailserver smtp.gmail.com PORT 587 USERNAME "yourname@gmail.com" PASSWORD "yourpassword" USING tlsv1 
+</span><span class='line'>
+</span><span class='line'>#设定邮件格式
+</span><span class='line'>
+</span><span class='line'>set mail-format {
+</span><span class='line'>
+</span><span class='line'>      from: monit@huaximall.com
+</span><span class='line'>
+</span><span class='line'>      subject: monit alert --  $EVENT $SERVICE
+</span><span class='line'>
+</span><span class='line'>      message: $EVENT Service $SERVICE
+</span><span class='line'>
+</span><span class='line'>                 Date:        $DATE
+</span><span class='line'>
+</span><span class='line'>                 Action:      $ACTION
+</span><span class='line'>
+</span><span class='line'>                 Host:        xinlogs.com
+</span><span class='line'>
+</span><span class='line'>                 Description: $DESCRIPTION
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>            Your faithful employee,
+</span><span class='line'>
+</span><span class='line'>            Monit
+</span><span class='line'>
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>#设定提醒超时
+</span><span class='line'>
+</span><span class='line'>set alert babodx@gmail.com with reminder on 3 cycles
+</span><span class='line'>
+</span><span class='line'>#设定检查nginx服务
+</span><span class='line'>
+</span><span class='line'>check process nginx with pidfile /usr/local/webserver/nginx-1.0.11/nginx.pid
+</span><span class='line'>
+</span><span class='line'>  start program = "/usr/local/webserver/nginx-1.0.11/sbin/nginx"
+</span><span class='line'>
+</span><span class='line'>  stop program = "/usr/bin/killall nginx"
+</span><span class='line'>
+</span><span class='line'>  if failed host xinlogs.com port 80 protocol http
+</span><span class='line'>
+</span><span class='line'>     and request "/t.html"
+</span><span class='line'>
+</span><span class='line'>     then restart
+</span><span class='line'>
+</span><span class='line'>  if 2 restarts within 3 cycles then timeout
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>#设定检查memcached服务
+</span><span class='line'>
+</span><span class='line'>check process memcached with pidfile /var/run/memcache.pid
+</span><span class='line'>
+</span><span class='line'>      start program = "/usr/local/memcached/bin/memcached -d -m 1024 -u root -p 11211 -c 1024 -P /var/run/memcache.pid"
+</span><span class='line'>
+</span><span class='line'>      stop program = "/bin/kill -9 `cat /var/run/memcache.pid`; rm /var/run/memcached.pid"
+</span><span class='line'>
+</span><span class='line'>      if failed host 127.0.0.1 port 11211 protocol MEMCACHE then restart
+</span><span class='line'>
+</span><span class='line'>      if cpu &gt; 60% for 2 cycles then alert
+</span><span class='line'>
+</span><span class='line'>      if cpu &gt; 98% for 5 cycles then restart
+</span><span class='line'>
+</span><span class='line'>      if 2 restarts within 3 cycles then timeout
+</span><span class='line'>
+</span><span class='line'>      group cache</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面再贴出来提醒的邮件样子给大家看看</p>
+
+<p>这个是检查到nginx被终止后的提醒邮件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Does not exist Service nginx
+</span><span class='line'>                Date:        Thu, 02 Feb 2012 11:31:50
+</span><span class='line'>                Action:      restart
+</span><span class='line'>                Host:        xinlogs.com
+</span><span class='line'>                Description: process is not running
+</span><span class='line'>
+</span><span class='line'>           Your faithful employee,
+</span><span class='line'>           Monit</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面是自动恢复nginx服务后的提醒邮件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Exists Service nginx
+</span><span class='line'>                Date:        Thu, 02 Feb 2012 11:32:28
+</span><span class='line'>                Action:      alert
+</span><span class='line'>                Host:        xinlogs.com
+</span><span class='line'>                Description: process is running with pid 6894
+</span><span class='line'>
+</span><span class='line'>           Your faithful employee,
+</span><span class='line'>           Monit</span></code></pre></td></tr></table></div></figure>
+
+
+<p>有了这些就可以安心了，万一网站访问异常了。monit会尝试自动恢复的，而且第一时间通知我们。因为我的vps在美国，所以发送到gmail很及时。手机再设置个邮件提醒功能，基本就ok了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/3/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

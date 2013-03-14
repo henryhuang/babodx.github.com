@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Website | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/website/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-03-14T13:53:55+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[一个关于debian系统管理的站点]]></title>
+    <link href="http://babodx.github.com/blog/2011/10/25/debian-administration-site/"/>
+    <updated>2011-10-25T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2011/10/25/debian-administration-site</id>
+    <content type="html"><![CDATA[<p>这个站点有很多关于debian系统管理的信息和经验。
+不过这个站点对于IE支持不好，页面会出现错位。建议还是采用firefox或者chrome这类的浏览器吧。
+网址：<a href="http://www.debian-administration.org/">http://www.debian-administration.org/</a>
+简介如下，照搬的原文：</p>
+
+<h1>Debian Administration</h1>
+
+
+<p>This site was created as a simple weblog designed to contain interesting and useful information related to the System Administration of <a href="http://www.debian.org/">Debian GNU/Linux</a> systems.
+Whilst there are several sites where users can post questions and have answers contributed by other users there are no other sites on the web which are specifically targeted at distributing articles of interest to Debian administrators.
+This site is designed to fill that void, with content accepted from users.
+Feel free to <a href="http://www.debian-administration.org/create/user">create your own account</a> and <a href="http://www.debian-administration.org/create/article">contribute an article, tip, or question</a> you may also <a href="http://www.debian-administration.org/create/poll">submit a poll</a>.
+User accounts aren't necessary but they do allow you to do several additional things:</p>
+
+<ul>
+<li>See your own comment and story posting history </li>
+<li>Bookmark articles, polls, or weblogs of interest to you. </li>
+<li>
+<a href="http://www.debian-administration.org/about/FAQ%20:%20Tags">Tag articles</a>. </li>
+<li>
+<a href="http://www.debian-administration.org/about/FAQ%20:%20Site%20Adverts">Disable the adverts</a> shown upon article pages. <ul>
+<li>Or <a href="http://www.debian-administration.org/create/advert">Create your own advert</a> </li>
+</ul>
+</li>
+<li>Create and post weblog entries. </li>
+<li>Ensure the use of our <a href="http://www.debian-administration.org/about/SSL%20Certificate">SSL certificate</a> by always using https://. </li>
+</ul>
+
+
+<p>From your account page you can customize several aspects of the site - such as which sections are displayed in the sidebar, whether to receive notifications if other people reply to your comments, etc.
+It should be noted that this site is neither an official part of the Debian project, nor endorsed by it. <a href="http://www.debian.org/">The Debian project</a> has its own official website, and the name Debian is a trademark held by <a href="http://www.spi-inc.org/">Software In the Public Interest</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[病毒测试样本]]></title>
+    <link href="http://babodx.github.com/blog/2010/11/28/anti-virus-test-file/"/>
+    <updated>2010-11-28T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/11/28/anti-virus-test-file</id>
+    <content type="html"><![CDATA[<p>我们在安装好杀毒软件后，如何测试下效果呢？
+下面的网站给我们提供了病毒测试样本：
+<a href="http://www.eicar.org/anti_virus_test_file.htm">http://www.eicar.org/anti_virus_test_file.htm</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[瑞豪开源(RASHOST)VPS10个月使用感受]]></title>
+    <link href="http://babodx.github.com/blog/2010/10/11/rashost-vps/"/>
+    <updated>2010-10-11T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/10/11/rashost-vps</id>
+    <content type="html"><![CDATA[<p>从2009年12月算来，我使用<strong>瑞豪开源(RASHOST)</strong>提供的VPS已经10个月了，下面说说我的感受。
+我选择的是128M Linux VPS，系统采用的CentOS 5
+选择理由：因为我就是跑自己的blog，还有开openvpn用来访问一些被墙的站点，所以不需要太多内存。当然这也归功于<strong>瑞豪开源(RASHOST)</strong>他们的技术实力优秀。他们提供的VPS 系统都是经过裁剪和优化的。默认启动系统只需要20多M内存占用。
+10个月使用下来，感觉<strong>瑞豪开源(RASHOST)</strong>提供的VPS相当稳定，10个月中将就出现过一次线路问题，大约不到1个小时就解决了。虽然我测试过<strong>瑞豪开源(RASHOST)</strong>提供的VPS网络速度不是很快，从北京ping过去大约300-400ms，但是很稳定。
+再说说服务，在使用vps过程中，开始的时候总会有些这样那样的问题，<strong>瑞豪开源(RASHOST)</strong>是通过提交服务单进行解决的。每个服务单都有记录，会很好的解决我遇到的问题。感谢<strong>瑞豪开源(RASHOST)</strong>提供的技术支持。
+最后就是方便的支付方式。我选择的是3个月支付一次。一般提前10天就会收到他们的邮件提示，按照提供的账单，通过支付宝就可以完成支付。不需要人工开通和确认了。只要支付完成，后台就显示支付成功。VPS的到期时间也自动计算好了。
+我主要是通过nginx+fastcgi+php跑blog，然后又安装了openvpn来做vpn服务器。优化后，大约用35-40M内存，当然这个随着访问量增大而增大。但是感觉个人128M足以。如果以后内存吃紧，通过一些<strong>瑞豪开源(RASHOST)</strong>的推广活动，还可以免费增加部分内存。这个活动很好，我最喜欢了。
+目前我已经续费到2011年1月。一直使用良好，在此推荐下。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[www.netcraft.com可以检测网站运行的操作系统和Web Server]]></title>
+    <link href="http://babodx.github.com/blog/2007/04/12/netcraft/"/>
+    <updated>2007-04-12T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2007/04/12/netcraft</id>
+    <content type="html"><![CDATA[<p><a href="http://www.netcraft.com">http://www.netcraft.com/</a>
+可以通过</p>
+
+<p><strong>What's that site running?</strong></p>
+
+<p>查询一个网站的服务器使用的什么操作系统,Web服务器用的什么软件..
+感觉很不错</p>
+]]></content>
+  </entry>
+  
+</feed>

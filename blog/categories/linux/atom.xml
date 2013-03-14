@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Linux | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/linux/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-03-14T13:53:55+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[批量部署系统方案]]></title>
+    <link href="http://babodx.github.com/blog/2013/01/22/installation-server/"/>
+    <updated>2013-01-22T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/01/22/installation-server</id>
+    <content type="html"><![CDATA[<p>最近单位一直弄刀片服务器，7个笼子，112片。安装系统是个麻烦的事情，如果单机安装，太痛苦了。
+所以就尝试了批量部署系统。
+ 
+主要是分Linux和Windows两种方案</p>
+
+<p>我这里Linux是CentOS。 采用了cobbler来做批量部署。</p>
+
+<p>Windows采用的是win 2008的部署服务，就是WDS来做批量部署。</p>
+
+<p>这样Linux做一台分发服务器，Windows做一台WDS服务器，需要部署那种系统就开那台服务器就可以了。</p>
+
+<p>所有刀片全部采用pxe来引导就可以了。
+ 
+具体方法就先不写了，以后再补上吧
+ </p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[debian6.0.5(squeeze)安装配置xen-4.0虚拟化]]></title>
+    <link href="http://babodx.github.com/blog/2012/08/06/debian-xen-install/"/>
+    <updated>2012-08-06T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/08/06/debian-xen-install</id>
+    <content type="html"><![CDATA[<h1>系统安装</h1>
+
+<p>我是通过http://mirrors.163.com下载的     debian-6.0.5-amd64-CD-1.iso
+最小安装有一张CD就可以了，安装的是debian6.0.5(squeeze) 64位版本</p>
+
+<p>安装没啥好说的，最小化安装，除了基本系统就多选择了一个ssh server。</p>
+
+<p>安装好系统后，进入系统首先设置网卡，不要用dhcp选择static模式
+编辑/etc/network/interfaces文件如下</p>
+
+<p>```</p>
+
+<h1>The loopback network interfaceauto lo</h1>
+
+<p>iface lo inet loopback</p>
+
+<h1>The primary network interface</h1>
+
+<h1>allow-hotplug eth0</h1>
+
+<p>auto eth0</p>
+
+<p>iface eth0 inet static</p>
+
+<p>  address 192.168.1.10</p>
+
+<p>  netmask 255.255.255.0</p>
+
+<p>  broadcast 192.168.1.255</p>
+
+<p>  network 192.168.1.0</p>
+
+<p>  gateway 192.168.1.1
+```</p>
+
+<p>我这里只有一个eth0网卡，采用192.168.1.10的IP地址</p>
+
+<p>接下来修改apt的源，采用mirrors.163.com提供的服务器，这样速度比较快
+修改/etc/apt/sources.list
+内容如下</p>
+
+<p><code>
+deb http://mirrors.163.com/debian/ squeeze main non-free contrib
+deb http://mirrors.163.com/debian/ squeeze-proposed-updates main non-free contrib
+deb-src http://mirrors.163.com/debian/ squeeze main non-free contrib
+deb-src http://mirrors.163.com/debian/ squeeze-proposed-updates main non-free contrib
+</code></p>
+
+<p>执行apt-get update更新源</p>
+
+<p>经过这些设置，系统基本就是一个干净的最小系统。并且采用163的服务器作为软件源。</p>
+
+<h2>安装XEN-4.0</h2>
+
+<p>下面开始安装xen-4.0的相关软件包和配置</p>
+
+<p><code>
+apt-get install xen-hypervisor-4.0-amd64 xen-linux-system-2.6.32-5-xen-amd64 xen-utils* xenwatch xen-tools
+</code></p>
+
+<p>需要下66.2M的软件包</p>
+
+<p>安装后，再次启动选择带XEN 4.0 amd64的内核启动项</p>
+
+<p>注意：（默认的启动项虽然带xen但是不带4.0选项，启动后不能正确启动xend）
+也可以修改/etc/default/grub里面的选项，默认从这个内核启动</p>
+
+<p>修改GRBU_DEFAULT=4</p>
+
+<h3>配置xen的网络</h3>
+
+<p>修改/etc/xen/xend-config.sxp文件</p>
+
+<p>打开<code>(network-script network-bridge)</code></p>
+
+<p>采用桥接方式</p>
+
+<p>重启后，系统会将物理网卡修改为peth0，而eth0为桥接的网卡</p>
+
+<p>brctl show 显示如下</p>
+
+<p><code>
+root@node1:~# brctl show
+bridge name     bridge id                    STP enabled     interfaces
+eth0                 8000.001c42d8fe43     no                    peth0
+</code></p>
+
+<h3>通过xen-create-image安装debian虚拟系统</h3>
+
+<p>```
+xen-create-image --hostname=vm01 --size=2G --swap=128M --ide \</p>
+
+<p>--ip=192.168.1.21 --netmask=255.255.255.0 --gateway=192.168.1.1 \</p>
+
+<p>--force --dir=/vm --memory=128M -arch=i386 \</p>
+
+<p>--kernel=/boot/vmlinuz-2.6.32-5-xen-amd64 \</p>
+
+<p>--dist=squeeze --mirror=http://mirrors.163.com/debian/ --passwd \</p>
+
+<p>--install-method=debootstrap
+```</p>
+
+<p>安装以后，需要调整vm01.cfg文件，否则无法启动
+首先调整磁盘的相关配置</p>
+
+<p>```
+root        = '/dev/xvda2 ro'
+disk        = [</p>
+
+<pre><code>              'file:/vm/domains/vm01/disk.img,xvda2,w',
+              'file:/vm/domains/vm01/swap.img,xvda1,w',
+          ]
+</code></pre>
+
+<p>```</p>
+
+<p>将原来的hda2修改为xvda2</p>
+
+<p>然后是调整网卡的相关配置</p>
+
+<p><code>
+vif         = [ 'ip=192.168.1.21,mac=00:16:3E:9B:1A:90,bridge=eth0' ]
+</code></p>
+
+<p>主要是加上bridge=eth0</p>
+
+<p>这样就可以通过xm create vm01.cfg启动虚拟系统了</p>
+
+<p>```
+root@node1:~# xm list
+Name                                        ID   Mem VCPUs      State   Time(s)
+Domain-0                                   0   879     1               r-----     26.6
+vm01                                         1   128     1                -b----      1.7</p>
+
+<p>root@node1:~#<br/>
+```</p>
+
+<p>启动后，dom0下面会出现一个vif的虚拟网卡</p>
+
+<p><code>
+root@node1:~# brctl show
+bridge name     bridge id                      STP enabled     interfaces
+eth0                 8000.001c42d8fe43         no                      peth0
+</code></p>
+
+<pre><code>                                                                                            vif1.0 
+</code></pre>
+
+<p>如果在guest系统只能ping到dom0的eth0，而不能ping到外网
+可以检查下</p>
+
+<p>```
+root@node1:~# sysctl net.ipv4.ip_forward</p>
+
+<p>net.ipv4.ip_forward = 0
+```</p>
+
+<p>只要打开这个ip_forward就可以了</p>
+
+<p>修改/etc/sysctl.conf里面的net.ipv4.ip_forward=1
+或者
+<code>echo 1&gt;/proc/sys/net/ipv4/ip_forward</code></p>
+
+<p>也可以用命令临时生效
+<code>sysctl -w net.ipv4.ip_forward=1</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[nginx通过轮询避免php-fpm引起的502错误]]></title>
+    <link href="http://babodx.github.com/blog/2012/08/01/Solve-nginx-502-mistakes/"/>
+    <updated>2012-08-01T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/08/01/Solve-nginx-502-mistakes</id>
+    <content type="html"><![CDATA[<h2>问题背景</h2>
+
+<p>最近客户的一个网站总是偶尔出现502错误</p>
+
+<p>网站架构采用的就是nginx 1.0.10+php 5.3.8+php-fpm模式</p>
+
+<h2>问题分析</h2>
+
+<p>首先要检查下php-fpm的进程数使用情况</p>
+
+<p><code>
+netstat -napo |grep "php-fpm" | wc -l
+</code></p>
+
+<p>如果这个查询出来的数量接近了你在php-fpm.conf里设置的数量，说明是进程数量不过用了。果断增加</p>
+
+<p>而我这次碰到的不是这个。继续分析</p>
+
+<p>会不会是php程序执行时间过长造成超时？</p>
+
+<p>这个可以通过我的另外一篇文章来查看[php-fpm查找php慢速代码]</p>
+
+<p>如果是这个问题，我们可以通过修改nginx.conf和php-fpm.conf里面相关的超时设置来解决</p>
+
+<p>nginx.conf里面主要是如下</p>
+
+<p><code>
+fastcgi_connect_timeout 300;
+fastcgi_send_timeout 300;
+fastcgi_read_timeout 300;
+</code>
+php-fpm.conf里如要是如下</p>
+
+<p><code>
+request_terminate_timeout = 10s
+</code></p>
+
+<p>很不幸，我碰到的也不是这个问题</p>
+
+<p>接着我开始分析是不是fastcgi缓存不够？</p>
+
+<p>主要是在nginx.conf配置里修改如下参数</p>
+
+<p><code>
+fastcgi_buffer_size 64k;
+fastcgi_buffers 4 64k;
+fastcgi_busy_buffers_size 128k
+</code></p>
+
+<p>这个我还真不清楚要设置多大合适，网站说这个配置小了，有可能引发502.</p>
+
+<h2>终极解决办法</h2>
+
+<p>既然上面的常规办法不能解决，那我就想其他办法了。可以肯定的是502引起肯定是因为php-fpm引发的，也就是nginx将正确的客户端请求发给了后端的php-fpm进程，但是因为php-fpm进程的问题导致不能正确解析php代码。最终返回给了客户端502错误。</p>
+
+<p>我觉得nginx既然upstream可以支持多组后端服务器轮询实现简单的负责均衡，并且可以做简单的健康检查。那我就用这个办法开多组php-fpm服务来实现一个php-fpm池，让nginx在这个php-fpm资源里通过stream轮询。</p>
+
+<p>因为有了健康检查机制，这样就可以在错误到达客户端前换另外一个php-fpm进程重新解析了。</p>
+
+<h3>主要配置方法</h3>
+
+<p>先修改php-fpm.conf来开启多组php-fpm进程</p>
+
+<p>我这里开启了php-cgi_www1和php-cgi_www2两组</p>
+
+<p>```
+[www1]
+listen = /tmp/php-cgi_www1.sock
+user = www
+group = www
+pm = dynamic
+pm.max_children = 128
+pm.start_servers = 32
+pm.min_spare_servers = 32
+pm.max_spare_servers = 96
+pm.max_requests= 10240
+request_terminate_timeout = 10s</p>
+
+<p>[www2]
+listen = /tmp/php-cgi_www2.sock
+user = www
+group = www
+pm = dynamic
+pm.max_children = 128
+pm.start_servers = 32
+pm.min_spare_servers = 32
+pm.max_spare_servers = 96
+pm.max_requests= 10240
+request_terminate_timeout = 10s
+```</p>
+
+<p>然后重启php-fpm进程，并查看/tmp目录是否已经出现了php-cgi_www1.sock和php-cgi_www2.sock的文件</p>
+
+<p>如果存在这两个文件，说明php-fpm配置ok了。我们继续修改nginx.conf配置</p>
+
+<p>主要在http {} 的配置块内，加入我们要使用的轮询配置</p>
+
+<p><code>
+upstream php_servers{
+  server unix:/tmp/php-cgi_www1.sock;
+  server unix:/tmp/php-cgi_www2.sock;
+}
+fastcgi_next_upstream error timeout invalid_header http_500 http_503;
+</code></p>
+
+<p>接着修改我们原来处理php代码的fastcgi配置</p>
+
+<p>```</p>
+
+<pre><code>location ~ .*\.(php|php5)?$
+   {
+     fastcgi_pass  unix:/tmp/php-cgi_www.sock;
+     fastcgi_index index.php;
+     include fastcgi.conf;
+   }
+</code></pre>
+
+<p>```</p>
+
+<p>将其中的fastcgi_pass由原来的php-cgi_www.sock单独的php-fpm进程修改为我们创建的php_servers轮询池</p>
+
+<p>```
+location ~ .*.(php|php5)?$
+   {</p>
+
+<pre><code> fastcgi_pass php_servers;
+ fastcgi_index index.php;
+ include fastcgi.conf;
+</code></pre>
+
+<p>   }
+```</p>
+
+<p>通过这样的配置，可以肯定的是php-fpm因为采用两组来轮询工作，并且有fastcgi_next_upstream进程简单的健康检查，可以最大限度的避免502错误发生了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Linux防御DDOS攻击]]></title>
+    <link href="http://babodx.github.com/blog/2012/03/21/linux-ddos-defender/"/>
+    <updated>2012-03-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/03/21/linux-ddos-defender</id>
+    <content type="html"><![CDATA[<p>这两天一个以前客户在万网购买的云主机一直被SYN Flood 攻击。</p>
+
+<p>其实SYN Flood到是只能拖慢系统，没到死机的地步。问题是万网发现了DDOS攻击后，直接给云主机断网24小时。</p>
+
+<p>这个处理太恶心了。不说想办法切断攻击的IP，而是直接断掉客户的网络。。。有点说不过去呀</p>
+
+<p>电话咨询了下，他们是系统自动处理的，发现了直接断网。
+ 
+一般应付DDOS攻击主要是调整SYN相关的内核参数，这个可以从/etc/sysctl.conf入手调整。</p>
+
+<p>再有就是添加iptables规则，来限制syn和连接数量</p>
+
+<p>最后就是通过脚本检查netstat状态，自动将连接数多的ip封掉。</p>
+
+<p>一般linux系统能做到的就这些了，那些可以防ddos的硬防火墙老百姓搞不起。
+ 
+调整syn相关参数和iptables网上资料很多，我就不说了。</p>
+
+<p>整段封IP的话，可以用</p>
+
+<p><code>
+iptables -I INPUT -s 192.0.0.0/8 -j DROP #来封掉192开头的全部ip
+</code>
+ 
+我是通过查看messages日志文件，发现了一些大量连接的IP。然后先手动封掉这些IP。下面是部分日志信息，当然这个是靠配置iptables来实现的日志</p>
+
+<p><code>
+Mar 20 21:51:21 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ea:c1:08:00 SRC=157.55.16.56 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=16250 DF PROTO=TCP SPT=61923 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+Mar 20 21:51:27 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ea:c1:08:00 SRC=157.55.16.56 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=21741 DF PROTO=TCP SPT=61923 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ed:c1:08:00 SRC=157.55.16.178 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=28201 DF PROTO=TCP SPT=14521 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ed:c1:08:00 SRC=157.55.16.178 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=29875 DF PROTO=TCP SPT=14588 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+</code>
+最后在介绍一款linux下防止DDOS的软件：DDoS-Defender-v2.1.0.tar.gz</p>
+
+<p>其实DDOS也是通过分析netstat状态来判断大量连接的IP，然后采取封掉的策略。并可以设置封掉多久后自动解除。</p>
+
+<p>基本经过上面的配置，现在万网没有再因为DDOS问题断网24小时了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[monit监控linux服务]]></title>
+    <link href="http://babodx.github.com/blog/2012/02/02/monit-to-monitor-services/"/>
+    <updated>2012-02-02T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/02/02/monit-to-monitor-services</id>
+    <content type="html"><![CDATA[<p>最近负责的两台服务器需要监控nginx和memcached服务，防止网站访问异常。</p>
+
+<p>我用monit来解决这个需求。</p>
+
+<p>monit是一款linux下的开源软件，可以负责监控系统的服务、进程、文件等内容，并设置一定的条件下执行特定的action。</p>
+
+<p>我们可以通过配置，让monit来检查网站的状态和memcached的状态，发现异常的时候，自动重启服务并邮件通知我们。</p>
+
+<p>我配置了30s检查一次，出现问题发送邮件到我的gmail邮箱。我手机马上就能收到邮件提醒，非常效率。</p>
+
+<p>安装配置步骤：</p>
+
+<p>下载monit</p>
+
+<p><code>
+wget http://mmonit.com/monit/dist/monit-5.3.2.tar.gz
+</code></p>
+
+<p>解压并安装</p>
+
+<p>```
+tar zxvf monit-5.3.2.tar.gz</p>
+
+<p>cd monit-5.3.2</p>
+
+<p>./configure --prefix=/usr/local/monit</p>
+
+<p>make</p>
+
+<p>make install
+```</p>
+
+<p>配置</p>
+
+<p>先将默认的配置文件拷贝到/etc目录下，然后编辑monitrc文件</p>
+
+<p><code>
+cp monitrc /etc/
+</code></p>
+
+<p>下面是我的一些配置：</p>
+
+<p>```
+set daemon  30   #设置30s检查一次</p>
+
+<p>set logfile /var/log/monit.log   #设定日志文件</p>
+
+<h1>设定邮件</h1>
+
+<p>set mailserver smtp.gmail.com PORT 587 USERNAME "yourname@gmail.com" PASSWORD "yourpassword" USING tlsv1</p>
+
+<h1>设定邮件格式</h1>
+
+<p>set mail-format {</p>
+
+<pre><code>  from: monit@huaximall.com
+
+  subject: monit alert --  $EVENT $SERVICE
+
+  message: $EVENT Service $SERVICE
+
+             Date:        $DATE
+
+             Action:      $ACTION
+
+             Host:        xinlogs.com
+
+             Description: $DESCRIPTION
+
+
+        Your faithful employee,
+
+        Monit
+</code></pre>
+
+<p>}</p>
+
+<h1>设定提醒超时</h1>
+
+<p>set alert babodx@gmail.com with reminder on 3 cycles</p>
+
+<h1>设定检查nginx服务</h1>
+
+<p>check process nginx with pidfile /usr/local/webserver/nginx-1.0.11/nginx.pid</p>
+
+<p>  start program = "/usr/local/webserver/nginx-1.0.11/sbin/nginx"</p>
+
+<p>  stop program = "/usr/bin/killall nginx"</p>
+
+<p>  if failed host xinlogs.com port 80 protocol http</p>
+
+<pre><code> and request "/t.html"
+
+ then restart
+</code></pre>
+
+<p>  if 2 restarts within 3 cycles then timeout</p>
+
+<h1>设定检查memcached服务</h1>
+
+<p>check process memcached with pidfile /var/run/memcache.pid</p>
+
+<pre><code>  start program = "/usr/local/memcached/bin/memcached -d -m 1024 -u root -p 11211 -c 1024 -P /var/run/memcache.pid"
+
+  stop program = "/bin/kill -9 `cat /var/run/memcache.pid`; rm /var/run/memcached.pid"
+
+  if failed host 127.0.0.1 port 11211 protocol MEMCACHE then restart
+
+  if cpu &gt; 60% for 2 cycles then alert
+
+  if cpu &gt; 98% for 5 cycles then restart
+
+  if 2 restarts within 3 cycles then timeout
+
+  group cache
+</code></pre>
+
+<p>```</p>
+
+<p>下面再贴出来提醒的邮件样子给大家看看</p>
+
+<p>这个是检查到nginx被终止后的提醒邮件</p>
+
+<p>```
+Does not exist Service nginx</p>
+
+<pre><code>            Date:        Thu, 02 Feb 2012 11:31:50
+            Action:      restart
+            Host:        xinlogs.com
+            Description: process is not running
+
+       Your faithful employee,
+       Monit
+</code></pre>
+
+<p>```</p>
+
+<p>下面是自动恢复nginx服务后的提醒邮件</p>
+
+<p>```
+Exists Service nginx</p>
+
+<pre><code>            Date:        Thu, 02 Feb 2012 11:32:28
+            Action:      alert
+            Host:        xinlogs.com
+            Description: process is running with pid 6894
+
+       Your faithful employee,
+       Monit
+</code></pre>
+
+<p>```</p>
+
+<p>有了这些就可以安心了，万一网站访问异常了。monit会尝试自动恢复的，而且第一时间通知我们。因为我的vps在美国，所以发送到gmail很及时。手机再设置个邮件提醒功能，基本就ok了。</p>
+]]></content>
+  </entry>
+  
+</feed>

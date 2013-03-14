@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>mac下用ssh转发端口 - 鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="起因是这样的，我在服务器上安装了个虚拟winxp。但是想要在外网远程控制却不行，因为这个虚拟系统没有公网IP。 我的服务器是有公网IP的，例如：210.1.1.1 服务器所在内网全部是10.0.1.x 网段，外网IP是通过路由器映射给服务器的，也就是说服务器上查看IP，只有10.0.1.1这个 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/2012/07/13/mac-vnc-rdp-over-ssh/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Mac下用ssh转发端口</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-13T00:00:00+08:00" pubdate data-updated="true">Jul 13<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>起因是这样的，我在服务器上安装了个虚拟winxp。但是想要在外网远程控制却不行，因为这个虚拟系统没有公网IP。</p>
+
+<p>我的服务器是有公网IP的，例如：210.1.1.1</p>
+
+<p>服务器所在内网全部是10.0.1.x 网段，外网IP是通过路由器映射给服务器的，也就是说服务器上查看IP，只有10.0.1.1这个
+ 
+虚拟机我是用的xen，然后采用nat方式将一个192.168.122.x的ip分配给虚拟winxp使用。这个192.168.122.x段ip只有虚拟服务器和虚拟机可以访问到，就连同一个内网的10.0.1.x段其他机器都不能访问</p>
+
+<p>我要想远程控制winxp，只有两个办法，一个是通过xen提供的vnc来访问。也就是访问10.0.1.1:5901或者外网210.1.1.1:5901</p>
+
+<p>但是vnc的速度确实比winxp的远程桌面慢，有时候刷屏都很卡。但是winxp的ip又不能从外面访问，只能虚拟服务器自己用。
+ 
+后来我就想到了用ssh来做跳转，将192.168.122.1（winxp的ip）下3389端口转发过来，这样不是就可以远程通过3389访问了？
+ 
+因为mac下面的命令行直接支持ssh，确实比windows方面。linux下的常用命令和工具都支持！</p>
+
+<p>我就直接在外网通过下面命令建立了ssh隧道</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ssh -N -L3389:192.168.122.1:3389 root@114.251.211.103</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其中－N表示不用显示提示符，这个选项也可以不要
+－L表示建立一个隧道，格式：[-L [bind_address:]port:host:hostport]</p>
+
+<p>我的这条命令就是将本地的3389端口通过ssh转发到192.168.122.1的3389端口，注意：这里的192.168.122.1必须是远程ssh服务器可以访问的。</p>
+
+<p>这样你访问本地127.0.0.1:3389就相当于直接访问192.168.122.1:3389了</p>
+
+<p>当然，通过调整端口也可以实现vnc的转发</p>
+
+<p>其实通过ssh －D等选项，还可以建立ssh通道，让浏览器翻墙使用。这个网上资料很多，就不多说了。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-13T00:00:00+08:00" pubdate data-updated="true">Jul 13<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/mac/'>Mac</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2012/07/13/mac-vnc-rdp-over-ssh/" data-via="" data-counturl="http://babodx.github.com/blog/2012/07/13/mac-vnc-rdp-over-ssh/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/07/13/config-winxp-remote-desktop/" title="Previous Post: winxp的远程桌面设置">&laquo; winxp的远程桌面设置</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/07/22/config-esmtp-via-gmail-sendmail/" title="Next Post: 配置ecshop通过本地esmtp发信">配置ecshop通过本地esmtp发信 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

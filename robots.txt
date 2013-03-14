@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: http://babodx.github.com/sitemap.xml 

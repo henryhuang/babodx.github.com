@@ -1,0 +1,515 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Mysql错误索引比没索引还慢 - 鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="今天一个客户反映网站某个页面很慢。初步分析是数据库查询造成的延时。
+打开数据库的慢查询日志，监控到如下语句 1
+2
+3
+4
+5
+6
+# Time: 120115  1:09:37
+# User@Host: sq_ttt[sq_ttt] @ localhost []
+# Query_time: 3. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/2012/01/15/mysql-error-index-is-slower/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Mysql错误索引比没索引还慢</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-15T00:00:00+08:00" pubdate data-updated="true">Jan 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>今天一个客户反映网站某个页面很慢。初步分析是数据库查询造成的延时。
+打开数据库的慢查询日志，监控到如下语句</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Time: 120115  1:09:37
+</span><span class='line'># User@Host: sq_ttt[sq_ttt] @ localhost []
+</span><span class='line'># Query_time: 3.895267  Lock_time: 0.000131 Rows_sent: 1  Rows_examined: 168835
+</span><span class='line'>use sq_ttt;
+</span><span class='line'>SET timestamp=1326560977;
+</span><span class='line'>SELECT A.*,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个查询用了3.8s时间。
+于是进入数据库开始了这次分析。。。
+ 
+首先看下表结构</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE `p8_article` (
+</span><span class='line'>  `aid` mediumint(7) unsigned NOT NULL AUTO_INCREMENT,
+</span><span class='line'>  `title` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `smalltitle` varchar(100) NOT NULL DEFAULT '',
+</span><span class='line'>  `fid` mediumint(7) unsigned NOT NULL DEFAULT '0',
+</span><span class='line'>  `mid` mediumint(5) NOT NULL DEFAULT '0',
+</span><span class='line'>  `fname` varchar(50) NOT NULL DEFAULT '',
+</span><span class='line'>  `hits` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `pages` smallint(4) NOT NULL DEFAULT '0',
+</span><span class='line'>  `comments` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `posttime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `list` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `uid` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `username` varchar(30) NOT NULL DEFAULT '',
+</span><span class='line'>  `author` varchar(30) NOT NULL DEFAULT '',
+</span><span class='line'>  `copyfrom` varchar(100) NOT NULL DEFAULT '',
+</span><span class='line'>  `copyfromurl` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `titlecolor` varchar(15) NOT NULL DEFAULT '',
+</span><span class='line'>  `fonttype` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `picurl` varchar(150) NOT NULL DEFAULT '0',
+</span><span class='line'>  `ispic` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `yz` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `yzer` varchar(30) NOT NULL DEFAULT '',
+</span><span class='line'>  `yztime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `levels` tinyint(2) NOT NULL DEFAULT '0',
+</span><span class='line'>  `levelstime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `keywords` varchar(100) NOT NULL DEFAULT '',
+</span><span class='line'>  `jumpurl` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `iframeurl` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `style` varchar(15) NOT NULL DEFAULT '',
+</span><span class='line'>  `template` varchar(255) NOT NULL DEFAULT '',
+</span><span class='line'>  `target` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `ip` varchar(15) NOT NULL DEFAULT '',
+</span><span class='line'>  `lastfid` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `money` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `buyuser` text NOT NULL,
+</span><span class='line'>  `passwd` varchar(32) NOT NULL DEFAULT '',
+</span><span class='line'>  `allowdown` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `allowview` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `editer` varchar(30) NOT NULL DEFAULT '',
+</span><span class='line'>  `edittime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `begintime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `endtime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `description` text NOT NULL,
+</span><span class='line'>  `lastview` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `digg_num` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `digg_time` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `forbidcomment` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `ifvote` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `heart` varchar(255) NOT NULL DEFAULT '',
+</span><span class='line'>  `htmlname` varchar(100) NOT NULL DEFAULT '',
+</span><span class='line'>  PRIMARY KEY (`aid`),
+</span><span class='line'>  KEY `list` (`list`,`fid`,`yz`,`ispic`) USING BTREE
+</span><span class='line'>) ENGINE=MyISAM AUTO_INCREMENT=176567 DEFAULT CHARSET=gbk</span></code></pre></td></tr></table></div></figure>
+
+
+<p> 
+然后我们采用explain看看是否使用了索引</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; explain SELECT A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
+</span><span class='line'>+----+-------------+-------+-------+---------------+------+---------+------+------+-------------+
+</span><span class='line'>| id | select_type | table | type  | possible_keys | key  | key_len | ref  | rows | Extra       |
+</span><span class='line'>+----+-------------+-------+-------+---------------+------+---------+------+------+-------------+
+</span><span class='line'>|  1 | SIMPLE      | A     | index | NULL          | list | 9       | NULL |    1 | Using where |
+</span><span class='line'>+----+-------------+-------+-------+---------------+------+---------+------+------+-------------+
+</span><span class='line'>1 row in set (0.00 sec)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以发现使用了list索引，这个查询类型是index</p>
+
+<p>注意：用explain分析的时候，这个type的速度顺序如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>system &gt; const &gt; eq_ref &gt; ref &gt; fulltext &gt; ref_or_null &gt; index_merge &gt; unique_subquery &gt; index_subquery &gt; range &gt; index &gt; ALL</span></code></pre></td></tr></table></div></figure>
+
+
+<p>一般我们优化，最少要到range。</p>
+
+<p>不过今天的问题没有这样简单，因为当我删除索引后，发现即使不用索引也比这个快。</p>
+
+<p>下面是我删掉全部索引的结果</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; SELECT A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
+</span><span class='line'>+------------+------+
+</span><span class='line'>| list       | id   |
+</span><span class='line'>+------------+------+
+</span><span class='line'>| 1323887041 | 1312 |
+</span><span class='line'>+------------+------+
+</span><span class='line'>1 row in set (0.31 sec)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>用explain查看没有索引的状态如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; explain SELECT A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+------+--------+-----------------------------+
+</span><span class='line'>| id | select_type | table | type | possible_keys | key  | key_len | ref  | rows   | Extra                       |
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+------+--------+-----------------------------+
+</span><span class='line'>|  1 | SIMPLE      | A     | ALL  | NULL          | NULL | NULL    | NULL | 175175 | Using where; Using filesort |
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+------+--------+-----------------------------+
+</span><span class='line'>1 row in set (0.00 sec)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们可以看到type是ALL，Extra里面还用了filesort.但即使这样，查询时间才0.31 sec
+可以看到加了索引后，反而慢了。这也是我今天想说的一个问题：<strong>错误的索引可能会更慢！</strong></p>
+
+<p><strong>调整索引</strong></p>
+
+<p>我们删掉list索引后，尝试重新建立这个复合索引。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; create index list on p8_article(yz,fid,ispic,list);
+</span><span class='line'>Query OK, 175175 rows affected (2.80 sec)
+</span><span class='line'>Records: 175175  Duplicates: 0  Warnings: 0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这次索引的区别就在于顺序的改变，将list放在了最后。这个可以参考mysql联合索引的最左前缀。
+这样在看看explain的状态</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; explain SELECT SQL_NO_CACHE A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+-------------------+------+-------------+
+</span><span class='line'>| id | select_type | table | type | possible_keys | key  | key_len | ref               | rows | Extra       |
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+-------------------+------+-------------+
+</span><span class='line'>|  1 | SIMPLE      | A     | ref  | list          | list | 5       | const,const,const |   37 | Using where |
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+-------------------+------+-------------+
+</span><span class='line'>1 row in set (0.00 sec)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>type已经是ref了，Extra也不在使用filesort了。</p>
+
+<p>再实际运行查询，看看时间上的变化</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; SELECT SQL_NO_CACHE A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
+</span><span class='line'>+------------+------+
+</span><span class='line'>| list       | id   |
+</span><span class='line'>+------------+------+
+</span><span class='line'>| 1323887041 | 1312 |
+</span><span class='line'>+------------+------+
+</span><span class='line'>1 row in set (0.00 sec)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>为了怕有query_cache的原因，所以特意加入了SQL_NO_CACHE。</p>
+
+<p>现在显示查询时间为0.00 sec 基本可以忽略不计了。而经过索引的调整，网页的速度也确实得到了改善。
+ 
+<strong>总结：索引错误的使用反而会拖慢查询，甚至比不用还慢。一定要根据最左前缀建立合适的索引，才可以起到加速查询的作用！</strong></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-15T00:00:00+08:00" pubdate data-updated="true">Jan 15<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/database/'>Database</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2012/01/15/mysql-error-index-is-slower/" data-via="" data-counturl="http://babodx.github.com/blog/2012/01/15/mysql-error-index-is-slower/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/12/30/php-performance-debugging-tools/" title="Previous Post: php性能调试工具">&laquo; php性能调试工具</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/01/17/squid-cache-php-script/" title="Next Post: squid缓存php页面">squid缓存php页面 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

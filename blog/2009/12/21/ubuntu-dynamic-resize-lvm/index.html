@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>试用ubuntu 8.04和LVM动态增加分区 - 鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="我在虚拟机VMware里面安装了ubuntu 8.04. 安装的时候，只是选择了openssh这个服务。安装后感觉系统很干净 磁盘占用 1
+/dev/mapper/ubuntu-root                      5.6G 321M 5.3G   6% / 系统就用了不到400M &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/2009/12/21/ubuntu-dynamic-resize-lvm/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">试用ubuntu 8.04和LVM动态增加分区</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>我在虚拟机VMware里面安装了ubuntu 8.04.</p>
+
+<p>安装的时候，只是选择了openssh这个服务。安装后感觉系统很干净</p>
+
+<p><strong>磁盘占用</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/dev/mapper/ubuntu-root                      5.6G 321M 5.3G   6% /</span></code></pre></td></tr></table></div></figure>
+
+
+<p>系统就用了不到400M</p>
+
+<p><strong>内存</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>                   total       used       free     shared    buffers     cached
+</span><span class='line'>Mem:           249         39        209          0          3         16</span></code></pre></td></tr></table></div></figure>
+
+
+<p>减掉buffers和cached的内容，还有我ssh远程连接的占用。实际系统启动后内存也就需要17M</p>
+
+<p><strong>LVM</strong></p>
+
+<p>安装系统的时候，我就选择了整个磁盘启用LVM，采用ubuntu默认分区的方式。</p>
+
+<p>ubuntu默认分了2个区/sda1和/sda5。sda1用来做/boot，sda5用来做LVM。文件系统都是默认的ext3。</p>
+
+<p>然后在LVM里面默认建立了2个LV( Logical volume)，一个/dev/ubuntu/root用来做/ ，一个/dev/ubuntu/swap_1用来做swap交换分区。我又手动修改了文件系统，采用reiserfs。</p>
+
+<p><strong>动态添加/分区大小</strong></p>
+
+<p>我先添加了一个硬盘，系统识别为sdb</p>
+
+<p>对这个盘<strong>创建分区</strong>（LVM可以不用分区的，但是需要动态添加到/分区，所以需要有文件系统，不能添加后格式化/分区吧）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo fdisk /dev/sdb
+</span><span class='line'>n --&gt;创建分区
+</span><span class='line'>t --&gt;修改分区类型为8e
+</span><span class='line'>w --&gt;保存结果</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在系统可以识别/dev/sdb1这个设备了。</p>
+
+<p><strong>创建PV(Physical volume)</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo pvcreate /dev/sdb1</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>创建VG(Volume group)</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vgextend ubuntu /dev/sdb1</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>扩展LV(Logical volume)</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo lvextend -L +2G /dev/ubuntu/root&lt;br&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就给/dev/ubuntu/root这个设备大小增加了2G。可以通过sudo lvdisply查看
+但是这个时候df -h还是没有变化的，需要调整文件系统。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo resize_reiserfs -s +2G /dev/ubuntu/root&lt;br&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就完成了全部动态扩展分区。而且是服务器一直在线状态，不用关机。</p>
+
+<p>调整Swap</p>
+
+<p>还是和上面一样的情景，只要VG里面还有剩余空间就可以用来扩展swap用。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo swapoff -a</span></code></pre></td></tr></table></div></figure>
+
+
+<p>关闭正在用的swap分区</p>
+
+<p>然后</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo lvextend -L +200M /dev/ubuntu/swap_1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>给/dev/ubuntu/swap_1扩展了200M容量</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo mkswap /dev/ubuntu/swap_1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>建立swap的文件系统</p>
+
+<p>最后</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo swapon -a</span></code></pre></td></tr></table></div></figure>
+
+
+<p>启用新的swap系统。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>Linux</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2009/12/21/ubuntu-dynamic-resize-lvm/" data-via="" data-counturl="http://babodx.github.com/blog/2009/12/21/ubuntu-dynamic-resize-lvm/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/12/21/ubuntu-console-unread-chinese/" title="Previous Post: ubuntu server 9.04 终端乱码问题">&laquo; ubuntu server 9.04 终端乱码问题</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/12/21/winphone-SynceWithUbuntu/" title="Next Post: ubuntu 8.10下同步wm6.1手机">ubuntu 8.10下同步wm6.1手机 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,421 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>获取XEN guestOS的images文件 - 鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="我们可以从http://stacklet.com/其实就是原来http://jailtime.org/站点找我们需要的xen image文件 在2009年的时候，jailtime.org发布了一个新闻 May 4th, 2009 The jailtime project has been &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/2009/12/21/get-xen-guestos-image/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">获取XEN guestOS的images文件</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>我们可以从<a href="http://stacklet.com/">http://stacklet.com/</a>其实就是原来<a href="http://jailtime.org/">http://jailtime.org/</a>站点找我们需要的xen image文件</p>
+
+<p>在2009年的时候，jailtime.org发布了一个新闻</p>
+
+<h6>May 4th, 2009</h6>
+
+<p>The jailtime project has been relaunched with a new name and site: <a href="http://stacklet.com/">Stacklet</a>
+As part of the relaunch all of the distributions currently on jailtime have been upgraded to their latest versions. Also, all of the code for creating the images is now publically available – see <a href="http://stacklet.com/">http://stacklet.com/</a> for further details&#8230;.
+Jailtime will remain online but downloads will probably be turned off eventually as the transition to stacklet proceeds.</p>
+
+<p>所以现在就访问<a href="http://stacklet.com/">http://stacklet.com/</a>就可以了。</p>
+
+<p>包括如下系统</p>
+
+<p><li>
+<a href="http://stacklet.com/downloads/images/list/CentOS">CentOS</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/centos/5.3">5.3</a> </li>
+<li><a href="http://stacklet.com/downloads/images/centos/5.3.64bit">5.3 (64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Debian">Debian</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/debian/5.0">5.0 (Lenny)</a> </li>
+<li><a href="http://stacklet.com/downloads/images/debian/5.0.64bit">5.0 (Lenny, 64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Fedora">Fedora</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/fedora/10">10</a> </li>
+<li><a href="http://stacklet.com/downloads/images/fedora/10.64bit">10 (64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Gentoo">Gentoo</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/gentoo/2008-0">2008.0</a> </li>
+<li><a href="http://stacklet.com/downloads/images/gentoo/2008-0.64bit">2008.0 (64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Mandriva">Mandriva</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/mandriva/2009.0">2009.0</a> </li>
+<li><a href="http://stacklet.com/downloads/images/mandriva/2009.0.64bit">2009.0 (64-bit)</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Slackware">Slackware</a> <ul>
+<li><a href="http://stacklet.com/node/13">12.2</a></li>
+</ul>
+</li>
+<li>
+<a href="http://stacklet.com/downloads/images/list/Ubuntu">Ubuntu</a> <ul>
+<li>
+<a href="http://stacklet.com/downloads/images/ubuntu/9.04">9.04 (Jaunty)</a> </li>
+<li><a href="http://stacklet.com/downloads/images/ubuntu/9.04.64bit">9.04 (Jaunty, 64-bit)</a></li>
+</ul>
+</li>
+</ul></li>
+<li></p>
+
+<p><strong>下面是一个站点提供的img文件的简单说明</strong>
+<strong>All files on this site are provided without guarantee or warranty. Use at your own risk.</strong>
+Each download is a bzipped tarball containing an image and cfg files:</p>
+
+<ul>
+<li>a xen guest filesystem
+</li>
+<li>sample xen configuration files to be used with <strong>xm create</strong>
+</li>
+</ul>
+
+
+<p>The naming convention of the download tarball is:
+<strong><distribution>.<distro-version>.<created-date>.img.tar.bz2</strong>.
+For example centos.5-3.x86.20090423.img.tar.bz2 contains</p>
+
+<ul>
+<li>centos.5-3.x86.img
+</li>
+<li>centos.5-3.x86.xen3.cfg
+</li>
+<li>centos.5-3.x86.xen3.pygrub.cfg（这个文件比较重要，如果用的是CentOS 5.3的虚拟化，就需要这个文件才可以启动guestOS。因为CentOS 5.3没有提供Xen-U的内核。）
+</li>
+</ul>
+
+
+<p>All of the packages installed in the image will be the latest versions available as of the created date, which is in yyyy-mm-dd format.</p>
+
+<h3>Prerequisites</h3>
+
+
+<ol>
+<li>Working installation of Xen version 3
+</li>
+<li>The xen daemon (xend) must be running
+</li>
+<li>Enough filesystem space to accomodate the uncompressed tarball (generally 1GB)
+</li>
+<li>Enough unallocated RAM to run the xen guest (generally 128MB)
+</li>
+</ol>
+
+
+<h3>Default Configuration and Networking</h3>
+
+
+<p>Each filesystem is configured to use dhcp. The *.xen.cfg also is also configured for dhcp. It is recommended that you first test the filesystem using dhcp if possible before attempting other networking parameters. Each download page has additional notes on networking that is appropriate for a particular distribution.
+The root login is root/password. It is highly recommened that you change the root password immediately.</p>
+
+<h3>Installation</h3>
+
+
+<p>You will need to uncompress the tarball to a local directory and edit the *.xen.cfg file to point to the uncompressed image and swap file.
+If all is well you will see the guest’s boot messages scrolling by.
+<strong>一些HOWTO文档</strong></p>
+
+<h3><strong>HOWTO: Filesystems</strong></h3>
+
+
+<p>In the following howto’s, <image file> should be replaced with a reference to a specific .img file.</p>
+
+<h4><strong>How do I mount an image without booting it?</strong></h4>
+
+
+<ul>
+<li>mkdir -p /mnt/loop
+</li>
+<li>mount -o loop <image file> /mnt/loop/
+</li>
+</ul>
+
+
+<h4><strong>How do I resize an image file?</strong></h4>
+
+
+<p>First, make sure that the image file is not already mounted and is not already running as a xen guest. The following commands increase an image file to 2.5GB. Backup the image before attempting this.</p>
+
+<ul>
+<li>dd if=/dev/zero of=<image file> bs=1M conv=notrunc count=1 seek=2500 
+</li>
+<li>losetup /dev/loop0 <image file>
+</li>
+<li>e2fsck -f /dev/loop0
+</li>
+<li>resize2fs /dev/loop0
+</li>
+<li>e2fsck -f /dev/loop0
+</li>
+<li>losetup -d /dev/loop0
+</li>
+</ul>
+
+
+<p>You may then boot or mount the image to confirm the increased size. The e2fsck checks in this howto are not strictly necessary.</p>
+
+<h4><strong>How do I move the contents of an img file to a regular partition?</strong></h4>
+
+
+<p>Mount the img file using the above howto. Assuming the destination partition is mounted at /mnt/dest, execute the following:</p>
+
+<ul>
+<li>cp -a /mnt/loop/* /mnt/dest/
+</li>
+</ul>
+
+
+<p>You will then be able to boot the filesystem using the partition instead of the image file, which should provide better performance. You will need to update the *.xen.cfg file to reference the partition instead of the img file (the <strong>disk</strong> parameter will need to change, see the <a href="http://www.cl.cam.ac.uk/Research/SRG/netos/xen/readmes/user/user.html">Xen Manual</a>). Also, remember to unmount partitions or img files before booting a xen guest from them!</p>
+
+<p></li></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/virtualization/'>Virtualization</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2009/12/21/get-xen-guestos-image/" data-via="" data-counturl="http://babodx.github.com/blog/2009/12/21/get-xen-guestos-image/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/12/21/first-lfs/" title="Previous Post: 第一次安装LFS">&laquo; 第一次安装LFS</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/12/21/howto-create-foreign-key-on-mysql/" title="Next Post: 如何建立两个表间的外键">如何建立两个表间的外键 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

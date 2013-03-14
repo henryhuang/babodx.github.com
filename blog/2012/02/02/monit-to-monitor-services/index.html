@@ -1,0 +1,485 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>monit监控linux服务 - 鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="最近负责的两台服务器需要监控nginx和memcached服务，防止网站访问异常。 我用monit来解决这个需求。 monit是一款linux下的开源软件，可以负责监控系统的服务、进程、文件等内容，并设置一定的条件下执行特定的action。 我们可以通过配置， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/2012/02/02/monit-to-monitor-services/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Monit监控linux服务</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-02T00:00:00+08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>最近负责的两台服务器需要监控nginx和memcached服务，防止网站访问异常。</p>
+
+<p>我用monit来解决这个需求。</p>
+
+<p>monit是一款linux下的开源软件，可以负责监控系统的服务、进程、文件等内容，并设置一定的条件下执行特定的action。</p>
+
+<p>我们可以通过配置，让monit来检查网站的状态和memcached的状态，发现异常的时候，自动重启服务并邮件通知我们。</p>
+
+<p>我配置了30s检查一次，出现问题发送邮件到我的gmail邮箱。我手机马上就能收到邮件提醒，非常效率。</p>
+
+<p>安装配置步骤：</p>
+
+<p>下载monit</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget http://mmonit.com/monit/dist/monit-5.3.2.tar.gz</span></code></pre></td></tr></table></div></figure>
+
+
+<p>解压并安装</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar zxvf monit-5.3.2.tar.gz
+</span><span class='line'>
+</span><span class='line'>cd monit-5.3.2
+</span><span class='line'>
+</span><span class='line'>./configure --prefix=/usr/local/monit
+</span><span class='line'>
+</span><span class='line'>make
+</span><span class='line'>
+</span><span class='line'>make install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>配置</p>
+
+<p>先将默认的配置文件拷贝到/etc目录下，然后编辑monitrc文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cp monitrc /etc/</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面是我的一些配置：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>set daemon  30   #设置30s检查一次
+</span><span class='line'>
+</span><span class='line'>set logfile /var/log/monit.log   #设定日志文件
+</span><span class='line'>
+</span><span class='line'>#设定邮件
+</span><span class='line'>
+</span><span class='line'>set mailserver smtp.gmail.com PORT 587 USERNAME "yourname@gmail.com" PASSWORD "yourpassword" USING tlsv1 
+</span><span class='line'>
+</span><span class='line'>#设定邮件格式
+</span><span class='line'>
+</span><span class='line'>set mail-format {
+</span><span class='line'>
+</span><span class='line'>      from: monit@huaximall.com
+</span><span class='line'>
+</span><span class='line'>      subject: monit alert --  $EVENT $SERVICE
+</span><span class='line'>
+</span><span class='line'>      message: $EVENT Service $SERVICE
+</span><span class='line'>
+</span><span class='line'>                 Date:        $DATE
+</span><span class='line'>
+</span><span class='line'>                 Action:      $ACTION
+</span><span class='line'>
+</span><span class='line'>                 Host:        xinlogs.com
+</span><span class='line'>
+</span><span class='line'>                 Description: $DESCRIPTION
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>            Your faithful employee,
+</span><span class='line'>
+</span><span class='line'>            Monit
+</span><span class='line'>
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>#设定提醒超时
+</span><span class='line'>
+</span><span class='line'>set alert babodx@gmail.com with reminder on 3 cycles
+</span><span class='line'>
+</span><span class='line'>#设定检查nginx服务
+</span><span class='line'>
+</span><span class='line'>check process nginx with pidfile /usr/local/webserver/nginx-1.0.11/nginx.pid
+</span><span class='line'>
+</span><span class='line'>  start program = "/usr/local/webserver/nginx-1.0.11/sbin/nginx"
+</span><span class='line'>
+</span><span class='line'>  stop program = "/usr/bin/killall nginx"
+</span><span class='line'>
+</span><span class='line'>  if failed host xinlogs.com port 80 protocol http
+</span><span class='line'>
+</span><span class='line'>     and request "/t.html"
+</span><span class='line'>
+</span><span class='line'>     then restart
+</span><span class='line'>
+</span><span class='line'>  if 2 restarts within 3 cycles then timeout
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>#设定检查memcached服务
+</span><span class='line'>
+</span><span class='line'>check process memcached with pidfile /var/run/memcache.pid
+</span><span class='line'>
+</span><span class='line'>      start program = "/usr/local/memcached/bin/memcached -d -m 1024 -u root -p 11211 -c 1024 -P /var/run/memcache.pid"
+</span><span class='line'>
+</span><span class='line'>      stop program = "/bin/kill -9 `cat /var/run/memcache.pid`; rm /var/run/memcached.pid"
+</span><span class='line'>
+</span><span class='line'>      if failed host 127.0.0.1 port 11211 protocol MEMCACHE then restart
+</span><span class='line'>
+</span><span class='line'>      if cpu &gt; 60% for 2 cycles then alert
+</span><span class='line'>
+</span><span class='line'>      if cpu &gt; 98% for 5 cycles then restart
+</span><span class='line'>
+</span><span class='line'>      if 2 restarts within 3 cycles then timeout
+</span><span class='line'>
+</span><span class='line'>      group cache</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面再贴出来提醒的邮件样子给大家看看</p>
+
+<p>这个是检查到nginx被终止后的提醒邮件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Does not exist Service nginx
+</span><span class='line'>                Date:        Thu, 02 Feb 2012 11:31:50
+</span><span class='line'>                Action:      restart
+</span><span class='line'>                Host:        xinlogs.com
+</span><span class='line'>                Description: process is not running
+</span><span class='line'>
+</span><span class='line'>           Your faithful employee,
+</span><span class='line'>           Monit</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面是自动恢复nginx服务后的提醒邮件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Exists Service nginx
+</span><span class='line'>                Date:        Thu, 02 Feb 2012 11:32:28
+</span><span class='line'>                Action:      alert
+</span><span class='line'>                Host:        xinlogs.com
+</span><span class='line'>                Description: process is running with pid 6894
+</span><span class='line'>
+</span><span class='line'>           Your faithful employee,
+</span><span class='line'>           Monit</span></code></pre></td></tr></table></div></figure>
+
+
+<p>有了这些就可以安心了，万一网站访问异常了。monit会尝试自动恢复的，而且第一时间通知我们。因为我的vps在美国，所以发送到gmail很及时。手机再设置个邮件提醒功能，基本就ok了。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-02T00:00:00+08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>Linux</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2012/02/02/monit-to-monitor-services/" data-via="" data-counturl="http://babodx.github.com/blog/2012/02/02/monit-to-monitor-services/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/01/19/php-eaccelerator-vs-fastcgi-cache/" title="Previous Post: php eaccelerator vs fastcgi_cache性能比较">&laquo; php eaccelerator vs fastcgi_cache性能比较</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/03/21/linux-ddos-defender/" title="Next Post: Linux防御DDOS攻击">Linux防御DDOS攻击 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

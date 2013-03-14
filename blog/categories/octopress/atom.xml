@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Octopress | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/octopress/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-03-14T13:53:55+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[emlog迁移到octopress]]></title>
+    <link href="http://babodx.github.com/blog/2013/02/28/emlogqian-yi-dao-octopress/"/>
+    <updated>2013-02-28T17:05:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/02/28/emlogqian-yi-dao-octopress</id>
+    <content type="html"><![CDATA[<p>用emlog的博客系统已经有2年了，本着活着就要折腾的原则。最近开始尝试使用octopress，这个博客还真的很适合技术人员。通过github版本控制，采用自己最喜欢的编辑器本地写博客，<code>rake deploy</code>发布。</p>
+
+<p>目前我原来的博客100多篇都迁移到octopress里了，不过因为原来的图片都存放在本地，这次打算全部存放到flickr.com了。这部分只能手动整理了。</p>
+
+<p>下面说说我是怎么迁移的吧</p>
+
+<!--more-->
+
+
+<p>网站上有很多人介绍了wordpress到octopress的迁移文章，可以搜索下。jekyll也有一篇专门介绍迁移的<a href="https://github.com/mojombo/jekyll/wiki/blog-migrations">wiki文章</a></p>
+
+<p><strong>思路</strong></p>
+
+<p>因为原来emlog博客是采用mysql来存储文章的，而且文章都是采用html和一些js来控制格式的和octopress差别很大，octopress每篇文章是采用markdown语法的单独文件。</p>
+
+<p>我是通过emlog的rss.php将全部博客导出为一个xml文件，然后通过一个ruby脚本将这个xml拆分为每篇一个markdown文件，并对一些html进行过滤。</p>
+
+<p>以我的博客为例，原来域名是http://xinlogs.com 首先进入后台设置，设置rss输出篇数为全部博客，且输出全文。因为默认只输出10篇并且是摘要部分。</p>
+
+<p>我将导出的xml命名为xinlogs.xml。</p>
+
+<p>然后在我的octopress/source/下面创建<em>import目录，并进入</em>import目录执行导入脚</p>
+
+<p><code>
+ruby -r "./migrate.rb" -e "Jekyll::EmlogDotCom.process('xinlogs.xml')" "xinlogs.xml"
+</code></p>
+
+<p>这个脚本是我根据网上的wordpress脚本修改的，主要是一些xml用的标签和wordpress的不同，我已经修改好了。这个脚本将把xml文件按照每篇日志拆分并保存在_post目录下面，每篇对应一个.md的文件。</p>
+
+<p>我们只要将.md文件移动到octopress/source/_post目录里，然后执行</p>
+
+<p><code>
+rake gen_deploy
+</code></p>
+
+<p>就可以发布到主机上了。</p>
+
+<p><strong>注意</strong>
+这个migrate.rb脚本调用了一些其他的gem，所以如果提示错误，需要安装相关的gem。
+例如<code>gem install hpricot</code></p>
+
+<p><a href="https://github.com/babodx/babodx.github.com/blob/source/source/_import/migrate.rb">migrate.rb</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[开始使用octopress]]></title>
+    <link href="http://babodx.github.com/blog/2013/02/13/kai-shi-shi-yong-octopress/"/>
+    <updated>2013-02-13T14:54:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/02/13/kai-shi-shi-yong-octopress</id>
+    <content type="html"><![CDATA[<h1>概述</h1>
+
+<p>最近在看<a href="http://ruby-china.org">ruby-china.org</a>和<a href="http://happycasts.net">happycasts.net</a>的视频。开始尝试使用git来做版本控制。原来都是使用svn，所以最近一直在折腾和学习。看到很多编程人员都开始采用octopress来代替wordpress写blog了。我也开始尝试使用这个octopress的blog系统。</p>
+
+<p>octopress是一套基于ruby构建的blog管理系统，通过git来为我们的文章做版本控制，并且通过rake命令可以简单的完成博客的发布与远程站点的同步。配合github提供的pages功能，我们连自己的主机都可以省了。非常方便。</p>
+
+<!--more-->
+
+
+<h2>新建文章</h2>
+
+<p>写文章只要进入到我们的octopress目录下，输入下面命令就可以创建一个新的blog文章。</p>
+
+<pre><code>rake new_post\[title\]
+</code></pre>
+
+<p>其中title就是你文章的标题，可以根据自己实际情况填写。</p>
+
+<h2>写文章</h2>
+
+<p>我们创建的文章会保存在下面的目录内</p>
+
+<pre><code>~/project/octopress/source/_posts
+</code></pre>
+
+<p>文件名为我们创建时候的日期-title.markdown的形式，中文的title会自动转为拼音。例如我这篇文章的名字就如下所示</p>
+
+<pre><code>2013-02-13-kai-shi-shi-yong-octopress.markdown
+</code></pre>
+
+<p>我们只需要用我们熟悉的编辑器打开这个.markdown文件来写我们的文章就可以了。而文章的写作采用markdown语言。这个语言也是我最近才接触的，感觉非常容易上手，可以说完全是为了写作而诞生的。可以让我们愉快的写作，而不是考虑用什么字体，用什么格式，怎么对齐等问题。</p>
+
+<p>有了这个很好的开始，后面就是慢慢学习octopress的技巧和markdown的各种语法了。</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,2047 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="最近放假一直在家里测试php如何优化性能。
+今天比较了下默认php、eaccelerator和fastcgi_cache的性能。 先介绍下我的测试环境：
+这次是在我VPS上做的测试：cpu 为1颗Intel(R) Core(TM) i7-2600 CPU @ 3.40GHz，内存256M &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/page/3/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/19/php-eaccelerator-vs-fastcgi-cache/">Php Eaccelerator vs Fastcgi_cache性能比较</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-19T00:00:00+08:00" pubdate data-updated="true">Jan 19<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近放假一直在家里测试php如何优化性能。
+今天比较了下默认php、eaccelerator和fastcgi_cache的性能。</p>
+
+<p>先介绍下我的测试环境：
+这次是在我VPS上做的测试：cpu 为1颗Intel(R) Core(TM) i7-2600 CPU @ 3.40GHz，内存256M
+系统为centos 5.6 32bit
+php版本 5.3.8
+web服务采用Tengine/1.2.1，其实就是nginx</p>
+
+<p>测试文件一个采用phpinfo.php，这个就是phpinfo()函数输出页面。另外一个就是采用我博客首页http://xinlogs.com
+注：我的博客采用emlog 4.1
+下面进入我的测试。。。。</p>
+
+<p>php先用默认状态，不加载eaccelerator模块。
+测试phpinfo.php,连续访问3000次，采用10个并发请求。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 3000 -c 10 http://xinlogs.com/phpinfo.php
+</span><span class='line'>Server Software:        Tengine/1.2.1
+</span><span class='line'>Server Hostname:        xinlogs.com
+</span><span class='line'>Server Port:            80
+</span><span class='line'>
+</span><span class='line'>Document Path:          /phpinfo.php
+</span><span class='line'>Document Length:        54365 bytes
+</span><span class='line'>
+</span><span class='line'>Concurrency Level:      10
+</span><span class='line'>Time taken for tests:   7.557223 seconds
+</span><span class='line'>Complete requests:      3000
+</span><span class='line'>Failed requests:        0
+</span><span class='line'>Write errors:           0
+</span><span class='line'>Total transferred:      163608000 bytes
+</span><span class='line'>HTML transferred:       163095000 bytes
+</span><span class='line'>Requests per second:    396.97 [#/sec] (mean)
+</span><span class='line'>Time per request:       25.191 [ms] (mean)
+</span><span class='line'>Time per request:       2.519 [ms] (mean, across all concurrent requests)
+</span><span class='line'>Transfer rate:          21141.76 [Kbytes/sec] received
+</span><span class='line'>
+</span><span class='line'>Connection Times (ms)
+</span><span class='line'>              min  mean[+/-sd] median   max
+</span><span class='line'>Connect:        0    0   0.0      0       2
+</span><span class='line'>Processing:     9   24  52.3     25    2432
+</span><span class='line'>Waiting:        9   24  52.2     25    2431
+</span><span class='line'>Total:          9   24  52.3     25    2432
+</span><span class='line'>
+</span><span class='line'>Percentage of the requests served within a certain time (ms)
+</span><span class='line'>  50%     25
+</span><span class='line'>  66%     28
+</span><span class='line'>  75%     29
+</span><span class='line'>  80%     29
+</span><span class='line'>  90%     31
+</span><span class='line'>  95%     32
+</span><span class='line'>  98%     34
+</span><span class='line'>  99%     36
+</span><span class='line'> 100%   2432 (longest request)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到每秒大约处理396.97 [#/sec] (mean)。99%响应时间在36ms以内
+我又测试了几次，基本每秒处理在390到450浮动，响应时间在45ms以内吧。</p>
+
+<p>再来看看我博客首页的测试情况</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 3000 -c 10 http://xinlogs.com/
+</span><span class='line'>Server Software:        Tengine/1.2.1
+</span><span class='line'>Server Hostname:        xinlogs.com
+</span><span class='line'>Server Port:            80
+</span><span class='line'>
+</span><span class='line'>Document Path:          /
+</span><span class='line'>Document Length:        21494 bytes
+</span><span class='line'>
+</span><span class='line'>Concurrency Level:      10
+</span><span class='line'>Time taken for tests:   52.787368 seconds
+</span><span class='line'>Complete requests:      3000
+</span><span class='line'>Failed requests:        2970
+</span><span class='line'>   (Connect: 0, Length: 2970, Exceptions: 0)
+</span><span class='line'>Write errors:           0
+</span><span class='line'>Total transferred:      64990449 bytes
+</span><span class='line'>HTML transferred:       64432449 bytes
+</span><span class='line'>Requests per second:    56.83 [#/sec] (mean)
+</span><span class='line'>Time per request:       175.958 [ms] (mean)
+</span><span class='line'>Time per request:       17.596 [ms] (mean, across all concurrent requests)
+</span><span class='line'>Transfer rate:          1202.31 [Kbytes/sec] received
+</span><span class='line'>
+</span><span class='line'>Connection Times (ms)
+</span><span class='line'>              min  mean[+/-sd] median   max
+</span><span class='line'>Connect:        0    0   0.0      0       0
+</span><span class='line'>Processing:     9  175 661.8    127   18091
+</span><span class='line'>Waiting:        9  174 661.9    126   18091
+</span><span class='line'>Total:          9  175 661.8    127   18091
+</span><span class='line'>
+</span><span class='line'>Percentage of the requests served within a certain time (ms)
+</span><span class='line'>  50%    127
+</span><span class='line'>  66%    149
+</span><span class='line'>  75%    166
+</span><span class='line'>  80%    178
+</span><span class='line'>  90%    199
+</span><span class='line'>  95%    210
+</span><span class='line'>  98%    226
+</span><span class='line'>  99%    348
+</span><span class='line'> 100%  18091 (longest request)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到每秒处理56.83 [#/sec] (mean)请求，99%的响应时间在348ms内
+多次测试后，基本保持在每秒处理55-60个请求，响应时间基本在350ms内。</p>
+
+<p>接着我开启php的eaccelerator模块,开启后的phpinfo信息如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>This program makes use of the Zend Scripting Language Engine:
+</span><span class='line'>Zend Engine v2.3.0, Copyright (c) 1998-2011 Zend Technologies
+</span><span class='line'>    with eAccelerator v0.9.6.1, Copyright (c) 2004-2010 eAccelerator, by eAccelerator</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们再次测试phpinfo.php文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 3000 -c 10 http://xinlogs.com/phpinfo.php
+</span><span class='line'>
+</span><span class='line'>Server Software:        Tengine/1.2.1
+</span><span class='line'>Server Hostname:        xinlogs.com
+</span><span class='line'>Server Port:            80
+</span><span class='line'>
+</span><span class='line'>Document Path:          /phpinfo.php
+</span><span class='line'>Document Length:        56845 bytes
+</span><span class='line'>
+</span><span class='line'>Concurrency Level:      10
+</span><span class='line'>Time taken for tests:   7.128081 seconds
+</span><span class='line'>Complete requests:      3000
+</span><span class='line'>Failed requests:        0
+</span><span class='line'>Write errors:           0
+</span><span class='line'>Total transferred:      171333080 bytes
+</span><span class='line'>HTML transferred:       170819225 bytes
+</span><span class='line'>Requests per second:    420.87 [#/sec] (mean)
+</span><span class='line'>Time per request:       23.760 [ms] (mean)
+</span><span class='line'>Time per request:       2.376 [ms] (mean, across all concurrent requests)
+</span><span class='line'>Transfer rate:          23472.94 [Kbytes/sec] received
+</span><span class='line'>
+</span><span class='line'>Connection Times (ms)
+</span><span class='line'>              min  mean[+/-sd] median   max
+</span><span class='line'>Connect:        0    9   7.9      9      40
+</span><span class='line'>Processing:     2   13  13.6     12     620
+</span><span class='line'>Waiting:        0    9  13.2      8     603
+</span><span class='line'>Total:         12   23  13.6     23     623
+</span><span class='line'>
+</span><span class='line'>Percentage of the requests served within a certain time (ms)
+</span><span class='line'>  50%     23
+</span><span class='line'>  66%     29
+</span><span class='line'>  75%     31
+</span><span class='line'>  80%     31
+</span><span class='line'>  90%     32
+</span><span class='line'>  95%     34
+</span><span class='line'>  98%     37
+</span><span class='line'>  99%     39
+</span><span class='line'> 100%    623 (longest request)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>从结果来看，加了eAccelerator后，phpinfo.php的测试结果并不是很快。每秒处理420.87请求，偶尔还会在380左右。并没有明显变化。</p>
+
+<p>再来看看博客首页的测试。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 3000 -c 10 http://xinlogs.com/
+</span><span class='line'>Server Software:        Tengine/1.2.1
+</span><span class='line'>Server Hostname:        xinlogs.com
+</span><span class='line'>Server Port:            80
+</span><span class='line'>
+</span><span class='line'>Document Path:          /
+</span><span class='line'>Document Length:        21488 bytes
+</span><span class='line'>
+</span><span class='line'>Concurrency Level:      10
+</span><span class='line'>Time taken for tests:   23.177888 seconds
+</span><span class='line'>Complete requests:      3000
+</span><span class='line'>Failed requests:        2970
+</span><span class='line'>   (Connect: 0, Length: 2970, Exceptions: 0)
+</span><span class='line'>Write errors:           0
+</span><span class='line'>Total transferred:      64929588 bytes
+</span><span class='line'>HTML transferred:       64371588 bytes
+</span><span class='line'>Requests per second:    129.43 [#/sec] (mean)
+</span><span class='line'>Time per request:       77.260 [ms] (mean)
+</span><span class='line'>Time per request:       7.726 [ms] (mean, across all concurrent requests)
+</span><span class='line'>Transfer rate:          2735.67 [Kbytes/sec] received
+</span><span class='line'>
+</span><span class='line'>Connection Times (ms)
+</span><span class='line'>              min  mean[+/-sd] median   max
+</span><span class='line'>Connect:        0    0   1.0      0      23
+</span><span class='line'>Processing:     4   76 582.2     31   13655
+</span><span class='line'>Waiting:        4   76 582.2     31   13655
+</span><span class='line'>Total:          4   76 582.2     31   13655
+</span><span class='line'>
+</span><span class='line'>Percentage of the requests served within a certain time (ms)
+</span><span class='line'>  50%     31
+</span><span class='line'>  66%     46
+</span><span class='line'>  75%     55
+</span><span class='line'>  80%     58
+</span><span class='line'>  90%     69
+</span><span class='line'>  95%     80
+</span><span class='line'>  98%    100
+</span><span class='line'>  99%    129
+</span><span class='line'> 100%  13655 (longest request)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>从博客首页的测试可以发现，用了eAccelerator的效果还是很明显的。每秒处理请求129.43 [#/sec] (mean)，99%的响应时间在129ms内完成。
+这个结果比不用eaccelerator的情况下，高了1倍多。</p>
+
+<p>个人认为eAccelerator因为减少了php每次编译时间，所以当php程序需要调用很多类，或者调用其他php文件的时候。这个优化就体现出来了。就想我上面的测试，博客首页的加载确实快了，每秒处理的请求也多了。但是想phpinfo.php这样只有一个文件，并且只是简单的输出phpinfo信息的页面，eaccelerator起到的优化就很少了。</p>
+
+<p>下面我们再来测试下fastcgi_cache有多快，这个就是缓存，完全不是优化php执行速度了，而是直接缓存上结果，下次直接调用缓存。</p>
+
+<p>我们先用curl请求2次phpinfo.php 确定已经缓存上，再来测试。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-bash-3.2# curl -I http://xinlogs.com/phpinfo.php
+</span><span class='line'>HTTP/1.1 200 OK
+</span><span class='line'>Server: Tengine/1.2.1
+</span><span class='line'>Date: Thu, 19 Jan 2012 07:09:23 GMT
+</span><span class='line'>Content-Type: text/html
+</span><span class='line'>Connection: keep-alive
+</span><span class='line'>Vary: Accept-Encoding
+</span><span class='line'>X-Powered-By: PHP/5.3.8
+</span><span class='line'>X-Cache: HIT
+</span><span class='line'>
+</span><span class='line'>ab -n 3000 -c 10 http://xinlogs.com/phpinfo.php
+</span><span class='line'>Server Software:        Tengine/1.2.1
+</span><span class='line'>Server Hostname:        xinlogs.com
+</span><span class='line'>Server Port:            80
+</span><span class='line'>
+</span><span class='line'>Document Path:          /phpinfo.php
+</span><span class='line'>Document Length:        58255 bytes
+</span><span class='line'>
+</span><span class='line'>Concurrency Level:      10
+</span><span class='line'>Time taken for tests:   0.656969 seconds
+</span><span class='line'>Complete requests:      3000
+</span><span class='line'>Failed requests:        0
+</span><span class='line'>Write errors:           0
+</span><span class='line'>Total transferred:      175320000 bytes
+</span><span class='line'>HTML transferred:       174765000 bytes
+</span><span class='line'>Requests per second:    4566.43 [#/sec] (mean)
+</span><span class='line'>Time per request:       2.190 [ms] (mean)
+</span><span class='line'>Time per request:       0.219 [ms] (mean, across all concurrent requests)
+</span><span class='line'>Transfer rate:          260605.90 [Kbytes/sec] received
+</span><span class='line'>
+</span><span class='line'>Connection Times (ms)
+</span><span class='line'>              min  mean[+/-sd] median   max
+</span><span class='line'>Connect:        0    0   0.0      0       0
+</span><span class='line'>Processing:     0    1   1.1      1       4
+</span><span class='line'>Waiting:        0    1   0.9      1       4
+</span><span class='line'>Total:          0    1   1.1      1       4
+</span><span class='line'>
+</span><span class='line'>Percentage of the requests served within a certain time (ms)
+</span><span class='line'>  50%      1
+</span><span class='line'>  66%      2
+</span><span class='line'>  75%      2
+</span><span class='line'>  80%      3
+</span><span class='line'>  90%      3
+</span><span class='line'>  95%      3
+</span><span class='line'>  98%      4
+</span><span class='line'>  99%      4
+</span><span class='line'> 100%      4 (longest request)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>看到什么是速度了吧。。。每秒处理请求 4566.43 [#/sec] (mean)，响应时间4ms以内完成。
+这个就是fastcgi_cache的速度了.</p>
+
+<p>也许一个phpinfo.php页面不能说明问题，我们再来看看博客首页的情况</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 3000 -c 10 http://xinlogs.com/
+</span><span class='line'>
+</span><span class='line'>Server Software:        Tengine/1.2.1
+</span><span class='line'>Server Hostname:        xinlogs.com
+</span><span class='line'>Server Port:            80
+</span><span class='line'>
+</span><span class='line'>Document Path:          /
+</span><span class='line'>Document Length:        21485 bytes
+</span><span class='line'>
+</span><span class='line'>Concurrency Level:      10
+</span><span class='line'>Time taken for tests:   0.578070 seconds
+</span><span class='line'>Complete requests:      3000
+</span><span class='line'>Failed requests:        0
+</span><span class='line'>Write errors:           0
+</span><span class='line'>Total transferred:      65055000 bytes
+</span><span class='line'>HTML transferred:       64455000 bytes
+</span><span class='line'>Requests per second:    5189.68 [#/sec] (mean)
+</span><span class='line'>Time per request:       1.927 [ms] (mean)
+</span><span class='line'>Time per request:       0.193 [ms] (mean, across all concurrent requests)
+</span><span class='line'>Transfer rate:          109900.19 [Kbytes/sec] received
+</span><span class='line'>
+</span><span class='line'>Connection Times (ms)
+</span><span class='line'>              min  mean[+/-sd] median   max
+</span><span class='line'>Connect:        0    0   0.0      0       0
+</span><span class='line'>Processing:     0    1   0.8      2       3
+</span><span class='line'>Waiting:        0    1   0.8      2       3
+</span><span class='line'>Total:          0    1   0.8      2       3
+</span><span class='line'>WARNING: The median and mean for the processing time are not within a normal deviation
+</span><span class='line'>        These results are probably not that reliable.
+</span><span class='line'>WARNING: The median and mean for the waiting time are not within a normal deviation
+</span><span class='line'>        These results are probably not that reliable.
+</span><span class='line'>WARNING: The median and mean for the total time are not within a normal deviation
+</span><span class='line'>        These results are probably not that reliable.
+</span><span class='line'>
+</span><span class='line'>Percentage of the requests served within a certain time (ms)
+</span><span class='line'>  50%      2
+</span><span class='line'>  66%      2
+</span><span class='line'>  75%      2
+</span><span class='line'>  80%      2
+</span><span class='line'>  90%      2
+</span><span class='line'>  95%      2
+</span><span class='line'>  98%      2
+</span><span class='line'>  99%      3
+</span><span class='line'> 100%      3 (longest request)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>再看看首页，因为采用了fastcgi_cache，每秒处理请求5189.68 [#/sec] (mean)，响应时间3ms内完成。</p>
+
+<p>性能比较表格(主要提供每秒处理数做比较)</p>
+
+<pre><code>                请求文件长度    php默认     eAccelerator加速模式      fastcgi_cache模式
+</code></pre>
+
+<p>phpinfo.php     58255 bytes     396.97          420.87                          4566.43
+博客首页        21485 bytes      56.83           129.43                           5189.68</p>
+
+<p><strong>总结：</strong></p>
+
+<p>上面的测试虽然不是很严谨，但是通过这些已经可以发现fastcgi_cache的优势了，通过缓存php结果，大幅提升请求处理能力。
+一般程序再通过eaccelerator模式加速后，可以提升2-3倍性能，而fastcgi_cache缓存的性能提升大约在10倍。</p>
+
+<p>不过fastcgi_cache的应用也有它的弊端，就是要通过程序控制好刷新和不缓存内容。不然登陆后的用户都显示一个界面，或者发布的消息迟迟不能显示在首页都是它要解决的问题。</p>
+
+<p>一般用户还是建议采用eaccelerator模块加速，因为这样基本无需修改代码，最容易实现。fastcgi_cache很难在不调整代码的情况下使用，因为他会缓存全部php文件，至少我的博客在启用了fastcgi_cache后，后台不正常。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/19/install-ApacheBench-on-CentOS-without-Apache/">Centos 单独安装apachebench</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-19T00:00:00+08:00" pubdate data-updated="true">Jan 19<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这两天在测试php性能优化方法。</p>
+
+<p>为了做压力测试可观察效果，就选择了ApacheBench来作为压力测试工具。其实就是大家常说的ab。</p>
+
+<p>但是这个工具是安装apache web server的时候自带的，现在我服务器上都是跑nginx。也不想为了用这个工具就再装个apache。所以在用下面方法单独安装ab工具，这里记录下步骤。
+ 
+首先安装ab运行需要的软件包apr-util</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>yum install apr-util</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后安装一个yum的工具包，为了可以单独弄出来ab。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>yum install yum-utils</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面两个安装好以后，我们开始单独安装ab，其实就是下载到apache的rpm包，然后解压后，cp出来ab工具。</p>
+
+<p>下载apache的rpm包就交给yumdownloader完成了，下载前我们建立一个临时目录用来存放。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir httpd
+</span><span class='line'>
+</span><span class='line'>cd httpd
+</span><span class='line'>
+</span><span class='line'>yumdownloader httpd</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下载后，我们对rpm进行解包</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rpm2cpio httpd-2.2.3-43.el5.centos.3.i386.rpm | cpio -idmv</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后将我们用到的ab拷贝到系统的/usr/bin目录下就可以了。最后再删除临时目录就全部ok了。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mv usr/bin/ab /usr/bin/ab
+</span><span class='line'>cd ..
+</span><span class='line'>rm -rf httpd</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/17/squid-cache-php-script/">Squid缓存php页面</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-17T00:00:00+08:00" pubdate data-updated="true">Jan 17<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这两天在看squid反向代理加速web应用方面的内容。</p>
+
+<p>总体来看squid的cache都是缓存一些静态内容，例如图片、css、js等文件。而动态内容是不能缓存的。那有没有办法让squid缓存php文件呢？答案是肯定的。</p>
+
+<p>首先用squid反向代理后，我们访问一个test.html的静态页面。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# curl -I http://xinlogs.com:3128/test.html
+</span><span class='line'>HTTP/1.0 200 OK
+</span><span class='line'>Content-Type: text/html
+</span><span class='line'>Content-Length: 77
+</span><span class='line'>Accept-Ranges: bytes
+</span><span class='line'>Server: Tengine/1.2.1
+</span><span class='line'>Date: Tue, 17 Jan 2012 12:38:36 GMT
+</span><span class='line'>Last-Modified: Tue, 17 Jan 2012 01:29:47 GMT
+</span><span class='line'>X-Cache: HIT from squid.xinlogs.com
+</span><span class='line'>Via: 1.1 squid.xinlogs.com:3128 (squid/2.7.STABLE9)
+</span><span class='line'>Connection: close</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到X-Cache: HIT from squid.xinlogs.com，成功命中缓存。说明是被squid缓存的内容直接给我们了。
+而访问一个动态页面呢？</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# curl -I http://xinlogs.com:3128/test.php
+</span><span class='line'>
+</span><span class='line'>HTTP/1.0 200 OK
+</span><span class='line'>
+</span><span class='line'>Server: Tengine/1.2.1
+</span><span class='line'>
+</span><span class='line'>Date: Tue, 17 Jan 2012 12:40:52 GMT
+</span><span class='line'>
+</span><span class='line'>Content-Type: text/html
+</span><span class='line'>
+</span><span class='line'>Vary: Accept-Encoding
+</span><span class='line'>
+</span><span class='line'>X-Powered-By: PHP/5.3.8
+</span><span class='line'>
+</span><span class='line'>X-Cache: MISS from squid.xinlogs.com
+</span><span class='line'>
+</span><span class='line'>Via: 1.1 squid.xinlogs.com:3128 (squid/2.7.STABLE9)
+</span><span class='line'>
+</span><span class='line'>Connection: close</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过X-Cache: MISS from squid.xinlogs.com，可以看到是未命中，也就是从squid后端的nginx请求到的内容。</p>
+
+<p>查了写资料，发现之所以不缓存动态脚本，主要是php文件没有输出Last-Modified: Tue, 17 Jan 2012 01:29:47 GMT这行头信息。</p>
+
+<p>下面我们构造一个可以输出头信息的php文件test2.php来测试下。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?php
+</span><span class='line'>$now = time();
+</span><span class='line'>$generatedAt = gmdate("D, d M Y H:i:s T",$now);
+</span><span class='line'>//print_r($generatedAt);
+</span><span class='line'>$lastModified = gmdate("D, d M Y 00:00:00 T",$now);
+</span><span class='line'>$expiresAt = gmdate("D, D M Y H:i:s T",strtotime($lastModified)+86400);
+</span><span class='line'>$maxAge=strtotime($expiresAt)-strtotime($generatedAt);
+</span><span class='line'>header('Last-modified: '.$lastModified);
+</span><span class='line'>header('Cache-control: max-age=' . $maxAge);
+</span><span class='line'>echo "Test".time();</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里我们通过header函数来构造了Last-Modified和Cache-control头信息。</p>
+
+<p>再让我们通过curl -I来查看下是否可以缓存这个test2.php文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>[root@localhost ~]# curl -I http://xinlogs.com:3128/test2.php
+</span><span class='line'>
+</span><span class='line'>HTTP/1.0 200 OK
+</span><span class='line'>
+</span><span class='line'>Server: Tengine/1.2.1
+</span><span class='line'>
+</span><span class='line'>Date: Tue, 17 Jan 2012 12:46:08 GMT
+</span><span class='line'>
+</span><span class='line'>Content-Type: text/html
+</span><span class='line'>
+</span><span class='line'>Vary: Accept-Encoding
+</span><span class='line'>
+</span><span class='line'>X-Powered-By: PHP/5.3.8
+</span><span class='line'>
+</span><span class='line'>Last-Modified: Tue, 17 Jan 2012 00:00:00 GMT
+</span><span class='line'>
+</span><span class='line'>Cache-Control: max-age=-1169168
+</span><span class='line'>
+</span><span class='line'>Age: 60
+</span><span class='line'>
+</span><span class='line'>Content-Length: 14
+</span><span class='line'>
+</span><span class='line'>X-Cache: HIT from squid.xinlogs.com
+</span><span class='line'>
+</span><span class='line'>Via: 1.1 squid.xinlogs.com:3128 (squid/2.7.STABLE9)
+</span><span class='line'>
+</span><span class='line'>Connection: close</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过上面信息，可以看到test2.php已经被缓存了。</p>
+
+<p><strong>总结：通过在php脚本里输出header头信息，还是可以让squid缓存上php文件的。</strong></p>
+
+<p><strong>但是目前还有一些问题没有解决：</strong></p>
+
+<p>通过IE浏览器访问可以正常命中，通过chrome或者firefox浏览器每次访问都是如下未命中</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>1326794201.750      1 210.56.223.167 TCP_REFRESH_MISS/200 355 GET http://xinlogs.com:3128/test2.php - FIRST_UP_PARENT/xinlogs text/html</span></code></pre></td></tr></table></div></figure>
+
+
+<p>而且不同访问方式的第一次访问也都是未命中，比如wget -S第一次访问未命中，如果换了curl -I再访问，还是未命中。</p>
+
+<p>尝试在squid.conf文件里加入了reload-into-ims on选项，但是无效。</p>
+
+<p>以上问题估计还需要看看是不是需要配合nginx的设置来解决，因为静态文件是不存在这些问题的。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/15/mysql-error-index-is-slower/">Mysql错误索引比没索引还慢</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-15T00:00:00+08:00" pubdate data-updated="true">Jan 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天一个客户反映网站某个页面很慢。初步分析是数据库查询造成的延时。
+打开数据库的慢查询日志，监控到如下语句</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Time: 120115  1:09:37
+</span><span class='line'># User@Host: sq_ttt[sq_ttt] @ localhost []
+</span><span class='line'># Query_time: 3.895267  Lock_time: 0.000131 Rows_sent: 1  Rows_examined: 168835
+</span><span class='line'>use sq_ttt;
+</span><span class='line'>SET timestamp=1326560977;
+</span><span class='line'>SELECT A.*,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个查询用了3.8s时间。
+于是进入数据库开始了这次分析。。。
+ 
+首先看下表结构</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE `p8_article` (
+</span><span class='line'>  `aid` mediumint(7) unsigned NOT NULL AUTO_INCREMENT,
+</span><span class='line'>  `title` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `smalltitle` varchar(100) NOT NULL DEFAULT '',
+</span><span class='line'>  `fid` mediumint(7) unsigned NOT NULL DEFAULT '0',
+</span><span class='line'>  `mid` mediumint(5) NOT NULL DEFAULT '0',
+</span><span class='line'>  `fname` varchar(50) NOT NULL DEFAULT '',
+</span><span class='line'>  `hits` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `pages` smallint(4) NOT NULL DEFAULT '0',
+</span><span class='line'>  `comments` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `posttime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `list` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `uid` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `username` varchar(30) NOT NULL DEFAULT '',
+</span><span class='line'>  `author` varchar(30) NOT NULL DEFAULT '',
+</span><span class='line'>  `copyfrom` varchar(100) NOT NULL DEFAULT '',
+</span><span class='line'>  `copyfromurl` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `titlecolor` varchar(15) NOT NULL DEFAULT '',
+</span><span class='line'>  `fonttype` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `picurl` varchar(150) NOT NULL DEFAULT '0',
+</span><span class='line'>  `ispic` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `yz` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `yzer` varchar(30) NOT NULL DEFAULT '',
+</span><span class='line'>  `yztime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `levels` tinyint(2) NOT NULL DEFAULT '0',
+</span><span class='line'>  `levelstime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `keywords` varchar(100) NOT NULL DEFAULT '',
+</span><span class='line'>  `jumpurl` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `iframeurl` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `style` varchar(15) NOT NULL DEFAULT '',
+</span><span class='line'>  `template` varchar(255) NOT NULL DEFAULT '',
+</span><span class='line'>  `target` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `ip` varchar(15) NOT NULL DEFAULT '',
+</span><span class='line'>  `lastfid` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `money` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `buyuser` text NOT NULL,
+</span><span class='line'>  `passwd` varchar(32) NOT NULL DEFAULT '',
+</span><span class='line'>  `allowdown` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `allowview` varchar(150) NOT NULL DEFAULT '',
+</span><span class='line'>  `editer` varchar(30) NOT NULL DEFAULT '',
+</span><span class='line'>  `edittime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `begintime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `endtime` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `description` text NOT NULL,
+</span><span class='line'>  `lastview` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `digg_num` mediumint(7) NOT NULL DEFAULT '0',
+</span><span class='line'>  `digg_time` int(10) NOT NULL DEFAULT '0',
+</span><span class='line'>  `forbidcomment` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `ifvote` tinyint(1) NOT NULL DEFAULT '0',
+</span><span class='line'>  `heart` varchar(255) NOT NULL DEFAULT '',
+</span><span class='line'>  `htmlname` varchar(100) NOT NULL DEFAULT '',
+</span><span class='line'>  PRIMARY KEY (`aid`),
+</span><span class='line'>  KEY `list` (`list`,`fid`,`yz`,`ispic`) USING BTREE
+</span><span class='line'>) ENGINE=MyISAM AUTO_INCREMENT=176567 DEFAULT CHARSET=gbk</span></code></pre></td></tr></table></div></figure>
+
+
+<p> 
+然后我们采用explain看看是否使用了索引</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; explain SELECT A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
+</span><span class='line'>+----+-------------+-------+-------+---------------+------+---------+------+------+-------------+
+</span><span class='line'>| id | select_type | table | type  | possible_keys | key  | key_len | ref  | rows | Extra       |
+</span><span class='line'>+----+-------------+-------+-------+---------------+------+---------+------+------+-------------+
+</span><span class='line'>|  1 | SIMPLE      | A     | index | NULL          | list | 9       | NULL |    1 | Using where |
+</span><span class='line'>+----+-------------+-------+-------+---------------+------+---------+------+------+-------------+
+</span><span class='line'>1 row in set (0.00 sec)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以发现使用了list索引，这个查询类型是index</p>
+
+<p>注意：用explain分析的时候，这个type的速度顺序如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>system &gt; const &gt; eq_ref &gt; ref &gt; fulltext &gt; ref_or_null &gt; index_merge &gt; unique_subquery &gt; index_subquery &gt; range &gt; index &gt; ALL</span></code></pre></td></tr></table></div></figure>
+
+
+<p>一般我们优化，最少要到range。</p>
+
+<p>不过今天的问题没有这样简单，因为当我删除索引后，发现即使不用索引也比这个快。</p>
+
+<p>下面是我删掉全部索引的结果</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; SELECT A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
+</span><span class='line'>+------------+------+
+</span><span class='line'>| list       | id   |
+</span><span class='line'>+------------+------+
+</span><span class='line'>| 1323887041 | 1312 |
+</span><span class='line'>+------------+------+
+</span><span class='line'>1 row in set (0.31 sec)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>用explain查看没有索引的状态如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; explain SELECT A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+------+--------+-----------------------------+
+</span><span class='line'>| id | select_type | table | type | possible_keys | key  | key_len | ref  | rows   | Extra                       |
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+------+--------+-----------------------------+
+</span><span class='line'>|  1 | SIMPLE      | A     | ALL  | NULL          | NULL | NULL    | NULL | 175175 | Using where; Using filesort |
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+------+--------+-----------------------------+
+</span><span class='line'>1 row in set (0.00 sec)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们可以看到type是ALL，Extra里面还用了filesort.但即使这样，查询时间才0.31 sec
+可以看到加了索引后，反而慢了。这也是我今天想说的一个问题：<strong>错误的索引可能会更慢！</strong></p>
+
+<p><strong>调整索引</strong></p>
+
+<p>我们删掉list索引后，尝试重新建立这个复合索引。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; create index list on p8_article(yz,fid,ispic,list);
+</span><span class='line'>Query OK, 175175 rows affected (2.80 sec)
+</span><span class='line'>Records: 175175  Duplicates: 0  Warnings: 0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这次索引的区别就在于顺序的改变，将list放在了最后。这个可以参考mysql联合索引的最左前缀。
+这样在看看explain的状态</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; explain SELECT SQL_NO_CACHE A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+-------------------+------+-------------+
+</span><span class='line'>| id | select_type | table | type | possible_keys | key  | key_len | ref               | rows | Extra       |
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+-------------------+------+-------------+
+</span><span class='line'>|  1 | SIMPLE      | A     | ref  | list          | list | 5       | const,const,const |   37 | Using where |
+</span><span class='line'>+----+-------------+-------+------+---------------+------+---------+-------------------+------+-------------+
+</span><span class='line'>1 row in set (0.00 sec)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>type已经是ref了，Extra也不在使用filesort了。</p>
+
+<p>再实际运行查询，看看时间上的变化</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; SELECT SQL_NO_CACHE A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
+</span><span class='line'>+------------+------+
+</span><span class='line'>| list       | id   |
+</span><span class='line'>+------------+------+
+</span><span class='line'>| 1323887041 | 1312 |
+</span><span class='line'>+------------+------+
+</span><span class='line'>1 row in set (0.00 sec)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>为了怕有query_cache的原因，所以特意加入了SQL_NO_CACHE。</p>
+
+<p>现在显示查询时间为0.00 sec 基本可以忽略不计了。而经过索引的调整，网页的速度也确实得到了改善。
+ 
+<strong>总结：索引错误的使用反而会拖慢查询，甚至比不用还慢。一定要根据最左前缀建立合适的索引，才可以起到加速查询的作用！</strong></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/30/php-performance-debugging-tools/">Php性能调试工具</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-30T00:00:00+08:00" pubdate data-updated="true">Dec 30<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近在帮一些客户优化php性能。</p>
+
+<p>排除掉服务器环境、memcache这些办法后，剩下的就是找php代码有没有执行过慢的因素了。</p>
+
+<p>下面列出一些在php性能调试中可以用到的工具。</p>
+
+<p>1、xdebug
+     这个工具大家都很熟悉，开始php过程中，用来调试程序用的。</p>
+
+<p>2、webgrind
+     这个工具主要是配合xdebug来使用，用来监测php执行时间的。</p>
+
+<p>3、XHProf
+     这个工具据说比xdebug轻量，可以考虑用于生产环境下来监测php性能。没有用过，看介绍很棒！facebook用的，肯定差不了。
+ 
+以上只是简单介绍下，用来记录。等以后有机会仔细用来，再发文档说明</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/29/find-php-slow-code/">Php-fpm查找php慢速代码</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-29T00:00:00+08:00" pubdate data-updated="true">Dec 29<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前两天帮助一个客户优化ecshop。
+他的ecshop代码是找人修改过的，修改后速度已很很慢，大概打开一页需要9s吧。
+而默认的ecshop在同样服务器上速度就很快。
+开始走了很多弯路，因为只是速度慢，并无错误。就没有想到是代码的原因。
+对比两个ecshop，首先发现首页加载的request数量差距很大，慢的站点105次，快的46次。
+而且慢的站点1.66M大小，而快的只有455k。通过开启gzip和合并css、js等手段优化后，效果并不明显。
+ 
+后来想到可能是因为找人修改过代码，开始怀疑到代码上（也确实没啥办法了）。
+想到php-fpm可以记录下执行过慢的php脚本，于是修改php-fpm配置，加入了记录慢速php请求的代码。</p>
+
+<p>下面是在php 5.3.8下的php-fpm.conf文件添加的内容</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>request_slowlog_timeout=5s
+</span><span class='line'>slowlog=/var/log/fpm_slow.log</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个配置会将php脚本执行超过5秒的，记录在/var/log/fpm_slow.log文件中。
+ 
+如果你的php还是5.2.x的版本，那么php-fpm还是以补丁的形式执行，请参考下面的配置文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>The timeout (in seconds) for serving of single request after which a php backtrace will be dumped to slow.log file
+</span><span class='line'>      '0s' means 'off'
+</span><span class='line'>      &lt;value name="request_slowlog_timeout"&gt;0s&lt;/value&gt;
+</span><span class='line'> 
+</span><span class='line'>      The log file for slow requests
+</span><span class='line'>      &lt;value name="slowlog"&gt;logs/slow.log&lt;/value&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最终在/var/log/fpm_slow.log文件里，发现很多如下记录</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[27-Dec-2011 10:07:27]  [pool www] pid 8524
+</span><span class='line'>
+</span><span class='line'>script_filename = /data/huaximall/flow.php
+</span><span class='line'>
+</span><span class='line'>[0x0a0f41c0] fsockopen() !:649
+</span><span class='line'>
+</span><span class='line'>[0x0a0f4104] _connect_sock() !:937
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3fdc] sock_to_host() !:693
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3f08] get_sock() !:372
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3e5c] get() !:952
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3d4c] getAll() !:291
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3c3c] get_child_tree() !:313
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3b18] get_child_tree() !:251
+</span><span class='line'>
+</span><span class='line'>[0x0a0f2fa8] get_categories_tree() !:44</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里比较奇怪，人家的这个日志都可以显示出具体是哪个文件的哪行，我这里只有函数和行，而文件名的地方却是“！”号。。。。
+这个问题我还没有解决，不过通过这些日志，我已经可以判断出来是flow.php的执行时间超过了5s。。。导致首页加载过慢。</p>
+
+<p>后面分析flow.php，发现又调用了init.php等相关库和初始化文件。
+最后发现fsockopen() _connect_sock() sock_to_host()这些函数是在尝试连接到memcached的服务器。而这个服务器的IP不对，导致这里延时很大。。。</p>
+
+<p>还有个技巧就是在php页面里加入计算执行时间的输出，看看到底哪些行的执行时间过长。
+具体时间的计算，可以参考下面代码</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$start = microtime(true);
+</span><span class='line'>$end = microtime(true);
+</span><span class='line'>$time=$end-$start;</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/25/ssh-login-protection-by-denyhosts/">通过denyhosts保护ssh登陆</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-25T00:00:00+08:00" pubdate data-updated="true">Dec 25<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天查看服务器的/var/log/secure日志，发现很多类似下面的信息</p>
+
+<p><code>PAM 6 more authentication failures; logname= uid=0 euid=0 tty=ssh ruser= rhost=121.176.35.192  user=root</code></p>
+
+<p>说明经常有人通过ssh尝试登陆，并不断尝试猜测root的密码。</p>
+
+<p>这样总让人尝试我的密码也不是个事儿呀&#8230;.于是通过denyhosts软件，开启了保护。</p>
+
+<p>通过denyhosts我们可以设置登陆失败几次，就禁止这个IP再次登陆。并可以设置多少分钟后，放开保护。</p>
+
+<p><strong>denyhosts介绍</strong></p>
+
+<p>DenyHosts是Python语言写的一个程序，用DenyHosts可以阻止试图猜测SSH登录口令，它会分析/var/log/secure等日志文件，当发现同一IP在进行多次SSH密码尝试时就会记录IP到/etc/hosts.deny文件，从而达到自动屏蔽该IP的目的。</p>
+
+<p>安装需求</p>
+
+<p>首要要求有python环境，并版本在2.3以上</p>
+
+<p>CentOS 默认安装了2.4.3版本，我们可以通过下面命令查看</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# python -V
+</span><span class='line'>
+</span><span class='line'>Python 2.4.3</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>注意大小写。</strong></p>
+
+<p>其次是sshd需要支持tcp_wrappers。这个一般都支持。可以用下面命令判断</p>
+
+<p><code>ldd /usr/sbin/sshd |grep wrap</code></p>
+
+<p>如果显示：libwrap.so.0 => /lib/libwrap.so.0 (0x00db7000)表示支持</p>
+
+<p><strong>安装</strong></p>
+
+<p>当前最新的版本是2.6</p>
+
+<p><a href="wget%20http://downloads.sourceforge.net/project/denyhosts/denyhosts/2.6/DenyHosts-2.6.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fdenyhosts%2Ffiles%2F&amp;ts=1324820171&amp;use_mirror=cdnetworks-kr-1">下载</a></p>
+
+<p><strong>解压安装</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar zxvf DenyHosts-2.6.tar.gz 
+</span><span class='line'>
+</span><span class='line'>cd DenyHosts-2.6
+</span><span class='line'>
+</span><span class='line'>python setup.py install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>默认将程序安装在/usr/share/denyhosts</p>
+
+<p>库文件在/usr/lib/python2.4/site-packages/DenyHosts/</p>
+
+<p>denyhosts.py安装到/usr/bin</p>
+
+<p><strong>设置启动脚本</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /usr/share/denyhosts/
+</span><span class='line'>
+</span><span class='line'>cp daemon-control-dist daemon-control
+</span><span class='line'>
+</span><span class='line'>chown root daemon-control
+</span><span class='line'>
+</span><span class='line'>chmod 700 daemon-control
+</span><span class='line'>
+</span><span class='line'>grep -v "^#" denyhosts.cfg-dist &gt; denyhosts.cfg</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就生成了一个标准的配置文件denyhosts.cfg</p>
+
+<p>我们需要按照自己的想法，配置下这个denyhosts.cfg文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SECURE_LOG = /var/log/secure
+</span><span class='line'>
+</span><span class='line'>#表示系统中secure日志文件位置
+</span><span class='line'>
+</span><span class='line'>HOSTS_DENY = /etc/hosts.deny
+</span><span class='line'>
+</span><span class='line'>#表示hosts.deny配置文件在系统中位置
+</span><span class='line'>
+</span><span class='line'>PURGE_DENY = 30m
+</span><span class='line'>
+</span><span class='line'>#表示多久后解封IP
+</span><span class='line'>
+</span><span class='line'>BLOCK_SERVICE  = sshd
+</span><span class='line'>
+</span><span class='line'>DENY_THRESHOLD_INVALID = 1
+</span><span class='line'>
+</span><span class='line'>#表示无效用户名，登陆失败几次就封IP
+</span><span class='line'>
+</span><span class='line'>DENY_THRESHOLD_VALID = 5
+</span><span class='line'>#表示有效果的普通用户登陆几次就封IP
+</span><span class='line'>
+</span><span class='line'>DENY_THRESHOLD_ROOT = 3
+</span><span class='line'>
+</span><span class='line'>#表示root用户登陆失败几次封IP
+</span><span class='line'>
+</span><span class='line'>DENY_THRESHOLD_RESTRICTED = 1
+</span><span class='line'>
+</span><span class='line'>WORK_DIR = /usr/share/denyhosts/data
+</span><span class='line'>
+</span><span class='line'>SUSPICIOUS_LOGIN_REPORT_ALLOWED_HOSTS=YES
+</span><span class='line'>
+</span><span class='line'>HOSTNAME_LOOKUP=NO
+</span><span class='line'>
+</span><span class='line'>表示是否做域名反解析
+</span><span class='line'>
+</span><span class='line'>LOCK_FILE = /var/lock/subsys/denyhosts</span></code></pre></td></tr></table></div></figure>
+
+
+<p>启动denyhosts</p>
+
+<p><code>/usr/share/denyhosts/daemon-control start</code></p>
+
+<p>配置denyhosts随系统自启动</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /etc/init.d
+</span><span class='line'>
+</span><span class='line'>ln -s /usr/share/denyhosts/daemon-control denyhosts
+</span><span class='line'>
+</span><span class='line'>chkconfig --add denyhosts
+</span><span class='line'>
+</span><span class='line'>chkconfig --level 345 denyhosts on</span></code></pre></td></tr></table></div></figure>
+
+
+<p>查看效果</p>
+
+<p>如果尝试登陆失败次数达到后，IP就会被记录到/etc/hosts.deny文件内，来达到阻止登陆的目的</p>
+
+<p>我们也可以通过查看/var/log/denyhosts日志文件来判断是否有被封的IP</p>
+
+<p>下面是我的机器部署denyhosts一段时间后封的IP</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># DenyHosts: Sun Dec 25 21:40:13 2011 | sshd: 112.164.231.91
+</span><span class='line'>
+</span><span class='line'>sshd: 112.164.231.91</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/22/monitor-network-connections-of-linux/">Linux网络连接数量监控</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-22T00:00:00+08:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天早上一个客户的网站停止了响应，不能正常解析php内容。
+重启php-fpm后正常，判断应该是php-fpm进程僵死。所以就先参考网上内容，写了一个监控nginx状态脚本
+后来又想看看这个php-fpm进程挂掉和访问量是否有关系，于是打算记录下服务器每分钟的访问量。
+其实就是用cron每分钟执行我写的这个脚本，而脚本的作用就是获取当前linux的连接数，并记录到日志文件中。
+ 
+监控linux网络连接数的脚本如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/sh
+</span><span class='line'>#定义日志的时间格式，用来作为日志结尾的时间标记
+</span><span class='line'>logfile=`date +%Y%m%d`
+</span><span class='line'>#定义个时间，用来写入日志用
+</span><span class='line'>logtime=`date`
+</span><span class='line'>#获取当前系统的网路连接数，这里去掉了127.0.0.1的连接，因为我的php-fpm用的127.0.0.1:9000这个连接。
+</span><span class='line'>log=`netstat -ntu | awk '{print $5}' | cut -d: -f1 |grep [^127.0.0.1] |wc -l`
+</span><span class='line'>#写日志内容到日志文件
+</span><span class='line'>echo "$logtime | $log " &gt;&gt; /data/logs/connect_$logfile.log</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/14/bbsxp6-to-phpwind8/">Bbsxp 6.0数据导入phpwind 8.7方法</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-14T00:00:00+08:00" pubdate data-updated="true">Dec 14<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天帮助猪八戒网上的一个客户将原来的bbsxp 6.0的论坛数据迁移到phpwind 8.7下。这里主要记录下思路</p>
+
+<p>phpwind官方论坛有各种的迁移程序，但是继续bbsxp的最早版本是2008. 而我这个客户的是bbsxp 6的access库。</p>
+
+<p>完成这个任务，我顺利升级到猪三戒！呵呵</p>
+
+<p>没有现成的，只能自己分析了。</p>
+
+<p>为了导入方便，我先将需要用到的数据从access的库导入mysql里。</p>
+
+<p>这样bbsxp的表和新安装的phpwind表都在一个库了。</p>
+
+<p><strong>数据分析</strong></p>
+
+<p>这个步骤主要分析用户数据、论坛的板块数据、帖子、回帖等数据的格式。找到两个表的数据关系，为后面导入数据打下基础。</p>
+
+<p><strong>数据迁移</strong></p>
+
+<p>用户数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_members(uid,username,password,email,icon,gender,regdate,signature,site,bday) SELECT ID,UserName,lower(UserPass),UserMail,UserFace,UserSex,UNIX_TIMESTAMP(UserRegTime),UserSign,UserHome,Birthday From bbsxp_users;</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_memberdata(uid,postnum,rvrc,money) SELECT ID,PostTopic,PostRevert,UserMoney From bbsxp_users;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>帖子数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_threads(tid,fid,author,subject,ifcheck,postdate,lastpost,lastposter,hits,replies) SELECT ID,ForumID,UserName,Topic,1,UNIX_TIMESTAMP(PostTime),UNIX_TIMESTAMP(LastTime),LastName,Views,Replies From bbsxp_threads;</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_tmsgs(tid,content) SELECT ThreadID,Content From bbsxp_posts2 where IsTopic=1;</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>update pw_threads set authorid = (SELECT uid from pw_members WHERE username=pw_threads.author);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>回帖数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_posts(pid,tid,author,postdate,subject,ifcheck,content) SELECT ID,ThreadID,UserName,UNIX_TIMESTAMP(PostTime),Subject,1,Content From bbsxp_posts2 where IsTopic=0;</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>update pw_posts set authorid = (SELECT uid from pw_members WHERE username=pw_posts.author);</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>最后注意：</strong></p>
+
+<p>导入数据后，论坛进入板块后没有分页。这个需要进入后台，数据-》全部缓存-》更新各种统计数据。</p>
+
+<p>还有就是需要看下bbsxp做没做分表处理，有可能将bbsxp_posts分表为bbsxp_posts1、bbsxp_posts2等表</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/09/check-slow-php-script/">如何找到执行慢的php程序</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-09T00:00:00+08:00" pubdate data-updated="true">Dec 9<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近在帮助一个网站做性能优化。
+从原来的windows平台切换到了linux平台。php环境也已经变为主流的Nginx+php-fpm+eAccelerator+Zend Optimization组合
+打开了MySQL的慢连接，发现基本集中在论坛的表查询上，但是我们如何定位有哪些php程序在执行的时候过慢呢？</p>
+
+<p>通过查看php-fpm.conf配置，可以找到如下配置信息</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>The timeout (in seconds) for serving of single request after which a php backtrace will be dumped to slow.log file
+</span><span class='line'>      '0s' means 'off'
+</span><span class='line'>      &lt;value name="request_slowlog_timeout"&gt;0s&lt;/value&gt;
+</span><span class='line'>
+</span><span class='line'>      The log file for slow requests
+</span><span class='line'>      &lt;value name="slowlog"&gt;logs/slow.log&lt;/value&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>request_slowlog_timeout 项是一个设定超过多长时间就会被记录到slow.log日志中。0s为关闭这个选项。</p>
+
+<p>下面的slowlog为设置slow.log文件的位置。</p>
+
+<p>打开这个以后，我们就可以看到哪些php文件用了过多的执行时间，来重点优化。
+而且php-fpm.log也回提示出执行时间超过这个设定的信息。</p>
+
+<p>下面是php-fpm.log的提示</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Dec 09 20:19:25.170259 [WARNING] fpm_request_check_timed_out(), line 146: child 28844, script '/data/htdocs/bbs/forumdisplay.php' (pool default) executing too slow (3.110822 sec), logging</span></code></pre></td></tr></table></div></figure>
+
+
+<p>提示forumdisplay.php文件执行过慢，用了3.110822秒</p>
+
+<p>再来看看slow.log的内容</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Dec 09 20:23:49.534250 pid 28865 (pool default)
+</span><span class='line'>
+</span><span class='line'>script_filename = /data/htdocs/t/bbs/forumdisplay.php
+</span><span class='line'>
+</span><span class='line'>[0xbff462a0] mysql_query() p:66
+</span><span class='line'>
+</span><span class='line'>[0xbff47020] query() p:622</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到和上面的php-fpm.log是对应的的。</p>
+
+<p>有了这个办法，我们就可以随时查看网站中到底是什么程序执行速度慢，来重点优化了！</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/4/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/2/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

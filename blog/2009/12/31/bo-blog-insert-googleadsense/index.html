@@ -1,0 +1,370 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>bo-blog 2.1.1如何加入google广告条 - 鑫的方向</title>
+  <meta name="author" content="babodx">
+
+  
+  <meta name="description" content="刚开始使用的bo-blog的时候也不知道如何加入google广告条，经过这几天的咕哝，现在已经成功在右边和下面加入。方法记录如下 右侧边栏加入google广告 进入后台管理->常规管理->模块配置 点击左侧的新建/编辑项目 如图 然后在手动添加项目中选择侧边模块，确定。如图 确认后，进入到新增/ &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://babodx.github.com/blog/2009/12/31/bo-blog-insert-googleadsense/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="鑫的方向" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">鑫的方向</a></h1>
+  
+    <h2>简单就是不简单！</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:babodx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Bo-blog 2.1.1如何加入google广告条</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-31T00:00:00+08:00" pubdate data-updated="true">Dec 31<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>刚开始使用的bo-blog的时候也不知道如何加入google广告条，经过这几天的咕哝，现在已经成功在右边和下面加入。方法记录如下</p>
+
+<p><strong>右侧边栏加入google广告</strong></p>
+
+<p>进入后台管理->常规管理->模块配置</p>
+
+<p>点击左侧的新建/编辑项目 如图</p>
+
+<p><img src="http://farm9.staticflickr.com/8102/8512175362_3d5fd9e7c9.jpg" alt="编辑项目截图" /></p>
+
+<p>然后在手动添加项目中选择侧边模块，确定。如图</p>
+
+<p><img src="http://farm9.staticflickr.com/8370/8512175480_2bb7b4d188.jpg" alt="侧边截图" /></p>
+
+<p>确认后，进入到新增/编辑项目页面</p>
+
+<p>项目名称&#8211;这个是在后台编辑的时候，给自己分辨模块用的，随意命名。我的叫做googleadsense，注意：只能字母和数字</p>
+
+<p>项目描述&#8211;随意填写</p>
+
+<p>抬头文字&#8211;显示在首页侧边栏上，我的叫做广告栏，根据个人情况写</p>
+
+<p>栏目内容&#8211;这里写入google的广告代码就可以了</p>
+
+<p>这个办法最容易，不用修改模板。如果加入后，首页显示google广告栏，里面内容是白的，不要着急，过段时间就可以显示了。我第一个广告大约在30分钟后，才正确显示出来。</p>
+
+<p>博客底部加入google广告</p>
+
+<p>底部加入广告，也可以用上面类似的办法，通过加入底部模块实现。但是我尝试了，不好对齐，而且有的模板会破坏底部风格。所以我没有用添加底部模块的办法。</p>
+
+<p>我采用直接修改模板的elements.php文件方法。</p>
+
+<p>到bo-blog的template目录下，找到自己使用的模板文件夹，我用的neowin2，所以对应目录就是neowin2</p>
+
+<p>在模板目录下，打开elements.php文件。找到文件里的displayfooter位置，在displayfooter段里面加入google广告代码。入下所示</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">$elements[&#39;displayfooter&#39;]=&lt;&lt;&lt;eot</span>
+</span><span class='line'><span class="x">&lt;div class=&quot;clear&quot;&gt; &lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;div class=&quot;content-box-b&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;div class=&quot;content-box-b-r&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;div class=&quot;content-box-b-l&quot;&gt;&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">/* 下面为google广告代码 */</span>
+</span><span class='line'><span class="x">&lt;center&gt;</span>
+</span><span class='line'><span class="x">&lt;script type=&quot;text/javascript&quot;&gt;&lt;!--</span>
+</span><span class='line'><span class="x">google_ad_client = &quot;pub-2759888315234430&quot;;</span>
+</span><span class='line'><span class="x">/* 728x90, ... 09-12-21 */</span>
+</span><span class='line'><span class="x">google_ad_slot = &quot;9531615827&quot;;</span>
+</span><span class='line'><span class="x">google_ad_width = 728;</span>
+</span><span class='line'><span class="x">google_ad_height = 90;</span>
+</span><span class='line'><span class="x">//--&gt;</span>
+</span><span class='line'><span class="x">&lt;/script&gt;</span>
+</span><span class='line'><span class="x">&lt;script type=&quot;text/javascript&quot;</span>
+</span><span class='line'><span class="x">src=&quot;http://pagead2.googlesyndication.com/pagead/show_ads.js&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;/script&gt;</span>
+</span><span class='line'><span class="x">&lt;/center&gt;</span>
+</span><span class='line'><span class="x">/*google广告代码结束*/</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;footer&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;footer-r&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;footer-l&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;footer-misc&quot;&gt;</span>
+</span><span class='line'><span class="x">Skin By &lt;a href=&quot;http://www.neowin.net/&quot; target=&quot;_blank&quot;&gt;Neowin&lt;/a&gt;&lt;br /&gt;</span>
+</span><span class='line'><span class="x">Transplanted By &lt;a href=&quot;http://blog.meiu.cn/&quot; target=&quot;_blank&quot;&gt;Lingter&lt;/a&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;footer-copyright&quot;&gt;</span>
+</span><span class='line'><span class="x">{section_foot_components}</span>
+</span><span class='line'><span class="x">&lt;div id=&quot;processtime&quot;&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;div class=&quot;clear&quot;&gt;&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">eot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面的代码就是在博客下面，footer信息的上面，加入一条google广告。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">babodx</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-31T00:00:00+08:00" pubdate data-updated="true">Dec 31<span>st</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/php/'>PHP</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2009/12/31/bo-blog-insert-googleadsense/" data-via="" data-counturl="http://babodx.github.com/blog/2009/12/31/bo-blog-insert-googleadsense/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/12/30/playframework-installation-guide/" title="Previous Post: playframework--Installation guide 安装手册【翻译】">&laquo; playframework--Installation guide 安装手册【翻译】</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2010/01/01/druapl-url-nginx-rewrite/" title="Next Post: drupal在nginx 0.8.15下的简洁URL配置">drupal在nginx 0.8.15下的简洁URL配置 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>Categories</h1>
+<ul id="categories">
+  <li class='category'><a href='/blog/categories/css/'>CSS (2)</a></li>
+<li class='category'><a href='/blog/categories/cloudstack/'>Cloudstack (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
+<li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
+<li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
+<li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (5)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>Vim (1)</a></li>
+<li class='category'><a href='/blog/categories/virtualization/'>Virtualization (9)</a></li>
+<li class='category'><a href='/blog/categories/website/'>Website (4)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (10)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
+<li class='category'><a href='/blog/categories/vim/'>vim (1)</a></li>
+
+</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - babodx -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Software | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/software/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-03-14T13:53:55+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[离线博客工具-菊子曰]]></title>
+    <link href="http://babodx.github.com/blog/2011/10/25/write-blog-offline/"/>
+    <updated>2011-10-25T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2011/10/25/write-blog-offline</id>
+    <content type="html"><![CDATA[<p>因为迁移到了emlog，最近几天一直在鼓弄博客。</p>
+
+<p>今天又尝试用离线工具写博客了。</p>
+
+<p>在网站上搜索了下，发现国人开发的菊子曰不错。所以开始了这次尝试</p>
+
+<p>功能方面日常写文章应该足够了。</p>
+
+<p>就是如果是程序员用，代码高亮效果很一般
+ 
+ 
+还有就是日志摘要功能，并不能符合emlog的日志摘要，基本只能全篇发上来。感觉如果文章不是很长，建议还是采用在线编辑吧。
+再有就是采用了离线发布，将不能自动和新浪微博同步</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HeidiSQL一款开源的MySQL图形管理软件]]></title>
+    <link href="http://babodx.github.com/blog/2010/11/25/HeidiSQL/"/>
+    <updated>2010-11-25T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2010/11/25/HeidiSQL</id>
+    <content type="html"><![CDATA[<p>以前一直使用Navicat客户端，功能确实强大。不过这个客户端是收费的商业软件。
+最近发现有一款HeidiSQL的开源软件，也可以很好的管理MySQL。使用后，发现很不错。这里推荐下
+官方介绍：</p>
+
+<h2>What's this?</h2>
+
+
+<p><strong>HeidiSQL</strong> is an easy-to-use interface and a "working-horse" for web-developers using the popular <a href="http://www.mysql.com/">MySQL-Database</a>. It allows you to manage and browse your databases and tables from an intuitive Windows® interface.
+放一张官方截图</p>
+
+<p><img src="http://flic.kr/p/dYr8K9" alt="HeidiSQL截图" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[一款匿名浏览器--XeroBank Browser]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/xerobank-browser/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/xerobank-browser</id>
+    <content type="html"><![CDATA[<p>XeroBank Browser 用来上网，可以很好的隐藏你的ip地址。利用Tor(The Onion Router)可以自动通过多层代理跳转，来隐藏你的IP因为是通过代理的，所以速度肯定要慢一些。但可以访问一些国内封锁的IP地址</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[一个很好的开源企业内部IM解决方案]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/opensource-im/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/opensource-im</id>
+    <content type="html"><![CDATA[<p>今天发现了<a href="http://www.igniterealtime.org/">http://www.igniterealtime.org</a>这个项目首页</p>
+
+<p>这个项目可以在企业内部架设一台服务器，来完成内部IM功能。客户端可以想QQ或者MSN一样登陆。并且通过服务器上设置GATEWAY功能，还能与MSN等主流软件通讯。</p>
+
+<p>具体功能还没有测试，不过打算有时间的时候架设下进行试用。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[一个在windows下很好用的MySQL工具Navicat]]></title>
+    <link href="http://babodx.github.com/blog/2009/12/21/navicat/"/>
+    <updated>2009-12-21T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2009/12/21/navicat</id>
+    <content type="html"><![CDATA[<p>为了解决中文乱码，我的Mysql都设置了使用utf8编码</p>
+
+<p>这样一来，使用SQLyog Enterprise查看表里面内容，就都不能正常显示了。可能SQLyog需要设置？反正我没有搞出来。</p>
+
+<p>不过后来我换用了Navicat 7以后，感觉很好。所有中文内容都可以正确显示</p>
+
+<p>比mysql front也要强很多。以后我就用这个了
+<img src="http://www.navicat.com/images/stories/product/mysql/product/win/win_big.jpg" alt="navicat" /></p>
+
+<p>而且支持Linux,windows,mac三个平台。下面是介绍</p>
+
+<p><span>PremiumSoft Navicat™ is a powerful MySQL database administration and development tool that is not only sophisticated enough for professional developers, but also easy to learn for new users. With an user-friendly GUI, Navicat™ lets you quickly and easily create, organize, access and share information in a secure and convenient way. </span>
+<span>PremiumSoft Navicat supports multiple MySQL server connections which can be connected locally or remotely. Your remote MySQL server can be running on Linux, Unix, Mac OS X or Windows platform.<br></span></p>
+]]></content>
+  </entry>
+  
+</feed>

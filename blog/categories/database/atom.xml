@@ -1,0 +1,544 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Database | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/database/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-03-14T13:53:55+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Mysql错误索引比没索引还慢]]></title>
+    <link href="http://babodx.github.com/blog/2012/01/15/mysql-error-index-is-slower/"/>
+    <updated>2012-01-15T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/01/15/mysql-error-index-is-slower</id>
+    <content type="html"><![CDATA[<p>今天一个客户反映网站某个页面很慢。初步分析是数据库查询造成的延时。
+打开数据库的慢查询日志，监控到如下语句</p>
+
+<p>```</p>
+
+<h1>Time: 120115  1:09:37</h1>
+
+<h1>User@Host: sq_ttt[sq_ttt] @ localhost []</h1>
+
+<h1>Query_time: 3.895267  Lock_time: 0.000131 Rows_sent: 1  Rows_examined: 168835</h1>
+
+<p>use sq_ttt;
+SET timestamp=1326560977;
+SELECT A.*,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
+```</p>
+
+<p>这个查询用了3.8s时间。
+于是进入数据库开始了这次分析。。。
+ 
+首先看下表结构</p>
+
+<p><code>
+CREATE TABLE `p8_article` (
+  `aid` mediumint(7) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(150) NOT NULL DEFAULT '',
+  `smalltitle` varchar(100) NOT NULL DEFAULT '',
+  `fid` mediumint(7) unsigned NOT NULL DEFAULT '0',
+  `mid` mediumint(5) NOT NULL DEFAULT '0',
+  `fname` varchar(50) NOT NULL DEFAULT '',
+  `hits` mediumint(7) NOT NULL DEFAULT '0',
+  `pages` smallint(4) NOT NULL DEFAULT '0',
+  `comments` mediumint(7) NOT NULL DEFAULT '0',
+  `posttime` int(10) NOT NULL DEFAULT '0',
+  `list` int(10) NOT NULL DEFAULT '0',
+  `uid` mediumint(7) NOT NULL DEFAULT '0',
+  `username` varchar(30) NOT NULL DEFAULT '',
+  `author` varchar(30) NOT NULL DEFAULT '',
+  `copyfrom` varchar(100) NOT NULL DEFAULT '',
+  `copyfromurl` varchar(150) NOT NULL DEFAULT '',
+  `titlecolor` varchar(15) NOT NULL DEFAULT '',
+  `fonttype` tinyint(1) NOT NULL DEFAULT '0',
+  `picurl` varchar(150) NOT NULL DEFAULT '0',
+  `ispic` tinyint(1) NOT NULL DEFAULT '0',
+  `yz` tinyint(1) NOT NULL DEFAULT '0',
+  `yzer` varchar(30) NOT NULL DEFAULT '',
+  `yztime` int(10) NOT NULL DEFAULT '0',
+  `levels` tinyint(2) NOT NULL DEFAULT '0',
+  `levelstime` int(10) NOT NULL DEFAULT '0',
+  `keywords` varchar(100) NOT NULL DEFAULT '',
+  `jumpurl` varchar(150) NOT NULL DEFAULT '',
+  `iframeurl` varchar(150) NOT NULL DEFAULT '',
+  `style` varchar(15) NOT NULL DEFAULT '',
+  `template` varchar(255) NOT NULL DEFAULT '',
+  `target` tinyint(1) NOT NULL DEFAULT '0',
+  `ip` varchar(15) NOT NULL DEFAULT '',
+  `lastfid` mediumint(7) NOT NULL DEFAULT '0',
+  `money` mediumint(7) NOT NULL DEFAULT '0',
+  `buyuser` text NOT NULL,
+  `passwd` varchar(32) NOT NULL DEFAULT '',
+  `allowdown` varchar(150) NOT NULL DEFAULT '',
+  `allowview` varchar(150) NOT NULL DEFAULT '',
+  `editer` varchar(30) NOT NULL DEFAULT '',
+  `edittime` int(10) NOT NULL DEFAULT '0',
+  `begintime` int(10) NOT NULL DEFAULT '0',
+  `endtime` int(10) NOT NULL DEFAULT '0',
+  `description` text NOT NULL,
+  `lastview` int(10) NOT NULL DEFAULT '0',
+  `digg_num` mediumint(7) NOT NULL DEFAULT '0',
+  `digg_time` int(10) NOT NULL DEFAULT '0',
+  `forbidcomment` tinyint(1) NOT NULL DEFAULT '0',
+  `ifvote` tinyint(1) NOT NULL DEFAULT '0',
+  `heart` varchar(255) NOT NULL DEFAULT '',
+  `htmlname` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`aid`),
+  KEY `list` (`list`,`fid`,`yz`,`ispic`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=176567 DEFAULT CHARSET=gbk
+</code>
+ 
+然后我们采用explain看看是否使用了索引</p>
+
+<p><code>
+mysql&gt; explain SELECT A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
++----+-------------+-------+-------+---------------+------+---------+------+------+-------------+
+| id | select_type | table | type  | possible_keys | key  | key_len | ref  | rows | Extra       |
++----+-------------+-------+-------+---------------+------+---------+------+------+-------------+
+|  1 | SIMPLE      | A     | index | NULL          | list | 9       | NULL |    1 | Using where |
++----+-------------+-------+-------+---------------+------+---------+------+------+-------------+
+1 row in set (0.00 sec)
+</code>
+可以发现使用了list索引，这个查询类型是index</p>
+
+<p>注意：用explain分析的时候，这个type的速度顺序如下：</p>
+
+<p><code>
+system &gt; const &gt; eq_ref &gt; ref &gt; fulltext &gt; ref_or_null &gt; index_merge &gt; unique_subquery &gt; index_subquery &gt; range &gt; index &gt; ALL
+</code></p>
+
+<p>一般我们优化，最少要到range。</p>
+
+<p>不过今天的问题没有这样简单，因为当我删除索引后，发现即使不用索引也比这个快。</p>
+
+<p>下面是我删掉全部索引的结果</p>
+
+<p><code>
+mysql&gt; SELECT A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
++------------+------+
+| list       | id   |
++------------+------+
+| 1323887041 | 1312 |
++------------+------+
+1 row in set (0.31 sec)
+</code></p>
+
+<p>用explain查看没有索引的状态如下</p>
+
+<p><code>
+mysql&gt; explain SELECT A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
++----+-------------+-------+------+---------------+------+---------+------+--------+-----------------------------+
+| id | select_type | table | type | possible_keys | key  | key_len | ref  | rows   | Extra                       |
++----+-------------+-------+------+---------------+------+---------+------+--------+-----------------------------+
+|  1 | SIMPLE      | A     | ALL  | NULL          | NULL | NULL    | NULL | 175175 | Using where; Using filesort |
++----+-------------+-------+------+---------------+------+---------+------+--------+-----------------------------+
+1 row in set (0.00 sec)
+</code></p>
+
+<p>我们可以看到type是ALL，Extra里面还用了filesort.但即使这样，查询时间才0.31 sec
+可以看到加了索引后，反而慢了。这也是我今天想说的一个问题：<strong>错误的索引可能会更慢！</strong></p>
+
+<p><strong>调整索引</strong></p>
+
+<p>我们删掉list索引后，尝试重新建立这个复合索引。</p>
+
+<p><code>
+mysql&gt; create index list on p8_article(yz,fid,ispic,list);
+Query OK, 175175 rows affected (2.80 sec)
+Records: 175175  Duplicates: 0  Warnings: 0
+</code></p>
+
+<p>这次索引的区别就在于顺序的改变，将list放在了最后。这个可以参考mysql联合索引的最左前缀。
+这样在看看explain的状态</p>
+
+<p><code>
+mysql&gt; explain SELECT SQL_NO_CACHE A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
++----+-------------+-------+------+---------------+------+---------+-------------------+------+-------------+
+| id | select_type | table | type | possible_keys | key  | key_len | ref               | rows | Extra       |
++----+-------------+-------+------+---------------+------+---------+-------------------+------+-------------+
+|  1 | SIMPLE      | A     | ref  | list          | list | 5       | const,const,const |   37 | Using where |
++----+-------------+-------+------+---------------+------+---------+-------------------+------+-------------+
+1 row in set (0.00 sec)
+</code></p>
+
+<p>type已经是ref了，Extra也不在使用filesort了。</p>
+
+<p>再实际运行查询，看看时间上的变化</p>
+
+<p><code>
+mysql&gt; SELECT SQL_NO_CACHE A.list,A.aid AS id FROM p8_article A  WHERE A.yz=1  AND A.fid IN (31)  AND A.ispic=1 ORDER BY A.list DESC LIMIT 0,1;
++------------+------+
+| list       | id   |
++------------+------+
+| 1323887041 | 1312 |
++------------+------+
+1 row in set (0.00 sec)
+</code></p>
+
+<p>为了怕有query_cache的原因，所以特意加入了SQL_NO_CACHE。</p>
+
+<p>现在显示查询时间为0.00 sec 基本可以忽略不计了。而经过索引的调整，网页的速度也确实得到了改善。
+ 
+<strong>总结：索引错误的使用反而会拖慢查询，甚至比不用还慢。一定要根据最左前缀建立合适的索引，才可以起到加速查询的作用！</strong></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Linux源码安装MySQL多版本共存]]></title>
+    <link href="http://babodx.github.com/blog/2011/11/25/Linux-source-install-multiple-versions-of-MySQL/"/>
+    <updated>2011-11-25T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2011/11/25/Linux-source-install-multiple-versions-of-MySQL</id>
+    <content type="html"><![CDATA[<p>原来我的服务器上是MySQL 5.5.16。本来是用的挺稳定。但是当时编译的时候由于手误将DDEFAULT_COLLATION=utf8-general_ci \弄错啦。。。应该是utf8_general_ci。导致很多程序用的时候报错，或者需要修改。
+最近发现MySQL更新到了5.5.18了，就打算迁移到新数据库正好修正原来问题。
+为了不影响访问，就打算在5.5.16运行的情况下，继续安装好5.5.18.等顺利转移到5.5.18后，再关闭原来MySQL5.5.16版本。
+也就有了今天这篇文章。在Linux下从源码安装多版本或者多个MySQL数据库。</p>
+
+<p><strong>重点：多版本或者多个MySQL同时运行，主要就是多个MySQL需要运行在不同目录，不同的端口，采用不同的数据库路径。</strong></p>
+
+<p><strong>步骤</strong></p>
+
+<p><strong>1、首先是下载需要安装的MySQL</strong></p>
+
+<p>下载mysql 5.5.16</p>
+
+<p><code>
+wget http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.16.tar.gz/from/http://mysql.mirrors.pair.com/
+</code></p>
+
+<p><strong>下载mysql 5.5.18</strong></p>
+
+<p><code>
+wget http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.16.tar.gz/from/http://mysql.mirrors.pair.com/
+</code></p>
+
+<p><strong>2、安装支持程序</strong></p>
+
+<p>原来版本的MySQL源码安装都是采用./configure和make这些。但是新版本的都是用cmake来弄了。所以如果系统中没有的，需要先安装cmake</p>
+
+<p><code>
+yum install cmake
+</code></p>
+
+<p><strong>3、创建MySQL用户和用户组</strong></p>
+
+<p>```
+/usr/sbin/groupadd mysql</p>
+
+<p>/usr/sbin/useradd -g mysql mysql
+```</p>
+
+<p><strong>4、解压、编译、安装MySQL</strong></p>
+
+<p><strong>解压</strong>
+<code>
+tar zxvf mysql-5.5.16.tar.gz
+cd mysql-5.5.16
+</code></p>
+
+<p><strong>编译参数</strong></p>
+
+<p><code>
+cmake . \
+  -DCMAKE_INSTALL_PREFIX=/usr/local/webserver/mysql5516/ \
+  -DMYSQL_DATADIR=/data0/mysql/3306/data \
+  -DMYSQL_UNIX_ADDR=/data0/mysql/3306/mysqld.sock \
+  -DWITH_MYISAM_STORAGE_ENGINE=1 \
+  -DWITH_INNOBASE_STORAGE_ENGINE=1 \
+  -DWITH_BLACKHOLE_STORAGE_ENGINE=0 \
+  -DWITH_ARCHIVE_STORAGE_ENGINE=0 \
+  -DWITHOUT_PARTITION_STORAGE_ENGINE=1 \
+  -DENABLED_LOCAL_INFILE=1 \
+  -DMYSQL_TCP_PORT=3306 \
+  -DEXTRA_CHARSETS=all \
+  -DDEFAULT_CHARSET=utf8 \
+  -DDEFAULT_COLLATION=utf8_general_ci \
+  -DWITH_DEBUG=0 \
+  -DWITH_EMBEDDED_SERVER=1 \
+  -DWITH_SSL=system \
+  -DWITH_READLINE=1
+</code></p>
+
+<p><strong>注意：编译参数里有几项需要根据自己具体情况设置。我这里将MySQL5.5.16运行于3306端口，并安装在mysql5516目录。</strong></p>
+
+<p>```
+-DCMAKE_INSTALL_PREFIX=/usr/local/webserver/mysql5516/   设置mysql的安装目录</p>
+
+<p>-DMYSQL_DATADIR=/data0/mysql/3306/data 设置mysql数据库文件的位置</p>
+
+<p>-DMYSQL_UNIX_ADDR=/data0/mysql/3306/mysqld.sock 设置mysql启动后sock文件位置</p>
+
+<p>-DMYSQL_TCP_PORT=3306 设置mysql的监听端口
+```</p>
+
+<p>以上这些设置需要根据不同版本的mysql相应修改。不然多个版本同时监听3306端口，肯定冲突了。</p>
+
+<p><strong>编译</strong></p>
+
+<p><code>make</code></p>
+
+<p><strong>安装</strong></p>
+
+<p><code>make install</code></p>
+
+<p><strong>5、配置目录权限、创建目录、建立初始数据。</strong></p>
+
+<p><strong>配置目录权限</strong></p>
+
+<p>```
+chmod +w /usr/local/webserver/mysql5516</p>
+
+<p>chown -R mysql:mysql /usr/local/webserver/mysql5516</p>
+
+<p>cd ../
+```</p>
+
+<p><strong>创建相关目录</strong></p>
+
+<p><code>
+mkdir -p /data0/mysql/3306/data/
+mkdir -p /data0/mysql/3306/binlog/
+mkdir -p /data0/mysql/3306/relaylog/
+chown -R mysql:mysql /data0/mysql/
+</code></p>
+
+<p><strong>建立初始数据</strong></p>
+
+<p><code>
+/usr/local/webserver/mysql5516/scripts/mysql_install_db --basedir=/usr/local/webserver/mysql --datadir=/data0/mysql/3306/data --user=mysql
+</code></p>
+
+<p><strong>6、创建My.cnf配置文件和Mysql启动脚本</strong></p>
+
+<p>创建my.cnf配置文件</p>
+
+<p><code>
+cp support-files/my-small.cnf /usr/local/webserver/mysql5516/my.cnf
+</code></p>
+
+<p><strong>注意：原来mysql默认的配置文件放在/etc/my.cnf。现在多个版本同时运行，需要每个版本都将配置文件单独放在自己的安装目录内。</strong></p>
+
+<p><strong>创建MySQL启动脚本</strong></p>
+
+<p><code>
+cp support-files/mysql.server /etc/init.d/mysql5516
+</code></p>
+
+<p><strong>注意：原来mysql默认采用mysqld脚本，现在每个mysql需要有自己的启动脚本，并通过修改启动脚本来为每个mysql指定采用的配置文件。</strong></p>
+
+<p>修改/etc/init.d/mysql5516，用来指定采用的配置文件位置。</p>
+
+<p>```</p>
+
+<h1>Try to find basedir in /etc/my.cnf</h1>
+
+<p>1    conf=/etc/my.cnf
+```</p>
+
+<p>在文件的213和214行内容如上，我们需要修改conf=/etc/my.cnf为我们指定的my.cnf文件位置。</p>
+
+<p>在我们这里是</p>
+
+<p><code>
+conf=/usr/local/webserver/mysql5516/my.cnf
+</code></p>
+
+<p>修改mysqld5516权限为可执行</p>
+
+<p><code>
+chmod +x mysqld5516
+</code></p>
+
+<p><strong>7、启动mysql并配置为开机运行</strong></p>
+
+<p>启动</p>
+
+<p><code>
+service mysqld5516 start
+</code></p>
+
+<p>开机运行</p>
+
+<p><code>
+chkconfig mysqld5516 on
+</code></p>
+
+<p>以上是MySQL 5.5.16的安装。下面5.5.18版本的安装</p>
+
+<p>5.5.18版本的安装基本和MySQL 5.5.16版本一样。我们因为要两个数据库同时运行。所以再给cmake的参数时候，需要安装上面注意的内容设定5.5.18的安装目录为/usr/local/webserver/mysql5518 再调整运行端口为3307
+具体的cmake参数如下</p>
+
+<p>```
+cmake . \
+  -DCMAKE_INSTALL_PREFIX=/usr/local/webserver/mysql5518/ \
+  -DMYSQL_DATADIR=/data0/mysql/3307/data \
+  -DMYSQL_UNIX_ADDR=/data0/mysql/3307/mysqld.sock \
+  -DWITH_MYISAM_STORAGE_ENGINE=1 \
+  -DWITH_INNOBASE_STORAGE_ENGINE=1 \
+  -DWITH_BLACKHOLE_STORAGE_ENGINE=0 \
+  -DWITH_ARCHIVE_STORAGE_ENGINE=0 \
+  -DWITHOUT_PARTITION_STORAGE_ENGINE=1 \
+  -DENABLED_LOCAL_INFILE=1 \
+  -DMYSQL_TCP_PORT=3307 \
+  -DEXTRA_CHARSETS=all \
+  -DDEFAULT_CHARSET=utf8 \
+  -DDEFAULT_COLLATION=utf8_general_ci \
+  -DWITH_DEBUG=0 \
+  -DWITH_EMBEDDED_SERVER=1 \
+  -DWITH_SSL=system \</p>
+
+<p>```</p>
+
+<p>还需要为mysql5518配置相应权限和建立3307端口的相关目录。因为上面已经有具体步骤，这里只是罗列下命令，不具体说明</p>
+
+<p>```
+chmod +w /usr/local/webserver/mysql5518</p>
+
+<p>chown -R mysql:mysql /usr/local/webserver/mysql5518</p>
+
+<p>cd ../</p>
+
+<p>mkdir -p /data0/mysql/3307/data/
+mkdir -p /data0/mysql/3307/binlog/
+mkdir -p /data0/mysql/3307/relaylog/
+chown -R mysql:mysql /data0/mysql/
+```</p>
+
+<p>最后的启动脚本也要修改为调用5518目录下的my.cnf配置。 而且my.cnf的[mysqld]段也要指定运行端口为3307
+下面是我mysql5518目录下的my.cnf中的一些需要修改的项
+注意：下面文件并不是完整的my.cnf，只是将需要修改的列出来了</p>
+
+<p>```
+[client]
+port    = 3307
+socket  = /data0/mysql/3307/mysql.sock</p>
+
+<p>[mysqld]
+port    = 3307
+socket  = /data0/mysql/3307/mysql.sock
+basedir = /usr/local/webserver/mysql5518
+datadir = /data0/mysql/3307/data
+log-error = /data0/mysql/3307/mysql_error.log
+pid-file = /data0/mysql/3307/mysql.pid
+log-bin = /data0/mysql/3307/binlog/binlog
+relay-log-index = /data0/mysql/3307/relaylog/relaylog
+relay-log-info-file = /data0/mysql/3307/relaylog/relaylog
+relay-log = /data0/mysql/3307/relaylog/relaylog
+```</p>
+
+<p>这样弄完后，我服务器上就可以同时运行mysql5516与mysql5518两个版本的数据库了。</p>
+
+<p>启动、关闭、重启mysql 5.5.16全部采用service mysqld5516脚本来控制。</p>
+
+<p>启动、关闭、重启mysql 5.5.18全部采用service mysqld5518脚本来控制。</p>
+
+<p><strong>总结：同时运行多个版本数据库，可以方便我们升级数据库或者对不同版本进行测试。</strong></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[mysqldump备份blob类型内容]]></title>
+    <link href="http://babodx.github.com/blog/2011/03/30/mysqldump_blob_field/"/>
+    <updated>2011-03-30T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2011/03/30/mysqldump_blob_field</id>
+    <content type="html"><![CDATA[<p>用mysqldump备份出数据库内容到SQL文件。当我们数据库表有blob类型字段的时候，这个导出的SQL再导入的时候就会因为blob字段内容乱码等原因，不能顺利导入了。</p>
+
+<p><strong>解决办法：</strong></p>
+
+<p>在用mysqldump备份的时候，采用--hex-blob参数，这样备份出来的sql文件，就可以顺利导入了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[mysqldump解决中文乱码问题]]></title>
+    <link href="http://babodx.github.com/blog/2011/03/14/mysqldump-encoding/"/>
+    <updated>2011-03-14T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2011/03/14/mysqldump-encoding</id>
+    <content type="html"><![CDATA[<p>我的数据库采用编码如下：</p>
+
+<p><code>
+mysql&gt; show variables like 'coll%';
++----------------------+-------------------+
+| Variable_name        | Value             |
++----------------------+-------------------+
+| collation_connection | latin1_swedish_ci |
+| collation_database   | latin1_swedish_ci |
+| collation_server     | latin1_swedish_ci |
++----------------------+-------------------+
+3 rows in set (0.00 sec)
+ 
+mysql&gt; show variables like 'character_set%';
++--------------------------+----------------------------+
+| Variable_name            | Value                      |
++--------------------------+----------------------------+
+| character_set_client     | latin1                     |
+| character_set_connection | latin1                     |
+| character_set_database   | latin1                     |
+| character_set_filesystem | binary                     |
+| character_set_results    | latin1                     |
+| character_set_server     | latin1                     |
+| character_set_system     | utf8                       |
+| character_sets_dir       | /usr/share/mysql/charsets/ |
++--------------------------+----------------------------+
+8 rows in set (0.00 sec)
+</code>
+ 
+数据库的编码采用utf8</p>
+
+<p>开始用mysqldump出来的都是乱码。后来采用 --default-character-set=gbk参数，然后再用iconv转码为utf8就解决了问题。</p>
+
+<p>下面是我的数据库备份脚本</p>
+
+<p>```</p>
+
+<pre><code>#!/bin/sh   
+#####configurate#######   
+rq=`date +%Y%m%d%N`   
+user="user"  
+password="password"  
+rm -rf /var/lib/mysql/mysql-bin.*   
+mysqldump -u$user -p$password --default-character-set=gbk --single-transaction --flush-logs --master-data=2 mydatabase&gt;/home/ict/mysql_backup/database$rq.sql   
+</code></pre>
+
+<p>```
+导出后转码</p>
+
+<p><code>iconv -t utf-8 -f gbk -c database.sql&gt;databaseutf8.sql</code></p>
+
+<p>这样已经可以看到正确的中文了。</p>
+
+<p><strong>导入</strong></p>
+
+<p>在windows下，如果采用HeidiSQL打开SQL文件，可以正确看到中文，但是导入后还是乱码。</p>
+
+<p>解决办法，采用记事本打开，选择另存为，编码选择ANSI。然后再用HeidiSQL工具打开导入即可。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Mysql设置不区分表名大小写]]></title>
+    <link href="http://babodx.github.com/blog/2011/01/13/mysql-tablename-lowercase/"/>
+    <updated>2011-01-13T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2011/01/13/mysql-tablename-lowercase</id>
+    <content type="html"><![CDATA[<p>今天遇到个问题，有个程序从Windows导入到Linux的时候，表格全部小写了。但程序里很多DAO全是大写调用。</p>
+
+<p>Linux默认安装的Mysql是表名区分大小写的。</p>
+
+<p>这个设置主要是在/etc/my.cnf里面的[mysqld]段，加入如下设置项</p>
+
+<p><code>
+lower_case_table_names = 1
+</code>
+ 
+如果设置为0，就是区分大小写。设置为1就是不区分了。</p>
+]]></content>
+  </entry>
+  
+</feed>

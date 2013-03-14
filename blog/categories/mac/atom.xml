@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Mac | 鑫的方向]]></title>
+  <link href="http://babodx.github.com/blog/categories/mac/atom.xml" rel="self"/>
+  <link href="http://babodx.github.com/"/>
+  <updated>2013-03-14T13:53:55+08:00</updated>
+  <id>http://babodx.github.com/</id>
+  <author>
+    <name><![CDATA[babodx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[mac下配置php调试环境]]></title>
+    <link href="http://babodx.github.com/blog/2012/08/10/mac-xdebug-netbeans-config/"/>
+    <updated>2012-08-10T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/08/10/mac-xdebug-netbeans-config</id>
+    <content type="html"><![CDATA[<p>已经用了mac有2个月了，基本网络管理和开发工作都在mac下面了。</p>
+
+<p>下面说下如何配置mac下面的php调试环境</p>
+
+<p><strong>我的环境：</strong></p>
+
+<ul>
+<li>macbook air 2012款</li>
+<li>Mac OS X 10.8 系统</li>
+<li>php环境：XAMPP 1.7.3</li>
+<li>开发工具：一般用sublime text 2，调试或者项目开发用netbeans</li>
+</ul>
+
+
+<p>下面说说如何安装调试环境，主要就是xdebug的安装和配置</p>
+
+<p>这里需要提下mac下面的安装包管理工具homebrew</p>
+
+<p>我就是用brew来安装xdebug的。homebrew是一个用ruby开发的，类似macport的工具。可以在线安装软件，就像linux下的apt-get或者yum一样。</p>
+
+<p><strong>安装homebrew</strong></p>
+
+<p>需要系统可以支持ruby，通过ruby -v命令可以查看ruby版本。mac os 自带ruby</p>
+
+<p>直接在终端里输入</p>
+
+<p><code>
+ruby &lt;(curl -fsSk https://raw.github.com/mxcl/homebrew/go)
+</code></p>
+
+<p>上面命令执行完，brew命令就可以执行了。</p>
+
+<p>先运行brew doctor测试下环境是否完整，如果需要，还要添加Command Line Tools。</p>
+
+<p>添加Command Line Tools</p>
+
+<p>打开Xcode，在preferences->downloads里面下载并安装Command Line Tools</p>
+
+<p><img src="http://farm9.staticflickr.com/8088/8515461958_4e96f751a7_z.jpg" alt="xcode" /></p>
+
+<p>一切正确的话，执行brew doctor显示如下</p>
+
+<p>```
+babomatoMacBook-Air:~ babo$ brew doctor</p>
+
+<p>Your system is raring to brew.
+```</p>
+
+<p>安装好brew后，先执行brew update更新下软件包的源，然后再加载两个formula的资源</p>
+
+<p>```
+brew update</p>
+
+<p>brew tap josegonzalez/homebrew-php</p>
+
+<p>brew tap homebrew/dupes
+```</p>
+
+<p>完成后，就可以通过brew search和brew install来查找并安装软件了</p>
+
+<p><code>
+brew install php53-xdebug
+</code></p>
+
+<p>安装好xdebug后，还需要配置php.ini才可以正常使用。</p>
+
+<p>先用brew info查看xdebug相关信息</p>
+
+<p>```
+babomatoMacBook-Air:~ babo$ brew info php53-xdebug
+php53-xdebug: stable 2.2.1, HEAD
+http://xdebug.org
+Depends on: autoconf
+/usr/local/Cellar/php53-xdebug/2.2.1 (4 files, 360K) *
+https://github.com/josegonzalez/homebrew-php/commits/master/Formula/php53-xdebug.rb
+==> Options
+--without-config-file</p>
+
+<pre><code>Do not add ext-xdebug.ini to /usr/local/etc/php/5.3/conf.d
+</code></pre>
+
+<p>==> Caveats
+To finish installing xdebug for PHP 5.3:
+  * /usr/local/etc/php/5.3/conf.d/ext-xdebug.ini was created,</p>
+
+<pre><code>do not forget to remove it upon extension removal.
+</code></pre>
+
+<ul>
+<li>Restart your webserver.</li>
+<li>Write a PHP page that calls "phpinfo();"</li>
+<li>Load it in a browser and look for the info on the xdebug module.</li>
+<li>If you see it, you have been successful!
+```</li>
+</ul>
+
+
+<p>通过信息我们知道xdebug版本是 stable 2.2.1</p>
+
+<p>配置文件在/usr/local/etc/php/5.3/conf.d/ext-xdebug.ini</p>
+
+<p>我们xampp的配置文件在/Applications/XAMPP/xamppfiles/etc/php.ini</p>
+
+<p>将xdebug的配置加入到/Applications/XAMPP/xamppfiles/etc/php.ini</p>
+
+<p>在文件最下面加入如下信息</p>
+
+<p>```
+[xdebug]
+zend_extension="/usr/local/Cellar/php53-xdebug/2.2.1/xdebug.so"</p>
+
+<pre><code>    xdebug.remote_enable=1
+    xdebug.remote_host=localhost
+    xdebug.remote_port=9000
+    xdebug.remote_handler=dbgp
+</code></pre>
+
+<p>```</p>
+
+<p>重启xampp的apache，然后访问phpinfo查看是否成功加载xdebug</p>
+
+<p><img src="http://farm9.staticflickr.com/8381/8515464954_5cd7f4b8be.jpg" alt="xdebug" /></p>
+
+<p><strong>配置netbeans可以调用xdebug</strong></p>
+
+<p>首先将netbeans的偏好设置里的php5解释器设置为xampp的php。不要用系统自带的</p>
+
+<p><img src="http://farm9.staticflickr.com/8518/8515466796_97a1191c23.jpg" alt="xampp_php" /></p>
+
+<p>再设置调试的端口</p>
+
+<p><img src="http://farm9.staticflickr.com/8239/8514355437_689a0d90c0.jpg" alt="netbeans设置xdebug端口" /></p>
+
+<p>这些都设置好，就可以调试php代码了</p>
+
+<p>最后放一张我调试的截图</p>
+
+<p><img src="http://farm9.staticflickr.com/8246/8514357603_58e49f882b_z.jpg" alt="php调试截图" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[快速提升app store下载速度]]></title>
+    <link href="http://babodx.github.com/blog/2012/07/29/accelerate-app-store-download/"/>
+    <updated>2012-07-29T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/07/29/accelerate-app-store-download</id>
+    <content type="html"><![CDATA[<p>前两天开始更新MAC OS Mountain Lion。</p>
+
+<p>为了下载这个4.5G的内容，可是郁闷坏了。计算出来的剩余时间7天。</p>
+
+<p>于是开始找加速下载的办法，看来一些帖子以后基本知道了下载速度主要取决与dns将你的请求解析到哪台服务器。</p>
+
+<p>网上一般是都是基于自己找到一台快速的下载服务器IP，然后手动修改/etc/hosts文件的办法。
+ 
+但是其实看原来就知道，如果我们设置的DNS得当，就能起到从最快服务器下载的目的。</p>
+
+<p>于是我查到了<a href="http://dns.v2ex.com/">http://dns.v2ex.com/</a>这个网站，但是使用这个dns后，速度依然很慢。</p>
+
+<p>后来又在www.weiphone.com找到了一个台湾的DNS。设置后速度大幅提升。
+ 
+如果你也在北京、也用歌华有线。</p>
+
+<p>试试下面这个台湾的DNS吧
+ 
+<code>
+168.95.1.1
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[2012 macbook Air 使用华为E1750 3g上网卡]]></title>
+    <link href="http://babodx.github.com/blog/2012/07/23/macbook-air-use-e1750-3g-mobilecard/"/>
+    <updated>2012-07-23T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/07/23/macbook-air-use-e1750-3g-mobilecard</id>
+    <content type="html"><![CDATA[<p>最近一直在摸索macbook air的使用方法，目前大部分工作都已经可以放弃windows了。</p>
+
+<p>今天又将华为的E1750上网卡在macbook air上正确安装了。</p>
+
+<p>我的3g上网卡如下</p>
+
+<p><img src="http://farm9.staticflickr.com/8390/8515414834_9758e77ab7_m.jpg" alt="e1750图" /></p>
+
+<p>这个上网卡是09年的，现在直接插入usb后，macbook air没有任何反应。</p>
+
+<p><strong>安装方法：</strong></p>
+
+<p>1、首先要在Windows机器上更新固件</p>
+
+<p>先在windows机器安装mobile_card_driver驱动。</p>
+
+<p>然后再到华为主页下载固件更新程序</p>
+
+<p>E1750 WINMACB300D00SP05C112(UTPS11.301.08.30.112_MAC11.301.06.13.112)(China Unicom)(05019744)</p>
+
+<p>将上网卡插入windows的usb接口，可以被驱动正确识别以后，运行固件更新程序开始更新固件。</p>
+
+<p>2、macbook下安装</p>
+
+<p>更新好固件以后，我们就可以插入macbook的笔记本。这个时候会识别出来一个mobile card的光驱。</p>
+
+<p>我们从finder进入这个光驱，就会发现“无线上网卡.app“程序</p>
+
+<p>直接安装这个程序就可以了</p>
+
+<p>3、安装好后的程序界面</p>
+
+<p><img src="http://farm9.staticflickr.com/8507/8515417076_b7b7b101f4_z.jpg" alt="运行界面" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[mac下用ssh转发端口]]></title>
+    <link href="http://babodx.github.com/blog/2012/07/13/mac-vnc-rdp-over-ssh/"/>
+    <updated>2012-07-13T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/07/13/mac-vnc-rdp-over-ssh</id>
+    <content type="html"><![CDATA[<p>起因是这样的，我在服务器上安装了个虚拟winxp。但是想要在外网远程控制却不行，因为这个虚拟系统没有公网IP。</p>
+
+<p>我的服务器是有公网IP的，例如：210.1.1.1</p>
+
+<p>服务器所在内网全部是10.0.1.x 网段，外网IP是通过路由器映射给服务器的，也就是说服务器上查看IP，只有10.0.1.1这个
+ 
+虚拟机我是用的xen，然后采用nat方式将一个192.168.122.x的ip分配给虚拟winxp使用。这个192.168.122.x段ip只有虚拟服务器和虚拟机可以访问到，就连同一个内网的10.0.1.x段其他机器都不能访问</p>
+
+<p>我要想远程控制winxp，只有两个办法，一个是通过xen提供的vnc来访问。也就是访问10.0.1.1:5901或者外网210.1.1.1:5901</p>
+
+<p>但是vnc的速度确实比winxp的远程桌面慢，有时候刷屏都很卡。但是winxp的ip又不能从外面访问，只能虚拟服务器自己用。
+ 
+后来我就想到了用ssh来做跳转，将192.168.122.1（winxp的ip）下3389端口转发过来，这样不是就可以远程通过3389访问了？
+ 
+因为mac下面的命令行直接支持ssh，确实比windows方面。linux下的常用命令和工具都支持！</p>
+
+<p>我就直接在外网通过下面命令建立了ssh隧道</p>
+
+<p><code>
+ssh -N -L3389:192.168.122.1:3389 root@114.251.211.103
+</code>
+其中－N表示不用显示提示符，这个选项也可以不要
+－L表示建立一个隧道，格式：[-L [bind_address:]port:host:hostport]</p>
+
+<p>我的这条命令就是将本地的3389端口通过ssh转发到192.168.122.1的3389端口，注意：这里的192.168.122.1必须是远程ssh服务器可以访问的。</p>
+
+<p>这样你访问本地127.0.0.1:3389就相当于直接访问192.168.122.1:3389了</p>
+
+<p>当然，通过调整端口也可以实现vnc的转发</p>
+
+<p>其实通过ssh －D等选项，还可以建立ssh通道，让浏览器翻墙使用。这个网上资料很多，就不多说了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[2012 macbook Air 使用感受]]></title>
+    <link href="http://babodx.github.com/blog/2012/07/13/buy-macbook-air/"/>
+    <updated>2012-07-13T00:00:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2012/07/13/buy-macbook-air</id>
+    <content type="html"><![CDATA[<p>6月底，我购买了一台2012新款macbook air笔记本。将近一个月的使用，记录下心得。</p>
+
+<p>以前从来没有用过mac os系统，不过对于linux还是很熟悉的。</p>
+
+<p>早就打算买一台玩玩，一个是没钱，一个是总觉得单位配的也够用。后来又打算学习下ios开发，就下决心购买一台了。</p>
+
+<p>正好赶上6月新款发布，北京正规零售店都没有上市呢，于是在macx.cn上面看到大家都在福利社购买，于是我也去了。
+ 
+<strong>购买心得</strong></p>
+
+<p>福利社的价格还算不错，和北京官方公布的教育优化价格相当。而且是香港过来的本，一旦大陆上市还有保修。
+我购买的是macbook air 低配版本，128G硬盘，4G内存 13'显示 价格：8500</p>
+
+<p>购买的时候需要什么软件还可以帮助安装。我就安装了常用的虚拟机和xcode
+ 
+<strong>使用心得</strong></p>
+
+<p>用来一个月下来，感觉mac os的系统确实不错。不愧是基于unix的。稳定！</p>
+
+<p>首先对于我经常需要服务器运维工作来说，mac os下面的软件完全可以满足</p>
+
+<p>自带的“终端” 可以支持大部分linux下的命令，要连接远程服务器直接ssh就可以，</p>
+
+<p>为了管理方便，我还是安装了secureCRT for mac</p>
+
+<p>输入法用IMKQIM（搜狗的词库）</p>
+
+<p>像office、qq、股票、远程桌面等常用软件都存在mac版本</p>
+
+<p>使用下来，没有任何的不适应。而且手势操作也很大的提高了效率。
+ 
+感受最大的是电池可以使用7小时，而且不用关机。在不用的时候，直接合上笔记本就休眠了。下次打开直接就是桌面感觉和用Ipad似的。
+ 
+因为我需要作一些php开发，在mac下面也可以使用XAMPP for mac版本</p>
+
+<p>编辑器我采用的是sublime text 2
+ 
+一个月下来，主要工作全部可以用mac系统替代了，感觉很好</p>
+]]></content>
+  </entry>
+  
+</feed>
