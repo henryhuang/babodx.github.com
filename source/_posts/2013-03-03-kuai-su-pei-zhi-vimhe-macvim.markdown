@@ -3,7 +3,7 @@ layout: post
 title: "快速配置vim和macvim"
 date: 2013-03-03 14:41
 comments: true
-categories: ['vim']
+categories: ['Vim']
 ---
 vim以为需要安装各种插件和配置好vimrc才能适合我们开发使用。如果默认只安装vim不用任何插件，并不好用。
 

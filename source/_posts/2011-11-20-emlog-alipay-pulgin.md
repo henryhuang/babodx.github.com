@@ -1,4 +1,4 @@
---- 
+---
 categories: ['PHP']
 comments: true
 layout: post
@@ -11,10 +11,10 @@ title: emlog支付插件发布
 
 1、在博客的侧边栏显示出一个支付宝的收款按钮，基本也就是用来让人家自愿捐款用。如下图：
 
-![插件截图1](http://flic.kr/p/dYrZvA)
+![插件截图1](http://farm9.staticflickr.com/8372/8515076256_1ddf6232e9.jpg)
  
 2、后台可以方便的设置用来收款的支付宝收款主页地址。
 
-![插件截图2](http://flic.kr/p/dYmisZ)
+![插件截图2](http://farm9.staticflickr.com/8520/8513965985_7f871e8d28.jpg)
  
  

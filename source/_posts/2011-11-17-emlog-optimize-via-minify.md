@@ -1,4 +1,4 @@
---- 
+---
 categories: ['PHP','CSS']
 comments: true
 layout: post
@@ -10,9 +10,9 @@ title: emlog访问速度优化之minify整合css与js文件
 
 下面是我博客默认情况下的加载css和js文件的数量
 
-![请求数截图](http://flic.kr/p/dYrS9W)
+![请求数截图](http://farm9.staticflickr.com/8246/8515051510_535fdf1923_z.jpg)
 
-![文件数](http://flic.kr/p/dYmaVv)
+![文件数](http://farm9.staticflickr.com/8087/8513940611_b373e87aea_z.jpg)
 
 从图上可以看到加载了4个css文件和5个js文件。大小分别为54.2kb和45.5kb。
  
@@ -27,7 +27,7 @@ title: emlog访问速度优化之minify整合css与js文件
 
 
 
-``` 
+```
 <?php
 /**
  * JS和CSS文件合并类
@@ -179,10 +179,10 @@ addAction('adm_writelog_head','drp_highlighter_adm_head');
 
 下面是我整合css与js代码后的效果
 
-![整合后效果1](http://flic.kr/p/dYrWDd)
+![整合后效果1](http://farm9.staticflickr.com/8088/8515066606_1e38661e7f_z.jpg)
 
 css文件降低为3个，其中有两个为新浪微博的代码，这个不好整合了。。。
 
-![整合后效果2](http://flic.kr/p/dYrXFQ)
+![整合后效果2](http://farm9.staticflickr.com/8234/8515070122_92e6aab78e_z.jpg)
 
 js文件数降低为3个，其中一个是微博的，一个是百度统计的。我们自己的代码已经整合到一个请求里调用了。
