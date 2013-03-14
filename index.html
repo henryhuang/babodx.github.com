@@ -9,8 +9,9 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="
-">
+  <meta name="description" content="rails controller中的中文问题 在ruby 1.9环境中，如果controller里出现中文，就会报错。报错如下 1
+invalid multibyte char (US-ASCII) 解决办法： 在这个controller的文件开头加入如下语句 1
+#encoding: utf-8 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -94,9 +95,30 @@
   </header>
 
 
-  <div class="entry-content">
+  <div class="entry-content"><h2>rails controller中的中文问题</h2>
+
+<p>在ruby 1.9环境中，如果controller里出现中文，就会报错。报错如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>invalid multibyte char (US-ASCII)</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>解决办法：</strong></p>
+
+<p>在这个controller的文件开头加入如下语句</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#encoding: utf-8</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>rails validates的中文问题</h2>
+
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/03/14/railszhong-wen-wen-ti/">Read on &rarr;</a>
+    </footer>
   
 
 

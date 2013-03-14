@@ -9,8 +9,9 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="
-">
+  <meta name="description" content="rails controller中的中文问题 在ruby 1.9环境中，如果controller里出现中文，就会报错。报错如下 1
+invalid multibyte char (US-ASCII) 解决办法： 在这个controller的文件开头加入如下语句 1
+#encoding: utf-8 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -91,7 +92,67 @@
   </header>
 
 
-<div class="entry-content">
+<div class="entry-content"><h2>rails controller中的中文问题</h2>
+
+<p>在ruby 1.9环境中，如果controller里出现中文，就会报错。报错如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>invalid multibyte char (US-ASCII)</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>解决办法：</strong></p>
+
+<p>在这个controller的文件开头加入如下语句</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#encoding: utf-8</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>rails validates的中文问题</h2>
+
+<!--more-->
+
+
+<p>当在models里设置了validates以后，提示的错误信息都是英文。而且提示信息前面的字段也都是数据库中的字段名字很不友好。</p>
+
+<p><strong>解决办法</strong></p>
+
+<p>这个需要采用i18n 来解决。</p>
+
+<p>首先在我们项目的Gemfile文件中加入如下的gem</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'rails-i18n'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后在config/application.rb文件中声明采用的语言。我这里是中文的，声明如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>config.i18n.default_locale = "zh-CN"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样错误提示信息应该就是中文信息了。不过前面的字段还是数据库中的名字，这个我们需要自定义一个翻译文件放在<code>config/locales/locales</code>目录下。我这里是定义了一个zh-CN.yml文件,文件内容如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>zh-CN:
+</span><span class='line'>  activerecord:
+</span><span class='line'>    attributes:
+</span><span class='line'>      student:
+</span><span class='line'>        id_num: "身份证号"
+</span><span class='line'>        password: "密码"
+</span><span class='line'>        password_digest: "密码"</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>注意</strong> zh-CN: 就是我们<code>config.i18n.default_locale = "zh-CN"</code>中定义的。 student 是我model的名字，下面的三项是数据库的字段，也是model的属性。</p>
+
+<p>错误提示界面如下：
+<img src="http://farm9.staticflickr.com/8505/8555747473_f908011335.jpg" alt="rails中文化错误信息" /></p>
 </div>
 
 
