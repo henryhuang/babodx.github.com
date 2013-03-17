@@ -9,7 +9,9 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="最近在威客网上接了个任务，帮助调整伪静态规则。WEB服务是apache的，主要就是修改rewrite规则。 伪静态规则写起来比较麻烦，关键是正则表达是写完总要测试，而我们不知道这个rewrite该怎么测试。我们需要准确知道服务器是怎么匹配我们的规则的，匹配后又发生了什么。 &hellip;">
+  <meta name="description" content="最近在帮助一个网站做性能优化。
+从原来的windows平台切换到了linux平台。php环境也已经变为主流的Nginx+php-fpm+eAccelerator+Zend Optimization组合
+打开了MySQL的慢连接，发现基本集中在论坛的表查询上， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +67,97 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/09/check-slow-php-script/">如何找到执行慢的php程序</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-09T00:00:00+08:00" pubdate data-updated="true">Dec 9<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近在帮助一个网站做性能优化。
+从原来的windows平台切换到了linux平台。php环境也已经变为主流的Nginx+php-fpm+eAccelerator+Zend Optimization组合
+打开了MySQL的慢连接，发现基本集中在论坛的表查询上，但是我们如何定位有哪些php程序在执行的时候过慢呢？</p>
+
+<p>通过查看php-fpm.conf配置，可以找到如下配置信息</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>The timeout (in seconds) for serving of single request after which a php backtrace will be dumped to slow.log file
+</span><span class='line'>      '0s' means 'off'
+</span><span class='line'>      &lt;value name="request_slowlog_timeout"&gt;0s&lt;/value&gt;
+</span><span class='line'>
+</span><span class='line'>      The log file for slow requests
+</span><span class='line'>      &lt;value name="slowlog"&gt;logs/slow.log&lt;/value&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>request_slowlog_timeout 项是一个设定超过多长时间就会被记录到slow.log日志中。0s为关闭这个选项。</p>
+
+<p>下面的slowlog为设置slow.log文件的位置。</p>
+
+<p>打开这个以后，我们就可以看到哪些php文件用了过多的执行时间，来重点优化。
+而且php-fpm.log也回提示出执行时间超过这个设定的信息。</p>
+
+<p>下面是php-fpm.log的提示</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Dec 09 20:19:25.170259 [WARNING] fpm_request_check_timed_out(), line 146: child 28844, script '/data/htdocs/bbs/forumdisplay.php' (pool default) executing too slow (3.110822 sec), logging</span></code></pre></td></tr></table></div></figure>
+
+
+<p>提示forumdisplay.php文件执行过慢，用了3.110822秒</p>
+
+<p>再来看看slow.log的内容</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Dec 09 20:23:49.534250 pid 28865 (pool default)
+</span><span class='line'>
+</span><span class='line'>script_filename = /data/htdocs/t/bbs/forumdisplay.php
+</span><span class='line'>
+</span><span class='line'>[0xbff462a0] mysql_query() p:66
+</span><span class='line'>
+</span><span class='line'>[0xbff47020] query() p:622</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到和上面的php-fpm.log是对应的的。</p>
+
+<p>有了这个办法，我们就可以随时查看网站中到底是什么程序执行速度慢，来重点优化了！</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1486,54 +1579,6 @@ cd mysql-5.5.16
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/10/25/write-blog-offline/">离线博客工具-菊子曰</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-10-25T00:00:00+08:00" pubdate data-updated="true">Oct 25<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>因为迁移到了emlog，最近几天一直在鼓弄博客。</p>
-
-<p>今天又尝试用离线工具写博客了。</p>
-
-<p>在网站上搜索了下，发现国人开发的菊子曰不错。所以开始了这次尝试</p>
-
-<p>功能方面日常写文章应该足够了。</p>
-
-<p>就是如果是程序员用，代码高亮效果很一般
- 
- 
-还有就是日志摘要功能，并不能符合emlog的日志摘要，基本只能全篇发上来。感觉如果文章不是很长，建议还是采用在线编辑吧。
-再有就是采用了离线发布，将不能自动和新浪微博同步</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -1567,7 +1612,7 @@ cd mysql-5.5.16
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
-<li class='category'><a href='/blog/categories/rails/'>Rails (6)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (7)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>Vim (2)</a></li>
@@ -1583,6 +1628,10 @@ cd mysql-5.5.16
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
       </li>
     
@@ -1596,10 +1645,6 @@ cd mysql-5.5.16
     
       <li class="post">
         <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
       </li>
     
   </ul>

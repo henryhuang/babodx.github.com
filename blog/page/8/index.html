@@ -9,7 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="原来单位的存储一直是分两个800G的区，挂在到Windows下。Windows的系统总要担心病毒，所以打算迁移到CentOS Linux下。 参考了http://blog.s135.com/post/415/这篇文章，但是他的文章里是单控制器，并且没有用到光纤。所以配置上有些不同 硬件配置 &hellip;">
+  <meta name="description" content="本来我是在美国的VPS服务器上安装的pptp vpn，这个vpn可以用windows自带的拨号连接，配置也很方便。刚配置好的时候很好用，可以开youtube也可以访问一些被封闭的站点。但是后来家里的歌华有线好像调整了一些路由配置，导致我在家里就不能连接vpn了。单位也不能连接。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,800 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/03/15/OpenVPN-Install/">CentOS 5.3下OpenVPN安装和Win7下OpenVPN GUI安装</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-15T00:00:00+08:00" pubdate data-updated="true">Mar 15<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>本来我是在美国的VPS服务器上安装的pptp vpn，这个vpn可以用windows自带的拨号连接，配置也很方便。刚配置好的时候很好用，可以开youtube也可以访问一些被封闭的站点。但是后来家里的歌华有线好像调整了一些路由配置，导致我在家里就不能连接vpn了。单位也不能连接。我用老婆家里的adsl尝试连接正常，用联通3G连接也正常。。。。这个既然是网络的问题，估计个人也解决不了了</p>
+
+<p>最近单位也开始搞起来封锁了，开心、verycd等都被封。。。又不能用pptpd vpn了。。。看来该想想其他办法了。代理尝试了，不管用，看来不是基于域名的限制。
+于是就开始尝试采用openvpn了。</p>
+
+<p>参考了</p>
+
+<p><a href="http://www.throx.net/2008/04/13/openvpn-and-centos-5-installation-and-configuration-guide/">http://www.throx.net/2008/04/13/openvpn-and-centos-5-installation-and-configuration-guide/</a></p>
+
+<p><a href="http://www.xiaohui.com/dev/server/20070514-install-openvpn.htm">http://www.xiaohui.com/dev/server/20070514-install-openvpn.htm</a></p>
+
+<p><strong>2010年10月14日更新</strong></p>
+
+<p>加入官方CentOS下,iptables规则修改.保证顺利nat上网</p>
+
+<p><strong>整体方案</strong></p>
+
+<p>采用位于美国的CentOS 5.3 Linux服务器搭建openvpn服务器，并通过iptables的nat功能使openvpn服务器当做客户端网关。</p>
+
+<p>客户端安装OpenVPN GUI程序连接服务器</p>
+
+<p><strong>服务器</strong></p>
+
+<p>服务器采用位于美国的vps,系统CentOS 5.3</p>
+
+<p>安装openvpn作为vpn服务器软件</p>
+
+<p><strong>OpenVPN服务器安装</strong></p>
+
+<p>kernel 需要<strong>支持 tun 设备</strong>, 需要加载 iptables 模块.</p>
+
+<p>检查 tun 是否安装:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>modinfo tun
+</span><span class='line'>     
+</span><span class='line'>或者
+</span><span class='line'>     
+</span><span class='line'>find / -name tun.o -print
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装需要的相关软件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> yum install rpm-build
+</span><span class='line'> yum install autoconf.noarch
+</span><span class='line'> yum install zlib-devel
+</span><span class='line'> yum install pam-devel
+</span><span class='line'> yum install openssl-devel</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装环境准备好后，我们下载需要安装的软件。一共需要下载两个软件openvpn 2.0.9和lzo-1.08-4</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget http://openvpn.net/release/openvpn-2.0.9.tar.gz
+</span><span class='line'>wget http://openvpn.net/release/lzo-1.08-4.rf.src.rpm</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装lzo</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rpmbuild --rebuild lzo-1.08-4.rf.src.rpm
+</span><span class='line'>rpm -Uvh /usr/src/redhat/RPMS/i386/lzo-*.rpm
+</span><span class='line'>
+</span><span class='line'>安装openvpn
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>rpmbuild -tb openvpn-2.0.9.tar.gz
+rpm -Uvh /usr/src/redhat/RPMS/i386/openvpn-2.0.9-1.i386.rpm</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>安装后，复制配置文件
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>cp -r /usr/share/doc/openvpn-2.0.9/easy-rsa/ /etc/openvpn/
+cp /usr/share/doc/openvpn-2.0.9/sample-config-files/server.conf /etc/openvpn/</p>
+
+<p>配置生成CA脚本需要的配置文件vars</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vi /etc/openvpn/easy-rsa/vars</span></code></pre></td></tr></table></div></figure>
+
+
+<p>打开vars后，找到文件最后的如下内容</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>export KEY_COUNTRY=KG
+</span><span class='line'>export KEY_PROVINCE=NA
+</span><span class='line'>export KEY_CITY=BISHKEK
+</span><span class='line'>export KEY_ORG="OpenVPN-TEST"
+</span><span class='line'>export KEY_EMAIL="me@myhost.mydomain"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>根据自己信息修改上面内容,下面是具体含义</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>export KEY_COUNTRY=KG 设置国家
+</span><span class='line'>export KEY_PROVINCE=NA 设置省份
+</span><span class='line'>export KEY_CITY=BISHKEK 设置城市
+</span><span class='line'>export KEY_ORG="OpenVPN-TEST" 设置组织
+</span><span class='line'>export KEY_EMAIL="me@myhost.mydomain" 设置邮件</span></code></pre></td></tr></table></div></figure>
+
+
+<p>设置好后，执行如下命令</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /etc/openvpn/easy-rsa/
+</span><span class='line'>. ./vars
+</span><span class='line'>./clean-all</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意上面的. ./vars两个点之间有一个空格</p>
+
+<p>建立CA证书</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./build-ca</span></code></pre></td></tr></table></div></figure>
+
+
+<p>生成后，ls keys 可以看到ca.crt ca.key文件</p>
+
+<p>建立服务器密钥</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./build-key-server xinlogs</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意这里的xinlogs是我给密钥起的名字，可以根据个人情况修改</p>
+
+<p>生成Diffie-Hellman文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./build-dh</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上文件都正确生成后，拷贝文件到正确目录</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /etc/openvpn/easy-rsa/
+</span><span class='line'>cp keys/ca.crt ../
+</span><span class='line'>cp keys/dh1024.pem ../
+</span><span class='line'>cp keys/xinlogs.key ../
+</span><span class='line'>cp keys/xinlogs.crt ../</span></code></pre></td></tr></table></div></figure>
+
+
+<p>生成客户端密钥</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./build-key client-1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里client-1是客户端密钥的文件名，如果需要创建多个客户端密钥，就修改client-1名字多次生成即可。</p>
+
+<p>修改/etc/openvpn/server.conf配置</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    local 204.74.212.217
+</span><span class='line'>    #修改local后面ip为服务器地址
+</span><span class='line'>     
+</span><span class='line'>    dev tap
+</span><span class='line'>    ;dev tun
+</span><span class='line'>    #默认是dev tun修改为dev tap,tap是可以路由模式 tun 是以太网隧道模式。具体区别我也不太清楚
+</span><span class='line'>     
+</span><span class='line'>    ca ca.crt
+</span><span class='line'>    cert xinlogs.crt
+</span><span class='line'>    key xinlogs.key
+</span><span class='line'>    #cert后面修改为生成的服务器crt文件xinlogs.crt
+</span><span class='line'>    #key后面修改为生成的服务器key文件xinlogs.key
+</span><span class='line'>    dh dh1024.pem
+</span><span class='line'>    #dh后面修改问生成的dh1024.pem
+</span><span class='line'>    server 10.8.0.0 255.255.255.0
+</span><span class='line'>    #server后面基本就用默认的10.8.0.0 255.255.255.0即可
+</span><span class='line'>    ifconfig-pool-persist ipp.txt
+</span><span class='line'>    #这个默认的ipp.txt就可以
+</span><span class='line'>    push "route 10.8.0.0 255.255.255.0"
+</span><span class='line'>    #添加客户端路由
+</span><span class='line'>    push "redirect-gateway"
+</span><span class='line'>    #修改客户端默认路由
+</span><span class='line'>    push "dhcp-option DNS 8.8.8.8"
+</span><span class='line'>    #修改客户端默认dns
+</span><span class='line'>    client-to-client
+</span><span class='line'>    #允许连接到vpn的客户端可以互相访问
+</span><span class='line'>    duplicate-cn
+</span><span class='line'>    keepalive 10 120
+</span><span class='line'>    comp-lzo
+</span><span class='line'>    #启用lzo压缩
+</span><span class='line'>    user nobody
+</span><span class='line'>    group nobody
+</span><span class='line'>    persist-key
+</span><span class='line'>    persist-tun
+</span><span class='line'>    status /var/log/openvpn-status.log
+</span><span class='line'>    log /var/log/openvpn.log
+</span><span class='line'>    log-append /var/log/openvpn.log
+</span><span class='line'>    verb 3
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>启动停止openvpn</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>service openvpn start
+</span><span class='line'>#启动openvpn服务
+</span><span class='line'> 
+</span><span class='line'>service openvpn stop
+</span><span class='line'>#停止openvpn服务</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>配置iptables</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j SNAT --to-source 214.174.212.217
+</span><span class='line'>#上面命令最后的214.174.212.217是服务器的公网地址，需要根据自己情况修改
+</span><span class='line'>service iptables save</span></code></pre></td></tr></table></div></figure>
+
+
+<p>确认net.ipv4.ip_forward = 1后，服务器就全部配置完成。</p>
+
+<p>如果是用的CentOS官方版本,不是VPS.那因为它自带的iptables规则限制,还需要在/etc/sysconfig/iptables加入下面语句才可以顺利nat上网</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-A RH-Firewall-1-INPUT -i tap+ -j ACCEPT  </span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat /etc/sysctl.conf |grep forward
+</span><span class='line'># Controls IP packet forwarding
+</span><span class='line'>net.ipv4.ip_forward = 1
+</span><span class='line'> 
+</span><span class='line'>#如果不是1，请用vi修改/etc/sysctl.conf文件</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Win7下Openvpn GUI安装</strong></p>
+
+<p>从 http://openvpn.se下载安装文件</p>
+
+<p>Latest stable release: 1.0.3 with OpenVPN 2.0.9 (2006-10-17)</p>
+
+<p>我们直接下载http://openvpn.se/files/install_packages/openvpn-2.0.9-gui-1.0.3-install.exe</p>
+
+<p>注意：下载后，别着急双击安装。先右键属性，设置兼容模式为windosxp sp3 并用管理员身份运行。</p>
+
+<p><img src="http://farm9.staticflickr.com/8378/8514766422_351fae319a.jpg" alt="openvpn gui 属性截图" /></p>
+
+<p>然后再运行安装。</p>
+
+<p><strong>客户端配置</strong></p>
+
+<p>安装后，将服务器/etc/openvpn/easy-rsa/keys/目录下的ca.crt、client-1.crt和client-1.key三个文件拷贝到C:Program FilesOpenVPNconfig目录下</p>
+
+<p>再将C:Program FilesOpenVPNsample-config目录下的client.ovpn文件拷贝到C:Program FilesOpenVPNconfig目录下。</p>
+
+<p>在开始->所有程序里找到openvpn，进入里面右键点击OpenVPN GUI属性，同样修改兼容模式为windows xp sp3 以管理员运行</p>
+
+<p>修改后，运行openvpn gui程序</p>
+
+<p>正确运行后，电脑的右下角会出现openvpn的图标，右键点击选择Edit Config来修改客户端配置文件</p>
+
+<p>下面是我全部客户端配置文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    ##############################################
+</span><span class='line'>    # Sample client-side OpenVPN 2.0 config file #
+</span><span class='line'>    # for connecting to multi-client server. #
+</span><span class='line'>    # #
+</span><span class='line'>    # This configuration can be used by multiple #
+</span><span class='line'>    # clients, however each client should have #
+</span><span class='line'>    # its own cert and key files. #
+</span><span class='line'>    # #
+</span><span class='line'>    # On Windows, you might want to rename this #
+</span><span class='line'>    # file so it has a .ovpn extension #
+</span><span class='line'>    ##############################################
+</span><span class='line'>     
+</span><span class='line'>    # Specify that we are a client and that we
+</span><span class='line'>    # will be pulling certain config file directives
+</span><span class='line'>    # from the server.
+</span><span class='line'>    client
+</span><span class='line'>     
+</span><span class='line'>    # Use the same setting as you are using on
+</span><span class='line'>    # the server.
+</span><span class='line'>    # On most systems, the VPN will not function
+</span><span class='line'>    # unless you partially or fully disable
+</span><span class='line'>    # the firewall for the TUN/TAP interface.
+</span><span class='line'>    dev tap
+</span><span class='line'>    ;dev tun
+</span><span class='line'>     
+</span><span class='line'>    # Windows needs the TAP-Win32 adapter name
+</span><span class='line'>    # from the Network Connections panel
+</span><span class='line'>    # if you have more than one. On XP SP2,
+</span><span class='line'>    # you may need to disable the firewall
+</span><span class='line'>    # for the TAP adapter.
+</span><span class='line'>    ;dev-node MyTap
+</span><span class='line'>     
+</span><span class='line'>    # Are we connecting to a TCP or
+</span><span class='line'>    # UDP server? Use the same setting as
+</span><span class='line'>    # on the server.
+</span><span class='line'>    ;proto tcp
+</span><span class='line'>    proto udp
+</span><span class='line'>     
+</span><span class='line'>    # The hostname/IP and port of the server.
+</span><span class='line'>    # You can have multiple remote entries
+</span><span class='line'>    # to load balance between the servers.
+</span><span class='line'>    remote 214.174.212.217 1194
+</span><span class='line'>    ;remote my-server-2 1194
+</span><span class='line'>     
+</span><span class='line'>    # Choose a random host from the remote
+</span><span class='line'>    # list for load-balancing. Otherwise
+</span><span class='line'>    # try hosts in the order specified.
+</span><span class='line'>    ;remote-random
+</span><span class='line'>     
+</span><span class='line'>    # Keep trying indefinitely to resolve the
+</span><span class='line'>    # host name of the OpenVPN server. Very useful
+</span><span class='line'>    # on machines which are not permanently connected
+</span><span class='line'>    # to the internet such as laptops.
+</span><span class='line'>    resolv-retry infinite
+</span><span class='line'>     
+</span><span class='line'>    # Most clients don't need to bind to
+</span><span class='line'>    # a specific local port number.
+</span><span class='line'>    nobind
+</span><span class='line'>     
+</span><span class='line'>    # Downgrade privileges after initialization (non-Windows only)
+</span><span class='line'>    ;user nobody
+</span><span class='line'>    ;group nobody
+</span><span class='line'>     
+</span><span class='line'>    # Try to preserve some state across restarts.
+</span><span class='line'>    persist-key
+</span><span class='line'>    persist-tun
+</span><span class='line'>     
+</span><span class='line'>    # If you are connecting through an
+</span><span class='line'>    # HTTP proxy to reach the actual OpenVPN
+</span><span class='line'>    # server, put the proxy server/IP and
+</span><span class='line'>    # port number here. See the man page
+</span><span class='line'>    # if your proxy server requires
+</span><span class='line'>    # authentication.
+</span><span class='line'>    ;http-proxy-retry # retry on connection failures
+</span><span class='line'>    ;http-proxy [proxy server] [proxy port #]
+</span><span class='line'>     
+</span><span class='line'>    # Wireless networks often produce a lot
+</span><span class='line'>    # of duplicate packets. Set this flag
+</span><span class='line'>    # to silence duplicate packet warnings.
+</span><span class='line'>    ;mute-replay-warnings
+</span><span class='line'>     
+</span><span class='line'>    # SSL/TLS parms.
+</span><span class='line'>    # See the server config file for more
+</span><span class='line'>    # description. It's best to use
+</span><span class='line'>    # a separate .crt/.key file pair
+</span><span class='line'>    # for each client. A single ca
+</span><span class='line'>    # file can be used for all clients.
+</span><span class='line'>    ca ca.crt
+</span><span class='line'>    cert client-1.crt
+</span><span class='line'>    key client-1.key
+</span><span class='line'>     
+</span><span class='line'>    # Verify server certificate by checking
+</span><span class='line'>    # that the certicate has the nsCertType
+</span><span class='line'>    # field set to "server". This is an
+</span><span class='line'>    # important precaution to protect against
+</span><span class='line'>    # a potential attack discussed here:
+</span><span class='line'>    # http://openvpn.net/howto.html#mitm
+</span><span class='line'>    #
+</span><span class='line'>    # To use this feature, you will need to generate
+</span><span class='line'>    # your server certificates with the nsCertType
+</span><span class='line'>    # field set to "server". The build-key-server
+</span><span class='line'>    # script in the easy-rsa folder will do this.
+</span><span class='line'>    ;ns-cert-type server
+</span><span class='line'>     
+</span><span class='line'>    # If a tls-auth key is used on the server
+</span><span class='line'>    # then every client must also have the key.
+</span><span class='line'>    ;tls-auth ta.key 1
+</span><span class='line'>     
+</span><span class='line'>    # Select a cryptographic cipher.
+</span><span class='line'>    # If the cipher option is used on the server
+</span><span class='line'>    # then you must also specify it here.
+</span><span class='line'>    ;cipher x
+</span><span class='line'>     
+</span><span class='line'>    # Enable compression on the VPN link.
+</span><span class='line'>    # Don't enable this unless it is also
+</span><span class='line'>    # enabled in the server config file.
+</span><span class='line'>    comp-lzo
+</span><span class='line'>     
+</span><span class='line'>    # Set log file verbosity.
+</span><span class='line'>    verb 3
+</span><span class='line'>     
+</span><span class='line'>    # Silence repeating messages
+</span><span class='line'>    ;mute 20
+</span><span class='line'>     
+</span><span class='line'>    route-method exe
+</span><span class='line'>    route-delay 2
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其实主要修改的就是如下地方
+复制内容到剪贴板</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>client
+</span><span class='line'>#说明这个是客户端配置文件
+</span><span class='line'> 
+</span><span class='line'>dev tap
+</span><span class='line'>;dev tun
+</span><span class='line'>#这个和服务器一样就可以
+</span><span class='line'> 
+</span><span class='line'>remote 214.174.212.217 1194
+</span><span class='line'>#这个ip要修改为服务器的公网ip地址
+</span><span class='line'> 
+</span><span class='line'>resolv-retry infinite
+</span><span class='line'>nobind
+</span><span class='line'>persist-key
+</span><span class='line'>persist-tun
+</span><span class='line'> 
+</span><span class='line'> 
+</span><span class='line'>ca ca.crt
+</span><span class='line'>cert client-1.crt
+</span><span class='line'>key client-1.key
+</span><span class='line'>#上面三行一定要根据自己生成的密钥配合
+</span><span class='line'> 
+</span><span class='line'>comp-lzo
+</span><span class='line'>#启用lzo压缩
+</span><span class='line'> 
+</span><span class='line'># Set log file verbosity.
+</span><span class='line'>verb 3
+</span><span class='line'> 
+</span><span class='line'>route-method exe
+</span><span class='line'>route-delay 2 
+</span><span class='line'>
+</span><span class='line'>#最后这两行win7如果不加上，就不能启动修改路由，导致拨vpn成功，但是不能通过远程服务器做网关上网</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这些配置完成后，右键点openvpn gui在桌面右下角图标选择Connect连接</p>
+
+<p>我正确连接后的日志如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    Mon Mar 15 13:03:14 2010 OpenVPN 2.0.9 Win32-MinGW [SSL] [LZO] built on Oct 1 2006
+</span><span class='line'>    Mon Mar 15 13:03:14 2010 IMPORTANT: OpenVPN's default port number is now 1194, based on an official port number assignment by IANA. OpenVPN 2.0-beta16 and earlier used 5000 as the default port.
+</span><span class='line'>    Mon Mar 15 13:03:14 2010 WARNING: No server certificate verification method has been enabled. See http://openvpn.net/howto.html#mitm for more info.
+</span><span class='line'>    Mon Mar 15 13:03:14 2010 LZO compression initialized
+</span><span class='line'>    Mon Mar 15 13:03:14 2010 Control Channel MTU parms [ L:1574 D:138 EF:38 EB:0 ET:0 EL:0 ]
+</span><span class='line'>    Mon Mar 15 13:03:14 2010 Data Channel MTU parms [ L:1574 D:1450 EF:42 EB:135 ET:32 EL:0 AF:3/1 ]
+</span><span class='line'>    Mon Mar 15 13:03:14 2010 Local Options hash (VER=V4): 'd79ca330'
+</span><span class='line'>    Mon Mar 15 13:03:14 2010 Expected Remote Options hash (VER=V4): 'f7df56b8'
+</span><span class='line'>    Mon Mar 15 13:03:14 2010 UDPv4 link local: [undef]
+</span><span class='line'>    Mon Mar 15 13:03:14 2010 UDPv4 link remote: 204.74.212.217:1194
+</span><span class='line'>    Mon Mar 15 13:03:16 2010 TLS: Initial packet from 204.74.212.217:1194, sid=3d4cf00a 84deb309
+</span><span class='line'>    Mon Mar 15 13:03:18 2010 VERIFY OK: depth=1, /C=US/ST=Beijing/L=BEIJING/O=xinlogs.com/CN=babodx/emailAddress=babodx@gmail.com
+</span><span class='line'>    Mon Mar 15 13:03:18 2010 VERIFY OK: depth=0, /C=US/ST=Beijing/O=xinlogs.com/CN=babodx/emailAddress=babodx@gmail.com
+</span><span class='line'>    Mon Mar 15 13:03:20 2010 Data Channel Encrypt: Cipher 'BF-CBC' initialized with 128 bit key
+</span><span class='line'>    Mon Mar 15 13:03:20 2010 Data Channel Encrypt: Using 160 bit message hash 'SHA1' for HMAC authentication
+</span><span class='line'>    Mon Mar 15 13:03:20 2010 Data Channel Decrypt: Cipher 'BF-CBC' initialized with 128 bit key
+</span><span class='line'>    Mon Mar 15 13:03:20 2010 Data Channel Decrypt: Using 160 bit message hash 'SHA1' for HMAC authentication
+</span><span class='line'>    Mon Mar 15 13:03:20 2010 Control Channel: TLSv1, cipher TLSv1/SSLv3 DHE-RSA-AES256-SHA, 1024 bit RSA
+</span><span class='line'>    Mon Mar 15 13:03:20 2010 [babodx] Peer Connection Initiated with 214.174.212.217:1194
+</span><span class='line'>    Mon Mar 15 13:03:21 2010 SENT CONTROL [babodx]: 'PUSH_REQUEST' (status=1)
+</span><span class='line'>    Mon Mar 15 13:03:21 2010 PUSH: Received control message: 'PUSH_REPLY,route 10.8.0.0 255.255.255.0,redirect-gateway,dhcp-option DNS 8.8.8.8,route-gateway 10.8.0.1,ping 10,ping-restart 120,ifconfig 10.8.0.3 255.255.255.0'
+</span><span class='line'>    Mon Mar 15 13:03:21 2010 OPTIONS IMPORT: timers and/or timeouts modified
+</span><span class='line'>    Mon Mar 15 13:03:21 2010 OPTIONS IMPORT: --ifconfig/up options modified
+</span><span class='line'>    Mon Mar 15 13:03:21 2010 OPTIONS IMPORT: route options modified
+</span><span class='line'>    Mon Mar 15 13:03:21 2010 OPTIONS IMPORT: --ip-win32 and/or --dhcp-option options modified
+</span><span class='line'>    Mon Mar 15 13:03:21 2010 TAP-WIN32 device [本地连接 3] opened: .Global{A958F4F2-14AF-49E6-9FBF-4FC25B8D8786}.tap
+</span><span class='line'>    Mon Mar 15 13:03:21 2010 TAP-Win32 Driver Version 8.4
+</span><span class='line'>    Mon Mar 15 13:03:21 2010 TAP-Win32 MTU=1500
+</span><span class='line'>    Mon Mar 15 13:03:21 2010 Notified TAP-Win32 driver to set a DHCP IP/netmask of 10.8.0.3/255.255.255.0 on interface {A958F4F2-14AF-49E6-9FBF-4FC25B8D8786} [DHCP-serv: 10.8.0.0, lease-time: 31536000]
+</span><span class='line'>    Mon Mar 15 13:03:21 2010 Successful ARP Flush on interface [29] {A958F4F2-14AF-49E6-9FBF-4FC25B8D8786}
+</span><span class='line'>    Mon Mar 15 13:03:23 2010 TEST ROUTES: 2/2 succeeded len=1 ret=1 a=0 u/d=up
+</span><span class='line'>    Mon Mar 15 13:03:23 2010 route ADD 214.174.212.217 MASK 255.255.255.255 192.168.2.1
+</span><span class='line'>    操作完成!
+</span><span class='line'>    Mon Mar 15 13:03:23 2010 route DELETE 0.0.0.0 MASK 0.0.0.0 192.168.2.1
+</span><span class='line'>    操作完成!
+</span><span class='line'>    Mon Mar 15 13:03:23 2010 route ADD 0.0.0.0 MASK 0.0.0.0 10.8.0.1
+</span><span class='line'>    操作完成!
+</span><span class='line'>    Mon Mar 15 13:03:23 2010 route ADD 10.8.0.0 MASK 255.255.255.0 10.8.0.1
+</span><span class='line'>    操作完成!
+</span><span class='line'>    Mon Mar 15 13:03:23 2010 Initialization Sequence Completed
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1107,123 +1901,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/01/03/druid-ubrs-quickmacro-code/">野D带黑上，后台挂机按键精灵代码</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-01-03T00:00:00+08:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>代码是运行在按键精灵里的。在winxp+按键精灵7和win7+按键精灵7下测试通过</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Plugin hwnd=Window.GetKeyFocusWnd()
-</span><span class='line'>Rem start
-</span><span class='line'>For 30
-</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,70)
-</span><span class='line'>Delay 300
-</span><span class='line'>EndFor
-</span><span class='line'>Delay 1000
-</span><span class='line'>Plugin Bkgnd.KeyDown(hwnd,16)
-</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,87)
-</span><span class='line'>Plugin Bkgnd.KeyUp(hwnd,16)
-</span><span class='line'>Delay 500
-</span><span class='line'>For 30
-</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,70)
-</span><span class='line'>Delay 300
-</span><span class='line'>EndFor
-</span><span class='line'>Delay 1000
-</span><span class='line'>Plugin Bkgnd.KeyDown(hwnd,18)
-</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,68)
-</span><span class='line'>Plugin Bkgnd.KeyUp(hwnd,18)
-</span><span class='line'>Delay 500
-</span><span class='line'>For 30
-</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,70)
-</span><span class='line'>Delay 300
-</span><span class='line'>EndFor
-</span><span class='line'>Delay 1000
-</span><span class='line'>For 8
-</span><span class='line'>Plugin Bkgnd.KeyDown(hwnd,16)
-</span><span class='line'>Plugin Bkgnd.KeyPress(hwnd,82)
-</span><span class='line'>Plugin Bkgnd.KeyUp(hwnd,16)
-</span><span class='line'>EndFor
-</span><span class='line'>Delay 500
-</span><span class='line'>Goto start
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>代码说明：</p>
-
-<p>上面是我自己使用的代码，我的快捷键设置和大家不一样，所以别人使用，请注意修改快捷键。</p>
-
-<p>精灵之火（野性） Shift+R</p>
-
-<p>树皮 Shift+W</p>
-
-<p>狂暴回复 Alt+D</p>
-
-<p>横扫+重殴 宏 F （其实就是个AOE宏，需要不断切换目标，保证重殴可以放出来就可以）</p>
-
-<p>以上就是我带刷的代码，基本保证装备不红，人物不死。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/9/">&larr; Older</a>
@@ -1257,7 +1934,7 @@
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
-<li class='category'><a href='/blog/categories/rails/'>Rails (6)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (7)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>Vim (2)</a></li>
@@ -1273,6 +1950,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
       </li>
     
@@ -1286,10 +1967,6 @@
     
       <li class="post">
         <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
       </li>
     
   </ul>

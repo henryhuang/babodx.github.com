@@ -9,10 +9,11 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="建立Mysql两个表间的外键,需要满足三个条件 两个表必须是InnoDB表类型
-使用在外键关系的域必须为索引型(Index)
-使用在外键关系的域必须与数据类型相似 下面举例说明 我们创建一个班级表和一个学生表,并建立一个外键 创建班级表 1
-CREATE TABLE class (id INT &hellip;">
+  <meta name="description" content="First you need to find out the partitions and the startsector of partitions: 1
+2
+3
+4
+[root@xen rruban]# file rheltest.img rheltest.img: x86 boot &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +69,94 @@ CREATE TABLE class (id INT &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/howto-mount-xen-img/">怎么mount一个xen的img映像。转载</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><ul>
+<li>First you need to find out the partitions and the startsector of partitions:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@xen rruban]# file rheltest.img rheltest.img: x86 boot sector, GRand Unified Bootloader (0.94); 
+</span><span class='line'>partition 
+</span><span class='line'>1: ID=0x83, active, starthead 1, startsector 63, 208782 sectors; partition 
+</span><span class='line'>2: ID=0x8e, starthead 0, startsector 208845, 3871665 sectors, code offset 0x48</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are 3 partitions inside the image file. The startsector of each partition is also listed. Boot partition will have start sector 63.</p>
+
+<ul>
+<li>Now you need to get the sector size:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@xen]fdisk -lu rheltest.img
+</span><span class='line'>Disk rheltest.img: 0 MB, 0 bytes 255 heads, 63 sectors/track, 0 cylinders, total 0 sectors 
+</span><span class='line'>Units = sectors of 1 * 512 = 512 bytes 
+</span><span class='line'>Device Boot Start End Blocks Id System 
+</span><span class='line'>rheltest.img1 * 63 208844 104391 83 Linux 
+</span><span class='line'>rheltest.img2 208845 4080509 1935832+ 8e Linux LVM </span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above shows the sector byte size is 512 byte.</p>
+
+<ul>
+<li>To calculating the offset: offset = start_sector x sector_byte_size.</li>
+</ul>
+
+
+<p>The startsector is 63 for the first partition, therefore the first partition offset is: 63x512=32256</p>
+
+<ul>
+<li>Finally, to mount the xen image, use:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mount -o loop,offset=32256 test.img /foldername</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -947,48 +1036,6 @@ If all is well you will see the guest’s boot messages scrolling by.
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-install-xen/">CentOS 5.3下成功安装了Xen虚拟化服务。</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天参照下面文档成功安装了虚拟化服务。</p>
-
-<p><a href="http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2">http://www.howtoforge.com/paravirtualization-with-xen-on-centos-5.3-x86_64-p2</a></p>
-
-<p>并且在虚拟化服务里，安装了一台vm01的虚拟Centos。</p>
-
-<p>不过时间比较长，通过网络安装，用了4个小时。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/14/">&larr; Older</a>
@@ -1022,7 +1069,7 @@ If all is well you will see the guest’s boot messages scrolling by.
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
-<li class='category'><a href='/blog/categories/rails/'>Rails (6)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (7)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>Vim (2)</a></li>
@@ -1038,6 +1085,10 @@ If all is well you will see the guest’s boot messages scrolling by.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
       </li>
     
@@ -1051,10 +1102,6 @@ If all is well you will see the guest’s boot messages scrolling by.
     
       <li class="post">
         <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
       </li>
     
   </ul>

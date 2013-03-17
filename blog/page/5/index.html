@@ -9,10 +9,10 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="这个站点有很多关于debian系统管理的信息和经验。
-不过这个站点对于IE支持不好，页面会出现错位。建议还是采用firefox或者chrome这类的浏览器吧。
-网址：http://www.debian-administration.org/
-简介如下，照搬的原文： Debian &hellip;">
+  <meta name="description" content="因为迁移到了emlog，最近几天一直在鼓弄博客。 今天又尝试用离线工具写博客了。 在网站上搜索了下，发现国人开发的菊子曰不错。所以开始了这次尝试 功能方面日常写文章应该足够了。 就是如果是程序员用，代码高亮效果很一般
+ 
+ 
+还有就是日志摘要功能，并不能符合emlog的日志摘要，基本只能全篇发上来 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +68,54 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/25/write-blog-offline/">离线博客工具-菊子曰</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-25T00:00:00+08:00" pubdate data-updated="true">Oct 25<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>因为迁移到了emlog，最近几天一直在鼓弄博客。</p>
+
+<p>今天又尝试用离线工具写博客了。</p>
+
+<p>在网站上搜索了下，发现国人开发的菊子曰不错。所以开始了这次尝试</p>
+
+<p>功能方面日常写文章应该足够了。</p>
+
+<p>就是如果是程序员用，代码高亮效果很一般
+ 
+ 
+还有就是日志摘要功能，并不能符合emlog的日志摘要，基本只能全篇发上来。感觉如果文章不是很长，建议还是采用在线编辑吧。
+再有就是采用了离线发布，将不能自动和新浪微博同步</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -628,128 +676,6 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/03/14/mysqldump-encoding/">Mysqldump解决中文乱码问题</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-03-14T00:00:00+08:00" pubdate data-updated="true">Mar 14<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>我的数据库采用编码如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; show variables like 'coll%';
-</span><span class='line'>+----------------------+-------------------+
-</span><span class='line'>| Variable_name        | Value             |
-</span><span class='line'>+----------------------+-------------------+
-</span><span class='line'>| collation_connection | latin1_swedish_ci |
-</span><span class='line'>| collation_database   | latin1_swedish_ci |
-</span><span class='line'>| collation_server     | latin1_swedish_ci |
-</span><span class='line'>+----------------------+-------------------+
-</span><span class='line'>3 rows in set (0.00 sec)
-</span><span class='line'> 
-</span><span class='line'>mysql&gt; show variables like 'character_set%';
-</span><span class='line'>+--------------------------+----------------------------+
-</span><span class='line'>| Variable_name            | Value                      |
-</span><span class='line'>+--------------------------+----------------------------+
-</span><span class='line'>| character_set_client     | latin1                     |
-</span><span class='line'>| character_set_connection | latin1                     |
-</span><span class='line'>| character_set_database   | latin1                     |
-</span><span class='line'>| character_set_filesystem | binary                     |
-</span><span class='line'>| character_set_results    | latin1                     |
-</span><span class='line'>| character_set_server     | latin1                     |
-</span><span class='line'>| character_set_system     | utf8                       |
-</span><span class='line'>| character_sets_dir       | /usr/share/mysql/charsets/ |
-</span><span class='line'>+--------------------------+----------------------------+
-</span><span class='line'>8 rows in set (0.00 sec)</span></code></pre></td></tr></table></div></figure>
-
-
-<p> 
-数据库的编码采用utf8</p>
-
-<p>开始用mysqldump出来的都是乱码。后来采用 &#8211;default-character-set=gbk参数，然后再用iconv转码为utf8就解决了问题。</p>
-
-<p>下面是我的数据库备份脚本</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/sh   
-</span><span class='line'>#####configurate#######   
-</span><span class='line'>rq=`date +%Y%m%d%N`   
-</span><span class='line'>user="user"  
-</span><span class='line'>password="password"  
-</span><span class='line'>rm -rf /var/lib/mysql/mysql-bin.*   
-</span><span class='line'>mysqldump -u$user -p$password --default-character-set=gbk --single-transaction --flush-logs --master-data=2 mydatabase&gt;/home/ict/mysql_backup/database$rq.sql   
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>导出后转码</p>
-
-<p><code>iconv -t utf-8 -f gbk -c database.sql&gt;databaseutf8.sql</code></p>
-
-<p>这样已经可以看到正确的中文了。</p>
-
-<p><strong>导入</strong></p>
-
-<p>在windows下，如果采用HeidiSQL打开SQL文件，可以正确看到中文，但是导入后还是乱码。</p>
-
-<p>解决办法，采用记事本打开，选择另存为，编码选择ANSI。然后再用HeidiSQL工具打开导入即可。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -783,7 +709,7 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
-<li class='category'><a href='/blog/categories/rails/'>Rails (6)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (7)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>Vim (2)</a></li>
@@ -799,6 +725,10 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
       </li>
     
@@ -812,10 +742,6 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
     
       <li class="post">
         <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
       </li>
     
   </ul>

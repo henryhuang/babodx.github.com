@@ -4,7 +4,7 @@
   <title><![CDATA[鑫的方向]]></title>
   <link href="http://babodx.github.com/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-03-14T16:01:55+08:00</updated>
+  <updated>2013-03-17T09:30:54+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,125 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[rails-best-practices-1]]></title>
+    <link href="http://babodx.github.com/blog/2013/03/16/rails-best-practices-1/"/>
+    <updated>2013-03-16T09:43:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/03/16/rails-best-practices-1</id>
+    <content type="html"><![CDATA[<h1>FAT MODEL,SKINNY CONTROLLER</h1>
+
+<p>最近看了codeschool的教程，打算把里面讲解的rails best practices总结下。</p>
+
+<p>视频里的第一部分就是讲解的Fat model，skinny controller。我理解的就是要尽量把业务代码写到model中，而controller要尽量的简单。</p>
+
+<p>第一个例子是tweets_controller.rb的代码</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">TweetsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">retweet</span>
+</span><span class='line'>    <span class="n">tweet</span> <span class="o">=</span> <span class="no">Tweet</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="n">tweet</span><span class="o">.</span><span class="n">user</span> <span class="o">==</span> <span class="n">current_user</span>
+</span><span class='line'>      <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Sorry, you can&#39;t retweet your own tweets&quot;</span>
+</span><span class='line'>    <span class="k">elsif</span> <span class="n">tweet</span><span class="o">.</span><span class="n">retweets</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">:user_id</span> <span class="o">=&gt;</span> <span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>      <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;You already retweeted!&quot;</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="n">t</span> <span class="o">=</span> <span class="no">Tweet</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;RT </span><span class="si">#{</span><span class="n">tweet</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">#{</span><span class="n">tweet</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">original_tweet</span> <span class="o">=</span> <span class="n">tweet</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">current_user</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>      <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Succesfully retweeted&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">redirect_to</span> <span class="n">tweet</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面的代码就是所谓的“SAD CODE”，并不理想。最佳实践里好的代码，被codeschool称作“HAPPY CODE”,很有意思。</p>
+
+<p>下面我们看看上面的代码该如何实现“HAYYP CODE”，首先要把一部分代码转移到tweet model里，然后上面的代码变成如下样子</p>
+
+<!--more-->
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">TweetsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">retweet</span>
+</span><span class='line'>    <span class="n">tweet</span> <span class="o">=</span> <span class="no">Tweet</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="n">tweet</span><span class="o">.</span><span class="n">retweet_by</span><span class="p">(</span><span class="n">current_user</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">redirect_to</span> <span class="n">tweet</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到上面tweets_controller.rb明显比之前简单多了，主要是将大部分代码转移到了tweet model的retweet_by方法中了。</p>
+
+<p>下面的/app/models/tweet.rb的部分代码</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Tweet</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">retweet_by</span><span class="p">(</span><span class="n">retweeter</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">user</span> <span class="o">==</span> <span class="n">retweeter</span>
+</span><span class='line'>      <span class="s2">&quot;Sorry,you can&#39;t retweet your own tweets&quot;</span>
+</span><span class='line'>    <span class="k">elsif</span> <span class="nb">self</span><span class="o">.</span><span class="n">retweets</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">:user_id</span> <span class="o">=&gt;</span> <span class="n">retweeter</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>      <span class="s2">&quot;You already retweeted!&quot;</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>      <span class="s2">&quot;Succesfully retweeted&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>小结</h2>
+
+<p>其实这个fat model,skinny controller很好理解。就是我们要经常检查我们自己的controller，一旦发现过于复杂或者代码过多。就要开始考虑将一些重复的代码或者涉及到复杂的业务逻辑代码提取到model当中实现。上面例子当中就是将转发tweet的业务逻辑代码转移到了model中，在model中判断tweet转发的是不是自己和是否已经转发过了。而最初这些代码放在controller中就造成了controller过于复杂，涉及了业务逻辑。</p>
+
+<p>我们只要把controller定位为action转发，而把model定义为model层和service层。涉及到业务逻辑或者各种条件判断的代码全扔到model中实际就可以了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[rails中文问题]]></title>
@@ -1524,251 +1643,6 @@ git config user.email "youremail"
 <p>其实DDOS也是通过分析netstat状态来判断大量连接的IP，然后采取封掉的策略。并可以设置封掉多久后自动解除。</p>
 
 <p>基本经过上面的配置，现在万网没有再因为DDOS问题断网24小时了。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[monit监控linux服务]]></title>
-    <link href="http://babodx.github.com/blog/2012/02/02/monit-to-monitor-services/"/>
-    <updated>2012-02-02T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2012/02/02/monit-to-monitor-services</id>
-    <content type="html"><![CDATA[<p>最近负责的两台服务器需要监控nginx和memcached服务，防止网站访问异常。</p>
-
-<p>我用monit来解决这个需求。</p>
-
-<p>monit是一款linux下的开源软件，可以负责监控系统的服务、进程、文件等内容，并设置一定的条件下执行特定的action。</p>
-
-<p>我们可以通过配置，让monit来检查网站的状态和memcached的状态，发现异常的时候，自动重启服务并邮件通知我们。</p>
-
-<p>我配置了30s检查一次，出现问题发送邮件到我的gmail邮箱。我手机马上就能收到邮件提醒，非常效率。</p>
-
-<p>安装配置步骤：</p>
-
-<p>下载monit</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>wget http://mmonit.com/monit/dist/monit-5.3.2.tar.gz</span></code></pre></td></tr></table></div></figure>
-
-
-<p>解压并安装</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>tar zxvf monit-5.3.2.tar.gz
-</span><span class='line'>
-</span><span class='line'>cd monit-5.3.2
-</span><span class='line'>
-</span><span class='line'>./configure --prefix=/usr/local/monit
-</span><span class='line'>
-</span><span class='line'>make
-</span><span class='line'>
-</span><span class='line'>make install</span></code></pre></td></tr></table></div></figure>
-
-
-<p>配置</p>
-
-<p>先将默认的配置文件拷贝到/etc目录下，然后编辑monitrc文件</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cp monitrc /etc/</span></code></pre></td></tr></table></div></figure>
-
-
-<p>下面是我的一些配置：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>set daemon  30   #设置30s检查一次
-</span><span class='line'>
-</span><span class='line'>set logfile /var/log/monit.log   #设定日志文件
-</span><span class='line'>
-</span><span class='line'>#设定邮件
-</span><span class='line'>
-</span><span class='line'>set mailserver smtp.gmail.com PORT 587 USERNAME "yourname@gmail.com" PASSWORD "yourpassword" USING tlsv1 
-</span><span class='line'>
-</span><span class='line'>#设定邮件格式
-</span><span class='line'>
-</span><span class='line'>set mail-format {
-</span><span class='line'>
-</span><span class='line'>      from: monit@huaximall.com
-</span><span class='line'>
-</span><span class='line'>      subject: monit alert --  $EVENT $SERVICE
-</span><span class='line'>
-</span><span class='line'>      message: $EVENT Service $SERVICE
-</span><span class='line'>
-</span><span class='line'>                 Date:        $DATE
-</span><span class='line'>
-</span><span class='line'>                 Action:      $ACTION
-</span><span class='line'>
-</span><span class='line'>                 Host:        xinlogs.com
-</span><span class='line'>
-</span><span class='line'>                 Description: $DESCRIPTION
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>            Your faithful employee,
-</span><span class='line'>
-</span><span class='line'>            Monit
-</span><span class='line'>
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>#设定提醒超时
-</span><span class='line'>
-</span><span class='line'>set alert babodx@gmail.com with reminder on 3 cycles
-</span><span class='line'>
-</span><span class='line'>#设定检查nginx服务
-</span><span class='line'>
-</span><span class='line'>check process nginx with pidfile /usr/local/webserver/nginx-1.0.11/nginx.pid
-</span><span class='line'>
-</span><span class='line'>  start program = "/usr/local/webserver/nginx-1.0.11/sbin/nginx"
-</span><span class='line'>
-</span><span class='line'>  stop program = "/usr/bin/killall nginx"
-</span><span class='line'>
-</span><span class='line'>  if failed host xinlogs.com port 80 protocol http
-</span><span class='line'>
-</span><span class='line'>     and request "/t.html"
-</span><span class='line'>
-</span><span class='line'>     then restart
-</span><span class='line'>
-</span><span class='line'>  if 2 restarts within 3 cycles then timeout
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>#设定检查memcached服务
-</span><span class='line'>
-</span><span class='line'>check process memcached with pidfile /var/run/memcache.pid
-</span><span class='line'>
-</span><span class='line'>      start program = "/usr/local/memcached/bin/memcached -d -m 1024 -u root -p 11211 -c 1024 -P /var/run/memcache.pid"
-</span><span class='line'>
-</span><span class='line'>      stop program = "/bin/kill -9 `cat /var/run/memcache.pid`; rm /var/run/memcached.pid"
-</span><span class='line'>
-</span><span class='line'>      if failed host 127.0.0.1 port 11211 protocol MEMCACHE then restart
-</span><span class='line'>
-</span><span class='line'>      if cpu &gt; 60% for 2 cycles then alert
-</span><span class='line'>
-</span><span class='line'>      if cpu &gt; 98% for 5 cycles then restart
-</span><span class='line'>
-</span><span class='line'>      if 2 restarts within 3 cycles then timeout
-</span><span class='line'>
-</span><span class='line'>      group cache</span></code></pre></td></tr></table></div></figure>
-
-
-<p>下面再贴出来提醒的邮件样子给大家看看</p>
-
-<p>这个是检查到nginx被终止后的提醒邮件</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Does not exist Service nginx
-</span><span class='line'>                Date:        Thu, 02 Feb 2012 11:31:50
-</span><span class='line'>                Action:      restart
-</span><span class='line'>                Host:        xinlogs.com
-</span><span class='line'>                Description: process is not running
-</span><span class='line'>
-</span><span class='line'>           Your faithful employee,
-</span><span class='line'>           Monit</span></code></pre></td></tr></table></div></figure>
-
-
-<p>下面是自动恢复nginx服务后的提醒邮件</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Exists Service nginx
-</span><span class='line'>                Date:        Thu, 02 Feb 2012 11:32:28
-</span><span class='line'>                Action:      alert
-</span><span class='line'>                Host:        xinlogs.com
-</span><span class='line'>                Description: process is running with pid 6894
-</span><span class='line'>
-</span><span class='line'>           Your faithful employee,
-</span><span class='line'>           Monit</span></code></pre></td></tr></table></div></figure>
-
-
-<p>有了这些就可以安心了，万一网站访问异常了。monit会尝试自动恢复的，而且第一时间通知我们。因为我的vps在美国，所以发送到gmail很及时。手机再设置个邮件提醒功能，基本就ok了。</p>
 ]]></content>
   </entry>
   

@@ -9,9 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="最近放假一直在家里测试php如何优化性能。
-今天比较了下默认php、eaccelerator和fastcgi_cache的性能。 先介绍下我的测试环境：
-这次是在我VPS上做的测试：cpu 为1颗Intel(R) Core(TM) i7-2600 CPU @ 3.40GHz，内存256M &hellip;">
+  <meta name="description" content="最近负责的两台服务器需要监控nginx和memcached服务，防止网站访问异常。 我用monit来解决这个需求。 monit是一款linux下的开源软件，可以负责监控系统的服务、进程、文件等内容，并设置一定的条件下执行特定的action。 我们可以通过配置， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +65,278 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/02/02/monit-to-monitor-services/">Monit监控linux服务</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-02T00:00:00+08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近负责的两台服务器需要监控nginx和memcached服务，防止网站访问异常。</p>
+
+<p>我用monit来解决这个需求。</p>
+
+<p>monit是一款linux下的开源软件，可以负责监控系统的服务、进程、文件等内容，并设置一定的条件下执行特定的action。</p>
+
+<p>我们可以通过配置，让monit来检查网站的状态和memcached的状态，发现异常的时候，自动重启服务并邮件通知我们。</p>
+
+<p>我配置了30s检查一次，出现问题发送邮件到我的gmail邮箱。我手机马上就能收到邮件提醒，非常效率。</p>
+
+<p>安装配置步骤：</p>
+
+<p>下载monit</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget http://mmonit.com/monit/dist/monit-5.3.2.tar.gz</span></code></pre></td></tr></table></div></figure>
+
+
+<p>解压并安装</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar zxvf monit-5.3.2.tar.gz
+</span><span class='line'>
+</span><span class='line'>cd monit-5.3.2
+</span><span class='line'>
+</span><span class='line'>./configure --prefix=/usr/local/monit
+</span><span class='line'>
+</span><span class='line'>make
+</span><span class='line'>
+</span><span class='line'>make install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>配置</p>
+
+<p>先将默认的配置文件拷贝到/etc目录下，然后编辑monitrc文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cp monitrc /etc/</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面是我的一些配置：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>set daemon  30   #设置30s检查一次
+</span><span class='line'>
+</span><span class='line'>set logfile /var/log/monit.log   #设定日志文件
+</span><span class='line'>
+</span><span class='line'>#设定邮件
+</span><span class='line'>
+</span><span class='line'>set mailserver smtp.gmail.com PORT 587 USERNAME "yourname@gmail.com" PASSWORD "yourpassword" USING tlsv1 
+</span><span class='line'>
+</span><span class='line'>#设定邮件格式
+</span><span class='line'>
+</span><span class='line'>set mail-format {
+</span><span class='line'>
+</span><span class='line'>      from: monit@huaximall.com
+</span><span class='line'>
+</span><span class='line'>      subject: monit alert --  $EVENT $SERVICE
+</span><span class='line'>
+</span><span class='line'>      message: $EVENT Service $SERVICE
+</span><span class='line'>
+</span><span class='line'>                 Date:        $DATE
+</span><span class='line'>
+</span><span class='line'>                 Action:      $ACTION
+</span><span class='line'>
+</span><span class='line'>                 Host:        xinlogs.com
+</span><span class='line'>
+</span><span class='line'>                 Description: $DESCRIPTION
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>            Your faithful employee,
+</span><span class='line'>
+</span><span class='line'>            Monit
+</span><span class='line'>
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>#设定提醒超时
+</span><span class='line'>
+</span><span class='line'>set alert babodx@gmail.com with reminder on 3 cycles
+</span><span class='line'>
+</span><span class='line'>#设定检查nginx服务
+</span><span class='line'>
+</span><span class='line'>check process nginx with pidfile /usr/local/webserver/nginx-1.0.11/nginx.pid
+</span><span class='line'>
+</span><span class='line'>  start program = "/usr/local/webserver/nginx-1.0.11/sbin/nginx"
+</span><span class='line'>
+</span><span class='line'>  stop program = "/usr/bin/killall nginx"
+</span><span class='line'>
+</span><span class='line'>  if failed host xinlogs.com port 80 protocol http
+</span><span class='line'>
+</span><span class='line'>     and request "/t.html"
+</span><span class='line'>
+</span><span class='line'>     then restart
+</span><span class='line'>
+</span><span class='line'>  if 2 restarts within 3 cycles then timeout
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>#设定检查memcached服务
+</span><span class='line'>
+</span><span class='line'>check process memcached with pidfile /var/run/memcache.pid
+</span><span class='line'>
+</span><span class='line'>      start program = "/usr/local/memcached/bin/memcached -d -m 1024 -u root -p 11211 -c 1024 -P /var/run/memcache.pid"
+</span><span class='line'>
+</span><span class='line'>      stop program = "/bin/kill -9 `cat /var/run/memcache.pid`; rm /var/run/memcached.pid"
+</span><span class='line'>
+</span><span class='line'>      if failed host 127.0.0.1 port 11211 protocol MEMCACHE then restart
+</span><span class='line'>
+</span><span class='line'>      if cpu &gt; 60% for 2 cycles then alert
+</span><span class='line'>
+</span><span class='line'>      if cpu &gt; 98% for 5 cycles then restart
+</span><span class='line'>
+</span><span class='line'>      if 2 restarts within 3 cycles then timeout
+</span><span class='line'>
+</span><span class='line'>      group cache</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面再贴出来提醒的邮件样子给大家看看</p>
+
+<p>这个是检查到nginx被终止后的提醒邮件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Does not exist Service nginx
+</span><span class='line'>                Date:        Thu, 02 Feb 2012 11:31:50
+</span><span class='line'>                Action:      restart
+</span><span class='line'>                Host:        xinlogs.com
+</span><span class='line'>                Description: process is not running
+</span><span class='line'>
+</span><span class='line'>           Your faithful employee,
+</span><span class='line'>           Monit</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面是自动恢复nginx服务后的提醒邮件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Exists Service nginx
+</span><span class='line'>                Date:        Thu, 02 Feb 2012 11:32:28
+</span><span class='line'>                Action:      alert
+</span><span class='line'>                Host:        xinlogs.com
+</span><span class='line'>                Description: process is running with pid 6894
+</span><span class='line'>
+</span><span class='line'>           Your faithful employee,
+</span><span class='line'>           Monit</span></code></pre></td></tr></table></div></figure>
+
+
+<p>有了这些就可以安心了，万一网站访问异常了。monit会尝试自动恢复的，而且第一时间通知我们。因为我的vps在美国，所以发送到gmail很及时。手机再设置个邮件提醒功能，基本就ok了。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1846,97 +2116,6 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/12/09/check-slow-php-script/">如何找到执行慢的php程序</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-09T00:00:00+08:00" pubdate data-updated="true">Dec 9<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近在帮助一个网站做性能优化。
-从原来的windows平台切换到了linux平台。php环境也已经变为主流的Nginx+php-fpm+eAccelerator+Zend Optimization组合
-打开了MySQL的慢连接，发现基本集中在论坛的表查询上，但是我们如何定位有哪些php程序在执行的时候过慢呢？</p>
-
-<p>通过查看php-fpm.conf配置，可以找到如下配置信息</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>The timeout (in seconds) for serving of single request after which a php backtrace will be dumped to slow.log file
-</span><span class='line'>      '0s' means 'off'
-</span><span class='line'>      &lt;value name="request_slowlog_timeout"&gt;0s&lt;/value&gt;
-</span><span class='line'>
-</span><span class='line'>      The log file for slow requests
-</span><span class='line'>      &lt;value name="slowlog"&gt;logs/slow.log&lt;/value&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>request_slowlog_timeout 项是一个设定超过多长时间就会被记录到slow.log日志中。0s为关闭这个选项。</p>
-
-<p>下面的slowlog为设置slow.log文件的位置。</p>
-
-<p>打开这个以后，我们就可以看到哪些php文件用了过多的执行时间，来重点优化。
-而且php-fpm.log也回提示出执行时间超过这个设定的信息。</p>
-
-<p>下面是php-fpm.log的提示</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Dec 09 20:19:25.170259 [WARNING] fpm_request_check_timed_out(), line 146: child 28844, script '/data/htdocs/bbs/forumdisplay.php' (pool default) executing too slow (3.110822 sec), logging</span></code></pre></td></tr></table></div></figure>
-
-
-<p>提示forumdisplay.php文件执行过慢，用了3.110822秒</p>
-
-<p>再来看看slow.log的内容</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Dec 09 20:23:49.534250 pid 28865 (pool default)
-</span><span class='line'>
-</span><span class='line'>script_filename = /data/htdocs/t/bbs/forumdisplay.php
-</span><span class='line'>
-</span><span class='line'>[0xbff462a0] mysql_query() p:66
-</span><span class='line'>
-</span><span class='line'>[0xbff47020] query() p:622</span></code></pre></td></tr></table></div></figure>
-
-
-<p>可以看到和上面的php-fpm.log是对应的的。</p>
-
-<p>有了这个办法，我们就可以随时查看网站中到底是什么程序执行速度慢，来重点优化了！</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -1970,7 +2149,7 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
-<li class='category'><a href='/blog/categories/rails/'>Rails (6)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (7)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>Vim (2)</a></li>
@@ -1986,6 +2165,10 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
       </li>
     
@@ -1999,10 +2182,6 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
     
       <li class="post">
         <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/20/wo-2013nian-xue-xi-lie-biao/">我2013年学习列表</a>
       </li>
     
   </ul>
