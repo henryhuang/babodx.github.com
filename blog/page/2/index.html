@@ -9,9 +9,10 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="今天115网盘关闭了对外分享链接的功能。我的客户有人是用115网盘作为服务器资源存储用的，网站上下载资源都是采用115网盘地址来发布的。这样直接造成全部资源都无法下载了，我临时写了个php脚本来更新全部的115网盘链接到本地服务器地址。
- 
-主要思路： 首先将网盘里的资源全部下载到服务器， &hellip;">
+  <meta name="description" content="已经用了mac有2个月了，基本网络管理和开发工作都在mac下面了。 下面说下如何配置mac下面的php调试环境 我的环境： macbook air 2012款
+Mac OS X 10.8 系统
+php环境：XAMPP 1.7.3
+开发工具：一般用sublime text 2， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +68,194 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/08/10/mac-xdebug-netbeans-config/">Mac下配置php调试环境</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-10T00:00:00+08:00" pubdate data-updated="true">Aug 10<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>已经用了mac有2个月了，基本网络管理和开发工作都在mac下面了。</p>
+
+<p>下面说下如何配置mac下面的php调试环境</p>
+
+<p><strong>我的环境：</strong></p>
+
+<ul>
+<li>macbook air 2012款</li>
+<li>Mac OS X 10.8 系统</li>
+<li>php环境：XAMPP 1.7.3</li>
+<li>开发工具：一般用sublime text 2，调试或者项目开发用netbeans</li>
+</ul>
+
+
+<p>下面说说如何安装调试环境，主要就是xdebug的安装和配置</p>
+
+<p>这里需要提下mac下面的安装包管理工具homebrew</p>
+
+<p>我就是用brew来安装xdebug的。homebrew是一个用ruby开发的，类似macport的工具。可以在线安装软件，就像linux下的apt-get或者yum一样。</p>
+
+<p><strong>安装homebrew</strong></p>
+
+<p>需要系统可以支持ruby，通过ruby -v命令可以查看ruby版本。mac os 自带ruby</p>
+
+<p>直接在终端里输入</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ruby &lt;(curl -fsSk https://raw.github.com/mxcl/homebrew/go)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面命令执行完，brew命令就可以执行了。</p>
+
+<p>先运行brew doctor测试下环境是否完整，如果需要，还要添加Command Line Tools。</p>
+
+<p>添加Command Line Tools</p>
+
+<p>打开Xcode，在preferences->downloads里面下载并安装Command Line Tools</p>
+
+<p><img src="http://farm9.staticflickr.com/8088/8515461958_4e96f751a7_z.jpg" alt="xcode" /></p>
+
+<p>一切正确的话，执行brew doctor显示如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>babomatoMacBook-Air:~ babo$ brew doctor
+</span><span class='line'>
+</span><span class='line'>Your system is raring to brew.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装好brew后，先执行brew update更新下软件包的源，然后再加载两个formula的资源</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>brew update
+</span><span class='line'>
+</span><span class='line'>brew tap josegonzalez/homebrew-php
+</span><span class='line'>
+</span><span class='line'>brew tap homebrew/dupes</span></code></pre></td></tr></table></div></figure>
+
+
+<p>完成后，就可以通过brew search和brew install来查找并安装软件了</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>brew install php53-xdebug</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装好xdebug后，还需要配置php.ini才可以正常使用。</p>
+
+<p>先用brew info查看xdebug相关信息</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>babomatoMacBook-Air:~ babo$ brew info php53-xdebug
+</span><span class='line'>php53-xdebug: stable 2.2.1, HEAD
+</span><span class='line'>http://xdebug.org
+</span><span class='line'>Depends on: autoconf
+</span><span class='line'>/usr/local/Cellar/php53-xdebug/2.2.1 (4 files, 360K) *
+</span><span class='line'>https://github.com/josegonzalez/homebrew-php/commits/master/Formula/php53-xdebug.rb
+</span><span class='line'>==&gt; Options
+</span><span class='line'>--without-config-file
+</span><span class='line'>    Do not add ext-xdebug.ini to /usr/local/etc/php/5.3/conf.d
+</span><span class='line'>==&gt; Caveats
+</span><span class='line'>To finish installing xdebug for PHP 5.3:
+</span><span class='line'>  * /usr/local/etc/php/5.3/conf.d/ext-xdebug.ini was created,
+</span><span class='line'>    do not forget to remove it upon extension removal.
+</span><span class='line'>  * Restart your webserver.
+</span><span class='line'>  * Write a PHP page that calls "phpinfo();"
+</span><span class='line'>  * Load it in a browser and look for the info on the xdebug module.
+</span><span class='line'>  * If you see it, you have been successful!</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过信息我们知道xdebug版本是 stable 2.2.1</p>
+
+<p>配置文件在/usr/local/etc/php/5.3/conf.d/ext-xdebug.ini</p>
+
+<p>我们xampp的配置文件在/Applications/XAMPP/xamppfiles/etc/php.ini</p>
+
+<p>将xdebug的配置加入到/Applications/XAMPP/xamppfiles/etc/php.ini</p>
+
+<p>在文件最下面加入如下信息</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[xdebug]
+</span><span class='line'>zend_extension="/usr/local/Cellar/php53-xdebug/2.2.1/xdebug.so"
+</span><span class='line'>        xdebug.remote_enable=1
+</span><span class='line'>        xdebug.remote_host=localhost
+</span><span class='line'>        xdebug.remote_port=9000
+</span><span class='line'>        xdebug.remote_handler=dbgp</span></code></pre></td></tr></table></div></figure>
+
+
+<p>重启xampp的apache，然后访问phpinfo查看是否成功加载xdebug</p>
+
+<p><img src="http://farm9.staticflickr.com/8381/8515464954_5cd7f4b8be.jpg" alt="xdebug" /></p>
+
+<p><strong>配置netbeans可以调用xdebug</strong></p>
+
+<p>首先将netbeans的偏好设置里的php5解释器设置为xampp的php。不要用系统自带的</p>
+
+<p><img src="http://farm9.staticflickr.com/8518/8515466796_97a1191c23.jpg" alt="xampp_php" /></p>
+
+<p>再设置调试的端口</p>
+
+<p><img src="http://farm9.staticflickr.com/8239/8514355437_689a0d90c0.jpg" alt="netbeans设置xdebug端口" /></p>
+
+<p>这些都设置好，就可以调试php代码了</p>
+
+<p>最后放一张我调试的截图</p>
+
+<p><img src="http://farm9.staticflickr.com/8246/8514357603_58e49f882b_z.jpg" alt="php调试截图" /></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1182,83 +1371,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/21/linux-ddos-defender/">Linux防御DDOS攻击</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-21T00:00:00+08:00" pubdate data-updated="true">Mar 21<span>st</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>这两天一个以前客户在万网购买的云主机一直被SYN Flood 攻击。</p>
-
-<p>其实SYN Flood到是只能拖慢系统，没到死机的地步。问题是万网发现了DDOS攻击后，直接给云主机断网24小时。</p>
-
-<p>这个处理太恶心了。不说想办法切断攻击的IP，而是直接断掉客户的网络。。。有点说不过去呀</p>
-
-<p>电话咨询了下，他们是系统自动处理的，发现了直接断网。
- 
-一般应付DDOS攻击主要是调整SYN相关的内核参数，这个可以从/etc/sysctl.conf入手调整。</p>
-
-<p>再有就是添加iptables规则，来限制syn和连接数量</p>
-
-<p>最后就是通过脚本检查netstat状态，自动将连接数多的ip封掉。</p>
-
-<p>一般linux系统能做到的就这些了，那些可以防ddos的硬防火墙老百姓搞不起。
- 
-调整syn相关参数和iptables网上资料很多，我就不说了。</p>
-
-<p>整段封IP的话，可以用</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>iptables -I INPUT -s 192.0.0.0/8 -j DROP #来封掉192开头的全部ip</span></code></pre></td></tr></table></div></figure>
-
-
-<p> 
-我是通过查看messages日志文件，发现了一些大量连接的IP。然后先手动封掉这些IP。下面是部分日志信息，当然这个是靠配置iptables来实现的日志</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Mar 20 21:51:21 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ea:c1:08:00 SRC=157.55.16.56 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=16250 DF PROTO=TCP SPT=61923 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
-</span><span class='line'>Mar 20 21:51:27 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ea:c1:08:00 SRC=157.55.16.56 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=21741 DF PROTO=TCP SPT=61923 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
-</span><span class='line'>Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ed:c1:08:00 SRC=157.55.16.178 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=28201 DF PROTO=TCP SPT=14521 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
-</span><span class='line'>Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ed:c1:08:00 SRC=157.55.16.178 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=29875 DF PROTO=TCP SPT=14588 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 </span></code></pre></td></tr></table></div></figure>
-
-
-<p>最后在介绍一款linux下防止DDOS的软件：DDoS-Defender-v2.1.0.tar.gz</p>
-
-<p>其实DDOS也是通过分析netstat状态来判断大量连接的IP，然后采取封掉的策略。并可以设置封掉多久后自动解除。</p>
-
-<p>基本经过上面的配置，现在万网没有再因为DDOS问题断网24小时了。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1286,13 +1398,13 @@
 <li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (51)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
-<li class='category'><a href='/blog/categories/rails/'>Rails (7)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (8)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>Vim (2)</a></li>
@@ -1308,6 +1420,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/">centos5.5安装rails环境</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
       </li>
     
@@ -1321,10 +1437,6 @@
     
       <li class="post">
         <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
       </li>
     
   </ul>

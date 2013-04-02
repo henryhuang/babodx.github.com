@@ -9,39 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="代码是运行在按键精灵里的。在winxp+按键精灵7和win7+按键精灵7下测试通过 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-Plugin hwnd=Window. &hellip;">
+  <meta name="description" content="上次写了一篇野D带黑上，后台挂机按键精灵代码，有人反映win7下按键精灵后台代码不能运行。 这里单独说明下。首先的我win7系统是32为的windows7 旗舰版，按键精灵版本是7.20.5292 免费版。在刚一开按键精灵的时候，会提示Init Seg Error。 这个不用管，直接点确定就可以。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -97,6 +65,64 @@ Plugin hwnd=Window. &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/01/07/quickmacro-on-win7/">Windows 7平台下按键精灵的后台运行</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-07T00:00:00+08:00" pubdate data-updated="true">Jan 7<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>上次写了一篇野D带黑上，后台挂机按键精灵代码</a>，有人反映win7下按键精灵后台代码不能运行。</p>
+
+<p>这里单独说明下。首先的我win7系统是32为的windows7 旗舰版，按键精灵版本是7.20.5292 免费版。在刚一开按键精灵的时候，会提示Init Seg Error。</p>
+
+<p>这个不用管，直接点确定就可以。然后打开按键精灵后，我们点“设置”按钮</p>
+
+<p><img src="http://farm9.staticflickr.com/8510/8512206738_6e55d4f97b.jpg" alt="设置按钮" /></p>
+
+<p>然后在弹出来的设置界面中，将热键模式选择为增强模式，如下图所示。</p>
+
+<p><img src="http://farm9.staticflickr.com/8515/8511095399_75fe398ca4.jpg" alt="增强模式截图" /></p>
+
+<p>点确定后，返回按键精灵主界面。</p>
+
+<p><strong>创建带黑上脚本</strong>点击新建按钮，进入“按键精灵-我的脚本”界面。然后点击这个界面中的“源文件”标签，如下图所示（注意红色三角标记）</p>
+
+<p><img src="http://farm9.staticflickr.com/8097/8512207532_e622ca5a45_z.jpg" alt="导入截图" /></p>
+
+<p>然后将带黑上脚本的代码粘贴进来。并在右侧“描述”里，写上黑上后台。点击保存退出，如下图所示</p>
+
+<p><img src="http://farm9.staticflickr.com/8095/8511096257_a2cfe36526_z.jpg" alt="保存截图" /></p>
+
+<p>到这里按键精灵设置完毕。只要打开刷黑上的小德号窗口，按F10启动脚本就可以了。然后再切换窗口双开，上网都可以。这个脚本会一直往小德号的窗口发送指令的。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1075,82 +1101,6 @@ Will create a new application. Start it with:
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/24/nginx-epool-events/">Nginx采用epoll的事件模型，为何效率高。</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-24T00:00:00+08:00" pubdate data-updated="true">Dec 24<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>以前就知道在linux下nginx采用epoll事件模型，处理效率高。但是一直不知道具体为什么，今天查看了下文档，了解了原因。</p>
-
-<p>首先nginx支持一下这些事件模型（才考nginx的wiki）</p>
-
-<p>Nginx支持如下处理连接的方法（I/O复用方法），这些方法可以通过use指令指定。</p>
-
-<ul>
-<li>select - 标准方法。 如果当前平台没有更有效的方法，它是编译时默认的方法。你可以使用配置参数 &#8211;with-select_module 和 &#8211;without-select_module 来启用或禁用这个模块。</li>
-<li>poll - 标准方法。 如果当前平台没有更有效的方法，它是编译时默认的方法。你可以使用配置参数 &#8211;with-poll_module 和 &#8211;without-poll_module 来启用或禁用这个模块。</li>
-<li>kqueue - 高效的方法，使用于 FreeBSD 4.1+, OpenBSD 2.9+, NetBSD 2.0 和 MacOS X. 使用双处理器的MacOS X系统使用kqueue可能会造成内核崩溃。</li>
-<li>epoll - 高效的方法，使用于Linux内核2.6版本及以后的系统。在某些发行版本中，如SuSE 8.2, 有让2.4版本的内核支持epoll的补丁。</li>
-<li>rtsig - 可执行的实时信号，使用于Linux内核版本2.2.19以后的系统。默认情况下整个系统中不能出现大于1024个POSIX实时(排队)信号。这种情况对于高负载的服务器来说是低效的；所以有必要通过调节内核参数 /proc/sys/kernel/rtsig-max 来增加队列的大小。可是从Linux内核版本2.6.6-mm2开始， 这个参数就不再使用了，并且对于每个进程有一个独立的信号队列，这个队列的大小可以用 RLIMIT_SIGPENDING 参数调节。当这个队列过于拥塞，nginx就放弃它并且开始使用 poll 方法来处理连接直到恢复正常。</li>
-<li>/dev/poll - 高效的方法，使用于 Solaris 7 11/99+, HP/UX 11.22+ (eventport), IRIX 6.5.15+ 和 Tru64 UNIX 5.1A+.</li>
-<li>eventport - 高效的方法，使用于 Solaris 10. 为了防止出现内核崩溃的问题， 有必要安装 这个 安全补丁。</li>
-</ul>
-
-
-<p>在linux下面，只有epoll是高效的方法。</p>
-
-<p>下面再来看看epoll到底是如何高效的</p>
-
-<p>Epoll是Linux内核为处理大批量句柄而作了改进的poll。要使用epoll只需要这三个系统调用：epoll_create(2)， epoll_ctl(2)， epoll_wait(2)。它是在2.5.44内核中被引进的(epoll(4) is a new API introduced in Linux kernel 2.5.44)，在2.6内核中得到广泛应用。</p>
-
-<p>epoll的优点</p>
-
-<p>支持一个进程打开大数目的socket描述符(FD)
-select 最不能忍受的是一个进程所打开的FD是有一定限制的，由FD_SETSIZE设置，默认值是2048。对于那些需要支持的上万连接数目的IM服务器来说显然太少了。这时候你一是可以选择修改这个宏然后重新编译内核，不过资料也同时指出这样会带来网络效率的下降，二是可以选择多进程的解决方案(传统的Apache方案)，不过虽然linux上面创建进程的代价比较小，但仍旧是不可忽视的，加上进程间数据同步远比不上线程间同步的高效，所以也不是一种完美的方案。不过 epoll则没有这个限制，它所支持的FD上限是最大可以打开文件的数目，这个数字一般远大于2048,举个例子,在1GB内存的机器上大约是10万左右，具体数目可以cat /proc/sys/fs/file-max察看,一般来说这个数目和系统内存关系很大。</p>
-
-<p>IO效率不随FD数目增加而线性下降
-传统的select/poll另一个致命弱点就是当你拥有一个很大的socket集合，不过由于网络延时，任一时间只有部分的socket是&#8221;活跃&#8221;的，但是select/poll每次调用都会线性扫描全部的集合，导致效率呈现线性下降。但是epoll不存在这个问题，它只会对&#8221;活跃&#8221;的socket进行操作&#8212;这是因为在内核实现中epoll是根据每个fd上面的callback函数实现的。那么，只有&#8221;活跃&#8221;的socket才会主动的去调用 callback函数，其他idle状态socket则不会，在这点上，epoll实现了一个&#8221;伪&#8221;AIO，因为这时候推动力在os内核。在一些 benchmark中，如果所有的socket基本上都是活跃的&#8212;比如一个高速LAN环境，epoll并不比select/poll有什么效率，相反，如果过多使用epoll_ctl,效率相比还有稍微的下降。但是一旦使用idle connections模拟WAN环境,epoll的效率就远在select/poll之上了。</p>
-
-<p>使用mmap加速内核与用户空间的消息传递。
-这点实际上涉及到epoll的具体实现了。无论是select,poll还是epoll都需要内核把FD消息通知给用户空间，如何避免不必要的内存拷贝就很重要，在这点上，epoll是通过内核于用户空间mmap同一块内存实现的。而如果你想我一样从2.5内核就关注epoll的话，一定不会忘记手工 mmap这一步的。</p>
-
-<p>内核微调
-这一点其实不算epoll的优点了，而是整个linux平台的优点。也许你可以怀疑linux平台，但是你无法回避linux平台赋予你微调内核的能力。比如，内核TCP/IP协议栈使用内存池管理sk_buff结构，那么可以在运行时期动态调整这个内存pool(skb_head_pool)的大小&#8212; 通过echo XXXX>/proc/sys/net/core/hot_list_length完成。再比如listen函数的第2个参数(TCP完成3次握手的数据包队列长度)，也可以根据你平台内存大小动态调整。更甚至在一个数据包面数目巨大但同时每个数据包本身大小却很小的特殊系统上尝试最新的NAPI网卡驱动架构。</p>
-
-<p>以上这些epoll内容，参考epoll_互动百科</p>
-
-<p>在我128M的vps上，我查看了一下，file-max的数量已经达到11945
-应该说确实比apache的方式要好，而且资源占用也少。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/10/">&larr; Older</a>
@@ -1178,13 +1128,13 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
 <li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (51)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
-<li class='category'><a href='/blog/categories/rails/'>Rails (7)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (8)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>Vim (2)</a></li>
@@ -1200,6 +1150,10 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/">centos5.5安装rails环境</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
       </li>
     
@@ -1213,10 +1167,6 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
     
       <li class="post">
         <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
       </li>
     
   </ul>

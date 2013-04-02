@@ -9,7 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="本来我是在美国的VPS服务器上安装的pptp vpn，这个vpn可以用windows自带的拨号连接，配置也很方便。刚配置好的时候很好用，可以开youtube也可以访问一些被封闭的站点。但是后来家里的歌华有线好像调整了一些路由配置，导致我在家里就不能连接vpn了。单位也不能连接。 &hellip;">
+  <meta name="description" content="现在YouTube和google博客等站点都被屏蔽，为了打破限制，只能用vpn来穿越了。 原来一直用pptpd类型vpn，这种类型速度快，但是要求防火墙或者网关支持。对内外支持不好（反正我在单位和家里歌华宽带都不支持） 后来改用openvpn类型的vpn了，发现虽然openvpn配置麻烦， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,98 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/03/17/HTC-Hero-Openvpn/">HTC Hero G3 Openvpn设置</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-17T00:00:00+08:00" pubdate data-updated="true">Mar 17<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>现在YouTube和google博客等站点都被屏蔽，为了打破限制，只能用vpn来穿越了。</p>
+
+<p>原来一直用pptpd类型vpn，这种类型速度快，但是要求防火墙或者网关支持。对内外支持不好（反正我在单位和家里歌华宽带都不支持）</p>
+
+<p>后来改用openvpn类型的vpn了，发现虽然openvpn配置麻烦，需要安装客户端。但却是对内网支持良好，穿透能力强。</p>
+
+<p>openvpn可以支持多系统（服务器我肯定用linux，这里多系统主要指客户端）</p>
+
+<p>Windows系统可以采用openvpn gui，这个在我博客以前文章提到了，今天要说的是我的手机，htc hero这次也可以让手机连接openvpn服务器上youtube等站点了。</p>
+
+<p><strong>手机型号及系统</strong></p>
+
+<p>我的手机是HTC hero g3</p>
+
+<p>采用的ROM是Flyzup制作的基于android 1.5修改的。</p>
+
+<p>Rom可以到Flyzup网站下载
+<a href="http://www.innovative-space.com/2010/02/21/flzyup-custom-rom-v1-6-final-release/">http://www.innovative-space.com/2010/02/21/flzyup-custom-rom-v1-6-final-release/</a></p>
+
+<p>其实只要手机用的Rom可以支持openvpn，存在tun.so文件就可以</p>
+
+<p><strong>安装相关软件</strong></p>
+
+<p>首先需要需要安装openvpn，这个软件我们可以到下面地址下载已经编译好的版本。因为是static编译的，所以不需要任何动态库支持直接解压就可以使用。
+<a href="http://github.com/downloads/fries/android-external-openvpn/openvpn-static-2.1.1.bz2">http://github.com/downloads/fries/android-external-openvpn/openvpn-static-2.1.1.bz2</a></p>
+
+<p>将解压后得到的openvpn-static-2.1.1文件改名为openvpn 并拷贝到手机的/system/xbin/目录下</p>
+
+<p>我是采用手机上安装的Better Terminal Emulator Pro来操作的，也可以用adb连接上usb操作。</p>
+
+<p>有了openvpn后，我们还要创建两个软连接才可以让后面的openvpn顺利建立连接</p>
+
+<p>用Better Terminal Emulator Pro进入终端模式，输入如下命令</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir /system/xbin/bb
+</span><span class='line'>ln -s /system/xbin/ifconfig /system/xbin/bb/ifconfig
+</span><span class='line'>ln -s /system/xbin/route /system/xbin/bb/route</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面创建两个命令的软连接，是因为后面安装的TunnelDroid软件，总是调用/system/xbin/bb目录下的命令，如果没有命令，就会出错。</p>
+
+<p>用google的电子市场，查找TunnelDroid软件，安装TunnelDroid软件。</p>
+
+<p><strong>配置TunnelDroid</strong></p>
+
+<p>其实和配置Windows下的客户端一样，也需要一个配置文件和3个密钥文件</p>
+
+<p>我们在sd卡的跟目录创建openvpn目录</p>
+
+<p>在openvpn目录放入client.ovpn配置文件和ca.crt、client-1.crt和client-1.key密钥文件</p>
+
+<p>这样启动TunnelDroid后，就会出现client.ovpn的选项，直接选择连接就可以。上面的配置文件和密钥，我都是从配置好的Windows机器拷贝过来的。</p>
+
+<p>目前我测试的android手机、windowsxp、windows7和Linux全部都可以连接openvpn服务器。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1843,64 +1935,6 @@ cp /usr/share/doc/openvpn-2.0.9/sample-config-files/server.conf /etc/openvpn/</p
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/01/07/quickmacro-on-win7/">Windows 7平台下按键精灵的后台运行</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-01-07T00:00:00+08:00" pubdate data-updated="true">Jan 7<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>上次写了一篇野D带黑上，后台挂机按键精灵代码</a>，有人反映win7下按键精灵后台代码不能运行。</p>
-
-<p>这里单独说明下。首先的我win7系统是32为的windows7 旗舰版，按键精灵版本是7.20.5292 免费版。在刚一开按键精灵的时候，会提示Init Seg Error。</p>
-
-<p>这个不用管，直接点确定就可以。然后打开按键精灵后，我们点“设置”按钮</p>
-
-<p><img src="http://farm9.staticflickr.com/8510/8512206738_6e55d4f97b.jpg" alt="设置按钮" /></p>
-
-<p>然后在弹出来的设置界面中，将热键模式选择为增强模式，如下图所示。</p>
-
-<p><img src="http://farm9.staticflickr.com/8515/8511095399_75fe398ca4.jpg" alt="增强模式截图" /></p>
-
-<p>点确定后，返回按键精灵主界面。</p>
-
-<p><strong>创建带黑上脚本</strong>点击新建按钮，进入“按键精灵-我的脚本”界面。然后点击这个界面中的“源文件”标签，如下图所示（注意红色三角标记）</p>
-
-<p><img src="http://farm9.staticflickr.com/8097/8512207532_e622ca5a45_z.jpg" alt="导入截图" /></p>
-
-<p>然后将带黑上脚本的代码粘贴进来。并在右侧“描述”里，写上黑上后台。点击保存退出，如下图所示</p>
-
-<p><img src="http://farm9.staticflickr.com/8095/8511096257_a2cfe36526_z.jpg" alt="保存截图" /></p>
-
-<p>到这里按键精灵设置完毕。只要打开刷黑上的小德号窗口，按F10启动脚本就可以了。然后再切换窗口双开，上网都可以。这个脚本会一直往小德号的窗口发送指令的。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/9/">&larr; Older</a>
@@ -1928,13 +1962,13 @@ cp /usr/share/doc/openvpn-2.0.9/sample-config-files/server.conf /etc/openvpn/</p
 <li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (51)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
-<li class='category'><a href='/blog/categories/rails/'>Rails (7)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (8)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>Vim (2)</a></li>
@@ -1950,6 +1984,10 @@ cp /usr/share/doc/openvpn-2.0.9/sample-config-files/server.conf /etc/openvpn/</p
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/">centos5.5安装rails环境</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
       </li>
     
@@ -1963,10 +2001,6 @@ cp /usr/share/doc/openvpn-2.0.9/sample-config-files/server.conf /etc/openvpn/</p
     
       <li class="post">
         <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
       </li>
     
   </ul>

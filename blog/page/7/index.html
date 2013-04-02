@@ -9,11 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="我一直使用G3，老婆看功能强大，打算也购买一个玩。
-去了中关村，挑来挑去，最后老婆还是看上了G6.
-感觉G6的金属外壳、后盖的设计都很好，而且有闪光灯。这些都是比较好的设计。
-不过数据线接口变了，不在和G3通用，这个不太喜欢。
-按键也感觉没有G3的好，觉得按键很粗糙，一按就咔咔的响（不是按键发音哦 &hellip;">
+  <meta name="description" content="最近在放假，我又玩了玩很久以前的网络游戏北美侠客行。一个纯文字的MUD游戏。而且自己在CentOS下也架设了一个，下面就说说我的安装过程，给自己做个记录，怕以后忘记。 要架设一个MUD游戏，需要MUDOS和MUDLIB两部分。这里简单解释一下，其实我也刚接触，有不对的地方还望见谅。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -69,6 +65,195 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/08/26/Centos-install-mudos/">CENTOS下安装MUDOS跑侠客行</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-26T00:00:00+08:00" pubdate data-updated="true">Aug 26<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近在放假，我又玩了玩很久以前的网络游戏北美侠客行。一个纯文字的MUD游戏。而且自己在CentOS下也架设了一个，下面就说说我的安装过程，给自己做个记录，怕以后忘记。</p>
+
+<p>要架设一个MUD游戏，需要MUDOS和MUDLIB两部分。这里简单解释一下，其实我也刚接触，有不对的地方还望见谅。</p>
+
+<p>MUDOS我理解就是一个跑MUD游戏的平台或者理解为模拟器，只要符合MUDOS要求的MUDLIB都可以通过MUDOS驱动起来。</p>
+
+<p>MUDLIB才是具体游戏的代码，各种MUD游戏其实就是MUDLIB不同，而底层平台基本都是MUDOS。</p>
+
+<p>当然现在除了MUDOS还可以采用FluffOS作为运行平台。</p>
+
+<p>下面贴个我架设的侠客行MUD截图（采用XKX早期代码修改来的，和北美侠客行最接近）
+<img src="http://farm9.staticflickr.com/8087/8514869856_f372e947e4_z.jpg" alt="xkx截图" /></p>
+
+<p><strong>下载MUDOS</strong>
+我采用的是<a href="http://www.pkuxkx.net/download/soft.php?id=20"><b>MudOSv22pre11 For Linux</b></a> 从北大侠客行官方网站下载的。</p>
+
+<p><strong>下载MUDLIB</strong></p>
+
+<p>至于mudlib才是能不能玩的重点，网上可以找到很多版本。我主要下载了如下几种</p>
+
+<p>金庸梦（个人感觉很完整的一套代码，基本是基于98年xkx修改而来）</p>
+
+<p>xkx2001（这个版本是早期一个xkx版本，和北美xkx比较接近）</p>
+
+<p>xkx6dao（和早期xkx最接近的一个版本）</p>
+
+<p>以上三个版本都可以在windows下正常运行，我们要做的就是选择一款移植到linux下。</p>
+
+<p>我是基于xkx6到的mudlib，将xkx2001和金庸梦的部分代码加入过来。这样基本实现了北美侠客行的大部分任务系统，包括斧头帮、镖局、门派任务等</p>
+
+<p><strong>安装mudos</strong></p>
+
+<p>1、将我们下载的<a href="http://www.pkuxkx.net/download/soft.php?id=20"><b>MudOSv22pre11 For Linux</b></a>解压缩，然后进入到解压后的目录。</p>
+
+<p>2、运行 ./build.MudOS</p>
+
+<p>提示如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Preparing to build standard MudOS driver ...
+</span><span class='line'>Trying out some stuff to see what works; ignore errors ...
+</span><span class='line'>gmake: Nothing to be done for `nothing'.
+</span><span class='line'>./build.MudOS: line 170: xlc: command not found
+</span><span class='line'>mkdir: ÎÞ·¨´´½¨Ä¿Â¼¡®tmp¡¯: ÎÄ¼þÒÑ´æÔÚ
+</span><span class='line'>install£ºÎÞÐ§Ñ¡Ïî -- f
+</span><span class='line'>Çë³¢ÊÔÖ´ÐÐ¡®install --help¡¯À´»ñÈ¡¸ü¶àÐÅÏ¢¡£
+</span><span class='line'>rm: ÎÞ·¨É¾³ý¡®tmp/insttest¡¯: Ã»ÓÐÄÇ¸öÎÄ¼þ»òÄ¿Â¼
+</span><span class='line'>mkdir: ÎÞ·¨´´½¨Ä¿Â¼¡®obj¡¯: ÎÄ¼þÒÑ´æÔÚ
+</span><span class='line'>***************** Configuration completed **************
+</span><span class='line'>Installing MudOS on Linux
+</span><span class='line'>Using install -c to install binaries in ../bin.
+</span><span class='line'>Using gcc -E for preprocessing.
+</span><span class='line'>Using gcc -O2 -fomit-frame-pointer -fstrength-reduce to compile.
+</span><span class='line'>Using bison -d -y to make the compiler.
+</span><span class='line'>Edit GNUmakefile if this is not what you want
+</span><span class='line'>Otherwise, type 'gmake' to build MudOS, then 'gmake install'.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面有些是乱码，因为linux的中文不能正常贴过来，主要是提示一些目录存在和一些安装选项无效。可以不用管。
+在安装前，我们用gmake clean 清理一下</p>
+
+<p>3、执行gmake和gmake install进行编译和安装</p>
+
+<p>正常的话，我们就可以在目录下发现driver文件了，这个driver就是为了驱动MUDLIB的。</p>
+
+<p><strong>配置MUDLIB和运行</strong></p>
+
+<p>配置mudlib的过程麻烦一些，一个是driver是否符合mudlib需要，另外一个是mudlib的配置。</p>
+
+<p>先说下mudlib的配置，一般是在mudlib的根目录下存在一个config.h的文件（这个名字可以自己修改为任意名字）</p>
+
+<p>这个配置文件一般需要根据自己的实际路径进行修改</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>name: 侠客行      (指定你的游戏名字)
+</span><span class='line'>port number: 5555  (指定游戏运行的端口)
+</span><span class='line'>mudlib directory: /mud/xkx/ (指向到你mudlib的目录)
+</span><span class='line'>binary directory: /mud/xkx/ (同样指向到你mudlib目录，其实是你配置文件目录)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其他默认就可以</p>
+
+<p>如果配置全部完成，没有问题。</p>
+
+<p>只要将driver文件拷贝到mudlib目录，我这里是/mud/xkx目录。</p>
+
+<p>然后</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /mud/xkx
+</span><span class='line'>./driver config.h &</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面是我的运行提示</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@ict xkx]# using config file: config.h
+</span><span class='line'>Initializing internal tables....
+</span><span class='line'>----------------------------------------------------------------------------
+</span><span class='line'>侠客行 (MudOS v22pre11) starting up on Linux - Thu Aug 26 10:21:29 2010
+</span><span class='line'>
+</span><span class='line'>Connection to address server (localhost 3992) refused.
+</span><span class='line'>]simul_efun loaded successfully.
+</span><span class='line'>Loading preloaded files ...
+</span><span class='line'>Initializations complete.
+</span><span class='line'>Accepting connections on port 5555.
+</span><span class='line'>[root@ict xkx]#</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>常见问题</strong></p>
+
+<p><strong>编码问题：</strong>因为我们的mudlib是从windows平台移植过去的，所以文件都是dos格式，需要进行转换。采用如下命令</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>find . -name *.c|xargs dos2unix
+</span><span class='line'>find . -name *.h|xargs dos2unix
+</span><span class='line'>find . -name *.o|xargs dos2unix</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上命令将所有.c .h .o结尾的文件转换为unix文件格式</p>
+
+<p><strong>driver编译问题：</strong>很多时候我们编译的driver并不能很好的驱动我们的mudlib。这个时候需要自己查看log目录下的debug.log文件找出具体原因。主要是通过修改 options.h  文件进行调整。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -947,98 +1132,6 @@ $ ln -s /etc etc_backup</code></pre>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/03/17/HTC-Hero-Openvpn/">HTC Hero G3 Openvpn设置</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-03-17T00:00:00+08:00" pubdate data-updated="true">Mar 17<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>现在YouTube和google博客等站点都被屏蔽，为了打破限制，只能用vpn来穿越了。</p>
-
-<p>原来一直用pptpd类型vpn，这种类型速度快，但是要求防火墙或者网关支持。对内外支持不好（反正我在单位和家里歌华宽带都不支持）</p>
-
-<p>后来改用openvpn类型的vpn了，发现虽然openvpn配置麻烦，需要安装客户端。但却是对内网支持良好，穿透能力强。</p>
-
-<p>openvpn可以支持多系统（服务器我肯定用linux，这里多系统主要指客户端）</p>
-
-<p>Windows系统可以采用openvpn gui，这个在我博客以前文章提到了，今天要说的是我的手机，htc hero这次也可以让手机连接openvpn服务器上youtube等站点了。</p>
-
-<p><strong>手机型号及系统</strong></p>
-
-<p>我的手机是HTC hero g3</p>
-
-<p>采用的ROM是Flyzup制作的基于android 1.5修改的。</p>
-
-<p>Rom可以到Flyzup网站下载
-<a href="http://www.innovative-space.com/2010/02/21/flzyup-custom-rom-v1-6-final-release/">http://www.innovative-space.com/2010/02/21/flzyup-custom-rom-v1-6-final-release/</a></p>
-
-<p>其实只要手机用的Rom可以支持openvpn，存在tun.so文件就可以</p>
-
-<p><strong>安装相关软件</strong></p>
-
-<p>首先需要需要安装openvpn，这个软件我们可以到下面地址下载已经编译好的版本。因为是static编译的，所以不需要任何动态库支持直接解压就可以使用。
-<a href="http://github.com/downloads/fries/android-external-openvpn/openvpn-static-2.1.1.bz2">http://github.com/downloads/fries/android-external-openvpn/openvpn-static-2.1.1.bz2</a></p>
-
-<p>将解压后得到的openvpn-static-2.1.1文件改名为openvpn 并拷贝到手机的/system/xbin/目录下</p>
-
-<p>我是采用手机上安装的Better Terminal Emulator Pro来操作的，也可以用adb连接上usb操作。</p>
-
-<p>有了openvpn后，我们还要创建两个软连接才可以让后面的openvpn顺利建立连接</p>
-
-<p>用Better Terminal Emulator Pro进入终端模式，输入如下命令</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir /system/xbin/bb
-</span><span class='line'>ln -s /system/xbin/ifconfig /system/xbin/bb/ifconfig
-</span><span class='line'>ln -s /system/xbin/route /system/xbin/bb/route</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上面创建两个命令的软连接，是因为后面安装的TunnelDroid软件，总是调用/system/xbin/bb目录下的命令，如果没有命令，就会出错。</p>
-
-<p>用google的电子市场，查找TunnelDroid软件，安装TunnelDroid软件。</p>
-
-<p><strong>配置TunnelDroid</strong></p>
-
-<p>其实和配置Windows下的客户端一样，也需要一个配置文件和3个密钥文件</p>
-
-<p>我们在sd卡的跟目录创建openvpn目录</p>
-
-<p>在openvpn目录放入client.ovpn配置文件和ca.crt、client-1.crt和client-1.key密钥文件</p>
-
-<p>这样启动TunnelDroid后，就会出现client.ovpn的选项，直接选择连接就可以。上面的配置文件和密钥，我都是从配置好的Windows机器拷贝过来的。</p>
-
-<p>目前我测试的android手机、windowsxp、windows7和Linux全部都可以连接openvpn服务器。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -1066,13 +1159,13 @@ $ ln -s /etc etc_backup</code></pre>
 <li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (51)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
-<li class='category'><a href='/blog/categories/rails/'>Rails (7)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (8)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>Vim (2)</a></li>
@@ -1088,6 +1181,10 @@ $ ln -s /etc etc_backup</code></pre>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/">centos5.5安装rails环境</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
       </li>
     
@@ -1101,10 +1198,6 @@ $ ln -s /etc etc_backup</code></pre>
     
       <li class="post">
         <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
       </li>
     
   </ul>

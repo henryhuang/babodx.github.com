@@ -4,7 +4,7 @@
   <title><![CDATA[鑫的方向]]></title>
   <link href="http://babodx.github.com/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-03-17T14:15:45+08:00</updated>
+  <updated>2013-04-02T13:24:13+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,79 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[centos5.5安装rails环境]]></title>
+    <link href="http://babodx.github.com/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/"/>
+    <updated>2013-04-02T13:10:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing</id>
+    <content type="html"><![CDATA[<p>最近招生需要写一个考试结果查询程序，就用rails来写了。以前一直java、php的，发现rails的高效开发以后，就打算尝试下。
+程序写好后，就开始考虑服务器的问题了。我手边就只有centos的系统，也直到ubuntu和debian对于rails来说有好点。但是现实总是残酷的。。。</p>
+
+<h2>安装EPEL</h2>
+
+<p>因为系统为centos 5.5 所以很多现在流行的软件包都没有。所以采用epel来安装。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget http://dl.fedoraproject.org/pub/epel/5/i386/epel-release-5-4.noarch.rpm
+</span><span class='line'>rpm -ivh epel-release-5-4.noarch.rpm</span></code></pre></td></tr></table></div></figure>
+
+
+<p>有了epel以后，就可以安装一些需要的软件包了。</p>
+
+<h2>安装git</h2>
+
+<p>git直接用<code>yum install git</code> 就可以顺利安装了</p>
+
+<h2>安装rvm</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>echo insecure &gt;&gt; ~/.curlrc
+</span><span class='line'>curl -L get.rvm.io | bash -s stable
+</span><span class='line'>source ~/.bashrc
+</span><span class='line'>source ~/.bash_profile
+</span><span class='line'>rvm list</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>安装ruby</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rvm install 1.9.3</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装的时候可能会因为系统缺少一些软件包而提示错误。根据提示安装对应软件包就可以了。
+我这里是提示缺少libyaml-devel和libffi-devel俩个</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>yum install libyaml-devel
+</span><span class='line'>yum install libffi-devel</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装完成后，设置下默认的ruby版本</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rvm use 1.9.3 --default</span></code></pre></td></tr></table></div></figure>
+
+
+<p>有了这些，就可以直接用gem来安装rails了</p>
+
+<h2>安装Rails</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install rails</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>小结</h2>
+
+<p>上面安装基本很顺利，就是用rvm安装ruby的时候可能会提示确认支持的软件包。根据提示安装上就可以了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[rails-best-practices-1]]></title>
@@ -1593,56 +1666,6 @@ git config user.email "youremail"
 <p>编辑器我采用的是sublime text 2
  
 一个月下来，主要工作全部可以用mac系统替代了，感觉很好</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Linux防御DDOS攻击]]></title>
-    <link href="http://babodx.github.com/blog/2012/03/21/linux-ddos-defender/"/>
-    <updated>2012-03-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2012/03/21/linux-ddos-defender</id>
-    <content type="html"><![CDATA[<p>这两天一个以前客户在万网购买的云主机一直被SYN Flood 攻击。</p>
-
-<p>其实SYN Flood到是只能拖慢系统，没到死机的地步。问题是万网发现了DDOS攻击后，直接给云主机断网24小时。</p>
-
-<p>这个处理太恶心了。不说想办法切断攻击的IP，而是直接断掉客户的网络。。。有点说不过去呀</p>
-
-<p>电话咨询了下，他们是系统自动处理的，发现了直接断网。
- 
-一般应付DDOS攻击主要是调整SYN相关的内核参数，这个可以从/etc/sysctl.conf入手调整。</p>
-
-<p>再有就是添加iptables规则，来限制syn和连接数量</p>
-
-<p>最后就是通过脚本检查netstat状态，自动将连接数多的ip封掉。</p>
-
-<p>一般linux系统能做到的就这些了，那些可以防ddos的硬防火墙老百姓搞不起。
- 
-调整syn相关参数和iptables网上资料很多，我就不说了。</p>
-
-<p>整段封IP的话，可以用</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>iptables -I INPUT -s 192.0.0.0/8 -j DROP #来封掉192开头的全部ip</span></code></pre></td></tr></table></div></figure>
-
-
-<p> 
-我是通过查看messages日志文件，发现了一些大量连接的IP。然后先手动封掉这些IP。下面是部分日志信息，当然这个是靠配置iptables来实现的日志</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Mar 20 21:51:21 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ea:c1:08:00 SRC=157.55.16.56 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=16250 DF PROTO=TCP SPT=61923 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
-</span><span class='line'>Mar 20 21:51:27 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ea:c1:08:00 SRC=157.55.16.56 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=21741 DF PROTO=TCP SPT=61923 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
-</span><span class='line'>Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ed:c1:08:00 SRC=157.55.16.178 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=28201 DF PROTO=TCP SPT=14521 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
-</span><span class='line'>Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ed:c1:08:00 SRC=157.55.16.178 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=29875 DF PROTO=TCP SPT=14588 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 </span></code></pre></td></tr></table></div></figure>
-
-
-<p>最后在介绍一款linux下防止DDOS的软件：DDoS-Defender-v2.1.0.tar.gz</p>
-
-<p>其实DDOS也是通过分析netstat状态来判断大量连接的IP，然后采取封掉的策略。并可以设置封掉多久后自动解除。</p>
-
-<p>基本经过上面的配置，现在万网没有再因为DDOS问题断网24小时了。</p>
 ]]></content>
   </entry>
   

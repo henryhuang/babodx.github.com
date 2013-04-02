@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-03-17T14:15:45+08:00</updated>
+  <updated>2013-04-02T13:24:13+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,71 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[centos5.5安装rails环境]]></title>
+    <link href="http://babodx.github.com/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/"/>
+    <updated>2013-04-02T13:10:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing</id>
+    <content type="html"><![CDATA[<p>最近招生需要写一个考试结果查询程序，就用rails来写了。以前一直java、php的，发现rails的高效开发以后，就打算尝试下。
+程序写好后，就开始考虑服务器的问题了。我手边就只有centos的系统，也直到ubuntu和debian对于rails来说有好点。但是现实总是残酷的。。。</p>
+
+<h2>安装EPEL</h2>
+
+<p>因为系统为centos 5.5 所以很多现在流行的软件包都没有。所以采用epel来安装。</p>
+
+<p><code>
+wget http://dl.fedoraproject.org/pub/epel/5/i386/epel-release-5-4.noarch.rpm
+rpm -ivh epel-release-5-4.noarch.rpm
+</code></p>
+
+<p>有了epel以后，就可以安装一些需要的软件包了。</p>
+
+<h2>安装git</h2>
+
+<p>git直接用<code>yum install git</code> 就可以顺利安装了</p>
+
+<h2>安装rvm</h2>
+
+<p><code>
+echo insecure &gt;&gt; ~/.curlrc
+curl -L get.rvm.io | bash -s stable
+source ~/.bashrc
+source ~/.bash_profile
+rvm list
+</code></p>
+
+<h2>安装ruby</h2>
+
+<p><code>
+rvm install 1.9.3
+</code>
+安装的时候可能会因为系统缺少一些软件包而提示错误。根据提示安装对应软件包就可以了。
+我这里是提示缺少libyaml-devel和libffi-devel俩个</p>
+
+<p><code>
+yum install libyaml-devel
+yum install libffi-devel
+</code>
+安装完成后，设置下默认的ruby版本</p>
+
+<p><code>
+rvm use 1.9.3 --default
+</code></p>
+
+<p>有了这些，就可以直接用gem来安装rails了</p>
+
+<h2>安装Rails</h2>
+
+<p><code>
+gem install rails
+</code></p>
+
+<h2>小结</h2>
+
+<p>上面安装基本很顺利，就是用rvm安装ruby的时候可能会提示确认支持的软件包。根据提示安装上就可以了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[rails-best-practices-1]]></title>
@@ -333,39 +398,6 @@ def set_charset
   @headers["Content-Type"]="text/html;charset=utf8"
 end
 </code></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rails下request.raw_post的一些问题]]></title>
-    <link href="http://babodx.github.com/blog/2009/12/21/rails-request/"/>
-    <updated>2009-12-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2009/12/21/rails-request</id>
-    <content type="html"><![CDATA[<p>我在学习Agile Web Development with Rails在第18章 Observers的例子中</p>
-
-<p><code>
-&lt;%=text_field_tag :search%&gt;
-&lt;%=observe_field( :search,
-                  :frequency =&gt; 0.5,
-                  :update =&gt; :results,
-                  :url =&gt; {:action =&gt; :search})%&gt;
-</code></p>
-
-<p>将text_field_tag里面的内容，每间隔0.5就提交给search这个action,然后将结果显示在<div id="results"></div>层</p>
-
-<p>在search方法里面可以通过request.raw_post获取提交的数据</p>
-
-<p><code>
-def search
-     render:text=&gt;request.raw_post   
-end
-</code></p>
-
-<p>问题是上面这样返回的内容，总是在提交的内容后多一个=号</p>
-
-<p>比如在文本框输入div层显示的就是a=</p>
-
-<p>后来只能通过把最后2位抹去，来达到正常效果render:text=>request.raw_post.to(request.raw_post.length-2)</p>
 ]]></content>
   </entry>
   

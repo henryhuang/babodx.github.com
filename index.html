@@ -9,7 +9,8 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="FAT MODEL,SKINNY CONTROLLER 最近看了codeschool的教程，打算把里面讲解的rails best practices总结下。 视频里的第一部分就是讲解的Fat model，skinny controller。我理解的就是要尽量把业务代码写到model中， &hellip;">
+  <meta name="description" content="最近招生需要写一个考试结果查询程序，就用rails来写了。以前一直java、php的，发现rails的高效开发以后，就打算尝试下。
+程序写好后，就开始考虑服务器的问题了。我手边就只有centos的系统，也直到ubuntu和debian对于rails来说有好点。但是现实总是残酷的。。。 安装EPEL &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,106 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/">centos5.5安装rails环境</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-02T13:10:00+08:00" pubdate data-updated="true">Apr 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近招生需要写一个考试结果查询程序，就用rails来写了。以前一直java、php的，发现rails的高效开发以后，就打算尝试下。
+程序写好后，就开始考虑服务器的问题了。我手边就只有centos的系统，也直到ubuntu和debian对于rails来说有好点。但是现实总是残酷的。。。</p>
+
+<h2>安装EPEL</h2>
+
+<p>因为系统为centos 5.5 所以很多现在流行的软件包都没有。所以采用epel来安装。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget http://dl.fedoraproject.org/pub/epel/5/i386/epel-release-5-4.noarch.rpm
+</span><span class='line'>rpm -ivh epel-release-5-4.noarch.rpm</span></code></pre></td></tr></table></div></figure>
+
+
+<p>有了epel以后，就可以安装一些需要的软件包了。</p>
+
+<h2>安装git</h2>
+
+<p>git直接用<code>yum install git</code> 就可以顺利安装了</p>
+
+<h2>安装rvm</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>echo insecure &gt;&gt; ~/.curlrc
+</span><span class='line'>curl -L get.rvm.io | bash -s stable
+</span><span class='line'>source ~/.bashrc
+</span><span class='line'>source ~/.bash_profile
+</span><span class='line'>rvm list</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>安装ruby</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rvm install 1.9.3</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装的时候可能会因为系统缺少一些软件包而提示错误。根据提示安装对应软件包就可以了。
+我这里是提示缺少libyaml-devel和libffi-devel俩个</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>yum install libyaml-devel
+</span><span class='line'>yum install libffi-devel</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装完成后，设置下默认的ruby版本</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rvm use 1.9.3 --default</span></code></pre></td></tr></table></div></figure>
+
+
+<p>有了这些，就可以直接用gem来安装rails了</p>
+
+<h2>安装Rails</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install rails</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>小结</h2>
+
+<p>上面安装基本很顺利，就是用rvm安装ruby的时候可能会提示确认支持的软件包。根据提示安装上就可以了。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -680,194 +781,6 @@ git config user.email "youremail"
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/08/10/mac-xdebug-netbeans-config/">Mac下配置php调试环境</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-08-10T00:00:00+08:00" pubdate data-updated="true">Aug 10<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>已经用了mac有2个月了，基本网络管理和开发工作都在mac下面了。</p>
-
-<p>下面说下如何配置mac下面的php调试环境</p>
-
-<p><strong>我的环境：</strong></p>
-
-<ul>
-<li>macbook air 2012款</li>
-<li>Mac OS X 10.8 系统</li>
-<li>php环境：XAMPP 1.7.3</li>
-<li>开发工具：一般用sublime text 2，调试或者项目开发用netbeans</li>
-</ul>
-
-
-<p>下面说说如何安装调试环境，主要就是xdebug的安装和配置</p>
-
-<p>这里需要提下mac下面的安装包管理工具homebrew</p>
-
-<p>我就是用brew来安装xdebug的。homebrew是一个用ruby开发的，类似macport的工具。可以在线安装软件，就像linux下的apt-get或者yum一样。</p>
-
-<p><strong>安装homebrew</strong></p>
-
-<p>需要系统可以支持ruby，通过ruby -v命令可以查看ruby版本。mac os 自带ruby</p>
-
-<p>直接在终端里输入</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ruby &lt;(curl -fsSk https://raw.github.com/mxcl/homebrew/go)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上面命令执行完，brew命令就可以执行了。</p>
-
-<p>先运行brew doctor测试下环境是否完整，如果需要，还要添加Command Line Tools。</p>
-
-<p>添加Command Line Tools</p>
-
-<p>打开Xcode，在preferences->downloads里面下载并安装Command Line Tools</p>
-
-<p><img src="http://farm9.staticflickr.com/8088/8515461958_4e96f751a7_z.jpg" alt="xcode" /></p>
-
-<p>一切正确的话，执行brew doctor显示如下</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>babomatoMacBook-Air:~ babo$ brew doctor
-</span><span class='line'>
-</span><span class='line'>Your system is raring to brew.</span></code></pre></td></tr></table></div></figure>
-
-
-<p>安装好brew后，先执行brew update更新下软件包的源，然后再加载两个formula的资源</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>brew update
-</span><span class='line'>
-</span><span class='line'>brew tap josegonzalez/homebrew-php
-</span><span class='line'>
-</span><span class='line'>brew tap homebrew/dupes</span></code></pre></td></tr></table></div></figure>
-
-
-<p>完成后，就可以通过brew search和brew install来查找并安装软件了</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>brew install php53-xdebug</span></code></pre></td></tr></table></div></figure>
-
-
-<p>安装好xdebug后，还需要配置php.ini才可以正常使用。</p>
-
-<p>先用brew info查看xdebug相关信息</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>babomatoMacBook-Air:~ babo$ brew info php53-xdebug
-</span><span class='line'>php53-xdebug: stable 2.2.1, HEAD
-</span><span class='line'>http://xdebug.org
-</span><span class='line'>Depends on: autoconf
-</span><span class='line'>/usr/local/Cellar/php53-xdebug/2.2.1 (4 files, 360K) *
-</span><span class='line'>https://github.com/josegonzalez/homebrew-php/commits/master/Formula/php53-xdebug.rb
-</span><span class='line'>==&gt; Options
-</span><span class='line'>--without-config-file
-</span><span class='line'>    Do not add ext-xdebug.ini to /usr/local/etc/php/5.3/conf.d
-</span><span class='line'>==&gt; Caveats
-</span><span class='line'>To finish installing xdebug for PHP 5.3:
-</span><span class='line'>  * /usr/local/etc/php/5.3/conf.d/ext-xdebug.ini was created,
-</span><span class='line'>    do not forget to remove it upon extension removal.
-</span><span class='line'>  * Restart your webserver.
-</span><span class='line'>  * Write a PHP page that calls "phpinfo();"
-</span><span class='line'>  * Load it in a browser and look for the info on the xdebug module.
-</span><span class='line'>  * If you see it, you have been successful!</span></code></pre></td></tr></table></div></figure>
-
-
-<p>通过信息我们知道xdebug版本是 stable 2.2.1</p>
-
-<p>配置文件在/usr/local/etc/php/5.3/conf.d/ext-xdebug.ini</p>
-
-<p>我们xampp的配置文件在/Applications/XAMPP/xamppfiles/etc/php.ini</p>
-
-<p>将xdebug的配置加入到/Applications/XAMPP/xamppfiles/etc/php.ini</p>
-
-<p>在文件最下面加入如下信息</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[xdebug]
-</span><span class='line'>zend_extension="/usr/local/Cellar/php53-xdebug/2.2.1/xdebug.so"
-</span><span class='line'>        xdebug.remote_enable=1
-</span><span class='line'>        xdebug.remote_host=localhost
-</span><span class='line'>        xdebug.remote_port=9000
-</span><span class='line'>        xdebug.remote_handler=dbgp</span></code></pre></td></tr></table></div></figure>
-
-
-<p>重启xampp的apache，然后访问phpinfo查看是否成功加载xdebug</p>
-
-<p><img src="http://farm9.staticflickr.com/8381/8515464954_5cd7f4b8be.jpg" alt="xdebug" /></p>
-
-<p><strong>配置netbeans可以调用xdebug</strong></p>
-
-<p>首先将netbeans的偏好设置里的php5解释器设置为xampp的php。不要用系统自带的</p>
-
-<p><img src="http://farm9.staticflickr.com/8518/8515466796_97a1191c23.jpg" alt="xampp_php" /></p>
-
-<p>再设置调试的端口</p>
-
-<p><img src="http://farm9.staticflickr.com/8239/8514355437_689a0d90c0.jpg" alt="netbeans设置xdebug端口" /></p>
-
-<p>这些都设置好，就可以调试php代码了</p>
-
-<p>最后放一张我调试的截图</p>
-
-<p><img src="http://farm9.staticflickr.com/8246/8514357603_58e49f882b_z.jpg" alt="php调试截图" /></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -893,13 +806,13 @@ git config user.email "youremail"
 <li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (51)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
-<li class='category'><a href='/blog/categories/rails/'>Rails (7)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (8)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>Vim (2)</a></li>
@@ -915,6 +828,10 @@ git config user.email "youremail"
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/">centos5.5安装rails环境</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
       </li>
     
@@ -928,10 +845,6 @@ git config user.email "youremail"
     
       <li class="post">
         <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
       </li>
     
   </ul>

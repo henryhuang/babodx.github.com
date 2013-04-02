@@ -9,7 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="最近负责的两台服务器需要监控nginx和memcached服务，防止网站访问异常。 我用monit来解决这个需求。 monit是一款linux下的开源软件，可以负责监控系统的服务、进程、文件等内容，并设置一定的条件下执行特定的action。 我们可以通过配置， &hellip;">
+  <meta name="description" content="这两天一个以前客户在万网购买的云主机一直被SYN Flood 攻击。 其实SYN Flood到是只能拖慢系统，没到死机的地步。问题是万网发现了DDOS攻击后，直接给云主机断网24小时。 这个处理太恶心了。不说想办法切断攻击的IP，而是直接断掉客户的网络。。。有点说不过去呀 电话咨询了下， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,83 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/21/linux-ddos-defender/">Linux防御DDOS攻击</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-21T00:00:00+08:00" pubdate data-updated="true">Mar 21<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这两天一个以前客户在万网购买的云主机一直被SYN Flood 攻击。</p>
+
+<p>其实SYN Flood到是只能拖慢系统，没到死机的地步。问题是万网发现了DDOS攻击后，直接给云主机断网24小时。</p>
+
+<p>这个处理太恶心了。不说想办法切断攻击的IP，而是直接断掉客户的网络。。。有点说不过去呀</p>
+
+<p>电话咨询了下，他们是系统自动处理的，发现了直接断网。
+ 
+一般应付DDOS攻击主要是调整SYN相关的内核参数，这个可以从/etc/sysctl.conf入手调整。</p>
+
+<p>再有就是添加iptables规则，来限制syn和连接数量</p>
+
+<p>最后就是通过脚本检查netstat状态，自动将连接数多的ip封掉。</p>
+
+<p>一般linux系统能做到的就这些了，那些可以防ddos的硬防火墙老百姓搞不起。
+ 
+调整syn相关参数和iptables网上资料很多，我就不说了。</p>
+
+<p>整段封IP的话，可以用</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>iptables -I INPUT -s 192.0.0.0/8 -j DROP #来封掉192开头的全部ip</span></code></pre></td></tr></table></div></figure>
+
+
+<p> 
+我是通过查看messages日志文件，发现了一些大量连接的IP。然后先手动封掉这些IP。下面是部分日志信息，当然这个是靠配置iptables来实现的日志</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Mar 20 21:51:21 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ea:c1:08:00 SRC=157.55.16.56 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=16250 DF PROTO=TCP SPT=61923 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+</span><span class='line'>Mar 20 21:51:27 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ea:c1:08:00 SRC=157.55.16.56 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=21741 DF PROTO=TCP SPT=61923 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+</span><span class='line'>Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ed:c1:08:00 SRC=157.55.16.178 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=28201 DF PROTO=TCP SPT=14521 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
+</span><span class='line'>Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ed:c1:08:00 SRC=157.55.16.178 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=29875 DF PROTO=TCP SPT=14588 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 </span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后在介绍一款linux下防止DDOS的软件：DDoS-Defender-v2.1.0.tar.gz</p>
+
+<p>其实DDOS也是通过分析netstat状态来判断大量连接的IP，然后采取封掉的策略。并可以设置封掉多久后自动解除。</p>
+
+<p>基本经过上面的配置，现在万网没有再因为DDOS问题断网24小时了。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -2018,104 +2095,6 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/12/14/bbsxp6-to-phpwind8/">Bbsxp 6.0数据导入phpwind 8.7方法</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-14T00:00:00+08:00" pubdate data-updated="true">Dec 14<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天帮助猪八戒网上的一个客户将原来的bbsxp 6.0的论坛数据迁移到phpwind 8.7下。这里主要记录下思路</p>
-
-<p>phpwind官方论坛有各种的迁移程序，但是继续bbsxp的最早版本是2008. 而我这个客户的是bbsxp 6的access库。</p>
-
-<p>完成这个任务，我顺利升级到猪三戒！呵呵</p>
-
-<p>没有现成的，只能自己分析了。</p>
-
-<p>为了导入方便，我先将需要用到的数据从access的库导入mysql里。</p>
-
-<p>这样bbsxp的表和新安装的phpwind表都在一个库了。</p>
-
-<p><strong>数据分析</strong></p>
-
-<p>这个步骤主要分析用户数据、论坛的板块数据、帖子、回帖等数据的格式。找到两个表的数据关系，为后面导入数据打下基础。</p>
-
-<p><strong>数据迁移</strong></p>
-
-<p>用户数据</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_members(uid,username,password,email,icon,gender,regdate,signature,site,bday) SELECT ID,UserName,lower(UserPass),UserMail,UserFace,UserSex,UNIX_TIMESTAMP(UserRegTime),UserSign,UserHome,Birthday From bbsxp_users;</span></code></pre></td></tr></table></div></figure>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_memberdata(uid,postnum,rvrc,money) SELECT ID,PostTopic,PostRevert,UserMoney From bbsxp_users;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>帖子数据</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_threads(tid,fid,author,subject,ifcheck,postdate,lastpost,lastposter,hits,replies) SELECT ID,ForumID,UserName,Topic,1,UNIX_TIMESTAMP(PostTime),UNIX_TIMESTAMP(LastTime),LastName,Views,Replies From bbsxp_threads;</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_tmsgs(tid,content) SELECT ThreadID,Content From bbsxp_posts2 where IsTopic=1;</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>update pw_threads set authorid = (SELECT uid from pw_members WHERE username=pw_threads.author);</span></code></pre></td></tr></table></div></figure>
-
-
-<p>回帖数据</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_posts(pid,tid,author,postdate,subject,ifcheck,content) SELECT ID,ThreadID,UserName,UNIX_TIMESTAMP(PostTime),Subject,1,Content From bbsxp_posts2 where IsTopic=0;</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>update pw_posts set authorid = (SELECT uid from pw_members WHERE username=pw_posts.author);</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>最后注意：</strong></p>
-
-<p>导入数据后，论坛进入板块后没有分页。这个需要进入后台，数据-》全部缓存-》更新各种统计数据。</p>
-
-<p>还有就是需要看下bbsxp做没做分表处理，有可能将bbsxp_posts分表为bbsxp_posts1、bbsxp_posts2等表</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -2143,13 +2122,13 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
 <li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (51)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
-<li class='category'><a href='/blog/categories/rails/'>Rails (7)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (8)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>Vim (2)</a></li>
@@ -2165,6 +2144,10 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/">centos5.5安装rails环境</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
       </li>
     
@@ -2178,10 +2161,6 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
     
       <li class="post">
         <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
       </li>
     
   </ul>

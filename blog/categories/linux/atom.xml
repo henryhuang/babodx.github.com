@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-03-17T14:15:45+08:00</updated>
+  <updated>2013-04-02T13:24:13+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,71 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[centos5.5安装rails环境]]></title>
+    <link href="http://babodx.github.com/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/"/>
+    <updated>2013-04-02T13:10:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing</id>
+    <content type="html"><![CDATA[<p>最近招生需要写一个考试结果查询程序，就用rails来写了。以前一直java、php的，发现rails的高效开发以后，就打算尝试下。
+程序写好后，就开始考虑服务器的问题了。我手边就只有centos的系统，也直到ubuntu和debian对于rails来说有好点。但是现实总是残酷的。。。</p>
+
+<h2>安装EPEL</h2>
+
+<p>因为系统为centos 5.5 所以很多现在流行的软件包都没有。所以采用epel来安装。</p>
+
+<p><code>
+wget http://dl.fedoraproject.org/pub/epel/5/i386/epel-release-5-4.noarch.rpm
+rpm -ivh epel-release-5-4.noarch.rpm
+</code></p>
+
+<p>有了epel以后，就可以安装一些需要的软件包了。</p>
+
+<h2>安装git</h2>
+
+<p>git直接用<code>yum install git</code> 就可以顺利安装了</p>
+
+<h2>安装rvm</h2>
+
+<p><code>
+echo insecure &gt;&gt; ~/.curlrc
+curl -L get.rvm.io | bash -s stable
+source ~/.bashrc
+source ~/.bash_profile
+rvm list
+</code></p>
+
+<h2>安装ruby</h2>
+
+<p><code>
+rvm install 1.9.3
+</code>
+安装的时候可能会因为系统缺少一些软件包而提示错误。根据提示安装对应软件包就可以了。
+我这里是提示缺少libyaml-devel和libffi-devel俩个</p>
+
+<p><code>
+yum install libyaml-devel
+yum install libffi-devel
+</code>
+安装完成后，设置下默认的ruby版本</p>
+
+<p><code>
+rvm use 1.9.3 --default
+</code></p>
+
+<p>有了这些，就可以直接用gem来安装rails了</p>
+
+<h2>安装Rails</h2>
+
+<p><code>
+gem install rails
+</code></p>
+
+<h2>小结</h2>
+
+<p>上面安装基本很顺利，就是用rvm安装ruby的时候可能会提示确认支持的软件包。根据提示安装上就可以了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[批量部署系统方案]]></title>
@@ -394,168 +459,6 @@ Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3
 <p>其实DDOS也是通过分析netstat状态来判断大量连接的IP，然后采取封掉的策略。并可以设置封掉多久后自动解除。</p>
 
 <p>基本经过上面的配置，现在万网没有再因为DDOS问题断网24小时了。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[monit监控linux服务]]></title>
-    <link href="http://babodx.github.com/blog/2012/02/02/monit-to-monitor-services/"/>
-    <updated>2012-02-02T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2012/02/02/monit-to-monitor-services</id>
-    <content type="html"><![CDATA[<p>最近负责的两台服务器需要监控nginx和memcached服务，防止网站访问异常。</p>
-
-<p>我用monit来解决这个需求。</p>
-
-<p>monit是一款linux下的开源软件，可以负责监控系统的服务、进程、文件等内容，并设置一定的条件下执行特定的action。</p>
-
-<p>我们可以通过配置，让monit来检查网站的状态和memcached的状态，发现异常的时候，自动重启服务并邮件通知我们。</p>
-
-<p>我配置了30s检查一次，出现问题发送邮件到我的gmail邮箱。我手机马上就能收到邮件提醒，非常效率。</p>
-
-<p>安装配置步骤：</p>
-
-<p>下载monit</p>
-
-<p><code>
-wget http://mmonit.com/monit/dist/monit-5.3.2.tar.gz
-</code></p>
-
-<p>解压并安装</p>
-
-<p>```
-tar zxvf monit-5.3.2.tar.gz</p>
-
-<p>cd monit-5.3.2</p>
-
-<p>./configure --prefix=/usr/local/monit</p>
-
-<p>make</p>
-
-<p>make install
-```</p>
-
-<p>配置</p>
-
-<p>先将默认的配置文件拷贝到/etc目录下，然后编辑monitrc文件</p>
-
-<p><code>
-cp monitrc /etc/
-</code></p>
-
-<p>下面是我的一些配置：</p>
-
-<p>```
-set daemon  30   #设置30s检查一次</p>
-
-<p>set logfile /var/log/monit.log   #设定日志文件</p>
-
-<h1>设定邮件</h1>
-
-<p>set mailserver smtp.gmail.com PORT 587 USERNAME "yourname@gmail.com" PASSWORD "yourpassword" USING tlsv1</p>
-
-<h1>设定邮件格式</h1>
-
-<p>set mail-format {</p>
-
-<pre><code>  from: monit@huaximall.com
-
-  subject: monit alert --  $EVENT $SERVICE
-
-  message: $EVENT Service $SERVICE
-
-             Date:        $DATE
-
-             Action:      $ACTION
-
-             Host:        xinlogs.com
-
-             Description: $DESCRIPTION
-
-
-        Your faithful employee,
-
-        Monit
-</code></pre>
-
-<p>}</p>
-
-<h1>设定提醒超时</h1>
-
-<p>set alert babodx@gmail.com with reminder on 3 cycles</p>
-
-<h1>设定检查nginx服务</h1>
-
-<p>check process nginx with pidfile /usr/local/webserver/nginx-1.0.11/nginx.pid</p>
-
-<p>  start program = "/usr/local/webserver/nginx-1.0.11/sbin/nginx"</p>
-
-<p>  stop program = "/usr/bin/killall nginx"</p>
-
-<p>  if failed host xinlogs.com port 80 protocol http</p>
-
-<pre><code> and request "/t.html"
-
- then restart
-</code></pre>
-
-<p>  if 2 restarts within 3 cycles then timeout</p>
-
-<h1>设定检查memcached服务</h1>
-
-<p>check process memcached with pidfile /var/run/memcache.pid</p>
-
-<pre><code>  start program = "/usr/local/memcached/bin/memcached -d -m 1024 -u root -p 11211 -c 1024 -P /var/run/memcache.pid"
-
-  stop program = "/bin/kill -9 `cat /var/run/memcache.pid`; rm /var/run/memcached.pid"
-
-  if failed host 127.0.0.1 port 11211 protocol MEMCACHE then restart
-
-  if cpu &gt; 60% for 2 cycles then alert
-
-  if cpu &gt; 98% for 5 cycles then restart
-
-  if 2 restarts within 3 cycles then timeout
-
-  group cache
-</code></pre>
-
-<p>```</p>
-
-<p>下面再贴出来提醒的邮件样子给大家看看</p>
-
-<p>这个是检查到nginx被终止后的提醒邮件</p>
-
-<p>```
-Does not exist Service nginx</p>
-
-<pre><code>            Date:        Thu, 02 Feb 2012 11:31:50
-            Action:      restart
-            Host:        xinlogs.com
-            Description: process is not running
-
-       Your faithful employee,
-       Monit
-</code></pre>
-
-<p>```</p>
-
-<p>下面是自动恢复nginx服务后的提醒邮件</p>
-
-<p>```
-Exists Service nginx</p>
-
-<pre><code>            Date:        Thu, 02 Feb 2012 11:32:28
-            Action:      alert
-            Host:        xinlogs.com
-            Description: process is running with pid 6894
-
-       Your faithful employee,
-       Monit
-</code></pre>
-
-<p>```</p>
-
-<p>有了这些就可以安心了，万一网站访问异常了。monit会尝试自动恢复的，而且第一时间通知我们。因为我的vps在美国，所以发送到gmail很及时。手机再设置个邮件提醒功能，基本就ok了。</p>
 ]]></content>
   </entry>
   

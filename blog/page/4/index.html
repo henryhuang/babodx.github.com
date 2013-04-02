@@ -9,9 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="最近在帮助一个网站做性能优化。
-从原来的windows平台切换到了linux平台。php环境也已经变为主流的Nginx+php-fpm+eAccelerator+Zend Optimization组合
-打开了MySQL的慢连接，发现基本集中在论坛的表查询上， &hellip;">
+  <meta name="description" content="今天帮助猪八戒网上的一个客户将原来的bbsxp 6.0的论坛数据迁移到phpwind 8.7下。这里主要记录下思路 phpwind官方论坛有各种的迁移程序，但是继续bbsxp的最早版本是2008. 而我这个客户的是bbsxp 6的access库。 完成这个任务，我顺利升级到猪三戒！呵呵 没有现成的 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +65,104 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/14/bbsxp6-to-phpwind8/">Bbsxp 6.0数据导入phpwind 8.7方法</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-14T00:00:00+08:00" pubdate data-updated="true">Dec 14<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天帮助猪八戒网上的一个客户将原来的bbsxp 6.0的论坛数据迁移到phpwind 8.7下。这里主要记录下思路</p>
+
+<p>phpwind官方论坛有各种的迁移程序，但是继续bbsxp的最早版本是2008. 而我这个客户的是bbsxp 6的access库。</p>
+
+<p>完成这个任务，我顺利升级到猪三戒！呵呵</p>
+
+<p>没有现成的，只能自己分析了。</p>
+
+<p>为了导入方便，我先将需要用到的数据从access的库导入mysql里。</p>
+
+<p>这样bbsxp的表和新安装的phpwind表都在一个库了。</p>
+
+<p><strong>数据分析</strong></p>
+
+<p>这个步骤主要分析用户数据、论坛的板块数据、帖子、回帖等数据的格式。找到两个表的数据关系，为后面导入数据打下基础。</p>
+
+<p><strong>数据迁移</strong></p>
+
+<p>用户数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_members(uid,username,password,email,icon,gender,regdate,signature,site,bday) SELECT ID,UserName,lower(UserPass),UserMail,UserFace,UserSex,UNIX_TIMESTAMP(UserRegTime),UserSign,UserHome,Birthday From bbsxp_users;</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_memberdata(uid,postnum,rvrc,money) SELECT ID,PostTopic,PostRevert,UserMoney From bbsxp_users;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>帖子数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_threads(tid,fid,author,subject,ifcheck,postdate,lastpost,lastposter,hits,replies) SELECT ID,ForumID,UserName,Topic,1,UNIX_TIMESTAMP(PostTime),UNIX_TIMESTAMP(LastTime),LastName,Views,Replies From bbsxp_threads;</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_tmsgs(tid,content) SELECT ThreadID,Content From bbsxp_posts2 where IsTopic=1;</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>update pw_threads set authorid = (SELECT uid from pw_members WHERE username=pw_threads.author);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>回帖数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO pw_posts(pid,tid,author,postdate,subject,ifcheck,content) SELECT ID,ThreadID,UserName,UNIX_TIMESTAMP(PostTime),Subject,1,Content From bbsxp_posts2 where IsTopic=0;</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>update pw_posts set authorid = (SELECT uid from pw_members WHERE username=pw_posts.author);</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>最后注意：</strong></p>
+
+<p>导入数据后，论坛进入板块后没有分页。这个需要进入后台，数据-》全部缓存-》更新各种统计数据。</p>
+
+<p>还有就是需要看下bbsxp做没做分表处理，有可能将bbsxp_posts分表为bbsxp_posts1、bbsxp_posts2等表</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1410,175 +1506,6 @@ cd mysql-5.5.16
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/10/26/mod-template-emidream/">修改EMiDream模板</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-10-26T00:00:00+08:00" pubdate data-updated="true">Oct 26<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天修改了EMiDream模板。这个模板是给wordpress制作的，应用在<a href="http://www.templatesnext.org/">http://www.templatesnext.org/</a>网站
-我是在emlog论坛找到了“通信民工”修改的过来的版本。
-我所做的修改如下：
-1、首页每条博客下面变为了中文的 评论 和 浏览
-这个修改主要是在log_list.php文件中，将28、29行改为如下内容</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;span class="postcomments"&gt;&lt;a href="&lt;?php echo $value['log_url']; ?&gt;#comments" title="查询评论"&gt;评论：&lt;?php echo $value['comnum']; ?&gt;&lt;/a&gt;&lt;/span&gt;
-</span><span class='line'>&lt;span class="postmore"&gt;浏览：&lt;?php echo $value['views']; ?&gt;&lt;/span&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p> 2、友情链接只在首页的时候显示，这个有利于SEO。
-主要是通过修改module.php实现。找到文件中关于友情链接段代码，然后在代码前后加入判断是否为首页的代码。
-具体代码如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?php
-</span><span class='line'>  //判断是否是首页，不是首页，不显示友情链接
-</span><span class='line'>  if("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'] == BLOG_URL):?&gt;
-</span><span class='line'>&lt;?php
-</span><span class='line'>//widget：链接
-</span><span class='line'>function widget_link($title){
-</span><span class='line'>  global $CACHE; 
-</span><span class='line'>  $link_cache = $CACHE-&gt;readCache('link');
-</span><span class='line'>  ?&gt;
-</span><span class='line'>  &lt;div class="widget-cat"&gt;
-</span><span class='line'>  &lt;h4&gt;&lt;?php echo $title; ?&gt;&lt;/h4&gt;
-</span><span class='line'>  &lt;ul id="link"&gt;
-</span><span class='line'>  &lt;?php foreach($link_cache as $value): ?&gt;
-</span><span class='line'>  &lt;li&gt;&lt;a href="&lt;?php echo $value['url']; ?&gt;" title="&lt;?php echo $value['des']; ?&gt;" target="_blank"&gt;&lt;?php echo $value['link']; ?&gt;&lt;/a&gt;&lt;/li&gt;
-</span><span class='line'>  &lt;?php endforeach; ?&gt;
-</span><span class='line'>  &lt;/ul&gt;
-</span><span class='line'>  &lt;/div&gt;
-</span><span class='line'>&lt;?php }?&gt;
-</span><span class='line'>&lt;?php endif;?&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>  
-3、修改了下module.php的blog_comments函数。让这个函数和default模板保持一致。<br>
-具体代码如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?php
-</span><span class='line'>//blog：博客评论列表
-</span><span class='line'>      function blog_comments($comments){
-</span><span class='line'>        //var_dump($comments);
-</span><span class='line'>    extract($comments);
-</span><span class='line'>    if($commentStacks): ?&gt;
-</span><span class='line'>  &lt;a name="comments"&gt;&lt;/a&gt;
-</span><span class='line'>  &lt;p class="comment-header"&gt;&lt;b&gt;评论：&lt;/b&gt;&lt;/p&gt;
-</span><span class='line'>  &lt;?php endif; ?&gt;
-</span><span class='line'>  &lt;?php
-</span><span class='line'>  $isGravatar = Option::get('isgravatar');
-</span><span class='line'>  foreach($commentStacks as $cid):
-</span><span class='line'>    $comment = $comments[$cid];
-</span><span class='line'>  $comment['poster'] = $comment['url'] ? '&lt;a href="'.$comment['url'].'" target="_blank" rel="nofollow"&gt;'.$comment['poster'].'&lt;/a&gt;' : $comment['poster'];
-</span><span class='line'>  ?&gt;
-</span><span class='line'>  &lt;div class="comment" id="comment-&lt;?php echo $comment['cid']; ?&gt;"&gt;
-</span><span class='line'>      &lt;a name="&lt;?php echo $comment['cid']; ?&gt;"&gt;&lt;/a&gt;
-</span><span class='line'>      &lt;?php if($isGravatar == 'y'): ?&gt;&lt;div class="avatar"&gt;&lt;img src="&lt;?php echo getGravatar($comment['mail']); ?&gt;" /&gt;&lt;/div&gt;&lt;?php endif; ?&gt;
-</span><span class='line'>      &lt;div class="comment-info"&gt;
-</span><span class='line'>          &lt;b&gt;&lt;?php echo $comment['poster']; ?&gt; &lt;/b&gt;&lt;br /&gt;&lt;span class="comment-time"&gt;&lt;?php echo $comment['date']; ?&gt;&lt;/span&gt;
-</span><span class='line'>          &lt;div class="comment-content"&gt;&lt;?php echo $comment['content']; ?&gt;&lt;/div&gt;
-</span><span class='line'>          &lt;div class="comment-reply"&gt;&lt;a href="#comment-&lt;?php echo $comment['cid']; ?&gt;" onclick="commentReply(&lt;?php echo $comment['cid']; ?&gt;,this)"&gt;回复&lt;/a&gt;&lt;/div&gt;
-</span><span class='line'>      &lt;/div&gt;
-</span><span class='line'>      &lt;?php blog_comments_children($comments, $comment['children']); ?&gt;
-</span><span class='line'>  &lt;/div&gt;
-</span><span class='line'>  &lt;?php endforeach; ?&gt;
-</span><span class='line'>    &lt;div id="pagenavi"&gt;
-</span><span class='line'>      &lt;?php echo $commentPageUrl;?&gt;
-</span><span class='line'>    &lt;/div&gt;
-</span><span class='line'>&lt;?php }?&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>  
-4、修复了置顶博客，不能正常显示“小星星”图标问题。
-主要是将images目录下，放入import.gif文件
-5、将评论里的对外链接加入了nofollow属性。这样有利于SEO，而且也不用担心垃圾评论来混外链了。
-主要是修改module.php文件中blog_comments函数里面关于评论作者的那句。
-具体代码如下</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$comment['poster'] = $comment['url'] ? '&lt;a href="'.$comment['url'].'" target="_blank" rel="nofollow"&gt;'.$comment['poster'].'&lt;/a&gt;' : $comment['poster'];</span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -1606,13 +1533,13 @@ cd mysql-5.5.16
 <li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (51)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
-<li class='category'><a href='/blog/categories/rails/'>Rails (7)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (8)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>Vim (2)</a></li>
@@ -1628,6 +1555,10 @@ cd mysql-5.5.16
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/">centos5.5安装rails环境</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
       </li>
     
@@ -1641,10 +1572,6 @@ cd mysql-5.5.16
     
       <li class="post">
         <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
       </li>
     
   </ul>

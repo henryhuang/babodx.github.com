@@ -9,7 +9,8 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="主要参考了 http://blog.caronsoftware.com/articles/2006/08/07/fckeditor-plugin-for-rails http://www.blogjava.net/rocky/archive/2006/11/04/rails-fckeditor- &hellip;">
+  <meta name="description" content="写在了babo.javaeye.com了 http://babo.javaeye.com/blog/72298
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,44 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-graphical-verification-code/">Rails实现图片验证码</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>写在了babo.javaeye.com了</p>
+
+<p><a href="http://babo.javaeye.com/blog/72298">http://babo.javaeye.com/blog/72298</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -720,140 +759,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/install-xen-shell/">安装和使用xen-shell</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>转自：<a href="http://www.xen-tools.org/software/xen-shell/install.html">http://www.xen-tools.org/software/xen-shell/install.html</a></p>
-
-<p>Installing &amp; using the Xen-Shell</p>
-
-<p>This shell makes several assumptions in the way that it operates:</p>
-
-<ul>
-<li>That you have a Xen 3.x host running.</li>
-<li>Then Xen host has several guests running.</li>
-<li>That you don&#8217;t wish to give your users shell access on the host.</li>
-</ul>
-
-
-<p>If these assumptions are not valid for your environment then you might find that you have problems.</p>
-
-<p><strong>Installation</strong></p>
-
-<p>Download either <a href="http://www.xen-tools.org/releases.html">a release</a>, or a current version of <a href="http://www.xen-tools.org/cvs.html">the CVS repository</a> and install it by executing:</p>
-
-<p><code>make install</code></p>
-
-<p><strong>Configuring Users</strong></p>
-
-<p>Each user is expected to login directly to the xen-shell, and not have any other access to the host system. To do this change their login shell by running:</p>
-
-<p><code>chsh -s /usr/local/bin/xen-login-shell username</code></p>
-
-<p>This will ensure when they connect to the system they will login to the shell, and run it within GNU Screen.</p>
-
-<p><strong>Note:</strong>CVS and Debian binary packages use /usr/bin instead of /usr/local/.
-Once you&#8217;ve changed the shell for the user you must update your Xen configuration files so that they include the username(s) of the users who can control them.
-To allow the user &#8220;bob&#8221; and the user &#8220;steve&#8221; to control the Xen guest &#8220;builder.my.flat&#8221; you would add the following to /etc/xen/builder.my.flat.cfg:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># All instances must have a name name = 'builder.my.flat'     
-</span><span class='line'># These users may control this instance. xen_shell = 'bob, steve' </span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Bandwidth Accounting</strong></p>
-
-<p>The shell allows the user to view the bandwidth they have transferred over a given period, using the bandwidth command.
-For this to work the vnstat tool must be installed and configured upon dom0. It is assumed that each Xen guest will have their network interface named the same as the guest name.
-For example a Xen guest called &#8216;skx&#8217; will have a network interface &#8216;skx&#8217; upon dom0. If you&#8217;re using the standard Xen configuration setup you can achieve this by changing your skx.cfg file to read:</p>
-
-<p><code>vif = [ 'vifname=skx,ip=1.2.3.4' ]</code></p>
-
-<p><strong>Note:</strong> if you have more than one IP address allocated to a guest you will have to create a more complicated setup.</p>
-
-<p><strong>Security</strong></p>
-
-<p>Since the xen administrator command xm requires root privileges to run you will need to configure sudo to allow the users who are running your shell to execute that command, without being prompted for a password, as root.
-Add something similar to the following to your /etc/sudoers file:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>User_Alias   XENUSERS = steve,bob,fred,foo 
-</span><span class='line'>Cmnd_Alias   XEN      = /usr/sbin/xm 
-</span><span class='line'>Cmnd_Alias   XENIMG   = /usr/bin/xen-create-image 
-</span><span class='line'>XENUSERS     ALL      = NOPASSWD: XEN,XENIMG </span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Note:</strong>you only need to grant the ability to run xen-create-image if you wish to enable reimaging support in the shell.</p>
-
-<p><strong>DNS Updates</strong></p>
-
-<p>When the shell starts it will look for the file ips.txt in the home directory of the user who connects. If that file doesn&#8217;t exist then the rdns command will be disabled.</p>
-
-<p>If you wish to allow users to control their reverse DNS create that file and give it contents such as these:</p>
-
-<p><code>192.168.1.1 foo.my.domain 192.168.1.2 bar.my.domain</code></p>
-
-<p>This file will be updated by the user when they invoke the rdns command. It is up to you to read the files and create the corresponding zonefiles / DNS updates. The shell will only manipulate the file - not push DNS updates itself.</p>
-
-<p><strong>Reimaging Support</strong></p>
-
-<p>If a user connects to the shell and has the executable file image.sh in their home directory the reimage command will be enabled.
-When the user invokes the command the image.sh script is executed after prompting for confirmation, and performing a last-chance count-down.
-It is up to you to create and configure this script to do the right thing. A sample file for user bob could look like this:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/sh /usr/bin/xen-create-image --hostname=bob \  
-</span><span class='line'>--ip=192.168.1.1  \  
-</span><span class='line'>--ip=192.168.1.2 \  
-</span><span class='line'>--size=9.5G \  
-</span><span class='line'>--swap=512M  --mem=256M \  
-</span><span class='line'>--force </span></code></pre></td></tr></table></div></figure>
-
-
-<p>This will require a correctly configured instance of <a href="http://www.xen-tools.org/software/xen-tools/">xen-tools</a> and the sudoer file to contain the ability for the user to run xen-create-image.</p>
-
-<p>Any remaining questions? <a href="http://www.xen-tools.org/contact/">contact the author</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -881,13 +786,13 @@ It is up to you to create and configure this script to do the right thing. A sam
 <li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (50)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (51)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
 <li class='category'><a href='/blog/categories/plan/'>Plan (1)</a></li>
-<li class='category'><a href='/blog/categories/rails/'>Rails (7)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>Rails (8)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>Ruby (2)</a></li>
 <li class='category'><a href='/blog/categories/software/'>Software (7)</a></li>
 <li class='category'><a href='/blog/categories/vim/'>Vim (2)</a></li>
@@ -903,6 +808,10 @@ It is up to you to create and configure this script to do the right thing. A sam
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/">centos5.5安装rails环境</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
       </li>
     
@@ -916,10 +825,6 @@ It is up to you to create and configure this script to do the right thing. A sam
     
       <li class="post">
         <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/24/git-first-on-ubuntu/">git-first-on-ubuntu</a>
       </li>
     
   </ul>
