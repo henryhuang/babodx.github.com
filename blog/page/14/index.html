@@ -9,7 +9,9 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="我买这个VPS的主机，一个目的是用来做Blog空间，另外一个就是用来跑vpn。 先按照http://rashost.com/blog/centos5-pptpd-vpn这里的文章安装vpn服务。 内核支持 pptpd VPN需要内核支持mppe，我们的VPS自带的内核已经把mppe编译进去了， &hellip;">
+  <meta name="description" content="昨天单位到了2台SUN x4450. 硬件配置相当强力. CPU 4颗6核的 Intel(R) Xeon(R) CPU           X7460 @ 2.66GHz 系统可以识别出24颗处理器 1
+2
+[root@localhost ~]# cat /proc/cpuinfo |grep &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +67,66 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-xen-memory-problem/">CentOS 5.3 安装虚拟化后的内存识别问题.</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>昨天单位到了2台SUN x4450.</p>
+
+<p><strong>硬件配置相当强力.</strong></p>
+
+<p>CPU 4颗6核的 Intel(R) Xeon(R) CPU           X7460 @ 2.66GHz</p>
+
+<p>系统可以识别出24颗处理器</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# cat /proc/cpuinfo |grep processor|wc -l
+</span><span class='line'>24</span></code></pre></td></tr></table></div></figure>
+
+
+<p>内存64G</p>
+
+<p>在内存问题上,我郁闷了一阵子.我用dmesg、free、top查看，都是32G</p>
+
+<p>开始以为CentOS 5.3的64位内核就能支持到32G呢。又尝试在启动参数里加mem=64G</p>
+
+<p>又上论坛询问、查看官方文档，都说CentOS 5.3 64bit应该没有内存限制的。</p>
+
+<p>后来我发现了，原来问题出在安装的虚拟化上面</p>
+
+<p>用xm top可以正确识别内存。而且安装的系统，只是当作xm 里面的一个dom0来运行的。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1065,65 +1127,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/04/19/resolve-explorer-cpu-occupancy-reate/">解决explorer Cpu占用率高的一些办法</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-04-19T00:00:00+08:00" pubdate data-updated="true">Apr 19<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>1 将zipfldr.dll注销掉</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>regsvr32 c:\windows\system32\zipfldr.dll /u
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>2 关闭avi预览</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>regsvr32 shmedia.dll /u</span></code></pre></td></tr></table></div></figure>
-
-
-<p>经过上面两步，应该可以减少explorer的cup占用率了。</p>
-
-<p>以后如果需要用上面的功能，再按照下面步骤打开</p>
-
-<p><strong>恢复上面功能</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>regsvr32 c:\windows\system32\zipfldr.dll
-</span><span class='line'>regsvr32 shmedia.dll</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/15/">&larr; Older</a>
@@ -1151,7 +1154,7 @@
 <li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (51)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
@@ -1173,6 +1176,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/">nginx支持thinkphp的pathinfo模式</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/">centos5.5安装rails环境</a>
       </li>
     
@@ -1186,10 +1193,6 @@
     
       <li class="post">
         <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
       </li>
     
   </ul>

@@ -9,7 +9,9 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="今天帮助猪八戒网上的一个客户将原来的bbsxp 6.0的论坛数据迁移到phpwind 8.7下。这里主要记录下思路 phpwind官方论坛有各种的迁移程序，但是继续bbsxp的最早版本是2008. 而我这个客户的是bbsxp 6的access库。 完成这个任务，我顺利升级到猪三戒！呵呵 没有现成的 &hellip;">
+  <meta name="description" content="今天早上一个客户的网站停止了响应，不能正常解析php内容。
+重启php-fpm后正常，判断应该是php-fpm进程僵死。所以就先参考网上内容，写了一个监控nginx状态脚本
+后来又想看看这个php-fpm进程挂掉和访问量是否有关系，于是打算记录下服务器每分钟的访问量。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +67,69 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/22/monitor-network-connections-of-linux/">Linux网络连接数量监控</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-22T00:00:00+08:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天早上一个客户的网站停止了响应，不能正常解析php内容。
+重启php-fpm后正常，判断应该是php-fpm进程僵死。所以就先参考网上内容，写了一个监控nginx状态脚本
+后来又想看看这个php-fpm进程挂掉和访问量是否有关系，于是打算记录下服务器每分钟的访问量。
+其实就是用cron每分钟执行我写的这个脚本，而脚本的作用就是获取当前linux的连接数，并记录到日志文件中。
+ 
+监控linux网络连接数的脚本如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/sh
+</span><span class='line'>#定义日志的时间格式，用来作为日志结尾的时间标记
+</span><span class='line'>logfile=`date +%Y%m%d`
+</span><span class='line'>#定义个时间，用来写入日志用
+</span><span class='line'>logtime=`date`
+</span><span class='line'>#获取当前系统的网路连接数，这里去掉了127.0.0.1的连接，因为我的php-fpm用的127.0.0.1:9000这个连接。
+</span><span class='line'>log=`netstat -ntu | awk '{print $5}' | cut -d: -f1 |grep [^127.0.0.1] |wc -l`
+</span><span class='line'>#写日志内容到日志文件
+</span><span class='line'>echo "$logtime | $log " &gt;&gt; /data/logs/connect_$logfile.log</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1456,56 +1521,6 @@ cd mysql-5.5.16
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/10/31/gvim-vimrc-file/">Gvim配置</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-10-31T00:00:00+08:00" pubdate data-updated="true">Oct 31<span>st</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>vim是在linux下面很有名的编辑工具。而今天说到的这个gvim呢，就是vim工具在windows下的版本。
-因为游戏、网银等种种原因，不是每个人都可以全部切换到linux下的，而linux的很多很棒的开源软件又特别好用。所以就尽量找这些软件的windows版本了。
- 
-软件主页：<a href="http://www.vim.org/">http://www.vim.org/</a></p>
-
-<p>下载地址：<a href="ftp://ftp.vim.org/pub/vim/pc/gvim73_46.exe">ftp://ftp.vim.org/pub/vim/pc/gvim73_46.exe</a></p>
-
-<p>默认状态下的gvim是和windows软件一样，也有菜单和状态条等的。但是我个喜欢linux下的风格。下面就是我目前使用的样子</p>
-
-<p><img src="http://farm9.staticflickr.com/8528/8513869811_fb6ff8fe29_z.jpg" alt="gvim截图" /></p>
-
-<p>gvim的设置全部是基于目录下的_vimrc配置文件的。</p>
-
-<p>这里具体的配置项内容我就不一一说明了，感兴趣的完全可以查看vim资料。我只是放出我的配置文件（基本也是网上其他高手分享出来的，自己修改下适合自己用就ok了）
- </p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -1533,7 +1548,7 @@ cd mysql-5.5.16
 <li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (51)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
@@ -1555,6 +1570,10 @@ cd mysql-5.5.16
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/">nginx支持thinkphp的pathinfo模式</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/">centos5.5安装rails环境</a>
       </li>
     
@@ -1568,10 +1587,6 @@ cd mysql-5.5.16
     
       <li class="post">
         <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
       </li>
     
   </ul>

@@ -9,10 +9,10 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="今天修改了EMiDream模板。这个模板是给wordpress制作的，应用在http://www.templatesnext.org/网站
-我是在emlog论坛找到了“通信民工”修改的过来的版本。
-我所做的修改如下：
-1、首页每条博客下面变为了中文的 评论 和 浏览 &hellip;">
+  <meta name="description" content="vim是在linux下面很有名的编辑工具。而今天说到的这个gvim呢，就是vim工具在windows下的版本。
+因为游戏、网银等种种原因，不是每个人都可以全部切换到linux下的，而linux的很多很棒的开源软件又特别好用。所以就尽量找这些软件的windows版本了。
+ 
+软件主页：http:// &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +68,56 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/31/gvim-vimrc-file/">Gvim配置</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-31T00:00:00+08:00" pubdate data-updated="true">Oct 31<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>vim是在linux下面很有名的编辑工具。而今天说到的这个gvim呢，就是vim工具在windows下的版本。
+因为游戏、网银等种种原因，不是每个人都可以全部切换到linux下的，而linux的很多很棒的开源软件又特别好用。所以就尽量找这些软件的windows版本了。
+ 
+软件主页：<a href="http://www.vim.org/">http://www.vim.org/</a></p>
+
+<p>下载地址：<a href="ftp://ftp.vim.org/pub/vim/pc/gvim73_46.exe">ftp://ftp.vim.org/pub/vim/pc/gvim73_46.exe</a></p>
+
+<p>默认状态下的gvim是和windows软件一样，也有菜单和状态条等的。但是我个喜欢linux下的风格。下面就是我目前使用的样子</p>
+
+<p><img src="http://farm9.staticflickr.com/8528/8513869811_fb6ff8fe29_z.jpg" alt="gvim截图" /></p>
+
+<p>gvim的设置全部是基于目录下的_vimrc配置文件的。</p>
+
+<p>这里具体的配置项内容我就不一一说明了，感兴趣的完全可以查看vim资料。我只是放出我的配置文件（基本也是网上其他高手分享出来的，自己修改下适合自己用就ok了）
+ </p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -668,46 +718,6 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/03/30/mysqldump_blob_field/">Mysqldump备份blob类型内容</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-03-30T00:00:00+08:00" pubdate data-updated="true">Mar 30<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>用mysqldump备份出数据库内容到SQL文件。当我们数据库表有blob类型字段的时候，这个导出的SQL再导入的时候就会因为blob字段内容乱码等原因，不能顺利导入了。</p>
-
-<p><strong>解决办法：</strong></p>
-
-<p>在用mysqldump备份的时候，采用&#8211;hex-blob参数，这样备份出来的sql文件，就可以顺利导入了。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -735,7 +745,7 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
 <li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (51)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
@@ -757,6 +767,10 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/">nginx支持thinkphp的pathinfo模式</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/">centos5.5安装rails环境</a>
       </li>
     
@@ -770,10 +784,6 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
     
       <li class="post">
         <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
       </li>
     
   </ul>

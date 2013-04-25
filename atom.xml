@@ -4,7 +4,7 @@
   <title><![CDATA[鑫的方向]]></title>
   <link href="http://babodx.github.com/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-04-02T13:24:13+08:00</updated>
+  <updated>2013-04-25T15:21:50+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[nginx支持thinkphp的pathinfo模式]]></title>
+    <link href="http://babodx.github.com/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/"/>
+    <updated>2013-04-25T15:06:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi</id>
+    <content type="html"><![CDATA[<p>最近帮助一个朋友迁移系统。原有系统是www.pinphp.com开发的一套淘宝客程序，跑在Win03服务器上。因为ddos攻击、性能问题等原因，找我迁移到Linux系统下。</p>
+
+<p>首先我推荐的组合当然是现在流行的Ningx+php-fpm模式。便于优化而且效率很高。</p>
+
+<p>部署的过程中遇到的问题就是伪静态无法生效。一些带中文的url无法正常处理等。</p>
+
+<p>后来看代码发现pinphp这套代码是基于thinkphp框架开发。而thinkphp框架采用一种pathinfo的伪静态模式。而nginx本身是不支持pathinfo模式的，要是通过修改fastcgi 参数来支持，可以实现但是会有安全隐患。</p>
+
+<p><strong>什么是pathinfo呢？</strong></p>
+
+<p>因为thinkphp框架要求所有请求都要通过入口文件来转发，所以任何请求都是到index.php后才转发的。为了url好看和便于seo。就产生了pathinfo了，就是我们比如想访问index.php?s=book这样的url，可以直接访问index.php/book. 其实也可以看做是一种特殊的伪静态。index.php后面的url部分作为参数传递给index.php来处理。</p>
+
+<p><strong>nginx要如何处理</strong></p>
+
+<p>index.php/book 这种类型url nginx无法很好处理，而且非要通过pathinfo处理可以，但是会有安全隐患问题。</p>
+
+<p>thinkphp文档里的解决办法是采用伪静态，把全部url转发给index.php?s=来处理。
+下面就是我在nginx里的转发规则</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if (!-e $request_filename)
+</span><span class='line'>    {
+</span><span class='line'>        rewrite  ^(.*)$  /index.php?s=$1  last;
+</span><span class='line'>        break;
+</span><span class='line'>    }
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样/目录后面的url部分就当作index.php?s的参数来处理了。可以完美解决pathinfo问题。而且这样处理后，中文url也可以正常执行了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[centos5.5安装rails环境]]></title>
@@ -1620,52 +1661,6 @@ git config user.email "youremail"
 将其中的“帐户：使用空白密码的本地帐户只运行使用控制台登陆”禁用掉。</p>
 
 <p>通过上面的设置就ok了</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[2012 macbook Air 使用感受]]></title>
-    <link href="http://babodx.github.com/blog/2012/07/13/buy-macbook-air/"/>
-    <updated>2012-07-13T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2012/07/13/buy-macbook-air</id>
-    <content type="html"><![CDATA[<p>6月底，我购买了一台2012新款macbook air笔记本。将近一个月的使用，记录下心得。</p>
-
-<p>以前从来没有用过mac os系统，不过对于linux还是很熟悉的。</p>
-
-<p>早就打算买一台玩玩，一个是没钱，一个是总觉得单位配的也够用。后来又打算学习下ios开发，就下决心购买一台了。</p>
-
-<p>正好赶上6月新款发布，北京正规零售店都没有上市呢，于是在macx.cn上面看到大家都在福利社购买，于是我也去了。
- 
-<strong>购买心得</strong></p>
-
-<p>福利社的价格还算不错，和北京官方公布的教育优化价格相当。而且是香港过来的本，一旦大陆上市还有保修。
-我购买的是macbook air 低配版本，128G硬盘，4G内存 13&#8217;显示 价格：8500</p>
-
-<p>购买的时候需要什么软件还可以帮助安装。我就安装了常用的虚拟机和xcode
- 
-<strong>使用心得</strong></p>
-
-<p>用来一个月下来，感觉mac os的系统确实不错。不愧是基于unix的。稳定！</p>
-
-<p>首先对于我经常需要服务器运维工作来说，mac os下面的软件完全可以满足</p>
-
-<p>自带的“终端” 可以支持大部分linux下的命令，要连接远程服务器直接ssh就可以，</p>
-
-<p>为了管理方便，我还是安装了secureCRT for mac</p>
-
-<p>输入法用IMKQIM（搜狗的词库）</p>
-
-<p>像office、qq、股票、远程桌面等常用软件都存在mac版本</p>
-
-<p>使用下来，没有任何的不适应。而且手势操作也很大的提高了效率。
- 
-感受最大的是电池可以使用7小时，而且不用关机。在不用的时候，直接合上笔记本就休眠了。下次打开直接就是桌面感觉和用Ipad似的。
- 
-因为我需要作一些php开发，在mac下面也可以使用XAMPP for mac版本</p>
-
-<p>编辑器我采用的是sublime text 2
- 
-一个月下来，主要工作全部可以用mac系统替代了，感觉很好</p>
 ]]></content>
   </entry>
   

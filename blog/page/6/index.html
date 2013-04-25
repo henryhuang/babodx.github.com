@@ -9,35 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="单位招生项目，需要向MySQL灌入一些数据测试。因为原始数据都是DBF文件，就是foxpro数据库。 下面是用ruby代码实现的导入功能。 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29 &hellip;">
+  <meta name="description" content="用mysqldump备份出数据库内容到SQL文件。当我们数据库表有blob类型字段的时候，这个导出的SQL再导入的时候就会因为blob字段内容乱码等原因，不能顺利导入了。 解决办法： 在用mysqldump备份的时候，采用&#8211;hex-blob参数，这样备份出来的sql文件， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -93,6 +65,46 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/03/30/mysqldump_blob_field/">Mysqldump备份blob类型内容</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-03-30T00:00:00+08:00" pubdate data-updated="true">Mar 30<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>用mysqldump备份出数据库内容到SQL文件。当我们数据库表有blob类型字段的时候，这个导出的SQL再导入的时候就会因为blob字段内容乱码等原因，不能顺利导入了。</p>
+
+<p><strong>解决办法：</strong></p>
+
+<p>在用mysqldump备份的时候，采用&#8211;hex-blob参数，这样备份出来的sql文件，就可以顺利导入了。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -832,58 +844,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/08/26/lingtu-on-hero-android21/">Hero G3 Android 2.1下好用的导航软件</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-08-26T00:00:00+08:00" pubdate data-updated="true">Aug 26<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Hero G3在升级到Android 2.1后就没有什么好用的导航软件了。google map需要流量，这个等于导航的时候随时收费，偶尔用用还可以，不适合长期使用。</p>
-
-<p>凯立德在anroid 2.1有可用版本，但是操作体验比较差，经常按个按钮，半天没有反映需要反复按。而且我还遇到过不能定位的问题，后来重启了手机才解决。</p>
-
-<p>不过现在天行者10终于可以运行在android 2.1下面了。我申请了测试号，感觉使用效果不错。以前andorid 1.5的时候，就是用的天行者9。我习惯要去什么地方都先到<a href="http://www.51ditu.com">www.51ditu.com</a>查查，因为都是图灵的资源，所以51ditu上找到了，基本天行者里肯定可以导航。</p>
-
-<p>目前缺点：没有横屏，开车的时候手机一般都横着放，不是很方便。</p>
-
-<p>触摸反映不灵敏，有的按键也是需要反复按几次才有反映。</p>
-
-<p>下面放几张运行截图（我手机hero g3,系统是自己刷的android 2.1）</p>
-
-<p><img src="http://farm9.staticflickr.com/8527/8514884434_9b172e9fb4.jpg" alt="灵图1" />
-<img src="http://flic.kr/p/dYkjan" alt="灵图2" />
-<img src="http://flic.kr/p/dYkjbK" alt="灵图3" />
-<img src="http://flic.kr/p/dYr1yG" alt="灵图4" />
- </p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -911,7 +871,7 @@
 <li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (51)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
@@ -933,6 +893,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/">nginx支持thinkphp的pathinfo模式</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/">centos5.5安装rails环境</a>
       </li>
     
@@ -946,10 +910,6 @@
     
       <li class="post">
         <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
       </li>
     
   </ul>

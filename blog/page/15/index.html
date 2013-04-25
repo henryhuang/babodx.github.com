@@ -9,10 +9,9 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="http://www.netcraft.com/
-可以通过 What&#8217;s that site running? 查询一个网站的服务器使用的什么操作系统,Web服务器用的什么软件..
-感觉很不错
-">
+  <meta name="description" content="1 将zipfldr.dll注销掉 1
+regsvr32 c:\windows\system32\zipfldr.dll /u 2 关闭avi预览 1
+regsvr32 shmedia.dll /u 经过上面两步，应该可以减少explorer的cup占用率了。 以后如果需要用上面的功能， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +67,65 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/04/19/resolve-explorer-cpu-occupancy-reate/">解决explorer Cpu占用率高的一些办法</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-04-19T00:00:00+08:00" pubdate data-updated="true">Apr 19<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>1 将zipfldr.dll注销掉</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>regsvr32 c:\windows\system32\zipfldr.dll /u
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>2 关闭avi预览</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>regsvr32 shmedia.dll /u</span></code></pre></td></tr></table></div></figure>
+
+
+<p>经过上面两步，应该可以减少explorer的cup占用率了。</p>
+
+<p>以后如果需要用上面的功能，再按照下面步骤打开</p>
+
+<p><strong>恢复上面功能</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>regsvr32 c:\windows\system32\zipfldr.dll
+</span><span class='line'>regsvr32 shmedia.dll</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -136,7 +194,7 @@
 <li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (51)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
@@ -158,6 +216,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/">nginx支持thinkphp的pathinfo模式</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/">centos5.5安装rails环境</a>
       </li>
     
@@ -171,10 +233,6 @@
     
       <li class="post">
         <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
       </li>
     
   </ul>

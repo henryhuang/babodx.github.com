@@ -9,10 +9,10 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="已经用了mac有2个月了，基本网络管理和开发工作都在mac下面了。 下面说下如何配置mac下面的php调试环境 我的环境： macbook air 2012款
-Mac OS X 10.8 系统
-php环境：XAMPP 1.7.3
-开发工具：一般用sublime text 2， &hellip;">
+  <meta name="description" content="最近单位一直弄刀片服务器，7个笼子，112片。安装系统是个麻烦的事情，如果单机安装，太痛苦了。
+所以就尝试了批量部署系统。
+ 
+主要是分Linux和Windows两种方案 我这里Linux是CentOS。 采用了cobbler来做批量部署。 Windows采用的是win 2008的部署服务， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +68,56 @@ php环境：XAMPP 1.7.3
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/01/22/installation-server/">批量部署系统方案</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-22T00:00:00+08:00" pubdate data-updated="true">Jan 22<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近单位一直弄刀片服务器，7个笼子，112片。安装系统是个麻烦的事情，如果单机安装，太痛苦了。
+所以就尝试了批量部署系统。
+ 
+主要是分Linux和Windows两种方案</p>
+
+<p>我这里Linux是CentOS。 采用了cobbler来做批量部署。</p>
+
+<p>Windows采用的是win 2008的部署服务，就是WDS来做批量部署。</p>
+
+<p>这样Linux做一台分发服务器，Windows做一台WDS服务器，需要部署那种系统就开那台服务器就可以了。</p>
+
+<p>所有刀片全部采用pxe来引导就可以了。
+ 
+具体方法就先不写了，以后再补上吧
+ </p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1298,79 +1348,6 @@ php环境：XAMPP 1.7.3
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/07/13/buy-macbook-air/">2012 Macbook Air 使用感受</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-13T00:00:00+08:00" pubdate data-updated="true">Jul 13<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>6月底，我购买了一台2012新款macbook air笔记本。将近一个月的使用，记录下心得。</p>
-
-<p>以前从来没有用过mac os系统，不过对于linux还是很熟悉的。</p>
-
-<p>早就打算买一台玩玩，一个是没钱，一个是总觉得单位配的也够用。后来又打算学习下ios开发，就下决心购买一台了。</p>
-
-<p>正好赶上6月新款发布，北京正规零售店都没有上市呢，于是在macx.cn上面看到大家都在福利社购买，于是我也去了。
- 
-<strong>购买心得</strong></p>
-
-<p>福利社的价格还算不错，和北京官方公布的教育优化价格相当。而且是香港过来的本，一旦大陆上市还有保修。
-我购买的是macbook air 低配版本，128G硬盘，4G内存 13&#8217;显示 价格：8500</p>
-
-<p>购买的时候需要什么软件还可以帮助安装。我就安装了常用的虚拟机和xcode
- 
-<strong>使用心得</strong></p>
-
-<p>用来一个月下来，感觉mac os的系统确实不错。不愧是基于unix的。稳定！</p>
-
-<p>首先对于我经常需要服务器运维工作来说，mac os下面的软件完全可以满足</p>
-
-<p>自带的“终端” 可以支持大部分linux下的命令，要连接远程服务器直接ssh就可以，</p>
-
-<p>为了管理方便，我还是安装了secureCRT for mac</p>
-
-<p>输入法用IMKQIM（搜狗的词库）</p>
-
-<p>像office、qq、股票、远程桌面等常用软件都存在mac版本</p>
-
-<p>使用下来，没有任何的不适应。而且手势操作也很大的提高了效率。
- 
-感受最大的是电池可以使用7小时，而且不用关机。在不用的时候，直接合上笔记本就休眠了。下次打开直接就是桌面感觉和用Ipad似的。
- 
-因为我需要作一些php开发，在mac下面也可以使用XAMPP for mac版本</p>
-
-<p>编辑器我采用的是sublime text 2
- 
-一个月下来，主要工作全部可以用mac系统替代了，感觉很好</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1398,7 +1375,7 @@ php环境：XAMPP 1.7.3
 <li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (51)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
@@ -1420,6 +1397,10 @@ php环境：XAMPP 1.7.3
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/">nginx支持thinkphp的pathinfo模式</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/02/centos5-dot-5an-zhuang-railshuan-jing/">centos5.5安装rails环境</a>
       </li>
     
@@ -1433,10 +1414,6 @@ php环境：XAMPP 1.7.3
     
       <li class="post">
         <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/28/emlogqian-yi-dao-octopress/">emlog迁移到octopress</a>
       </li>
     
   </ul>

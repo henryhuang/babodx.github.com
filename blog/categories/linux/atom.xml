@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-04-02T13:24:13+08:00</updated>
+  <updated>2013-04-25T15:21:50+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[nginx支持thinkphp的pathinfo模式]]></title>
+    <link href="http://babodx.github.com/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/"/>
+    <updated>2013-04-25T15:06:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi</id>
+    <content type="html"><![CDATA[<p>最近帮助一个朋友迁移系统。原有系统是www.pinphp.com开发的一套淘宝客程序，跑在Win03服务器上。因为ddos攻击、性能问题等原因，找我迁移到Linux系统下。</p>
+
+<p>首先我推荐的组合当然是现在流行的Ningx+php-fpm模式。便于优化而且效率很高。</p>
+
+<p>部署的过程中遇到的问题就是伪静态无法生效。一些带中文的url无法正常处理等。</p>
+
+<p>后来看代码发现pinphp这套代码是基于thinkphp框架开发。而thinkphp框架采用一种pathinfo的伪静态模式。而nginx本身是不支持pathinfo模式的，要是通过修改fastcgi 参数来支持，可以实现但是会有安全隐患。</p>
+
+<p><strong>什么是pathinfo呢？</strong></p>
+
+<p>因为thinkphp框架要求所有请求都要通过入口文件来转发，所以任何请求都是到index.php后才转发的。为了url好看和便于seo。就产生了pathinfo了，就是我们比如想访问index.php?s=book这样的url，可以直接访问index.php/book. 其实也可以看做是一种特殊的伪静态。index.php后面的url部分作为参数传递给index.php来处理。</p>
+
+<p><strong>nginx要如何处理</strong></p>
+
+<p>index.php/book 这种类型url nginx无法很好处理，而且非要通过pathinfo处理可以，但是会有安全隐患问题。</p>
+
+<p>thinkphp文档里的解决办法是采用伪静态，把全部url转发给index.php?s=来处理。
+下面就是我在nginx里的转发规则</p>
+
+<p>```
+if (!-e $request_filename)</p>
+
+<pre><code>{
+    rewrite  ^(.*)$  /index.php?s=$1  last;
+    break;
+}
+</code></pre>
+
+<p>```</p>
+
+<p>这样/目录后面的url部分就当作index.php?s的参数来处理了。可以完美解决pathinfo问题。而且这样处理后，中文url也可以正常执行了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[centos5.5安装rails环境]]></title>
@@ -414,51 +453,6 @@ location ~ .*.(php|php5)?$
 ```</p>
 
 <p>通过这样的配置，可以肯定的是php-fpm因为采用两组来轮询工作，并且有fastcgi_next_upstream进程简单的健康检查，可以最大限度的避免502错误发生了。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Linux防御DDOS攻击]]></title>
-    <link href="http://babodx.github.com/blog/2012/03/21/linux-ddos-defender/"/>
-    <updated>2012-03-21T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2012/03/21/linux-ddos-defender</id>
-    <content type="html"><![CDATA[<p>这两天一个以前客户在万网购买的云主机一直被SYN Flood 攻击。</p>
-
-<p>其实SYN Flood到是只能拖慢系统，没到死机的地步。问题是万网发现了DDOS攻击后，直接给云主机断网24小时。</p>
-
-<p>这个处理太恶心了。不说想办法切断攻击的IP，而是直接断掉客户的网络。。。有点说不过去呀</p>
-
-<p>电话咨询了下，他们是系统自动处理的，发现了直接断网。
- 
-一般应付DDOS攻击主要是调整SYN相关的内核参数，这个可以从/etc/sysctl.conf入手调整。</p>
-
-<p>再有就是添加iptables规则，来限制syn和连接数量</p>
-
-<p>最后就是通过脚本检查netstat状态，自动将连接数多的ip封掉。</p>
-
-<p>一般linux系统能做到的就这些了，那些可以防ddos的硬防火墙老百姓搞不起。
- 
-调整syn相关参数和iptables网上资料很多，我就不说了。</p>
-
-<p>整段封IP的话，可以用</p>
-
-<p><code>
-iptables -I INPUT -s 192.0.0.0/8 -j DROP #来封掉192开头的全部ip
-</code>
- 
-我是通过查看messages日志文件，发现了一些大量连接的IP。然后先手动封掉这些IP。下面是部分日志信息，当然这个是靠配置iptables来实现的日志</p>
-
-<p><code>
-Mar 20 21:51:21 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ea:c1:08:00 SRC=157.55.16.56 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=16250 DF PROTO=TCP SPT=61923 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
-Mar 20 21:51:27 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ea:c1:08:00 SRC=157.55.16.56 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=21741 DF PROTO=TCP SPT=61923 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
-Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ed:c1:08:00 SRC=157.55.16.178 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=28201 DF PROTO=TCP SPT=14521 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
-Mar 20 21:51:29 uhz001737 kernel: HTTP_ATTACK:IN=eth1 OUT= MAC=00:16:3e:00:5d:d3:c0:62:6b:ac:ed:c1:08:00 SRC=157.55.16.178 DST=223.4.118.120 LEN=48 TOS=0x1C PREC=0x20 TTL=112 ID=29875 DF PROTO=TCP SPT=14588 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 
-</code>
-最后在介绍一款linux下防止DDOS的软件：DDoS-Defender-v2.1.0.tar.gz</p>
-
-<p>其实DDOS也是通过分析netstat状态来判断大量连接的IP，然后采取封掉的策略。并可以设置封掉多久后自动解除。</p>
-
-<p>基本经过上面的配置，现在万网没有再因为DDOS问题断网24小时了。</p>
 ]]></content>
   </entry>
   
