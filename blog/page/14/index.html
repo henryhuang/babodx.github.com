@@ -9,9 +9,9 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="昨天单位到了2台SUN x4450. 硬件配置相当强力. CPU 4颗6核的 Intel(R) Xeon(R) CPU           X7460 @ 2.66GHz 系统可以识别出24颗处理器 1
-2
-[root@localhost ~]# cat /proc/cpuinfo |grep &hellip;">
+  <meta name="description" content="如果用virt-install生成一台虚拟服务器
+在查看配置的时候，会发现已经没有了kernel=这个配置来制定启动内核。而是用了 bootloader = '/usr/bin/pygrub' 关于这个，可以参考
+http://wiki.xensource.com/xenwiki/PyGrub &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +67,52 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/centos-xen-pygrub/">CentOS里的Xen配置pygrub</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>如果用virt-install生成一台虚拟服务器
+在查看配置的时候，会发现已经没有了kernel=这个配置来制定启动内核。而是用了</p>
+
+<p><code>bootloader = '/usr/bin/pygrub'</code></p>
+
+<p>关于这个，可以参考
+<a href="http://wiki.xensource.com/xenwiki/PyGrub">http://wiki.xensource.com/xenwiki/PyGrub</a></p>
+
+<p>CentOS 5.3的虚拟化，好像没有了XenU的内核，而是改用了这种新的方式。</p>
+
+<p>反正我用kernel启动失败了。后来用这个方式已经可以正常使用虚拟服务器了。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1091,42 +1137,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/04/27/vista-slow/">Vista 太慢了，决定放弃使用她的念头了</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-04-27T00:00:00+08:00" pubdate data-updated="true">Apr 27<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>居然1G内存酷睿双核处理器使用起来还是会很慢不知道是我没有优化，或者配置的不对？还是本来就不快？总之放弃了，还是用winxp了，以后成熟些再说</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/15/">&larr; Older</a>
@@ -1151,7 +1161,7 @@
 <li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
 <li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
 <li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
-<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (4)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
@@ -1176,6 +1186,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/29/digitalocean-vps/">digitalocean-vps</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/">nginx支持thinkphp的pathinfo模式</a>
       </li>
     
@@ -1189,10 +1203,6 @@
     
       <li class="post">
         <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
       </li>
     
   </ul>

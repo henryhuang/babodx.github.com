@@ -9,7 +9,38 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="最近帮朋友弄了个网站并注册了域名。 注册域名的时候，选择域名注册商，我原来用的namecheap.com 后来网上看很多人推荐name.com和godaddy.com。 因为godaddy.com支持支付宝，我就选择了godaddy来注册。 其实上面提到的三家都不错，godaddy域名价格最便宜。 &hellip;">
+  <meta name="description" content="最近在整理服务器的时候，发现mysql的查询日志文件占用了很多空间。这个查询日志文件部分内容如下，随着查询增加，会越来越大 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +96,143 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/04/05/disable-mysql-query-log/">开启或者关闭MYSQL的query Log(查询日志)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-05T00:00:00+08:00" pubdate data-updated="true">Apr 5<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近在整理服务器的时候，发现mysql的查询日志文件占用了很多空间。这个查询日志文件部分内容如下，随着查询增加，会越来越大</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Tcp port: 3306 Unix socket: /tmp/mysql.sock
+</span><span class='line'>Time Id Command Argument
+</span><span class='line'>100404 8:36:49 1 Connect zzz@localhost on
+</span><span class='line'>1 Init DB zzz
+</span><span class='line'>1 Query SET NAMES 'utf8'
+</span><span class='line'>1 Query SELECT * FROM `boblog_counter` LIMIT 0,1
+</span><span class='line'>1 Query SELECT `blogid`,`pubtime`,`edittime`,`blogalias` FROM `boblog_blogs` WHERE `property`&lt;2 ORDER BY `pubtime`DESC LIMIT 0, 1500
+</span><span class='line'>1 Quit
+</span><span class='line'>100404 8:38:01 2 Connect admin@localhost on
+</span><span class='line'>2 Init DB zzz
+</span><span class='line'>2 Query SET NAMES 'utf8'
+</span><span class='line'>2 Query SET sql_mode=''
+</span><span class='line'>2 Query SELECT * FROM `cmseasy_settings` WHERE `tag`='table-fieldset' ORDER BY 1 DESC limit 1
+</span><span class='line'>2 Init DB zzz
+</span><span class='line'>2 Query SET NAMES 'utf8'
+</span><span class='line'>2 Query SET sql_mode=''
+</span><span class='line'>2 Query SELECT * FROM `cmseasy_user` WHERE userid&gt;0 ORDER BY 1 DESC limit 1
+</span><span class='line'>2 Init DB zzz
+</span><span class='line'>2 Query SET NAMES 'utf8'
+</span><span class='line'>2 Query SET sql_mode=''
+</span><span class='line'>2 Query SELECT count(typeid) as rec_sum FROM `cmseasy_type`
+</span><span class='line'>2 Query SELECT * FROM `cmseasy_type` ORDER BY `order`,1 limit 1000
+</span><span class='line'>2 Init DB zzz
+</span><span class='line'>2 Query SET NAMES 'utf8'
+</span><span class='line'>2 Query SET sql_mode=''
+</span><span class='line'>2 Query SELECT count(1) as rec_sum FROM `cmseasy_friendlink` WHERE state&gt;0 and linktype=1
+</span><span class='line'>2 Query SELECT * FROM `cmseasy_friendlink` WHERE state&gt;0 and linktype=1 ORDER BY listorder asc,id limit 20
+</span><span class='line'>2 Init DB zzz
+</span><span class='line'>2 Query SET NAMES 'utf8'
+</span><span class='line'>2 Query SET sql_mode=''
+</span><span class='line'>2 Query SELECT count(1) as rec_sum FROM `cmseasy_friendlink` WHERE state&gt;0 and linktype=1
+</span><span class='line'>2 Query SELECT * FROM `cmseasy_friendlink` WHERE state&gt;0 and linktype=1 ORDER BY listorder asc,id limit 20
+</span><span class='line'>2 Init DB zzz
+</span><span class='line'>2 Query SET NAMES 'utf8'
+</span><span class='line'>2 Query SET sql_mode=''
+</span><span class='line'>2 Query SELECT * FROM `cmseasy_templatetag` WHERE name='å~E¬å~O¸ç®~@ä»~K' ORDER BY 1 DESC limit 1
+</span><span class='line'>2 Init DB zzz
+</span><span class='line'>2 Query SET NAMES 'utf8'
+</span><span class='line'>2 Query SET sql_mode=''
+</span><span class='line'>2 Query Describe cmseasy_archive
+</span><span class='line'>2 Query SELECT count(1) as rec_sum FROM `cmseasy_archive` WHERE typeid in (2) and checked=1 and (state IS NULL or state&lt;&gt;'-1')
+</span><span class='line'>2 Query SELECT * FROM `cmseasy_archive` WHERE typeid in (2) and checked=1 and (state IS NULL or state&lt;&gt;'-1') ORDER BY aid desc limit 4
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其实记录的都是mysql执行的一些select语句，对于正常运行的服务器，我觉得基本没有必要保留这些日志。</p>
+
+<p>关键是怎么关闭，这个日志的开启与否，可以通过mysql里提交如下命令查看</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>show variables like 'log';</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果现实 log 的值是 ON就代码开启，如果是OFF就代表关闭</p>
+
+<p>我们可以通过my.cnf配置文件进行配置</p>
+
+<p>在my.cnf文件里，加入general-log = 0就关闭了这个查询日志。如果是general-log = 1就开启了这个查询日志。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1895,76 +2063,6 @@ cp /usr/share/doc/openvpn-2.0.9/sample-config-files/server.conf /etc/openvpn/</p
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/01/19/extman/">Extman后台登陆问题解决方法</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-01-19T00:00:00+08:00" pubdate data-updated="true">Jan 19<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>前一阵子给一个公司架设了postfix+mysql+extmail的邮件系统。</p>
-
-<p>用了一段时间后，发现后台管理的extman不能登录了，提示如下</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Can't open /tmp/extman//sid_26da75f9aec35f2cbc6b4fa425ab525e, No such file or directory</span></code></pre></td></tr></table></div></figure>
-
-
-<p>后来发现是/tmp目录下的extman目录被系统清除了。。</p>
-
-<p>然后再网络上找了一些解决办法，说是Linux系统在启动的时候，会清理/tmp目录。建议将这个目录设置在/var/tmp目录下。</p>
-
-<p>结果用了一段时间后，发现一样是被清理。。。。</p>
-
-<p>我的系统是CentOS 5.3 64bit</p>
-
-<p>最后我通过修改，/var/www/extsuite/extman/webmail.cf文件里面的配置</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#sys_sess_dir, the session dir
-</span><span class='line'>SYS_SESS_DIR = /tmp/extman/</span></code></pre></td></tr></table></div></figure>
-
-
-<p>将SYS_SESS_DIR指定到了/data/extman下面了。估计这次系统不会清除这个目录了吧</p>
-
-<p>还有一种常见错误就是提示</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Can't open /tmp/extman//sid_89b33ec5ce0b5903f24035aa4ad76d15, Permission denied</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这个是因为extman 那个临时目录的权限不对。</p>
-
-<p>可以设置为777就ok了</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/9/">&larr; Older</a>
@@ -1989,7 +2087,7 @@ cp /usr/share/doc/openvpn-2.0.9/sample-config-files/server.conf /etc/openvpn/</p
 <li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
 <li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
 <li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
-<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (4)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
@@ -2014,6 +2112,10 @@ cp /usr/share/doc/openvpn-2.0.9/sample-config-files/server.conf /etc/openvpn/</p
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/29/digitalocean-vps/">digitalocean-vps</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/">nginx支持thinkphp的pathinfo模式</a>
       </li>
     
@@ -2027,10 +2129,6 @@ cp /usr/share/doc/openvpn-2.0.9/sample-config-files/server.conf /etc/openvpn/</p
     
       <li class="post">
         <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
       </li>
     
   </ul>

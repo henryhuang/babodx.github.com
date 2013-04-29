@@ -9,7 +9,9 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="Hero G3在升级到Android 2.1后就没有什么好用的导航软件了。google map需要流量，这个等于导航的时候随时收费，偶尔用用还可以，不适合长期使用。 凯立德在anroid 2.1有可用版本，但是操作体验比较差，经常按个按钮，半天没有反映需要反复按。而且我还遇到过不能定位的问题， &hellip;">
+  <meta name="description" content="从2009年12月算来，我使用瑞豪开源(RASHOST)提供的VPS已经10个月了，下面说说我的感受。
+我选择的是128M Linux VPS，系统采用的CentOS 5
+选择理由：因为我就是跑自己的blog，还有开openvpn用来访问一些被墙的站点，所以不需要太多内存。当然这也归功于瑞豪开源( &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +67,49 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/10/11/rashost-vps/">瑞豪开源(RASHOST)VPS10个月使用感受</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-11T00:00:00+08:00" pubdate data-updated="true">Oct 11<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>从2009年12月算来，我使用<strong>瑞豪开源(RASHOST)</strong>提供的VPS已经10个月了，下面说说我的感受。
+我选择的是128M Linux VPS，系统采用的CentOS 5
+选择理由：因为我就是跑自己的blog，还有开openvpn用来访问一些被墙的站点，所以不需要太多内存。当然这也归功于<strong>瑞豪开源(RASHOST)</strong>他们的技术实力优秀。他们提供的VPS 系统都是经过裁剪和优化的。默认启动系统只需要20多M内存占用。
+10个月使用下来，感觉<strong>瑞豪开源(RASHOST)</strong>提供的VPS相当稳定，10个月中将就出现过一次线路问题，大约不到1个小时就解决了。虽然我测试过<strong>瑞豪开源(RASHOST)</strong>提供的VPS网络速度不是很快，从北京ping过去大约300-400ms，但是很稳定。
+再说说服务，在使用vps过程中，开始的时候总会有些这样那样的问题，<strong>瑞豪开源(RASHOST)</strong>是通过提交服务单进行解决的。每个服务单都有记录，会很好的解决我遇到的问题。感谢<strong>瑞豪开源(RASHOST)</strong>提供的技术支持。
+最后就是方便的支付方式。我选择的是3个月支付一次。一般提前10天就会收到他们的邮件提示，按照提供的账单，通过支付宝就可以完成支付。不需要人工开通和确认了。只要支付完成，后台就显示支付成功。VPS的到期时间也自动计算好了。
+我主要是通过nginx+fastcgi+php跑blog，然后又安装了openvpn来做vpn服务器。优化后，大约用35-40M内存，当然这个随着访问量增大而增大。但是感觉个人128M足以。如果以后内存吃紧，通过一些<strong>瑞豪开源(RASHOST)</strong>的推广活动，还可以免费增加部分内存。这个活动很好，我最喜欢了。
+目前我已经续费到2011年1月。一直使用良好，在此推荐下。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -962,143 +1007,6 @@ $ ln -s /etc etc_backup</code></pre>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/04/05/disable-mysql-query-log/">开启或者关闭MYSQL的query Log(查询日志)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-04-05T00:00:00+08:00" pubdate data-updated="true">Apr 5<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近在整理服务器的时候，发现mysql的查询日志文件占用了很多空间。这个查询日志文件部分内容如下，随着查询增加，会越来越大</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Tcp port: 3306 Unix socket: /tmp/mysql.sock
-</span><span class='line'>Time Id Command Argument
-</span><span class='line'>100404 8:36:49 1 Connect zzz@localhost on
-</span><span class='line'>1 Init DB zzz
-</span><span class='line'>1 Query SET NAMES 'utf8'
-</span><span class='line'>1 Query SELECT * FROM `boblog_counter` LIMIT 0,1
-</span><span class='line'>1 Query SELECT `blogid`,`pubtime`,`edittime`,`blogalias` FROM `boblog_blogs` WHERE `property`&lt;2 ORDER BY `pubtime`DESC LIMIT 0, 1500
-</span><span class='line'>1 Quit
-</span><span class='line'>100404 8:38:01 2 Connect admin@localhost on
-</span><span class='line'>2 Init DB zzz
-</span><span class='line'>2 Query SET NAMES 'utf8'
-</span><span class='line'>2 Query SET sql_mode=''
-</span><span class='line'>2 Query SELECT * FROM `cmseasy_settings` WHERE `tag`='table-fieldset' ORDER BY 1 DESC limit 1
-</span><span class='line'>2 Init DB zzz
-</span><span class='line'>2 Query SET NAMES 'utf8'
-</span><span class='line'>2 Query SET sql_mode=''
-</span><span class='line'>2 Query SELECT * FROM `cmseasy_user` WHERE userid&gt;0 ORDER BY 1 DESC limit 1
-</span><span class='line'>2 Init DB zzz
-</span><span class='line'>2 Query SET NAMES 'utf8'
-</span><span class='line'>2 Query SET sql_mode=''
-</span><span class='line'>2 Query SELECT count(typeid) as rec_sum FROM `cmseasy_type`
-</span><span class='line'>2 Query SELECT * FROM `cmseasy_type` ORDER BY `order`,1 limit 1000
-</span><span class='line'>2 Init DB zzz
-</span><span class='line'>2 Query SET NAMES 'utf8'
-</span><span class='line'>2 Query SET sql_mode=''
-</span><span class='line'>2 Query SELECT count(1) as rec_sum FROM `cmseasy_friendlink` WHERE state&gt;0 and linktype=1
-</span><span class='line'>2 Query SELECT * FROM `cmseasy_friendlink` WHERE state&gt;0 and linktype=1 ORDER BY listorder asc,id limit 20
-</span><span class='line'>2 Init DB zzz
-</span><span class='line'>2 Query SET NAMES 'utf8'
-</span><span class='line'>2 Query SET sql_mode=''
-</span><span class='line'>2 Query SELECT count(1) as rec_sum FROM `cmseasy_friendlink` WHERE state&gt;0 and linktype=1
-</span><span class='line'>2 Query SELECT * FROM `cmseasy_friendlink` WHERE state&gt;0 and linktype=1 ORDER BY listorder asc,id limit 20
-</span><span class='line'>2 Init DB zzz
-</span><span class='line'>2 Query SET NAMES 'utf8'
-</span><span class='line'>2 Query SET sql_mode=''
-</span><span class='line'>2 Query SELECT * FROM `cmseasy_templatetag` WHERE name='å~E¬å~O¸ç®~@ä»~K' ORDER BY 1 DESC limit 1
-</span><span class='line'>2 Init DB zzz
-</span><span class='line'>2 Query SET NAMES 'utf8'
-</span><span class='line'>2 Query SET sql_mode=''
-</span><span class='line'>2 Query Describe cmseasy_archive
-</span><span class='line'>2 Query SELECT count(1) as rec_sum FROM `cmseasy_archive` WHERE typeid in (2) and checked=1 and (state IS NULL or state&lt;&gt;'-1')
-</span><span class='line'>2 Query SELECT * FROM `cmseasy_archive` WHERE typeid in (2) and checked=1 and (state IS NULL or state&lt;&gt;'-1') ORDER BY aid desc limit 4
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>其实记录的都是mysql执行的一些select语句，对于正常运行的服务器，我觉得基本没有必要保留这些日志。</p>
-
-<p>关键是怎么关闭，这个日志的开启与否，可以通过mysql里提交如下命令查看</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>show variables like 'log';</span></code></pre></td></tr></table></div></figure>
-
-
-<p>如果现实 log 的值是 ON就代码开启，如果是OFF就代表关闭</p>
-
-<p>我们可以通过my.cnf配置文件进行配置</p>
-
-<p>在my.cnf文件里，加入general-log = 0就关闭了这个查询日志。如果是general-log = 1就开启了这个查询日志。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -1123,7 +1031,7 @@ $ ln -s /etc etc_backup</code></pre>
 <li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
 <li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
 <li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
-<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (4)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
@@ -1148,6 +1056,10 @@ $ ln -s /etc etc_backup</code></pre>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/29/digitalocean-vps/">digitalocean-vps</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/">nginx支持thinkphp的pathinfo模式</a>
       </li>
     
@@ -1161,10 +1073,6 @@ $ ln -s /etc etc_backup</code></pre>
     
       <li class="post">
         <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
       </li>
     
   </ul>

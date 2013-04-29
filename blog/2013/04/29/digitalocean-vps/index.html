@@ -5,14 +5,18 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>批量部署系统方案 - 鑫的方向</title>
+  <title>digitalocean-vps - 鑫的方向</title>
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="最近单位一直弄刀片服务器，7个笼子，112片。安装系统是个麻烦的事情，如果单机安装，太痛苦了。
-所以就尝试了批量部署系统。
- 
-主要是分Linux和Windows两种方案 我这里Linux是CentOS。 采用了cobbler来做批量部署。 Windows采用的是win 2008的部署服务， &hellip;">
+  <meta name="description" content="Digitalocean debian6 vps测试 最近又折腾了一次VPS。 原来一直使用的是vpsee.com提供的最低配置VPS。 配置
+* 1 core CPU
+* 256 MB 内存
+* 256 MB 交换
+* 10 GB 硬盘
+* 160 GB 流量
+* 1 IP
+* 5 机房可选 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +25,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://babodx.github.com/blog/2013/01/22/installation-server/">
+  <link rel="canonical" href="http://babodx.github.com/blog/2013/04/29/digitalocean-vps/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -71,7 +75,7 @@
   
   <header>
     
-      <h1 class="entry-title">批量部署系统方案</h1>
+      <h1 class="entry-title">Digitalocean-vps</h1>
     
     
       <p class="meta">
@@ -87,28 +91,70 @@
   
 
 
-<time datetime="2013-01-22T00:00:00+08:00" pubdate data-updated="true">Jan 22<span>nd</span>, 2013</time>
+<time datetime="2013-04-29T10:55:00+08:00" pubdate data-updated="true">Apr 29<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>最近单位一直弄刀片服务器，7个笼子，112片。安装系统是个麻烦的事情，如果单机安装，太痛苦了。
-所以就尝试了批量部署系统。
- 
-主要是分Linux和Windows两种方案</p>
+<div class="entry-content"><h2>Digitalocean debian6 vps测试</h2>
 
-<p>我这里Linux是CentOS。 采用了cobbler来做批量部署。</p>
+<p>最近又折腾了一次VPS。 原来一直使用的是vpsee.com提供的最低配置VPS。</p>
 
-<p>Windows采用的是win 2008的部署服务，就是WDS来做批量部署。</p>
+<p><strong>配置</strong>
+* 1 core CPU
+* 256 MB 内存
+* 256 MB 交换
+* 10 GB 硬盘
+* 160 GB 流量
+* 1 IP
+* 5 机房可选</p>
 
-<p>这样Linux做一台分发服务器，Windows做一台WDS服务器，需要部署那种系统就开那台服务器就可以了。</p>
+<p>费用 $10/月</p>
 
-<p>所有刀片全部采用pxe来引导就可以了。
- 
-具体方法就先不写了，以后再补上吧
- </p>
+<p>再来看看我最近选择的digitalocean的vps</p>
+
+<p><strong>配置</strong></p>
+
+<ul>
+<li>512MB / 1 CPU</li>
+<li>20GB SSD Disk</li>
+<li>地点：New York  Amsterdam  San Francisco</li>
+</ul>
+
+
+<p>费用  $5/月</p>
+
+<!--more-->
+
+
+<p>通过上面比较可以看到内存多了256M、硬盘多10G、流量多了840G。
+而且硬盘采用SSD，性能很给力！</p>
+
+<p>我申请了一台基于debian6 32bit的测试了，下面是效果</p>
+
+<p>默认系统很精简，启动后占用内存12M，具体见下图：
+<a href="http://farm8.staticflickr.com/7048/8691651426_83dbc54a9c_b.jpg">!debian6 内存占用</a></p>
+
+<p>硬盘占用700M
+<a href="http://farm9.staticflickr.com/8536/8690532229_4a3395dc6e_z.jpg">!debian6 硬盘占用</a></p>
+
+<h2>网速测试</h2>
+
+<p>先看看和美国其他vps的文件传递速度
+<a href="http://farm8.staticflickr.com/7045/8691651836_9f52659248_c.jpg">!到美国vps的网速</a></p>
+
+<p>再看看到国内的速度
+<a href="http://farm8.staticflickr.com/7045/8690532089_2b0987a779_c.jpg">!到国内网速</a></p>
+
+<h2>总结</h2>
+
+<p>总的来说性能很给力，网速也不错。而且价格便宜</p>
+
+<p>我接下来再这台服务器上配置了varnish+nginx+php+mysql环境，性能也是不错了。跑了一个朋友基于wordpress的网站。优化了内核、配置了防火墙策略和防入侵、DDOS等，给varnish分配了32M。最终服务器占用90M，用ab和siege压力测试了下，并发300 压1万次，完全没问题。</p>
+
+<p>关于debian6的服务器具体配置，我以后会写出来。</p>
 </div>
 
 
@@ -131,12 +177,12 @@
   
 
 
-<time datetime="2013-01-22T00:00:00+08:00" pubdate data-updated="true">Jan 22<span>nd</span>, 2013</time>
+<time datetime="2013-04-29T10:55:00+08:00" pubdate data-updated="true">Apr 29<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/windows/'>Windows</a>
+    <a class='category' href='/blog/categories/host/'>Host</a>
   
 </span>
 
@@ -145,7 +191,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2013/01/22/installation-server/" data-via="" data-counturl="http://babodx.github.com/blog/2013/01/22/installation-server/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2013/04/29/digitalocean-vps/" data-via="" data-counturl="http://babodx.github.com/blog/2013/04/29/digitalocean-vps/" >Tweet</a>
   
   
   
@@ -154,10 +200,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/08/10/mac-xdebug-netbeans-config/" title="Previous Post: mac下配置php调试环境">&laquo; mac下配置php调试环境</a>
+        <a class="basic-alignment left" href="/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/" title="Previous Post: nginx支持thinkphp的pathinfo模式">&laquo; nginx支持thinkphp的pathinfo模式</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/02/02/cloudstack-on-vmware/" title="Next Post: cloudstack on vmware">cloudstack on vmware &raquo;</a>
       
     </p>
   </footer>

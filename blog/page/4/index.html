@@ -9,9 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="今天早上一个客户的网站停止了响应，不能正常解析php内容。
-重启php-fpm后正常，判断应该是php-fpm进程僵死。所以就先参考网上内容，写了一个监控nginx状态脚本
-后来又想看看这个php-fpm进程挂掉和访问量是否有关系，于是打算记录下服务器每分钟的访问量。 &hellip;">
+  <meta name="description" content="今天查看服务器的/var/log/secure日志，发现很多类似下面的信息 PAM 6 more authentication failures; logname= uid=0 euid=0 tty=ssh ruser= rhost=121.176.35.192 user=root &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +65,240 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/25/ssh-login-protection-by-denyhosts/">通过denyhosts保护ssh登陆</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-25T00:00:00+08:00" pubdate data-updated="true">Dec 25<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天查看服务器的/var/log/secure日志，发现很多类似下面的信息</p>
+
+<p><code>PAM 6 more authentication failures; logname= uid=0 euid=0 tty=ssh ruser= rhost=121.176.35.192  user=root</code></p>
+
+<p>说明经常有人通过ssh尝试登陆，并不断尝试猜测root的密码。</p>
+
+<p>这样总让人尝试我的密码也不是个事儿呀&#8230;.于是通过denyhosts软件，开启了保护。</p>
+
+<p>通过denyhosts我们可以设置登陆失败几次，就禁止这个IP再次登陆。并可以设置多少分钟后，放开保护。</p>
+
+<p><strong>denyhosts介绍</strong></p>
+
+<p>DenyHosts是Python语言写的一个程序，用DenyHosts可以阻止试图猜测SSH登录口令，它会分析/var/log/secure等日志文件，当发现同一IP在进行多次SSH密码尝试时就会记录IP到/etc/hosts.deny文件，从而达到自动屏蔽该IP的目的。</p>
+
+<p>安装需求</p>
+
+<p>首要要求有python环境，并版本在2.3以上</p>
+
+<p>CentOS 默认安装了2.4.3版本，我们可以通过下面命令查看</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# python -V
+</span><span class='line'>
+</span><span class='line'>Python 2.4.3</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>注意大小写。</strong></p>
+
+<p>其次是sshd需要支持tcp_wrappers。这个一般都支持。可以用下面命令判断</p>
+
+<p><code>ldd /usr/sbin/sshd |grep wrap</code></p>
+
+<p>如果显示：libwrap.so.0 => /lib/libwrap.so.0 (0x00db7000)表示支持</p>
+
+<p><strong>安装</strong></p>
+
+<p>当前最新的版本是2.6</p>
+
+<p><a href="wget%20http://downloads.sourceforge.net/project/denyhosts/denyhosts/2.6/DenyHosts-2.6.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fdenyhosts%2Ffiles%2F&amp;ts=1324820171&amp;use_mirror=cdnetworks-kr-1">下载</a></p>
+
+<p><strong>解压安装</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar zxvf DenyHosts-2.6.tar.gz 
+</span><span class='line'>
+</span><span class='line'>cd DenyHosts-2.6
+</span><span class='line'>
+</span><span class='line'>python setup.py install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>默认将程序安装在/usr/share/denyhosts</p>
+
+<p>库文件在/usr/lib/python2.4/site-packages/DenyHosts/</p>
+
+<p>denyhosts.py安装到/usr/bin</p>
+
+<p><strong>设置启动脚本</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /usr/share/denyhosts/
+</span><span class='line'>
+</span><span class='line'>cp daemon-control-dist daemon-control
+</span><span class='line'>
+</span><span class='line'>chown root daemon-control
+</span><span class='line'>
+</span><span class='line'>chmod 700 daemon-control
+</span><span class='line'>
+</span><span class='line'>grep -v "^#" denyhosts.cfg-dist &gt; denyhosts.cfg</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就生成了一个标准的配置文件denyhosts.cfg</p>
+
+<p>我们需要按照自己的想法，配置下这个denyhosts.cfg文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SECURE_LOG = /var/log/secure
+</span><span class='line'>
+</span><span class='line'>#表示系统中secure日志文件位置
+</span><span class='line'>
+</span><span class='line'>HOSTS_DENY = /etc/hosts.deny
+</span><span class='line'>
+</span><span class='line'>#表示hosts.deny配置文件在系统中位置
+</span><span class='line'>
+</span><span class='line'>PURGE_DENY = 30m
+</span><span class='line'>
+</span><span class='line'>#表示多久后解封IP
+</span><span class='line'>
+</span><span class='line'>BLOCK_SERVICE  = sshd
+</span><span class='line'>
+</span><span class='line'>DENY_THRESHOLD_INVALID = 1
+</span><span class='line'>
+</span><span class='line'>#表示无效用户名，登陆失败几次就封IP
+</span><span class='line'>
+</span><span class='line'>DENY_THRESHOLD_VALID = 5
+</span><span class='line'>#表示有效果的普通用户登陆几次就封IP
+</span><span class='line'>
+</span><span class='line'>DENY_THRESHOLD_ROOT = 3
+</span><span class='line'>
+</span><span class='line'>#表示root用户登陆失败几次封IP
+</span><span class='line'>
+</span><span class='line'>DENY_THRESHOLD_RESTRICTED = 1
+</span><span class='line'>
+</span><span class='line'>WORK_DIR = /usr/share/denyhosts/data
+</span><span class='line'>
+</span><span class='line'>SUSPICIOUS_LOGIN_REPORT_ALLOWED_HOSTS=YES
+</span><span class='line'>
+</span><span class='line'>HOSTNAME_LOOKUP=NO
+</span><span class='line'>
+</span><span class='line'>表示是否做域名反解析
+</span><span class='line'>
+</span><span class='line'>LOCK_FILE = /var/lock/subsys/denyhosts</span></code></pre></td></tr></table></div></figure>
+
+
+<p>启动denyhosts</p>
+
+<p><code>/usr/share/denyhosts/daemon-control start</code></p>
+
+<p>配置denyhosts随系统自启动</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /etc/init.d
+</span><span class='line'>
+</span><span class='line'>ln -s /usr/share/denyhosts/daemon-control denyhosts
+</span><span class='line'>
+</span><span class='line'>chkconfig --add denyhosts
+</span><span class='line'>
+</span><span class='line'>chkconfig --level 345 denyhosts on</span></code></pre></td></tr></table></div></figure>
+
+
+<p>查看效果</p>
+
+<p>如果尝试登陆失败次数达到后，IP就会被记录到/etc/hosts.deny文件内，来达到阻止登陆的目的</p>
+
+<p>我们也可以通过查看/var/log/denyhosts日志文件来判断是否有被封的IP</p>
+
+<p>下面是我的机器部署denyhosts一段时间后封的IP</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># DenyHosts: Sun Dec 25 21:40:13 2011 | sshd: 112.164.231.91
+</span><span class='line'>
+</span><span class='line'>sshd: 112.164.231.91</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1423,104 +1655,6 @@ cd mysql-5.5.16
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/11/06/godaddy-to-dnspod/">解决godaddy注册域名无法解析问题</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-11-06T00:00:00+08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>godaddy.com是全球知名的域名注册商。国内很多站长也是使用的这个注册商。</p>
-
-<p>但是出于各种原因，godaddy的域名服务器经常被国内封掉。导致我们注册的域名无法被解析。直接影响了网站的稳定性。</p>
-
-<p>解决办法无非两个：一、不用godaddy了，二、换域名服务器。</p>
-
-<p>如果不打算用godaddy了，我推荐name.com也不错，不过不支持支付宝了。需要用paypal支付</p>
-
-<p>而我选择了第二种办法，采用国内的dns服务器来代替godaddy自己的，这样可以很好的解决问题。</p>
-
-<p>具体步骤：</p>
-
-<p>到http://www.dnspod.cn去注册一个免费账号，不知道dnspod为何物的，可以参考下面介绍</p>
-
-<p>关于DNSPod</p>
-
-<p>DNSPod建立于2006年3月份，是国内最早提供免费智能DNS产品的网站，致力于为各类网站提供高质量的多线智能DNS免费解析。</p>
-
-<p>DNSPod以稳定性、安全性、功能强大、智能免费、高速等优 势深得广大站长和企业用户们的喜爱，以至于越来越多的企业站、地方门户站、游戏站等等都在使用DNSPod，他们喜欢的是DNSPod给他们带来的稳定性、承受能力强、访问速度快以及极高的用户体验，使用普通的DNS（像域名注册商提供的）不是不可以“用”，但是避免不了因为不稳定导致网站时常经常打不开，由于功 能限制不能实现想要实现的功能、因为用户体验不够好等丢失客户。所以选择一个好的DNS服务商可以为自己的网站带来很大的、意想不到的收益，避开不必要的损失。</p>
-
-<p>功能上：除了智能DNS解析，普通DNS解析也可以满足用户的稳定、高速等需求。相对竞争对手的产品，DNSPod除了实时生效，不限制用户添加的域名和记录数量外，还率先提供 了IPv6的支持和动态域名解析的功能，另外还支持DNS轮询、URL转发、API接口、批量修改管理等先进功能。并且所有功能都是免费提供。</p>
-
-<p>使用DNSPod的站长们知道，DNSPod不仅仅是以雄厚的技术优势，而且还是靠优质的服务赢得市场的，为几十万免费用户和几千VIP用户分别设立相应的技术支持！做到用户与DNSPod随时可以沟通，有问题及时解决！</p>
-
-<p>暴风影音、华军下载、魅族手机、VeryCD、4399、 霏凡下载、雨林木风、深度、手机之家、去看去看、站长之家、51啦、Discuz、cnBeta、 逐浪文学等知名网站都是DNSPod vip用户。</p>
-
-<p>将域名服务器修改到国内</p>
-
-<p>在 dnspod的后台域名管理中，添加自己需要转到国内的解析的域名。如下图</p>
-
-<p><img src="http://farm9.staticflickr.com/8251/8513876981_070153af29_z.jpg" alt="dnspod后台" /></p>
-
-<p>点开我们刚添加的域名，可以看到分配给我们的dns服务器。如下图</p>
-
-<p><img src="http://farm9.staticflickr.com/8105/8513879533_140115711c_z.jpg" alt="添加dns服务器" /></p>
-
-<p>现在我们登录到godaddy下，修改我们的DNS服务器到刚才dnspod分配给我们的dns服务器上。</p>
-
-<p>登录后，如下图所示，点my account</p>
-
-<p><img src="http://farm9.staticflickr.com/8530/8513882515_d24da3b0d9_z.jpg" alt="account截图" /></p>
-
-<p>然后在域名管理界面，点我们要转到国内解析的域名。如图</p>
-
-<p><img src="http://farm9.staticflickr.com/8520/8513884849_f2c2282477_z.jpg" alt="域名管理截图" /></p>
-
-<p>进入域名管理后，找到NameServers项，点set name servers。如图</p>
-
-<p><img src="http://farm9.staticflickr.com/8374/8513887055_cf354bfba5_z.jpg" alt="nameserver截图" /></p>
-
-<p>上面点击“Set Nameservers”后，会弹出一个窗口让你设置DNS Server。如下图</p>
-
-<p><img src="http://farm9.staticflickr.com/8518/8515007886_405481c010_z.jpg" alt="set nameserver" /></p>
-
-<p>将Nameserver1和Nameserver2里面的内容修改为dnspod分配给我们的dns服务器。nameserver3和nameserver4里面清空。</p>
-
-<p>点 “OK”按钮完成设置。</p>
-
-<p>域名服务器设置完，我们回到dnspod的后台，查看我们域名的状态。一般情况会是无法解析或者dns错误。这个说明还没有生效。最慢48小时生效。如果48小时候，还是错误就要找dnspod联系看看怎么解决了。也可以自己使用dnspod提供的域名全面诊断来判断问题。</p>
-
-<p>下面是完全生效后的状态</p>
-
-<p><img src="http://farm9.staticflickr.com/8371/8513897017_913b9e6764_z.jpg" alt="设置完成的状态" /></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -1545,7 +1679,7 @@ cd mysql-5.5.16
 <li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
 <li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
 <li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
-<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (4)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
@@ -1570,6 +1704,10 @@ cd mysql-5.5.16
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/29/digitalocean-vps/">digitalocean-vps</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/">nginx支持thinkphp的pathinfo模式</a>
       </li>
     
@@ -1583,10 +1721,6 @@ cd mysql-5.5.16
     
       <li class="post">
         <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
       </li>
     
   </ul>

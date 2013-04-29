@@ -9,10 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="vim是在linux下面很有名的编辑工具。而今天说到的这个gvim呢，就是vim工具在windows下的版本。
-因为游戏、网银等种种原因，不是每个人都可以全部切换到linux下的，而linux的很多很棒的开源软件又特别好用。所以就尽量找这些软件的windows版本了。
- 
-软件主页：http:// &hellip;">
+  <meta name="description" content="godaddy.com是全球知名的域名注册商。国内很多站长也是使用的这个注册商。 但是出于各种原因，godaddy的域名服务器经常被国内封掉。导致我们注册的域名无法被解析。直接影响了网站的稳定性。 解决办法无非两个：一、不用godaddy了，二、换域名服务器。 如果不打算用godaddy了， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +65,104 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/11/06/godaddy-to-dnspod/">解决godaddy注册域名无法解析问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-06T00:00:00+08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>godaddy.com是全球知名的域名注册商。国内很多站长也是使用的这个注册商。</p>
+
+<p>但是出于各种原因，godaddy的域名服务器经常被国内封掉。导致我们注册的域名无法被解析。直接影响了网站的稳定性。</p>
+
+<p>解决办法无非两个：一、不用godaddy了，二、换域名服务器。</p>
+
+<p>如果不打算用godaddy了，我推荐name.com也不错，不过不支持支付宝了。需要用paypal支付</p>
+
+<p>而我选择了第二种办法，采用国内的dns服务器来代替godaddy自己的，这样可以很好的解决问题。</p>
+
+<p>具体步骤：</p>
+
+<p>到http://www.dnspod.cn去注册一个免费账号，不知道dnspod为何物的，可以参考下面介绍</p>
+
+<p>关于DNSPod</p>
+
+<p>DNSPod建立于2006年3月份，是国内最早提供免费智能DNS产品的网站，致力于为各类网站提供高质量的多线智能DNS免费解析。</p>
+
+<p>DNSPod以稳定性、安全性、功能强大、智能免费、高速等优 势深得广大站长和企业用户们的喜爱，以至于越来越多的企业站、地方门户站、游戏站等等都在使用DNSPod，他们喜欢的是DNSPod给他们带来的稳定性、承受能力强、访问速度快以及极高的用户体验，使用普通的DNS（像域名注册商提供的）不是不可以“用”，但是避免不了因为不稳定导致网站时常经常打不开，由于功 能限制不能实现想要实现的功能、因为用户体验不够好等丢失客户。所以选择一个好的DNS服务商可以为自己的网站带来很大的、意想不到的收益，避开不必要的损失。</p>
+
+<p>功能上：除了智能DNS解析，普通DNS解析也可以满足用户的稳定、高速等需求。相对竞争对手的产品，DNSPod除了实时生效，不限制用户添加的域名和记录数量外，还率先提供 了IPv6的支持和动态域名解析的功能，另外还支持DNS轮询、URL转发、API接口、批量修改管理等先进功能。并且所有功能都是免费提供。</p>
+
+<p>使用DNSPod的站长们知道，DNSPod不仅仅是以雄厚的技术优势，而且还是靠优质的服务赢得市场的，为几十万免费用户和几千VIP用户分别设立相应的技术支持！做到用户与DNSPod随时可以沟通，有问题及时解决！</p>
+
+<p>暴风影音、华军下载、魅族手机、VeryCD、4399、 霏凡下载、雨林木风、深度、手机之家、去看去看、站长之家、51啦、Discuz、cnBeta、 逐浪文学等知名网站都是DNSPod vip用户。</p>
+
+<p>将域名服务器修改到国内</p>
+
+<p>在 dnspod的后台域名管理中，添加自己需要转到国内的解析的域名。如下图</p>
+
+<p><img src="http://farm9.staticflickr.com/8251/8513876981_070153af29_z.jpg" alt="dnspod后台" /></p>
+
+<p>点开我们刚添加的域名，可以看到分配给我们的dns服务器。如下图</p>
+
+<p><img src="http://farm9.staticflickr.com/8105/8513879533_140115711c_z.jpg" alt="添加dns服务器" /></p>
+
+<p>现在我们登录到godaddy下，修改我们的DNS服务器到刚才dnspod分配给我们的dns服务器上。</p>
+
+<p>登录后，如下图所示，点my account</p>
+
+<p><img src="http://farm9.staticflickr.com/8530/8513882515_d24da3b0d9_z.jpg" alt="account截图" /></p>
+
+<p>然后在域名管理界面，点我们要转到国内解析的域名。如图</p>
+
+<p><img src="http://farm9.staticflickr.com/8520/8513884849_f2c2282477_z.jpg" alt="域名管理截图" /></p>
+
+<p>进入域名管理后，找到NameServers项，点set name servers。如图</p>
+
+<p><img src="http://farm9.staticflickr.com/8374/8513887055_cf354bfba5_z.jpg" alt="nameserver截图" /></p>
+
+<p>上面点击“Set Nameservers”后，会弹出一个窗口让你设置DNS Server。如下图</p>
+
+<p><img src="http://farm9.staticflickr.com/8518/8515007886_405481c010_z.jpg" alt="set nameserver" /></p>
+
+<p>将Nameserver1和Nameserver2里面的内容修改为dnspod分配给我们的dns服务器。nameserver3和nameserver4里面清空。</p>
+
+<p>点 “OK”按钮完成设置。</p>
+
+<p>域名服务器设置完，我们回到dnspod的后台，查看我们域名的状态。一般情况会是无法解析或者dns错误。这个说明还没有生效。最慢48小时生效。如果48小时候，还是错误就要找dnspod联系看看怎么解决了。也可以自己使用dnspod提供的域名全面诊断来判断问题。</p>
+
+<p>下面是完全生效后的状态</p>
+
+<p><img src="http://farm9.staticflickr.com/8371/8513897017_913b9e6764_z.jpg" alt="设置完成的状态" /></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -666,58 +761,6 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/09/21/h3c-ttl-expires/">H3C路由器 Tracert超时，解决办法。</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-09-21T00:00:00+08:00" pubdate data-updated="true">Sep 21<span>st</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>单位的H3C路由器和交换机上，tracert总是超时。但是可以正常上网或者ping到目标。
-后来查找资料，找到了解决办法。</p>
-
-<p>解决方法：</p>
-
-<p>    ip ttl-expires enable     ip unreachables enable</p>
-
-<p>（官方说法这两条命令默认开启，可能跟版本有关，有的默认未开启。）</p>
-
-<p>官方对这两条命令解释是：</p>
-
-<p>ip ttl-expires enable命 令用来开启设备的ICMP超时报文的发送功能。undo ip ttl-expires命令用来关闭设备的ICMP超 时报文的发送功能。（缺省情况下，ICMP超时报文发送功能处于开启状 态。）</p>
-
-<p>需要注意的是，关闭ICMP超时报文发送 功能后，设备不会再发送“TTL超时”ICMP差 错报文，但“重组超时”ICMP差错报文仍会正常发送。</p>
-
-<p>ip unreachables enable命 令用来开启设备的ICMP目的不可达报文的发送功能。undo ip unreachables命令用来关闭设备的ICMP目 的不可达报文的发送功能。（缺省情况下，ICMP目的不可达报文发送功 能处于关闭状态。）
- </p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -742,7 +785,7 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
 <li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
 <li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
 <li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
-<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (4)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
@@ -767,6 +810,10 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/29/digitalocean-vps/">digitalocean-vps</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/">nginx支持thinkphp的pathinfo模式</a>
       </li>
     
@@ -780,10 +827,6 @@ FlyKernel是一个用来只能调整CPU性能的补丁，在刷rom的时候，�
     
       <li class="post">
         <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
       </li>
     
   </ul>

@@ -9,7 +9,8 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="用mysqldump备份出数据库内容到SQL文件。当我们数据库表有blob类型字段的时候，这个导出的SQL再导入的时候就会因为blob字段内容乱码等原因，不能顺利导入了。 解决办法： 在用mysqldump备份的时候，采用&#8211;hex-blob参数，这样备份出来的sql文件， &hellip;">
+  <meta name="description" content="单位的H3C路由器和交换机上，tracert总是超时。但是可以正常上网或者ping到目标。
+后来查找资料，找到了解决办法。 解决方法：     ip ttl-expires enable     ip unreachables enable （官方说法这两条命令默认开启，可能跟版本有关， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,58 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/09/21/h3c-ttl-expires/">H3C路由器 Tracert超时，解决办法。</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-09-21T00:00:00+08:00" pubdate data-updated="true">Sep 21<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>单位的H3C路由器和交换机上，tracert总是超时。但是可以正常上网或者ping到目标。
+后来查找资料，找到了解决办法。</p>
+
+<p>解决方法：</p>
+
+<p>    ip ttl-expires enable     ip unreachables enable</p>
+
+<p>（官方说法这两条命令默认开启，可能跟版本有关，有的默认未开启。）</p>
+
+<p>官方对这两条命令解释是：</p>
+
+<p>ip ttl-expires enable命 令用来开启设备的ICMP超时报文的发送功能。undo ip ttl-expires命令用来关闭设备的ICMP超 时报文的发送功能。（缺省情况下，ICMP超时报文发送功能处于开启状 态。）</p>
+
+<p>需要注意的是，关闭ICMP超时报文发送 功能后，设备不会再发送“TTL超时”ICMP差 错报文，但“重组超时”ICMP差错报文仍会正常发送。</p>
+
+<p>ip unreachables enable命 令用来开启设备的ICMP目的不可达报文的发送功能。undo ip unreachables命令用来关闭设备的ICMP目 的不可达报文的发送功能。（缺省情况下，ICMP目的不可达报文发送功 能处于关闭状态。）
+ </p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -801,49 +854,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/10/11/rashost-vps/">瑞豪开源(RASHOST)VPS10个月使用感受</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-10-11T00:00:00+08:00" pubdate data-updated="true">Oct 11<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>从2009年12月算来，我使用<strong>瑞豪开源(RASHOST)</strong>提供的VPS已经10个月了，下面说说我的感受。
-我选择的是128M Linux VPS，系统采用的CentOS 5
-选择理由：因为我就是跑自己的blog，还有开openvpn用来访问一些被墙的站点，所以不需要太多内存。当然这也归功于<strong>瑞豪开源(RASHOST)</strong>他们的技术实力优秀。他们提供的VPS 系统都是经过裁剪和优化的。默认启动系统只需要20多M内存占用。
-10个月使用下来，感觉<strong>瑞豪开源(RASHOST)</strong>提供的VPS相当稳定，10个月中将就出现过一次线路问题，大约不到1个小时就解决了。虽然我测试过<strong>瑞豪开源(RASHOST)</strong>提供的VPS网络速度不是很快，从北京ping过去大约300-400ms，但是很稳定。
-再说说服务，在使用vps过程中，开始的时候总会有些这样那样的问题，<strong>瑞豪开源(RASHOST)</strong>是通过提交服务单进行解决的。每个服务单都有记录，会很好的解决我遇到的问题。感谢<strong>瑞豪开源(RASHOST)</strong>提供的技术支持。
-最后就是方便的支付方式。我选择的是3个月支付一次。一般提前10天就会收到他们的邮件提示，按照提供的账单，通过支付宝就可以完成支付。不需要人工开通和确认了。只要支付完成，后台就显示支付成功。VPS的到期时间也自动计算好了。
-我主要是通过nginx+fastcgi+php跑blog，然后又安装了openvpn来做vpn服务器。优化后，大约用35-40M内存，当然这个随着访问量增大而增大。但是感觉个人128M足以。如果以后内存吃紧，通过一些<strong>瑞豪开源(RASHOST)</strong>的推广活动，还可以免费增加部分内存。这个活动很好，我最喜欢了。
-目前我已经续费到2011年1月。一直使用良好，在此推荐下。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -868,7 +878,7 @@
 <li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
 <li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
 <li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
-<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (4)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
@@ -893,6 +903,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/29/digitalocean-vps/">digitalocean-vps</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/">nginx支持thinkphp的pathinfo模式</a>
       </li>
     
@@ -906,10 +920,6 @@
     
       <li class="post">
         <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
       </li>
     
   </ul>

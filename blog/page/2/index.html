@@ -9,10 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="最近单位一直弄刀片服务器，7个笼子，112片。安装系统是个麻烦的事情，如果单机安装，太痛苦了。
-所以就尝试了批量部署系统。
- 
-主要是分Linux和Windows两种方案 我这里Linux是CentOS。 采用了cobbler来做批量部署。 Windows采用的是win 2008的部署服务， &hellip;">
+  <meta name="description" content="很久没写博客了，总是犯懒。。。。 最近在玩cloudstack和python、django啥的。 上周参加了北京举行的cloudstack技术沙龙，收获很大。这两天在自己笔记本上开始折腾cloudstack玩，写下自己的方法和大家分享下。 我主要是分享下如何通过vmware的嵌套虚拟化， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +65,126 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/02/02/cloudstack-on-vmware/">Cloudstack on Vmware</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-02T00:00:00+08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>很久没写博客了，总是犯懒。。。。</p>
+
+<p>最近在玩cloudstack和python、django啥的。</p>
+
+<p>上周参加了北京举行的cloudstack技术沙龙，收获很大。这两天在自己笔记本上开始折腾cloudstack玩，写下自己的方法和大家分享下。</p>
+
+<p>我主要是分享下如何通过vmware的嵌套虚拟化，在一台自己的笔记本上跑起来cloudstack。这样手边没有服务器的朋友也可以先看看cloudstack到底什么样子了。</p>
+
+<p>因为cloudstack还是很吃资源的，我先说下我的硬件吧。</p>
+
+<p>我的笔记本 CPU i7-3520M  内存4G  装的64位 win7</p>
+
+<p>主要是cpu支持虚拟化技术，并且内存越大越好</p>
+
+<p>本来我是用的virtualBOX的，因为devcloud2需要virtualbox来跑。但是virtualbox不支持嵌套虚拟化，所以无法胜任cloudstack的运行环境。我换了vmware workstation 9.</p>
+
+<p>本来cloudstack文档里的最小配置是2台机器，一台跑管理程序和NFS存储，一台跑虚拟化。但是社区里发布了一个一键安装版本，将这些都整合到一个CentOS 6.3的系统下了，用的kvm的虚拟化技术。</p>
+
+<p><strong>下面说说我的步骤：</strong></p>
+
+<p>首先在vmware里创建一个虚拟机，Guest operating system选择Linux下的Red Hat Enterprise Linux 6 64-bit。</p>
+
+<p>虚拟机的内存我给分配了2936M，这个数值是vmware建议的最大分配内存了（宿主4G内存情况下）。</p>
+
+<p>cpu我分配了2个core</p>
+
+<p>注意：Processors设置的时候，已经要勾选下面的Virtualize Intel VT-x/EPT or AMD-V/RVI选项。</p>
+
+<p><img src="http://farm9.staticflickr.com/8093/8515483562_07be509e48.jpg" alt="Virtualize选项" /></p>
+
+<p>通过上面截图可以看到Device里面没用的设备也全部删掉，只保留必要的设备。</p>
+
+<p>网卡配置为Host-only模式</p>
+
+<p><img src="http://farm9.staticflickr.com/8526/8514370229_06ea6ee63d.jpg" alt="网卡模式" /></p>
+
+<p>然后我们还要修改下win7下面vmnet1的网卡IP设置，因为一键安装的cloudstack默认使用192.168.16.10这个IP。而这个IP关联到很多配置不能随意修改，所以我们只能修改本机的IP来访问192.168.16这个网段了。</p>
+
+<p><img src="http://farm9.staticflickr.com/8383/8515487410_b3382b821e.jpg" alt="IP设置" /></p>
+
+<p>这样基本环境就配置好。</p>
+
+<p>然后放入一键安装光盘或者加载ISO来安装cloudstack就可以了。光盘启动后只要选择默认的第一项就可以等待了，全部自动安装，大约20-30分钟就完成了。</p>
+
+<p>系统自动重启后，再次进入系统。我们就可以通过win7下的浏览器访问http://192.168.16.10:8080/client这个管理界面了。默认的用户名密码为admin/password</p>
+
+<p><img src="http://farm9.staticflickr.com/8513/8514374093_9c6c9484eb.jpg" alt="cloudstack登陆页面" /></p>
+
+<p>进入后会见到如下界面</p>
+
+<p><img src="http://farm9.staticflickr.com/8375/8514375723_cc7d64a0f2.jpg" alt="cloudstack初始页面" /></p>
+
+<p>主机警报里会出现一个关于nfs的警报，常规警报里也会出现一些。我这个截图已经跑了一个实例了，所以默认安装的可能和这个截图不太一样。</p>
+
+<p>什么都不需要设置，包括cidr也不需要设置了。</p>
+
+<p>全局设置就保持默认的就可以了</p>
+
+<p><img src="http://farm9.staticflickr.com/8225/8514376901_202a3ac45d.jpg" alt="全局设置" /></p>
+
+<p>去基础架构界面看下，两台系统VM启动正常就可以了</p>
+
+<p><img src="http://farm9.staticflickr.com/8230/8514378539_d899c23a14.jpg" alt="架构页面" /></p>
+
+<p><strong>注意：如果没有启动实例的时候，虚拟路由器是0.</strong></p>
+
+<p>接下来我们就可以部署一个自己的虚拟机实例了，这个一键安装里自带了一个centos的模版。</p>
+
+<p>通过实例界面一步一步创建就可以。不要分配太大的内存，要不会因为资源不足导致创建失败，毕竟我们是在vmware嵌套的虚拟环境下弄的。</p>
+
+<p><img src="http://farm9.staticflickr.com/8520/8515496552_f402b92c3b.jpg" alt="创建虚拟机实例" /></p>
+
+<p>创建后，如果一切正常就会看到新创建的实例已经启动了。如果有错误，可以查看/var/log/cloud/management/management-server.log日志文件。</p>
+
+<p>状态会有Creating->Starting->Running</p>
+
+<p><img src="http://farm9.staticflickr.com/8248/8515499772_6a211fd324.jpg" alt="实例状态" /></p>
+
+<p>cloudstack很强大涉及的知识也很广。如果要在实际生产中使用，还要熟悉很多方面的内容。慢慢学习了。。。。</p>
+
+<p>大家如果对cloudstack感兴趣，可以加入www.cloudstack-china.org获取更多资料和帮助。</p>
+
+<p>也可以加入cloudstack-china的qq群（群 号:236581725）</p>
+
+<p>最后感谢qq群和邮件列表内回答我问题的朋友，是他们帮我解决了实例无法启动的问题和告诉我如何查看日志等。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1278,76 +1395,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/07/13/config-winxp-remote-desktop/">Winxp的远程桌面设置</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-13T00:00:00+08:00" pubdate data-updated="true">Jul 13<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近换了mac的笔记本，由于一些程序需要跑在winxp上面，比如zmud等。。。</p>
-
-<p>于是就在服务器上安装了xen，开了个winxp的虚拟机。本来xen支持vnc远程访问的，但是vnc感觉真心不给里，比windows自带的远程桌面慢了很多。</p>
-
-<p>于是开始考虑使用远程桌面，可是winxp不是服务器版本，所以远程桌面有一些限制。</p>
-
-<p>一个是解决多用户登陆问题</p>
-
-<p>下面是网上找到的解决办法，测试好用</p>
-
-<p>Windows XP不支持多个用户同时登录远程桌面，当其他用户远程登录Windows XP时，主机上当前已登录的用户</p>
-
-<p>即会自动退出。不过在Windows XP SP2中提供了允许连接会话并发功能，可通过远程桌面进行多用户的同时登录，</p>
-
-<p>但其在默认状态下关闭了该项特性，需要通过修改注册表开启该功能。</p>
-
-<p>打开注册表编辑器，依次展开</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>“HKEY_LOCAL_MACHINE\System \CurrentControlSet\Control\Terminal Server\Licensing Core”</span></code></pre></td></tr></table></div></figure>
-
-
-<p>分支，转到右侧窗口，在其中新建一个类型为DWORD的子键，将该键命名为“EnableConcurrentSessions”，
-并将键值设置为“1”，即可开启多用户登录功能。</p>
-
-<p>还有就是空密码登陆问题，因为winxp就是平时随便用用，每次输入密码太麻烦。但是远程桌面默认空密码不让登陆</p>
-
-<p><strong>解决办法如下</strong></p>
-
-<p>在运行里，输入<code>gpedit.msc</code>调出组策略界面</p>
-
-<p>依次找到“计算机配置”－》“windows设置”－》“安全设置”－》“本地策略”－》“安全选项”
-将其中的“帐户：使用空白密码的本地帐户只运行使用控制台登陆”禁用掉。</p>
-
-<p>通过上面的设置就ok了</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1372,7 +1419,7 @@
 <li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
 <li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
 <li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
-<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (4)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
@@ -1397,6 +1444,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/29/digitalocean-vps/">digitalocean-vps</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/">nginx支持thinkphp的pathinfo模式</a>
       </li>
     
@@ -1410,10 +1461,6 @@
     
       <li class="post">
         <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
       </li>
     
   </ul>

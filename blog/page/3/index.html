@@ -9,7 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="6月底，我购买了一台2012新款macbook air笔记本。将近一个月的使用，记录下心得。 以前从来没有用过mac os系统，不过对于linux还是很熟悉的。 早就打算买一台玩玩，一个是没钱，一个是总觉得单位配的也够用。后来又打算学习下ios开发，就下决心购买一台了。 正好赶上6月新款发布， &hellip;">
+  <meta name="description" content="最近换了mac的笔记本，由于一些程序需要跑在winxp上面，比如zmud等。。。 于是就在服务器上安装了xen，开了个winxp的虚拟机。本来xen支持vnc远程访问的，但是vnc感觉真心不给里，比windows自带的远程桌面慢了很多。 于是开始考虑使用远程桌面，可是winxp不是服务器版本， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,76 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/13/config-winxp-remote-desktop/">Winxp的远程桌面设置</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-13T00:00:00+08:00" pubdate data-updated="true">Jul 13<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近换了mac的笔记本，由于一些程序需要跑在winxp上面，比如zmud等。。。</p>
+
+<p>于是就在服务器上安装了xen，开了个winxp的虚拟机。本来xen支持vnc远程访问的，但是vnc感觉真心不给里，比windows自带的远程桌面慢了很多。</p>
+
+<p>于是开始考虑使用远程桌面，可是winxp不是服务器版本，所以远程桌面有一些限制。</p>
+
+<p>一个是解决多用户登陆问题</p>
+
+<p>下面是网上找到的解决办法，测试好用</p>
+
+<p>Windows XP不支持多个用户同时登录远程桌面，当其他用户远程登录Windows XP时，主机上当前已登录的用户</p>
+
+<p>即会自动退出。不过在Windows XP SP2中提供了允许连接会话并发功能，可通过远程桌面进行多用户的同时登录，</p>
+
+<p>但其在默认状态下关闭了该项特性，需要通过修改注册表开启该功能。</p>
+
+<p>打开注册表编辑器，依次展开</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>“HKEY_LOCAL_MACHINE\System \CurrentControlSet\Control\Terminal Server\Licensing Core”</span></code></pre></td></tr></table></div></figure>
+
+
+<p>分支，转到右侧窗口，在其中新建一个类型为DWORD的子键，将该键命名为“EnableConcurrentSessions”，
+并将键值设置为“1”，即可开启多用户登录功能。</p>
+
+<p>还有就是空密码登陆问题，因为winxp就是平时随便用用，每次输入密码太麻烦。但是远程桌面默认空密码不让登陆</p>
+
+<p><strong>解决办法如下</strong></p>
+
+<p>在运行里，输入<code>gpedit.msc</code>调出组策略界面</p>
+
+<p>依次找到“计算机配置”－》“windows设置”－》“安全设置”－》“本地策略”－》“安全选项”
+将其中的“帐户：使用空白密码的本地帐户只运行使用控制台登陆”禁用掉。</p>
+
+<p>通过上面的设置就ok了</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1871,240 +1941,6 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/12/25/ssh-login-protection-by-denyhosts/">通过denyhosts保护ssh登陆</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-25T00:00:00+08:00" pubdate data-updated="true">Dec 25<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天查看服务器的/var/log/secure日志，发现很多类似下面的信息</p>
-
-<p><code>PAM 6 more authentication failures; logname= uid=0 euid=0 tty=ssh ruser= rhost=121.176.35.192  user=root</code></p>
-
-<p>说明经常有人通过ssh尝试登陆，并不断尝试猜测root的密码。</p>
-
-<p>这样总让人尝试我的密码也不是个事儿呀&#8230;.于是通过denyhosts软件，开启了保护。</p>
-
-<p>通过denyhosts我们可以设置登陆失败几次，就禁止这个IP再次登陆。并可以设置多少分钟后，放开保护。</p>
-
-<p><strong>denyhosts介绍</strong></p>
-
-<p>DenyHosts是Python语言写的一个程序，用DenyHosts可以阻止试图猜测SSH登录口令，它会分析/var/log/secure等日志文件，当发现同一IP在进行多次SSH密码尝试时就会记录IP到/etc/hosts.deny文件，从而达到自动屏蔽该IP的目的。</p>
-
-<p>安装需求</p>
-
-<p>首要要求有python环境，并版本在2.3以上</p>
-
-<p>CentOS 默认安装了2.4.3版本，我们可以通过下面命令查看</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@localhost ~]# python -V
-</span><span class='line'>
-</span><span class='line'>Python 2.4.3</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>注意大小写。</strong></p>
-
-<p>其次是sshd需要支持tcp_wrappers。这个一般都支持。可以用下面命令判断</p>
-
-<p><code>ldd /usr/sbin/sshd |grep wrap</code></p>
-
-<p>如果显示：libwrap.so.0 => /lib/libwrap.so.0 (0x00db7000)表示支持</p>
-
-<p><strong>安装</strong></p>
-
-<p>当前最新的版本是2.6</p>
-
-<p><a href="wget%20http://downloads.sourceforge.net/project/denyhosts/denyhosts/2.6/DenyHosts-2.6.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fdenyhosts%2Ffiles%2F&amp;ts=1324820171&amp;use_mirror=cdnetworks-kr-1">下载</a></p>
-
-<p><strong>解压安装</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>tar zxvf DenyHosts-2.6.tar.gz 
-</span><span class='line'>
-</span><span class='line'>cd DenyHosts-2.6
-</span><span class='line'>
-</span><span class='line'>python setup.py install</span></code></pre></td></tr></table></div></figure>
-
-
-<p>默认将程序安装在/usr/share/denyhosts</p>
-
-<p>库文件在/usr/lib/python2.4/site-packages/DenyHosts/</p>
-
-<p>denyhosts.py安装到/usr/bin</p>
-
-<p><strong>设置启动脚本</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cd /usr/share/denyhosts/
-</span><span class='line'>
-</span><span class='line'>cp daemon-control-dist daemon-control
-</span><span class='line'>
-</span><span class='line'>chown root daemon-control
-</span><span class='line'>
-</span><span class='line'>chmod 700 daemon-control
-</span><span class='line'>
-</span><span class='line'>grep -v "^#" denyhosts.cfg-dist &gt; denyhosts.cfg</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样就生成了一个标准的配置文件denyhosts.cfg</p>
-
-<p>我们需要按照自己的想法，配置下这个denyhosts.cfg文件</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>SECURE_LOG = /var/log/secure
-</span><span class='line'>
-</span><span class='line'>#表示系统中secure日志文件位置
-</span><span class='line'>
-</span><span class='line'>HOSTS_DENY = /etc/hosts.deny
-</span><span class='line'>
-</span><span class='line'>#表示hosts.deny配置文件在系统中位置
-</span><span class='line'>
-</span><span class='line'>PURGE_DENY = 30m
-</span><span class='line'>
-</span><span class='line'>#表示多久后解封IP
-</span><span class='line'>
-</span><span class='line'>BLOCK_SERVICE  = sshd
-</span><span class='line'>
-</span><span class='line'>DENY_THRESHOLD_INVALID = 1
-</span><span class='line'>
-</span><span class='line'>#表示无效用户名，登陆失败几次就封IP
-</span><span class='line'>
-</span><span class='line'>DENY_THRESHOLD_VALID = 5
-</span><span class='line'>#表示有效果的普通用户登陆几次就封IP
-</span><span class='line'>
-</span><span class='line'>DENY_THRESHOLD_ROOT = 3
-</span><span class='line'>
-</span><span class='line'>#表示root用户登陆失败几次封IP
-</span><span class='line'>
-</span><span class='line'>DENY_THRESHOLD_RESTRICTED = 1
-</span><span class='line'>
-</span><span class='line'>WORK_DIR = /usr/share/denyhosts/data
-</span><span class='line'>
-</span><span class='line'>SUSPICIOUS_LOGIN_REPORT_ALLOWED_HOSTS=YES
-</span><span class='line'>
-</span><span class='line'>HOSTNAME_LOOKUP=NO
-</span><span class='line'>
-</span><span class='line'>表示是否做域名反解析
-</span><span class='line'>
-</span><span class='line'>LOCK_FILE = /var/lock/subsys/denyhosts</span></code></pre></td></tr></table></div></figure>
-
-
-<p>启动denyhosts</p>
-
-<p><code>/usr/share/denyhosts/daemon-control start</code></p>
-
-<p>配置denyhosts随系统自启动</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cd /etc/init.d
-</span><span class='line'>
-</span><span class='line'>ln -s /usr/share/denyhosts/daemon-control denyhosts
-</span><span class='line'>
-</span><span class='line'>chkconfig --add denyhosts
-</span><span class='line'>
-</span><span class='line'>chkconfig --level 345 denyhosts on</span></code></pre></td></tr></table></div></figure>
-
-
-<p>查看效果</p>
-
-<p>如果尝试登陆失败次数达到后，IP就会被记录到/etc/hosts.deny文件内，来达到阻止登陆的目的</p>
-
-<p>我们也可以通过查看/var/log/denyhosts日志文件来判断是否有被封的IP</p>
-
-<p>下面是我的机器部署denyhosts一段时间后封的IP</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># DenyHosts: Sun Dec 25 21:40:13 2011 | sshd: 112.164.231.91
-</span><span class='line'>
-</span><span class='line'>sshd: 112.164.231.91</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -2129,7 +1965,7 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
 <li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
 <li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
 <li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
-<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (4)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
@@ -2154,6 +1990,10 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/29/digitalocean-vps/">digitalocean-vps</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/">nginx支持thinkphp的pathinfo模式</a>
       </li>
     
@@ -2167,10 +2007,6 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
     
       <li class="post">
         <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
       </li>
     
   </ul>

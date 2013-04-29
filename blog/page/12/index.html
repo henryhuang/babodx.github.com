@@ -9,14 +9,10 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="我在学习Agile Web Development with Rails在第18章 Observers的例子中 1
+  <meta name="description" content="这个问题是我在www.javaeye.com论坛上提出的，并且由mathsfan给出了解决办法 首先创建一个项目，叫test 在app目录下的controllers目录下，找到test_controller.rb文件 添加一个upload的action 1
 2
 3
-4
-5
-&lt;%=text_field_tag :search%&gt;
-&lt;%=observe_field( :search,
-                  : &hellip;">
+def upload end &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -72,6 +68,169 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-upload-unread/">Rails下上传文件并且解决乱码问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这个问题是我在<a href="http://www.javaeye.com/">www.javaeye.com</a>论坛上提出的，并且由mathsfan给出了解决办法</p>
+
+<p>首先创建一个项目，叫<strong>test</strong></p>
+
+<p>在app目录下的controllers目录下，找到<strong>test_controller.rb</strong>文件</p>
+
+<p>添加一个upload的action</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def upload
+</span><span class='line'>
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后在view目录下的test目录下，创建一个<strong>upload.rhtml</strong>文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;%=form_tag({:action=&gt;'save'},:multipart=&gt;true)%&gt;
+</span><span class='line'>&lt;br/&gt;upload your file:&lt;%=file_field("file","file")%&gt;
+</span><span class='line'>&lt;br/&gt;
+</span><span class='line'>&lt;%=submit_tag("upload")%&gt;
+</span><span class='line'>&lt;%=end_form_tag%&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在访问<a href="http://localhost:3000/test/upload">http://localhost:3000/test/upload</a>，应该可以看到一个上传的界面了。</p>
+
+<p>不过还没有处理上传后的方法呢，所以还不能实现上传。因为上面的表单是提交给save这个action 的，现在还没有写呢。</p>
+
+<p>在写save之前，先要完成一些相关的方法</p>
+
+<p>在<strong>application.rb</strong>文件里，加入</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def uploadFile(file) #处理上传后的文件保存
+</span><span class='line'>       if !file.original_filename.empty? 
+</span><span class='line'>          #生成一个随机的文件名
+</span><span class='line'>          @filename=getFileName(file.original_filename) 
+</span><span class='line'>          #向dir目录写入文件 
+</span><span class='line'>          File.open("#{RAILS_ROOT}/public/images/#{@filename}", "wb") do |f|
+</span><span class='line'>           f.write(file.read) 
+</span><span class='line'>          end 
+</span><span class='line'>          #返回文件名称
+</span><span class='line'>          return @filename 
+</span><span class='line'>        end 
+</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def getFileName(filename) 
+</span><span class='line'>#获取文件名
+</span><span class='line'>  if !filename.nil? 
+</span><span class='line'>     return filename 
+</span><span class='line'>  end 
+</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在在<strong>test_controller.rb</strong>里写出save的action</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def save 
+</span><span class='line'>  unless request.get? 
+</span><span class='line'>    if filename=uploadFile(params[:file]['file']) #调用application.rb&lt;/strong&gt;里写的uploadFile对文件保存
+</span><span class='line'>       render :text=&gt;filename 
+</span><span class='line'>    end 
+</span><span class='line'>  end 
+</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
+
+
+<p>文件可以正确上传到public/images下
+但是中文文件名变为了乱码,但是render :text=>filename返回的名字,并不是乱码.</p>
+
+<p> ###解决办法###</p>
+
+<p>在ApplicationController加上：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>before_filter:set_charset 
+</span><span class='line'>
+</span><span class='line'>def set_charset 
+</span><span class='line'>     @headers["Content-Type"]="text/html;charset=gb2312" 
+</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
+
+
+<p>我试验了一下，用utf8也可以正常处理,比如按照如下写法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def set_charset
+</span><span class='line'>  @headers["Content-Type"]="text/html;charset=utf8" 
+</span><span class='line'>end </span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -712,42 +871,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/mage-be-stolen/">我的高督被盗了&#8230;&#8230;</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>07年3月29日,我的高督法式被盗了,同一个账号下还有60的萨满.因为是朋友玩的时候被盗的，我到是没有什么感觉。反正也冲到高督了，该玩的也玩了。ZG鳄鱼,MLD公主也刷了。现在也是该离开的时候了</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -772,7 +895,7 @@
 <li class='category'><a href='/blog/categories/database/'>Database (10)</a></li>
 <li class='category'><a href='/blog/categories/game/'>Game (15)</a></li>
 <li class='category'><a href='/blog/categories/hardware/'>Hardware (9)</a></li>
-<li class='category'><a href='/blog/categories/host/'>Host (3)</a></li>
+<li class='category'><a href='/blog/categories/host/'>Host (4)</a></li>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
@@ -797,6 +920,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/29/digitalocean-vps/">digitalocean-vps</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/25/nginxzhi-chi-thinkphpde-pathinfomo-shi/">nginx支持thinkphp的pathinfo模式</a>
       </li>
     
@@ -810,10 +937,6 @@
     
       <li class="post">
         <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/03/kuai-su-pei-zhi-vimhe-macvim/">快速配置vim和macvim</a>
       </li>
     
   </ul>
