@@ -11,6 +11,7 @@ categories: ['Host']
 最近又折腾了一次VPS。 原来一直使用的是vpsee.com提供的最低配置VPS。
 
 **配置**
+
 * 1 core CPU
 * 256 MB 内存
 * 256 MB 交换
@@ -39,17 +40,17 @@ categories: ['Host']
 我申请了一台基于debian6 32bit的测试了，下面是效果
 
 默认系统很精简，启动后占用内存12M，具体见下图：
-[!debian6 内存占用](http://farm8.staticflickr.com/7048/8691651426_83dbc54a9c_b.jpg)
+![debian6 内存占用](http://farm8.staticflickr.com/7048/8691651426_83dbc54a9c_b.jpg)
 
 硬盘占用700M
-[!debian6 硬盘占用](http://farm9.staticflickr.com/8536/8690532229_4a3395dc6e_z.jpg)
+![debian6 硬盘占用](http://farm9.staticflickr.com/8536/8690532229_4a3395dc6e_z.jpg)
 
 ##网速测试##
 先看看和美国其他vps的文件传递速度
-[!到美国vps的网速](http://farm8.staticflickr.com/7045/8691651836_9f52659248_c.jpg)
+![到美国vps的网速](http://farm8.staticflickr.com/7045/8691651836_9f52659248_c.jpg)
 
 再看看到国内的速度
-[!到国内网速](http://farm8.staticflickr.com/7045/8690532089_2b0987a779_c.jpg)
+![到国内网速](http://farm8.staticflickr.com/7045/8690532089_2b0987a779_c.jpg)
 
 ##总结##
 总的来说性能很给力，网速也不错。而且价格便宜
