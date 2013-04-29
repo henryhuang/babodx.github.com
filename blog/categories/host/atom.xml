@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Host | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/host/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-04-29T11:17:17+08:00</updated>
+  <updated>2013-04-29T21:07:22+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -22,14 +22,18 @@
 
 <p>最近又折腾了一次VPS。 原来一直使用的是vpsee.com提供的最低配置VPS。</p>
 
-<p><strong>配置</strong>
-* 1 core CPU
-* 256 MB 内存
-* 256 MB 交换
-* 10 GB 硬盘
-* 160 GB 流量
-* 1 IP
-* 5 机房可选</p>
+<p><strong>配置</strong></p>
+
+<ul>
+<li>1 core CPU</li>
+<li>256 MB 内存</li>
+<li>256 MB 交换</li>
+<li>10 GB 硬盘</li>
+<li>160 GB 流量</li>
+<li>1 IP</li>
+<li>5 机房可选</li>
+</ul>
+
 
 <p>费用 $10/月</p>
 
@@ -55,18 +59,18 @@
 <p>我申请了一台基于debian6 32bit的测试了，下面是效果</p>
 
 <p>默认系统很精简，启动后占用内存12M，具体见下图：
-<a href="http://farm8.staticflickr.com/7048/8691651426_83dbc54a9c_b.jpg">!debian6 内存占用</a></p>
+<img src="http://farm8.staticflickr.com/7048/8691651426_83dbc54a9c_b.jpg" alt="debian6 内存占用" /></p>
 
 <p>硬盘占用700M
-<a href="http://farm9.staticflickr.com/8536/8690532229_4a3395dc6e_z.jpg">!debian6 硬盘占用</a></p>
+<img src="http://farm9.staticflickr.com/8536/8690532229_4a3395dc6e_z.jpg" alt="debian6 硬盘占用" /></p>
 
 <h2>网速测试</h2>
 
 <p>先看看和美国其他vps的文件传递速度
-<a href="http://farm8.staticflickr.com/7045/8691651836_9f52659248_c.jpg">!到美国vps的网速</a></p>
+<img src="http://farm8.staticflickr.com/7045/8691651836_9f52659248_c.jpg" alt="到美国vps的网速" /></p>
 
 <p>再看看到国内的速度
-<a href="http://farm8.staticflickr.com/7045/8690532089_2b0987a779_c.jpg">!到国内网速</a></p>
+<img src="http://farm8.staticflickr.com/7045/8690532089_2b0987a779_c.jpg" alt="到国内网速" /></p>
 
 <h2>总结</h2>
 
