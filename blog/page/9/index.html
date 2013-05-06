@@ -9,8 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="前一阵子给一个公司架设了postfix+mysql+extmail的邮件系统。 用了一段时间后，发现后台管理的extman不能登录了，提示如下 1
-Can't open /tmp/extman//sid_26da75f9aec35f2cbc6b4fa425ab525e, No such file &hellip;">
+  <meta name="description" content="最近在给一个公司部署了postfix+extmail的邮件系统后，遇到了附件大小限制问题。 extmail默认设置是5M，但是由于extmail的统计大小方法问题，一般附件限制比设置的小了1/3。也就是你设置了5M，也就能到3M多。 这里先说下大小限制的配置。 一、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +65,158 @@ Can't open /tmp/extman//sid_26da75f9aec35f2cbc6b4fa425ab525e, No such file &hell
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/01/24/postfix-extmail-attachment-bug/">Postfix+extmail的附件大小显示和限制问题解决办法</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-24T00:00:00+08:00" pubdate data-updated="true">Jan 24<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近在给一个公司部署了postfix+extmail的邮件系统后，遇到了附件大小限制问题。</p>
+
+<p>extmail默认设置是5M，但是由于extmail的统计大小方法问题，一般附件限制比设置的小了1/3。也就是你设置了5M，也就能到3M多。</p>
+
+<p>这里先说下大小限制的配置。</p>
+
+<p>一、修改extmail的webmail.cf文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SYS_MESSAGE_SIZE_LIMIT = 5242880 注意：以位为单位为5M字节。 
+</span><span class='line'>
+</span><span class='line'>SYS_MESSAGE_SIZE_LIMIT = xxx</span></code></pre></td></tr></table></div></figure>
+
+
+<p>二、修改/etc/postfix/main.cf文件，</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>message_size_limit = xxx</span></code></pre></td></tr></table></div></figure>
+
+
+<p>三、重启postfix即可，<code>service postfix restrart</code> 和重启apache，<code>service httpd restart</code></p>
+
+<p><strong>如何解决附件限制大小和系统文件大小相差1/3呢？</strong></p>
+
+<p>首先是修改/var/www/extsuite/extmail/libs/Ext/App目录下的Compose.pm文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sub is_oversize {   
+</span><span class='line'>    my $self = shift;   
+</span><span class='line'>    my $sys = $self-&gt;{sysconfig};   
+</span><span class='line'>    my $maxsize = $sys-&gt;{SYS_MESSAGE_SIZE_LIMIT};   
+</span><span class='line'>    my $tsize = shift;   
+</span><span class='line'>  
+</span><span class='line'>    return 0 unless defined $maxsize and $maxsize &gt; 0;   
+</span><span class='line'>    return 0 unless defined $tsize and $tsize &gt; 0;   
+</span><span class='line'>  
+</span><span class='line'>    if ($tsize &gt;= $maxsize) {   
+</span><span class='line'>        return $maxsize;   
+</span><span class='line'>    }   
+</span><span class='line'>    0;   
+</span><span class='line'>}   </span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意到上面的if ($tsize >= $maxsize)了吧，修改为if ($tsize >= 1.29*$maxsize)</p>
+
+<p>这样修改后，基本extmail的附件限制大小就和系统显示的文件大小一样。</p>
+
+<p>目前还有一个文件，就是我们上传一个1M的内容，显示出来的附件大小大约是1.3M，这个问题需要修改一个human函数解决。</p>
+
+<p>在/var/www/extsuite/extmail/libs/Ext目录下，打开Utils.pm文件</p>
+
+<p>找到如下函数</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sub human_size {   
+</span><span class='line'>    my $s = $_[0];   
+</span><span class='line'>    if($s&lt;1024) {   
+</span><span class='line'>        return sprintf("%0.2f", $s/1024)."K";   
+</span><span class='line'>    }elsif($s&lt;1024*1024) {   
+</span><span class='line'>        return sprintf("%0.1f", $s/1024)."K";   
+</span><span class='line'>    }else {   
+</span><span class='line'>        return sprintf("%0.1f", $s/(1024*1024))."M";   
+</span><span class='line'>    }   
+</span><span class='line'>}   </span></code></pre></td></tr></table></div></figure>
+
+
+<p>将函数修改如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sub human_size {   
+</span><span class='line'>    my $s = $_[0];   
+</span><span class='line'>    if($s&lt;1024) {   
+</span><span class='line'>        return sprintf("%0.2f", $s/1024/1.36)."K";   
+</span><span class='line'>    }elsif($s&lt;1024*1024) {   
+</span><span class='line'>        return sprintf("%0.1f", $s/1024/1.36)."K";   
+</span><span class='line'>    }else {   
+</span><span class='line'>        return sprintf("%0.1f", $s/(1024*1024*1.36))."M";   
+</span><span class='line'>    }   
+</span><span class='line'>}   </span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就解决了extmail的附件大小显示和限制问题。</p>
+
+<p>目前还有一个遗留问题，就是在folder.htm模板界面里显示的邮件大小还是比系统文件大1/3。这个不知道怎么修改了。找到了对应函数，但是它直接显示的多少M或者多少K，用除1.36会出现问题。。。。这个期待高手解决了。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -937,188 +1088,6 @@ Will create a new application. Start it with:
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/28/Tomcat-reboot-problems/">解决Linux下Tomcat不能重启和停止问题</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-28T00:00:00+08:00" pubdate data-updated="true">Dec 28<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>我的Tomcat 5.5.28安装在CentOS 5.3 64bit系统上</p>
-
-<p>每次重启都停住，只要要等5-10分钟才可以。</p>
-
-<p>系统reboot或者shutdown也都卡在关闭tomcat的过程中</p>
-
-<p>后来发现直接用/usr/local/tomcat/bin/shutdown.sh一样存在问题，但是如果Tomcat什么项目都不加载，却正常。</p>
-
-<p>我怀疑是tomcat加载的lib或者jar文件一多，重启和关闭就会慢的巨慢。。。甚至10分钟以上。</p>
-
-<p>为了解决这个问题，我修改了/etc/init.d/目录下的tomcat文件，让关闭或者重启的时候，直接通过kill命令杀掉tomcat进程。</p>
-
-<p>下面是我/etc/init.d/tomcat文件</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/bash
-</span><span class='line'>#
-</span><span class='line'># Startup script for the tomcat
-</span><span class='line'>#
-</span><span class='line'># chkconfig: 345 80 15
-</span><span class='line'># description: Tomcat is a Servlet+JSP Engine.
-</span><span class='line'> 
-</span><span class='line'># Source function library.
-</span><span class='line'>. /etc/rc.d/init.d/functions
-</span><span class='line'> 
-</span><span class='line'> 
-</span><span class='line'>export JAVA_HOME=/usr/local/jdk1.6.0_16
-</span><span class='line'>export CLASSPATH=.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
-</span><span class='line'>export PATH=$PATH:$JAVA_HOME/bin
-</span><span class='line'> 
-</span><span class='line'>export CATALINA_BASE=/usr/local/tomcat
-</span><span class='line'>export CATALINA_HOME=/usr/local/tomcat
-</span><span class='line'>export CATALINA_TMPDIR=/usr/local/tomcat/temp
-</span><span class='line'>export JRE_HOME=/usr/local/jdk1.6.0_16
-</span><span class='line'> 
-</span><span class='line'>start(){
-</span><span class='line'>if [ -z $(/sbin/pidof java) ]; then
-</span><span class='line'>echo "Starting tomcat"
-</span><span class='line'>/usr/local/tomcat/bin/startup.sh
-</span><span class='line'>touch /var/lock/subsys/tomcat
-</span><span class='line'>else
-</span><span class='line'>echo "tomcat allready running"
-</span><span class='line'>fi
-</span><span class='line'>}
-</span><span class='line'> 
-</span><span class='line'> 
-</span><span class='line'>stop(){
-</span><span class='line'>if [ ! -z $(/sbin/pidof java) ]; then
-</span><span class='line'>echo "Shutting down tomcat"
-</span><span class='line'>#下面就是关闭的核心代码了，用ps获取tomcat进程id，直接kill掉
-</span><span class='line'>
-</span><span class='line'>ps aux|grep tomcat|grep startup|awk '{print $2}'|xargs kill -9
-</span><span class='line'>#/usr/local/tomcat/bin/shutdown.sh
-</span><span class='line'>until [ -z $(/sbin/pidof java) ]; do :; done
-</span><span class='line'>rm -f /var/lock/subsys/tomcat
-</span><span class='line'>else
-</span><span class='line'>echo "tomcat not running"
-</span><span class='line'>fi
-</span><span class='line'>}
-</span><span class='line'> 
-</span><span class='line'> 
-</span><span class='line'>case "$1" in
-</span><span class='line'>start)
-</span><span class='line'>start
-</span><span class='line'>;;
-</span><span class='line'>stop)
-</span><span class='line'>stop
-</span><span class='line'>;;
-</span><span class='line'>restart)
-</span><span class='line'>stop
-</span><span class='line'>start
-</span><span class='line'>;;
-</span><span class='line'>status)
-</span><span class='line'>/usr/local/tomcat/bin/catalina.sh version
-</span><span class='line'>;;
-</span><span class='line'>*)
-</span><span class='line'>echo "Usage: $0 {start|stop|restart|status}"
-</span><span class='line'>esac
-</span><span class='line'> 
-</span><span class='line'>exit 0
-</span><span class='line'> </span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/10/">&larr; Older</a>
@@ -1150,7 +1119,7 @@ Will create a new application. Start it with:
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
-<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (6)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
@@ -1171,6 +1140,10 @@ Will create a new application. Start it with:
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/05/06/securecrt-for-mac-store-password/">mac下的secureCRT如何保存密码？</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/29/digitalocean-vps/">digitalocean-vps</a>
       </li>
     
@@ -1184,10 +1157,6 @@ Will create a new application. Start it with:
     
       <li class="post">
         <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
       </li>
     
   </ul>

@@ -9,10 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="这个问题是我在www.javaeye.com论坛上提出的，并且由mathsfan给出了解决办法 首先创建一个项目，叫test 在app目录下的controllers目录下，找到test_controller.rb文件 添加一个upload的action 1
-2
-3
-def upload end &hellip;">
+  <meta name="description" content="参考http://wiki.rubyonrails.org/rails/pages/HowtoUseSQLite 安装SQLite SQLite 是一个轻量级的sql风格数据库.可以执行大部分sql92标准SQLite全部安装只有244kb,包括命令行客户端和DLL文件SQLite不用安装服务进程 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +65,100 @@ def upload end &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/21/rails-use-sqlite3/">Rails下使用sqlite3</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>参考<a href="http://wiki.rubyonrails.org/rails/pages/HowtoUseSQLite">http://wiki.rubyonrails.org/rails/pages/HowtoUseSQLite</a></p>
+
+<p><strong>安装SQLite</strong></p>
+
+<p>SQLite 是一个轻量级的sql风格数据库.可以执行大部分sql92标准SQLite全部安装只有244kb,包括命令行客户端和DLL文件SQLite不用安装服务进程，就像Access数据库一样使用方便安装只需要2个文件</p>
+
+<ul>
+<li>SQLite DLL</span></li>
+<li>SQLite command-line client for creating tables</li>
+</ul>
+
+
+<p>添加sqlite3.exe 和sqlite3.dll 到系统的path下，我放在了c:\windows\system32下了</p>
+
+<p><strong>安装sqlite3-ruby.gem</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install sqlite3-rubyAttempting local installation of 'sqlite3'
+</span><span class='line'>Local gem file not found: sqlite3*.gem
+</span><span class='line'>Attempting remote installation of 'sqlite3'
+</span><span class='line'>Select which gem to install for your platform (i386-mswin32)
+</span><span class='line'>1. sqlite3-ruby 1.1.0 (mswin32)
+</span><span class='line'>2. sqlite3-ruby 1.1.0 (ruby)
+</span><span class='line'>3. sqlite3-ruby 1.0.1 (ruby)
+</span><span class='line'>...
+</span><span class='line'>&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>选择 1 安装sqlite3-ruby 1.1.0(mswin32) 现在好像2才是sqlite3-ruby 1.1.0(mswin32),总之选择(mswin32)就对了</p>
+
+<p><strong>安装图像管理工具</strong>（也可以不用，直接用命令行也很方便）<a href="http://sqlitebrowser.sourceforge.net/">http://sqlitebrowser.sourceforge.net/</a></p>
+
+<p><strong>创建数据库</strong></p>
+
+<p>进入项目所在目录，比如我的项目是testsqld:\work\testsql>sqlite db\test.db上面命令就在db目录下，创建了一个test.db数据库</p>
+
+<p><strong>配置database.yml文件，访问test.db数据库</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>development:
+</span><span class='line'>   adapter: sqlite3
+</span><span class='line'>   database: db/test.db   #username: root
+</span><span class='line'>   #password: 
+</span><span class='line'>   #host: localhost</span></code></pre></td></tr></table></div></figure>
+
+
+<p>后面如何操作，就和使用mysql数据库一样了。建立数据表可以用db:migrate来完成</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -835,42 +926,6 @@ def upload end &hellip;">
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/mage-recover/">我的高督法师的装备恢复了</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天恢复了高督法师的装备，虽然损失了3500G，但是装备还是给恢复回来了现在装备没有FM了，只有440法伤。。。。以前523知足了。希望大家都用密保卡，省的丢号</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -902,7 +957,7 @@ def upload end &hellip;">
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
-<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (6)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
@@ -923,6 +978,10 @@ def upload end &hellip;">
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/05/06/securecrt-for-mac-store-password/">mac下的secureCRT如何保存密码？</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/29/digitalocean-vps/">digitalocean-vps</a>
       </li>
     
@@ -936,10 +995,6 @@ def upload end &hellip;">
     
       <li class="post">
         <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
       </li>
     
   </ul>

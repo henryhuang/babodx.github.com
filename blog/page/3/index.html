@@ -9,7 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="最近换了mac的笔记本，由于一些程序需要跑在winxp上面，比如zmud等。。。 于是就在服务器上安装了xen，开了个winxp的虚拟机。本来xen支持vnc远程访问的，但是vnc感觉真心不给里，比windows自带的远程桌面慢了很多。 于是开始考虑使用远程桌面，可是winxp不是服务器版本， &hellip;">
+  <meta name="description" content="起因是这样的，我在服务器上安装了个虚拟winxp。但是想要在外网远程控制却不行，因为这个虚拟系统没有公网IP。 我的服务器是有公网IP的，例如：210.1.1.1 服务器所在内网全部是10.0.1.x 网段，外网IP是通过路由器映射给服务器的，也就是说服务器上查看IP，只有10.0.1.1这个 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,73 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/13/mac-vnc-rdp-over-ssh/">Mac下用ssh转发端口</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-13T00:00:00+08:00" pubdate data-updated="true">Jul 13<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>起因是这样的，我在服务器上安装了个虚拟winxp。但是想要在外网远程控制却不行，因为这个虚拟系统没有公网IP。</p>
+
+<p>我的服务器是有公网IP的，例如：210.1.1.1</p>
+
+<p>服务器所在内网全部是10.0.1.x 网段，外网IP是通过路由器映射给服务器的，也就是说服务器上查看IP，只有10.0.1.1这个
+ 
+虚拟机我是用的xen，然后采用nat方式将一个192.168.122.x的ip分配给虚拟winxp使用。这个192.168.122.x段ip只有虚拟服务器和虚拟机可以访问到，就连同一个内网的10.0.1.x段其他机器都不能访问</p>
+
+<p>我要想远程控制winxp，只有两个办法，一个是通过xen提供的vnc来访问。也就是访问10.0.1.1:5901或者外网210.1.1.1:5901</p>
+
+<p>但是vnc的速度确实比winxp的远程桌面慢，有时候刷屏都很卡。但是winxp的ip又不能从外面访问，只能虚拟服务器自己用。
+ 
+后来我就想到了用ssh来做跳转，将192.168.122.1（winxp的ip）下3389端口转发过来，这样不是就可以远程通过3389访问了？
+ 
+因为mac下面的命令行直接支持ssh，确实比windows方面。linux下的常用命令和工具都支持！</p>
+
+<p>我就直接在外网通过下面命令建立了ssh隧道</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ssh -N -L3389:192.168.122.1:3389 root@114.251.211.103</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其中－N表示不用显示提示符，这个选项也可以不要
+－L表示建立一个隧道，格式：[-L [bind_address:]port:host:hostport]</p>
+
+<p>我的这条命令就是将本地的3389端口通过ssh转发到192.168.122.1的3389端口，注意：这里的192.168.122.1必须是远程ssh服务器可以访问的。</p>
+
+<p>这样你访问本地127.0.0.1:3389就相当于直接访问192.168.122.1:3389了</p>
+
+<p>当然，通过调整端口也可以实现vnc的转发</p>
+
+<p>其实通过ssh －D等选项，还可以建立ssh通道，让浏览器翻墙使用。这个网上资料很多，就不多说了。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1806,141 +1873,6 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/12/29/find-php-slow-code/">Php-fpm查找php慢速代码</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-29T00:00:00+08:00" pubdate data-updated="true">Dec 29<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>前两天帮助一个客户优化ecshop。
-他的ecshop代码是找人修改过的，修改后速度已很很慢，大概打开一页需要9s吧。
-而默认的ecshop在同样服务器上速度就很快。
-开始走了很多弯路，因为只是速度慢，并无错误。就没有想到是代码的原因。
-对比两个ecshop，首先发现首页加载的request数量差距很大，慢的站点105次，快的46次。
-而且慢的站点1.66M大小，而快的只有455k。通过开启gzip和合并css、js等手段优化后，效果并不明显。
- 
-后来想到可能是因为找人修改过代码，开始怀疑到代码上（也确实没啥办法了）。
-想到php-fpm可以记录下执行过慢的php脚本，于是修改php-fpm配置，加入了记录慢速php请求的代码。</p>
-
-<p>下面是在php 5.3.8下的php-fpm.conf文件添加的内容</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>request_slowlog_timeout=5s
-</span><span class='line'>slowlog=/var/log/fpm_slow.log</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这个配置会将php脚本执行超过5秒的，记录在/var/log/fpm_slow.log文件中。
- 
-如果你的php还是5.2.x的版本，那么php-fpm还是以补丁的形式执行，请参考下面的配置文件</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>The timeout (in seconds) for serving of single request after which a php backtrace will be dumped to slow.log file
-</span><span class='line'>      '0s' means 'off'
-</span><span class='line'>      &lt;value name="request_slowlog_timeout"&gt;0s&lt;/value&gt;
-</span><span class='line'> 
-</span><span class='line'>      The log file for slow requests
-</span><span class='line'>      &lt;value name="slowlog"&gt;logs/slow.log&lt;/value&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>最终在/var/log/fpm_slow.log文件里，发现很多如下记录</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[27-Dec-2011 10:07:27]  [pool www] pid 8524
-</span><span class='line'>
-</span><span class='line'>script_filename = /data/huaximall/flow.php
-</span><span class='line'>
-</span><span class='line'>[0x0a0f41c0] fsockopen() !:649
-</span><span class='line'>
-</span><span class='line'>[0x0a0f4104] _connect_sock() !:937
-</span><span class='line'>
-</span><span class='line'>[0x0a0f3fdc] sock_to_host() !:693
-</span><span class='line'>
-</span><span class='line'>[0x0a0f3f08] get_sock() !:372
-</span><span class='line'>
-</span><span class='line'>[0x0a0f3e5c] get() !:952
-</span><span class='line'>
-</span><span class='line'>[0x0a0f3d4c] getAll() !:291
-</span><span class='line'>
-</span><span class='line'>[0x0a0f3c3c] get_child_tree() !:313
-</span><span class='line'>
-</span><span class='line'>[0x0a0f3b18] get_child_tree() !:251
-</span><span class='line'>
-</span><span class='line'>[0x0a0f2fa8] get_categories_tree() !:44</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这里比较奇怪，人家的这个日志都可以显示出具体是哪个文件的哪行，我这里只有函数和行，而文件名的地方却是“！”号。。。。
-这个问题我还没有解决，不过通过这些日志，我已经可以判断出来是flow.php的执行时间超过了5s。。。导致首页加载过慢。</p>
-
-<p>后面分析flow.php，发现又调用了init.php等相关库和初始化文件。
-最后发现fsockopen() _connect_sock() sock_to_host()这些函数是在尝试连接到memcached的服务器。而这个服务器的IP不对，导致这里延时很大。。。</p>
-
-<p>还有个技巧就是在php页面里加入计算执行时间的输出，看看到底哪些行的执行时间过长。
-具体时间的计算，可以参考下面代码</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$start = microtime(true);
-</span><span class='line'>$end = microtime(true);
-</span><span class='line'>$time=$end-$start;</span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -1972,7 +1904,7 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
-<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (6)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
@@ -1993,6 +1925,10 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/05/06/securecrt-for-mac-store-password/">mac下的secureCRT如何保存密码？</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/29/digitalocean-vps/">digitalocean-vps</a>
       </li>
     
@@ -2006,10 +1942,6 @@ web服务采用Tengine/1.2.1，其实就是nginx</p>
     
       <li class="post">
         <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
       </li>
     
   </ul>

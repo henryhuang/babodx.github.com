@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Mac | 鑫的方向]]></title>
   <link href="http://babodx.github.com/blog/categories/mac/atom.xml" rel="self"/>
   <link href="http://babodx.github.com/"/>
-  <updated>2013-05-03T23:44:21+08:00</updated>
+  <updated>2013-05-06T11:17:19+08:00</updated>
   <id>http://babodx.github.com/</id>
   <author>
     <name><![CDATA[babodx]]></name>
@@ -12,6 +12,22 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[mac下的secureCRT如何保存密码？]]></title>
+    <link href="http://babodx.github.com/blog/2013/05/06/securecrt-for-mac-store-password/"/>
+    <updated>2013-05-06T11:03:00+08:00</updated>
+    <id>http://babodx.github.com/blog/2013/05/06/securecrt-for-mac-store-password</id>
+    <content type="html"><![CDATA[<p>mac下面的secureCRT默认保存不上密码，我们选择了保存密码后，下次登录还是提示密码错误。</p>
+
+<p>解决办法：
+因为secureCRT默认采用mac的keychain来处理密码，所以会出现这个问题。我们只需要去掉这个选项即可正常。</p>
+
+<p>打开secureCRT后，按"command+," 在"advanced"里面去掉"Use Keychain"的选项即可。</p>
+
+<p><img src="http://farm9.staticflickr.com/8417/8711955329_2f851cb291_b.jpg" alt="解决secureCRT在mac下无法保存密码问题" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[mac下配置php调试环境]]></title>
@@ -265,52 +281,6 @@ ssh -N -L3389:192.168.122.1:3389 root@114.251.211.103
 <p>当然，通过调整端口也可以实现vnc的转发</p>
 
 <p>其实通过ssh －D等选项，还可以建立ssh通道，让浏览器翻墙使用。这个网上资料很多，就不多说了。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[2012 macbook Air 使用感受]]></title>
-    <link href="http://babodx.github.com/blog/2012/07/13/buy-macbook-air/"/>
-    <updated>2012-07-13T00:00:00+08:00</updated>
-    <id>http://babodx.github.com/blog/2012/07/13/buy-macbook-air</id>
-    <content type="html"><![CDATA[<p>6月底，我购买了一台2012新款macbook air笔记本。将近一个月的使用，记录下心得。</p>
-
-<p>以前从来没有用过mac os系统，不过对于linux还是很熟悉的。</p>
-
-<p>早就打算买一台玩玩，一个是没钱，一个是总觉得单位配的也够用。后来又打算学习下ios开发，就下决心购买一台了。</p>
-
-<p>正好赶上6月新款发布，北京正规零售店都没有上市呢，于是在macx.cn上面看到大家都在福利社购买，于是我也去了。
- 
-<strong>购买心得</strong></p>
-
-<p>福利社的价格还算不错，和北京官方公布的教育优化价格相当。而且是香港过来的本，一旦大陆上市还有保修。
-我购买的是macbook air 低配版本，128G硬盘，4G内存 13'显示 价格：8500</p>
-
-<p>购买的时候需要什么软件还可以帮助安装。我就安装了常用的虚拟机和xcode
- 
-<strong>使用心得</strong></p>
-
-<p>用来一个月下来，感觉mac os的系统确实不错。不愧是基于unix的。稳定！</p>
-
-<p>首先对于我经常需要服务器运维工作来说，mac os下面的软件完全可以满足</p>
-
-<p>自带的“终端” 可以支持大部分linux下的命令，要连接远程服务器直接ssh就可以，</p>
-
-<p>为了管理方便，我还是安装了secureCRT for mac</p>
-
-<p>输入法用IMKQIM（搜狗的词库）</p>
-
-<p>像office、qq、股票、远程桌面等常用软件都存在mac版本</p>
-
-<p>使用下来，没有任何的不适应。而且手势操作也很大的提高了效率。
- 
-感受最大的是电池可以使用7小时，而且不用关机。在不用的时候，直接合上笔记本就休眠了。下次打开直接就是桌面感觉和用Ipad似的。
- 
-因为我需要作一些php开发，在mac下面也可以使用XAMPP for mac版本</p>
-
-<p>编辑器我采用的是sublime text 2
- 
-一个月下来，主要工作全部可以用mac系统替代了，感觉很好</p>
 ]]></content>
   </entry>
   

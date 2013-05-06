@@ -9,7 +9,7 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="http://www.playframework.org/ 网站上本来首页有一段大约10分钟的视频。内容是10分钟开发一个web程序，包括数据库的curd操作。 但是由于视频是放在了http://vimeo.com/国内正常情况下访问不到。 我在浏览首页的时候，发现可以通过http://www. &hellip;">
+  <meta name="description" content="我的Tomcat 5.5.28安装在CentOS 5.3 64bit系统上 每次重启都停住，只要要等5-10分钟才可以。 系统reboot或者shutdown也都卡在关闭tomcat的过程中 后来发现直接用/usr/local/tomcat/bin/shutdown.sh一样存在问题， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,188 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/28/Tomcat-reboot-problems/">解决Linux下Tomcat不能重启和停止问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-28T00:00:00+08:00" pubdate data-updated="true">Dec 28<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>我的Tomcat 5.5.28安装在CentOS 5.3 64bit系统上</p>
+
+<p>每次重启都停住，只要要等5-10分钟才可以。</p>
+
+<p>系统reboot或者shutdown也都卡在关闭tomcat的过程中</p>
+
+<p>后来发现直接用/usr/local/tomcat/bin/shutdown.sh一样存在问题，但是如果Tomcat什么项目都不加载，却正常。</p>
+
+<p>我怀疑是tomcat加载的lib或者jar文件一多，重启和关闭就会慢的巨慢。。。甚至10分钟以上。</p>
+
+<p>为了解决这个问题，我修改了/etc/init.d/目录下的tomcat文件，让关闭或者重启的时候，直接通过kill命令杀掉tomcat进程。</p>
+
+<p>下面是我/etc/init.d/tomcat文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/bash
+</span><span class='line'>#
+</span><span class='line'># Startup script for the tomcat
+</span><span class='line'>#
+</span><span class='line'># chkconfig: 345 80 15
+</span><span class='line'># description: Tomcat is a Servlet+JSP Engine.
+</span><span class='line'> 
+</span><span class='line'># Source function library.
+</span><span class='line'>. /etc/rc.d/init.d/functions
+</span><span class='line'> 
+</span><span class='line'> 
+</span><span class='line'>export JAVA_HOME=/usr/local/jdk1.6.0_16
+</span><span class='line'>export CLASSPATH=.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+</span><span class='line'>export PATH=$PATH:$JAVA_HOME/bin
+</span><span class='line'> 
+</span><span class='line'>export CATALINA_BASE=/usr/local/tomcat
+</span><span class='line'>export CATALINA_HOME=/usr/local/tomcat
+</span><span class='line'>export CATALINA_TMPDIR=/usr/local/tomcat/temp
+</span><span class='line'>export JRE_HOME=/usr/local/jdk1.6.0_16
+</span><span class='line'> 
+</span><span class='line'>start(){
+</span><span class='line'>if [ -z $(/sbin/pidof java) ]; then
+</span><span class='line'>echo "Starting tomcat"
+</span><span class='line'>/usr/local/tomcat/bin/startup.sh
+</span><span class='line'>touch /var/lock/subsys/tomcat
+</span><span class='line'>else
+</span><span class='line'>echo "tomcat allready running"
+</span><span class='line'>fi
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'> 
+</span><span class='line'>stop(){
+</span><span class='line'>if [ ! -z $(/sbin/pidof java) ]; then
+</span><span class='line'>echo "Shutting down tomcat"
+</span><span class='line'>#下面就是关闭的核心代码了，用ps获取tomcat进程id，直接kill掉
+</span><span class='line'>
+</span><span class='line'>ps aux|grep tomcat|grep startup|awk '{print $2}'|xargs kill -9
+</span><span class='line'>#/usr/local/tomcat/bin/shutdown.sh
+</span><span class='line'>until [ -z $(/sbin/pidof java) ]; do :; done
+</span><span class='line'>rm -f /var/lock/subsys/tomcat
+</span><span class='line'>else
+</span><span class='line'>echo "tomcat not running"
+</span><span class='line'>fi
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'> 
+</span><span class='line'>case "$1" in
+</span><span class='line'>start)
+</span><span class='line'>start
+</span><span class='line'>;;
+</span><span class='line'>stop)
+</span><span class='line'>stop
+</span><span class='line'>;;
+</span><span class='line'>restart)
+</span><span class='line'>stop
+</span><span class='line'>start
+</span><span class='line'>;;
+</span><span class='line'>status)
+</span><span class='line'>/usr/local/tomcat/bin/catalina.sh version
+</span><span class='line'>;;
+</span><span class='line'>*)
+</span><span class='line'>echo "Usage: $0 {start|stop|restart|status}"
+</span><span class='line'>esac
+</span><span class='line'> 
+</span><span class='line'>exit 0
+</span><span class='line'> </span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -548,46 +730,6 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/21/wow-memory-tools/">魔兽世界内存分析，基于wow 2.4.2</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天基于wow 2.4.2分析了下魔兽世界的内存，并做了如下软件。</p>
-
-<p><img src="http://farm9.staticflickr.com/8227/8509559819_61b2546573.jpg" alt="wow外挂" /></p>
-
-<p>全部采用C#编写，实现如下功能加速3.5%.&#8211;（这个服务器有限制，超过4%就掉线）。这个加速是修改人物速度出来的，和那些变速齿轮不一样。这样修改后，别人看你的速度也是正常的，就好像你穿了加速的鞋子一样。无阻力爬山&#8211;只要不是90度的山，多陡都能爬上去。超级跳&#8211;可以让跳跃的高度自己设置Z+&#8211;直接传送到任意高度目前就分析出来了这些，其实这些小功能只能自己在副本娱乐下。估计出了副本。。大街上没有人敢用。呵呵主要锻炼下自己对C#实现内存读写，还有就是分析内存的基地址和最终目的地址。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/11/">&larr; Older</a>
@@ -619,7 +761,7 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
-<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (6)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
@@ -640,6 +782,10 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/05/06/securecrt-for-mac-store-password/">mac下的secureCRT如何保存密码？</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/29/digitalocean-vps/">digitalocean-vps</a>
       </li>
     
@@ -653,10 +799,6 @@ select 最不能忍受的是一个进程所打开的FD是有一定限制的，�
     
       <li class="post">
         <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
       </li>
     
   </ul>

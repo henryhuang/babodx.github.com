@@ -9,8 +9,9 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="单位的H3C路由器和交换机上，tracert总是超时。但是可以正常上网或者ping到目标。
-后来查找资料，找到了解决办法。 解决方法：     ip ttl-expires enable     ip unreachables enable （官方说法这两条命令默认开启，可能跟版本有关， &hellip;">
+  <meta name="description" content="首先在新浪微博的“微博小工具”内找到“微博秀”。然后根据自己的需要设置好样式和大小。
+从下面的 “设置完成，获得嵌入代码： ”框内粘贴出代码。 回到bo-blog后台，从“常规管理”->“模块配置”项了，添加一个“侧边模块”，起个名字叫新浪微博。 最后将刚才的代码贴进去。就可以了
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +67,50 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/20/boblog-add-weiboshow/">给bo-blog加上新浪的微博秀</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-20T00:00:00+08:00" pubdate data-updated="true">Oct 20<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>首先在新浪微博的“微博小工具”内找到“微博秀”。然后根据自己的需要设置好样式和大小。
+从下面的</p>
+
+<p><dt>“设置完成，获得嵌入代码： ”框内粘贴出代码。</dt>
+<dt></dt></p>
+
+<p><dt>回到bo-blog后台，从“常规管理”->“模块配置”项了，添加一个“侧边模块”，起个名字叫新浪微博。</dt>
+<dt></dt>
+<dt>最后将刚才的代码贴进去。就可以了</dt></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -784,76 +829,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/10/27/eMule-VPN-HighID/">通过VPN获取eMule的HighID</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-10-27T00:00:00+08:00" pubdate data-updated="true">Oct 27<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>一般单位里，我们都是通过单位网关上网。这种情况下打开eMule肯定获取到的是LowID（低ID）。那么既然我们可以通过VPN来翻墙，有没有办法通过VPN来获取到eMule的HighID（高ID）呢？</p>
-
-<p>答案是肯定的：可以。</p>
-
-<p>只要我们将VPN服务器的外网IP上的对应端口映射到我们VPN客户端获取到的IP端口上就可以。</p>
-
-<p>我的VPN服务器，就是跑在我这台博客服务器上的openvpn server。笔记本采用openvpn gui客户端连接。</p>
-
-<p>我笔记本分到的ip 10.8.0.2  </p>
-
-<ul>
-<li>vpn server的外网ip：204.74.212.217</li>
-<li>vpn server的tap0 ip地址：10.8.0.1</li>
-</ul>
-
-
-<p>下面是我的iptables配置：</p>
-
-<p>加入如下两条规则</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>iptables -t nat -A PREROUTING -p tcp -d 204.74.212.217 --dport 13242 -j DNAT --to 10.8.0.2:13242   
-</span><span class='line'>iptables -t nat -A PREROUTING -p udp -d 204.74.212.217 --dport 11324 -j DNAT --to 10.8.0.2:11324   </span></code></pre></td></tr></table></div></figure>
-
-
-<p>其中13242和11324端口，要和自己安装的emule端口对应。这个可以在emule的选项-》连接界面查看。</p>
-
-<p>以上配置后，还不能获取高ID的话，基本都是windows防火墙原因了。</p>
-
-<p>修改win7 防火墙</p>
-
-<p>在“高级安全Windows防火墙”中的“入站规则”和“出站规则”中，都允许eMule的通过。</p>
-
-<p>然后断开eMule连接，重新连接一次。就可以获取高ID了。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -885,7 +860,7 @@
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
-<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (6)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
@@ -906,6 +881,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/05/06/securecrt-for-mac-store-password/">mac下的secureCRT如何保存密码？</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/29/digitalocean-vps/">digitalocean-vps</a>
       </li>
     
@@ -919,10 +898,6 @@
     
       <li class="post">
         <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
       </li>
     
   </ul>

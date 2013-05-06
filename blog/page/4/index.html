@@ -9,7 +9,11 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="今天查看服务器的/var/log/secure日志，发现很多类似下面的信息 PAM 6 more authentication failures; logname= uid=0 euid=0 tty=ssh ruser= rhost=121.176.35.192 user=root &hellip;">
+  <meta name="description" content="前两天帮助一个客户优化ecshop。
+他的ecshop代码是找人修改过的，修改后速度已很很慢，大概打开一页需要9s吧。
+而默认的ecshop在同样服务器上速度就很快。
+开始走了很多弯路，因为只是速度慢，并无错误。就没有想到是代码的原因。
+对比两个ecshop， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +69,141 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/29/find-php-slow-code/">Php-fpm查找php慢速代码</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-29T00:00:00+08:00" pubdate data-updated="true">Dec 29<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前两天帮助一个客户优化ecshop。
+他的ecshop代码是找人修改过的，修改后速度已很很慢，大概打开一页需要9s吧。
+而默认的ecshop在同样服务器上速度就很快。
+开始走了很多弯路，因为只是速度慢，并无错误。就没有想到是代码的原因。
+对比两个ecshop，首先发现首页加载的request数量差距很大，慢的站点105次，快的46次。
+而且慢的站点1.66M大小，而快的只有455k。通过开启gzip和合并css、js等手段优化后，效果并不明显。
+ 
+后来想到可能是因为找人修改过代码，开始怀疑到代码上（也确实没啥办法了）。
+想到php-fpm可以记录下执行过慢的php脚本，于是修改php-fpm配置，加入了记录慢速php请求的代码。</p>
+
+<p>下面是在php 5.3.8下的php-fpm.conf文件添加的内容</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>request_slowlog_timeout=5s
+</span><span class='line'>slowlog=/var/log/fpm_slow.log</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个配置会将php脚本执行超过5秒的，记录在/var/log/fpm_slow.log文件中。
+ 
+如果你的php还是5.2.x的版本，那么php-fpm还是以补丁的形式执行，请参考下面的配置文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>The timeout (in seconds) for serving of single request after which a php backtrace will be dumped to slow.log file
+</span><span class='line'>      '0s' means 'off'
+</span><span class='line'>      &lt;value name="request_slowlog_timeout"&gt;0s&lt;/value&gt;
+</span><span class='line'> 
+</span><span class='line'>      The log file for slow requests
+</span><span class='line'>      &lt;value name="slowlog"&gt;logs/slow.log&lt;/value&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最终在/var/log/fpm_slow.log文件里，发现很多如下记录</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[27-Dec-2011 10:07:27]  [pool www] pid 8524
+</span><span class='line'>
+</span><span class='line'>script_filename = /data/huaximall/flow.php
+</span><span class='line'>
+</span><span class='line'>[0x0a0f41c0] fsockopen() !:649
+</span><span class='line'>
+</span><span class='line'>[0x0a0f4104] _connect_sock() !:937
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3fdc] sock_to_host() !:693
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3f08] get_sock() !:372
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3e5c] get() !:952
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3d4c] getAll() !:291
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3c3c] get_child_tree() !:313
+</span><span class='line'>
+</span><span class='line'>[0x0a0f3b18] get_child_tree() !:251
+</span><span class='line'>
+</span><span class='line'>[0x0a0f2fa8] get_categories_tree() !:44</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里比较奇怪，人家的这个日志都可以显示出具体是哪个文件的哪行，我这里只有函数和行，而文件名的地方却是“！”号。。。。
+这个问题我还没有解决，不过通过这些日志，我已经可以判断出来是flow.php的执行时间超过了5s。。。导致首页加载过慢。</p>
+
+<p>后面分析flow.php，发现又调用了init.php等相关库和初始化文件。
+最后发现fsockopen() _connect_sock() sock_to_host()这些函数是在尝试连接到memcached的服务器。而这个服务器的IP不对，导致这里延时很大。。。</p>
+
+<p>还有个技巧就是在php页面里加入计算执行时间的输出，看看到底哪些行的执行时间过长。
+具体时间的计算，可以参考下面代码</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$start = microtime(true);
+</span><span class='line'>$end = microtime(true);
+</span><span class='line'>$time=$end-$start;</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1490,171 +1629,6 @@ cd mysql-5.5.16
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/11/10/centos-linux-sshclient-unreadable-code/">Centos Linux 远程终端ssh乱码问题</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-11-10T00:00:00+08:00" pubdate data-updated="true">Nov 10<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>我们经常碰到linux乱码问题。尤其是碰到网页上传个中文文件名的文件，ssh登陆到linux一看全乱码想删除都不行。很郁闷的。如下图所示中文文件名全都是显示问号了（这个乱码由于你的编码设置不同，显示的也不太一样）</p>
-
-<p><img src="http://farm9.staticflickr.com/8094/8513901709_166ee71c2c.jpg" alt="乱码截图" /></p>
-
-<p>还有一个就是vim的乱码</p>
-
-<p><img src="http://farm9.staticflickr.com/8235/8513903997_2edf6ef68a_m.jpg" alt="vim乱码" /></p>
-
-<p><strong>解决办法：</strong></p>
-
-<p>首先需要给linux安装中文支持。这里以centos为例，所以采用yum安装</p>
-
-<p><code>yum groupinstall chinese-support</code></p>
-
-<p>然后再设置linux系统的i18n文件，位置在/etc/sysconfig/i18n</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>LANG="zh_CN.GB18030"
-</span><span class='line'>
-</span><span class='line'>SUPPORTED="zh_CN.UTF-8:zh_CN.GBK:zh_CN.GB18030:zh_CN:zh:en_US.UTF-8:en_US:en"
-</span><span class='line'>
-</span><span class='line'>SYSFONT="latarcyrheb-sun16"</span></code></pre></td></tr></table></div></figure>
-
-
-<p>接着设置LC_ALL环境变量，在/etc/profile文件里加入</p>
-
-<p><code>export LC_ALL=zh_CN.GB18030</code></p>
-
-<p>全部设置好后，重启系统。再次登陆后，用如下命令查看</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>-bash-3.2# locale
-</span><span class='line'>
-</span><span class='line'>LANG=zh_CN.GB18030
-</span><span class='line'>
-</span><span class='line'>LC_CTYPE="zh_CN.GB18030"
-</span><span class='line'>
-</span><span class='line'>LC_NUMERIC="zh_CN.GB18030"
-</span><span class='line'>
-</span><span class='line'>LC_TIME="zh_CN.GB18030"
-</span><span class='line'>
-</span><span class='line'>LC_COLLATE="zh_CN.GB18030"
-</span><span class='line'>
-</span><span class='line'>LC_MONETARY="zh_CN.GB18030"
-</span><span class='line'>
-</span><span class='line'>LC_MESSAGES="zh_CN.GB18030"
-</span><span class='line'>
-</span><span class='line'>LC_PAPER="zh_CN.GB18030"
-</span><span class='line'>
-</span><span class='line'>LC_NAME="zh_CN.GB18030"
-</span><span class='line'>
-</span><span class='line'>LC_ADDRESS="zh_CN.GB18030"
-</span><span class='line'>
-</span><span class='line'>LC_TELEPHONE="zh_CN.GB18030"
-</span><span class='line'>
-</span><span class='line'>LC_MEASUREMENT="zh_CN.GB18030"
-</span><span class='line'>
-</span><span class='line'>LC_IDENTIFICATION="zh_CN.GB18030"
-</span><span class='line'>
-</span><span class='line'>LC_ALL=zh_CN.GB18030</span></code></pre></td></tr></table></div></figure>
-
-
-<p>完成以上操作，应该就可以正常显示中文文件名字了。不过这个只是linux没有问题了，我们的ssh客户端还需要支持才可以。我一般使用Putty来当做ssh客户端，下面就以putty为例子进行设置。
-先设置使用的字体，选择windows->Appearance，弹出的字体界面里选择“新宋体”，字符集选择“CHINESE_GB2312”</p>
-
-<p><img src="http://farm9.staticflickr.com/8369/8513908051_06d0c35864_z.jpg" alt="putty设置" /></p>
-
-<p>再设置编码</p>
-
-<p><img src="http://farm9.staticflickr.com/8225/8513910593_16685f713a.jpg" alt="设置编码" /></p>
-
-<p>以上设置完成后，就可以正常显示了。效果如下图所示：</p>
-
-<p><img src="http://farm9.staticflickr.com/8379/8515025280_c0816e5461.jpg" alt="正常显示的效果" /></p>
-
-<p>在命令行输入中文文件名也可以正常使用了。</p>
-
-<p><img src="http://farm9.staticflickr.com/8097/8515027934_4514657da8_m.jpg" alt="输入中文效果" /></p>
-
-<p>到目前为止，ssh下操作中文文件名的问题就彻底解决了。可以正常输入中文文件名来操作了。</p>
-
-<p>下面是vim显示乱码问题，vim一般都是因为文件编码和显示编码的问题引起的乱码。</p>
-
-<p>我们打开文件发现乱码后，采用如下命令</p>
-
-<p><code>set encoding=utf-8 termencoding=gbk</code></p>
-
-<p>这样以后，vim也可以正常操作中文了。效果图</p>
-
-<p><img src="http://farm9.staticflickr.com/8248/8515031904_d608be830d_z.jpg" alt="vim中文操作效果" /></p>
-
-<p><strong>注意:</strong></p>
-
-<p>网上看到一些资料说是将i18n的LANG设置为zh_CN.UTF-8，然后LC_ALL也是设置为zh_CN.UTF-8</p>
-
-<p>但是我试验了下，效果并不好（也将putty调整为了utf-8）.但是文件名显示还是乱码。需要用ls &#8211;show-control-chars来正常显示，输入中文文件名也不正常。</p>
-
-<p>以上只是在putty下使用，也许配合其他ssh客户端效果不太一样。稍后我再添加一些其他客户端效果。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -1686,7 +1660,7 @@ cd mysql-5.5.16
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
-<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (6)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
@@ -1707,6 +1681,10 @@ cd mysql-5.5.16
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/05/06/securecrt-for-mac-store-password/">mac下的secureCRT如何保存密码？</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/29/digitalocean-vps/">digitalocean-vps</a>
       </li>
     
@@ -1720,10 +1698,6 @@ cd mysql-5.5.16
     
       <li class="post">
         <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
       </li>
     
   </ul>

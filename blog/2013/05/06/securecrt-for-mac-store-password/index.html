@@ -5,13 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>ubuntu server 9.04 终端乱码问题 - 鑫的方向</title>
+  <title>mac下的secureCRT如何保存密码？ - 鑫的方向</title>
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="安装了ubuntu server 9.04，安装的时候选择了中文环境。 因为server是没有桌面的，发现终端里面显示提示信息，出错信息都变成乱码了。 解决办法
-修改/etc/default/locale文件 将zh_CN修改为en_US
-">
+  <meta name="description" content="mac下面的secureCRT默认保存不上密码，我们选择了保存密码后，下次登录还是提示密码错误。 解决办法：
+因为secureCRT默认采用mac的keychain来处理密码，所以会出现这个问题。我们只需要去掉这个选项即可正常。 打开secureCRT后，按&#8221;command+,&# &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://babodx.github.com/blog/2009/12/21/ubuntu-console-unread-chinese/">
+  <link rel="canonical" href="http://babodx.github.com/blog/2013/05/06/securecrt-for-mac-store-password/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -70,7 +69,7 @@
   
   <header>
     
-      <h1 class="entry-title">Ubuntu Server 9.04 终端乱码问题</h1>
+      <h1 class="entry-title">mac下的secureCRT如何保存密码？</h1>
     
     
       <p class="meta">
@@ -86,21 +85,21 @@
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2013-05-06T11:03:00+08:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>安装了ubuntu server 9.04，安装的时候选择了中文环境。</p>
+<div class="entry-content"><p>mac下面的secureCRT默认保存不上密码，我们选择了保存密码后，下次登录还是提示密码错误。</p>
 
-<p>因为server是没有桌面的，发现终端里面显示提示信息，出错信息都变成乱码了。</p>
+<p>解决办法：
+因为secureCRT默认采用mac的keychain来处理密码，所以会出现这个问题。我们只需要去掉这个选项即可正常。</p>
 
-<p><strong>解决办法</strong>
-修改/etc/default/locale文件</p>
+<p>打开secureCRT后，按&#8221;command+,&#8221; 在&#8221;advanced&#8221;里面去掉&#8221;Use Keychain&#8221;的选项即可。</p>
 
-<p>将zh_CN修改为en_US</p>
+<p><img src="http://farm9.staticflickr.com/8417/8711955329_2f851cb291_b.jpg" alt="解决secureCRT在mac下无法保存密码问题" /></p>
 </div>
 
 
@@ -123,12 +122,12 @@
   
 
 
-<time datetime="2009-12-21T00:00:00+08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2009</time>
+<time datetime="2013-05-06T11:03:00+08:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/linux/'>Linux</a>
+    <a class='category' href='/blog/categories/mac/'>Mac</a>
   
 </span>
 
@@ -137,7 +136,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2009/12/21/ubuntu-console-unread-chinese/" data-via="" data-counturl="http://babodx.github.com/blog/2009/12/21/ubuntu-console-unread-chinese/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://babodx.github.com/blog/2013/05/06/securecrt-for-mac-store-password/" data-via="" data-counturl="http://babodx.github.com/blog/2013/05/06/securecrt-for-mac-store-password/" >Tweet</a>
   
   
   
@@ -146,10 +145,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2009/12/21/ubuntu-904-show-chinese-filename/" title="Previous Post: ubuntu server 9.04显示中文文件">&laquo; ubuntu server 9.04显示中文文件</a>
+        <a class="basic-alignment left" href="/blog/2013/04/29/digitalocean-vps/" title="Previous Post: digitalocean-vps">&laquo; digitalocean-vps</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2009/12/21/ubuntu-dynamic-resize-lvm/" title="Next Post: 试用ubuntu 8.04和LVM动态增加分区">试用ubuntu 8.04和LVM动态增加分区 &raquo;</a>
       
     </p>
   </footer>

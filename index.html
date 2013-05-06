@@ -9,13 +9,8 @@
   <meta name="author" content="babodx">
 
   
-  <meta name="description" content="Digitalocean debian6 vps测试 最近又折腾了一次VPS。 原来一直使用的是vpsee.com提供的最低配置VPS。 配置 1 core CPU
-256 MB 内存
-256 MB 交换
-10 GB 硬盘
-160 GB 流量
-1 IP
-5 机房可选 费用 $10/月 &hellip;">
+  <meta name="description" content="mac下面的secureCRT默认保存不上密码，我们选择了保存密码后，下次登录还是提示密码错误。 解决办法：
+因为secureCRT默认采用mac的keychain来处理密码，所以会出现这个问题。我们只需要去掉这个选项即可正常。 打开secureCRT后，按&#8221;command+,&# &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -71,6 +66,49 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/06/securecrt-for-mac-store-password/">mac下的secureCRT如何保存密码？</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-06T11:03:00+08:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>mac下面的secureCRT默认保存不上密码，我们选择了保存密码后，下次登录还是提示密码错误。</p>
+
+<p>解决办法：
+因为secureCRT默认采用mac的keychain来处理密码，所以会出现这个问题。我们只需要去掉这个选项即可正常。</p>
+
+<p>打开secureCRT后，按&#8221;command+,&#8221; 在&#8221;advanced&#8221;里面去掉&#8221;Use Keychain&#8221;的选项即可。</p>
+
+<p><img src="http://farm9.staticflickr.com/8417/8711955329_2f851cb291_b.jpg" alt="解决secureCRT在mac下无法保存密码问题" /></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -710,51 +748,6 @@ git config user.email "youremail"
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">开始使用octopress</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-13T14:54:00+08:00" pubdate data-updated="true">Feb 13<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1>概述</h1>
-
-<p>最近在看<a href="http://ruby-china.org">ruby-china.org</a>和<a href="http://happycasts.net">happycasts.net</a>的视频。开始尝试使用git来做版本控制。原来都是使用svn，所以最近一直在折腾和学习。看到很多编程人员都开始采用octopress来代替wordpress写blog了。我也开始尝试使用这个octopress的blog系统。</p>
-
-<p>octopress是一套基于ruby构建的blog管理系统，通过git来为我们的文章做版本控制，并且通过rake命令可以简单的完成博客的发布与远程站点的同步。配合github提供的pages功能，我们连自己的主机都可以省了。非常方便。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/02/13/kai-shi-shi-yong-octopress/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -784,7 +777,7 @@ git config user.email "youremail"
 <li class='category'><a href='/blog/categories/java/'>Java (3)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (3)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (52)</a></li>
-<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (6)</a></li>
 <li class='category'><a href='/blog/categories/mobile/'>Mobile (8)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (14)</a></li>
@@ -805,6 +798,10 @@ git config user.email "youremail"
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/05/06/securecrt-for-mac-store-password/">mac下的secureCRT如何保存密码？</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/29/digitalocean-vps/">digitalocean-vps</a>
       </li>
     
@@ -818,10 +815,6 @@ git config user.email "youremail"
     
       <li class="post">
         <a href="/blog/2013/03/16/rails-best-practices-1/">rails-best-practices-1</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/14/railszhong-wen-wen-ti/">rails中文问题</a>
       </li>
     
   </ul>
